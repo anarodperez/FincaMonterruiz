@@ -8,7 +8,7 @@
 | **Tipo**        | Técnico                |
 | **Complejidad** | Fácil         |
 | **Entrega**     | v1             |
-
+| **Incidencia**  | [1](https://github.com/anarp14/FincaMonterruiz/issues/1) |
 
 | **R2**     | **Código fuente**         |
 | --------------: | :------------------- |
@@ -17,7 +17,7 @@
 | **Tipo**        | Técnico                |
 | **Complejidad** | Fácil         |
 | **Entrega**     | v1             |
-
+| **Incidencia**  | [2](https://github.com/anarp14/FincaMonterruiz/issues/2) |
 
 | **R3**     | **Estilo del código**         |
 | --------------: | :------------------- |
@@ -26,7 +26,7 @@
 | **Tipo**        | Técnico                |
 | **Complejidad** | Fácil         |
 | **Entrega**     | v1             |
-
+| **Incidencia**  | [3](https://github.com/anarp14/FincaMonterruiz/issues/3) |
 
 | **R4**     | **Tres lanzamientos**         |
 | --------------: | :------------------- |
@@ -35,7 +35,7 @@
 | **Tipo**        | Técnico                |
 | **Complejidad** | Fácil         |
 | **Entrega**     | v1             |
-
+| **Incidencia**  | [4](https://github.com/anarp14/FincaMonterruiz/issues/4) |
 
 | **R5**     | **README.md**         |
 | --------------: | :------------------- |
@@ -44,7 +44,7 @@
 | **Tipo**        | Técnico                |
 | **Complejidad** | Fácil         |
 | **Entrega**     | v1             |
-
+| **Incidencia**  | [5](https://github.com/anarp14/FincaMonterruiz/issues/5) |
 
 | **R6**     | **Documentación**         |
 | --------------: | :------------------- |
@@ -53,7 +53,7 @@
 | **Tipo**        | Técnico                |
 | **Complejidad** | Fácil         |
 | **Entrega**     | v1             |
-
+| **Incidencia**  | [6](https://github.com/anarp14/FincaMonterruiz/issues/6) |
 
 | **R7**     | **Incidencias en GitHub**         |
 | --------------: | :------------------- |
@@ -62,7 +62,7 @@
 | **Tipo**        | Técnico                |
 | **Complejidad** | Fácil         |
 | **Entrega**     | v1             |
-
+| **Incidencia**  | [7](https://github.com/anarp14/FincaMonterruiz/issues/7) |
 
 | **R8**     | **Etiquetas e hitos**         |
 | --------------: | :------------------- |
@@ -71,7 +71,7 @@
 | **Tipo**        | Técnico                |
 | **Complejidad** | Fácil         |
 | **Entrega**     | v1             |
-
+| **Incidencia**  | [8](https://github.com/anarp14/FincaMonterruiz/issues/8) |
 
 | **R9**     | **Rama master**         |
 | --------------: | :------------------- |
@@ -80,7 +80,7 @@
 | **Tipo**        | Técnico                |
 | **Complejidad** | Fácil         |
 | **Entrega**     | v1             |
-
+| **Incidencia**  | [9](https://github.com/anarp14/FincaMonterruiz/issues/9) |
 
 | **R10**     | **Gestión del proyecto**         |
 | --------------: | :------------------- |
@@ -89,7 +89,7 @@
 | **Tipo**        | Técnico                |
 | **Complejidad** | Fácil         |
 | **Entrega**     | v1             |
-
+| **Incidencia**  | [10](https://github.com/anarp14/FincaMonterruiz/issues/10) |
 
 | **R11**     | **Final de cada iteración**         |
 | --------------: | :------------------- |
@@ -98,7 +98,7 @@
 | **Tipo**        | Técnico                |
 | **Complejidad** | Fácil         |
 | **Entrega**     | v1             |
-
+| **Incidencia**  | [11](https://github.com/anarp14/FincaMonterruiz/issues/11) |
 
 | **R12**     | **Validación de formularios**         |
 | --------------: | :------------------- |
@@ -107,7 +107,7 @@
 | **Tipo**        | Técnico                |
 | **Complejidad** | Fácil         |
 | **Entrega**     | v1             |
-
+| **Incidencia**  | [12](https://github.com/anarp14/FincaMonterruiz/issues/12) |
 
 | **R13**     | **Gestión de ventanas**         |
 | --------------: | :------------------- |
@@ -116,7 +116,7 @@
 | **Tipo**        | Técnico                |
 | **Complejidad** | Fácil         |
 | **Entrega**     | v1             |
-
+| **Incidencia**  | [13](https://github.com/anarp14/FincaMonterruiz/issues/13) |
 
 | **R14**     | **Manejo de eventos**         |
 | --------------: | :------------------- |
@@ -125,7 +125,7 @@
 | **Tipo**        | Técnico                |
 | **Complejidad** | Fácil         |
 | **Entrega**     | v1             |
-
+| **Incidencia**  | [14](https://github.com/anarp14/FincaMonterruiz/issues/14) |
 
 | **R15**     | **DOM**         |
 | --------------: | :------------------- |
@@ -134,7 +134,7 @@
 | **Tipo**        | Técnico                |
 | **Complejidad** | Fácil         |
 | **Entrega**     | v1             |
-
+| **Incidencia**  | [15](https://github.com/anarp14/FincaMonterruiz/issues/15) |
 
 | **R16**     | **Almacenamiento en el lado del cliente**         |
 | --------------: | :------------------- |
@@ -143,7 +143,7 @@
 | **Tipo**        | Técnico                |
 | **Complejidad** | Fácil         |
 | **Entrega**     | v1             |
-
+| **Incidencia**  | [16](https://github.com/anarp14/FincaMonterruiz/issues/16) |
 
 | **R17**     | **Alpine.js**         |
 | --------------: | :------------------- |
@@ -152,7 +152,7 @@
 | **Tipo**        | Técnico                |
 | **Complejidad** | Fácil         |
 | **Entrega**     | v1             |
-
+| **Incidencia**  | [17](https://github.com/anarp14/FincaMonterruiz/issues/17) |
 
 | **R18**     | **Plugin no trabajado en clase**         |
 | --------------: | :------------------- |
@@ -161,7 +161,7 @@
 | **Tipo**        | Técnico                |
 | **Complejidad** | Fácil         |
 | **Entrega**     | v1             |
-
+| **Incidencia**  | [18](https://github.com/anarp14/FincaMonterruiz/issues/18) |
 
 | **R19**     | **Utilización de AJAX**         |
 | --------------: | :------------------- |
@@ -170,7 +170,7 @@
 | **Tipo**        | Técnico                |
 | **Complejidad** | Fácil         |
 | **Entrega**     | v1             |
-
+| **Incidencia**  | [19](https://github.com/anarp14/FincaMonterruiz/issues/19) |
 
 | **R20**     | **ECMAScript2015 (ES6)**         |
 | --------------: | :------------------- |
@@ -179,7 +179,7 @@
 | **Tipo**        | Técnico                |
 | **Complejidad** | Fácil         |
 | **Entrega**     | v1             |
-
+| **Incidencia**  | [20](https://github.com/anarp14/FincaMonterruiz/issues/20) |
 
 | **R21**     | **PHP**         |
 | --------------: | :------------------- |
@@ -188,7 +188,7 @@
 | **Tipo**        | Técnico                |
 | **Complejidad** | Fácil         |
 | **Entrega**     | v1             |
-
+| **Incidencia**  | [21](https://github.com/anarp14/FincaMonterruiz/issues/21) |
 
 | **R22**     | **Laravel Framework**         |
 | --------------: | :------------------- |
@@ -197,7 +197,7 @@
 | **Tipo**        | Técnico                |
 | **Complejidad** | Fácil         |
 | **Entrega**     | v1             |
-
+| **Incidencia**  | [22](https://github.com/anarp14/FincaMonterruiz/issues/22) |
 
 | **R23**     | **PostgreSQL**         |
 | --------------: | :------------------- |
@@ -206,7 +206,7 @@
 | **Tipo**        | Técnico                |
 | **Complejidad** | Fácil         |
 | **Entrega**     | v1             |
-
+| **Incidencia**  | [23](https://github.com/anarp14/FincaMonterruiz/issues/23) |
 
 | **R24**     | **Cloud computing**         |
 | --------------: | :------------------- |
@@ -215,7 +215,7 @@
 | **Tipo**        | Técnico                |
 | **Complejidad** | Fácil         |
 | **Entrega**     | v1             |
-
+| **Incidencia**  | [24](https://github.com/anarp14/FincaMonterruiz/issues/24) |
 
 | **R25**     | **Pruebas funcionales**         |
 | --------------: | :------------------- |
@@ -224,7 +224,7 @@
 | **Tipo**        | Técnico                |
 | **Complejidad** | Fácil         |
 | **Entrega**     | v1             |
-
+| **Incidencia**  | [25](https://github.com/anarp14/FincaMonterruiz/issues/25) |
 
 | **R26**     | **Aplicación escalable**         |
 | --------------: | :------------------- |
@@ -233,7 +233,7 @@
 | **Tipo**        | Técnico                |
 | **Complejidad** | Fácil         |
 | **Entrega**     | v1             |
-
+| **Incidencia**  | [26](https://github.com/anarp14/FincaMonterruiz/issues/26) |
 
 | **R27**     | **Etiquetas semánticas de HTML5**         |
 | --------------: | :------------------- |
@@ -242,7 +242,7 @@
 | **Tipo**        | Técnico                |
 | **Complejidad** | Fácil         |
 | **Entrega**     | v1             |
-
+| **Incidencia**  | [27](https://github.com/anarp14/FincaMonterruiz/issues/27) |
 
 | **R28**     | **Presentación mediante CSS**         |
 | --------------: | :------------------- |
@@ -251,7 +251,7 @@
 | **Tipo**        | Técnico                |
 | **Complejidad** | Fácil         |
 | **Entrega**     | v1             |
-
+| **Incidencia**  | [28](https://github.com/anarp14/FincaMonterruiz/issues/28) |
 
 | **R29**     | **Diseño flexible**         |
 | --------------: | :------------------- |
@@ -260,7 +260,7 @@
 | **Tipo**        | Técnico                |
 | **Complejidad** | Fácil         |
 | **Entrega**     | v1             |
-
+| **Incidencia**  | [29](https://github.com/anarp14/FincaMonterruiz/issues/29) |
 
 | **R30**     | **Transiciones, transformaciones, animaciones y contenido multimedia**         |
 | --------------: | :------------------- |
@@ -269,7 +269,7 @@
 | **Tipo**        | Técnico                |
 | **Complejidad** | Fácil         |
 | **Entrega**     | v1             |
-
+| **Incidencia**  | [30](https://github.com/anarp14/FincaMonterruiz/issues/30) |
 
 | **R31**     | **Uso de microdatos**         |
 | --------------: | :------------------- |
@@ -278,7 +278,7 @@
 | **Tipo**        | Técnico                |
 | **Complejidad** | Fácil         |
 | **Entrega**     | v1             |
-
+| **Incidencia**  | [31](https://github.com/anarp14/FincaMonterruiz/issues/31) |
 
 | **R32**     | **Validación HTML5, CSS3 y accesibilidad**         |
 | --------------: | :------------------- |
@@ -287,7 +287,7 @@
 | **Tipo**        | Técnico                |
 | **Complejidad** | Fácil         |
 | **Entrega**     | v1             |
-
+| **Incidencia**  | [32](https://github.com/anarp14/FincaMonterruiz/issues/32) |
 
 | **R33**     | **Diseño para varias resoluciones**         |
 | --------------: | :------------------- |
@@ -296,7 +296,7 @@
 | **Tipo**        | Técnico                |
 | **Complejidad** | Fácil         |
 | **Entrega**     | v1             |
-
+| **Incidencia**  | [33](https://github.com/anarp14/FincaMonterruiz/issues/33) |
 
 | **R34**     | **Varios navegadores**         |
 | --------------: | :------------------- |
@@ -305,7 +305,7 @@
 | **Tipo**        | Técnico                |
 | **Complejidad** | Fácil         |
 | **Entrega**     | v1             |
-
+| **Incidencia**  | [34](https://github.com/anarp14/FincaMonterruiz/issues/34) |
 
 | **R35**     | **Despliegue en un Host**         |
 | --------------: | :------------------- |
@@ -314,7 +314,7 @@
 | **Tipo**        | Técnico                |
 | **Complejidad** | Fácil         |
 | **Entrega**     | v1             |
-
+| **Incidencia**  | [35](https://github.com/anarp14/FincaMonterruiz/issues/35) |
 
 | **R36**     | **Despliegue en un servidor local**         |
 | --------------: | :------------------- |
@@ -323,7 +323,7 @@
 | **Tipo**        | Técnico                |
 | **Complejidad** | Fácil         |
 | **Entrega**     | v1             |
-
+| **Incidencia**  | [36](https://github.com/anarp14/FincaMonterruiz/issues/36) |
 
 | **R37**     | **Creación base de datos **         |
 | --------------: | :------------------- |
@@ -332,7 +332,7 @@
 | **Tipo**        | Técnico                |
 | **Complejidad** | Fácil         |
 | **Entrega**     | v1             |
-
+| **Incidencia**  | [37](https://github.com/anarp14/FincaMonterruiz/issues/37) |
 
 | **R38**     | **Modelo entidad-relación**         |
 | --------------: | :------------------- |
@@ -341,7 +341,7 @@
 | **Tipo**        | Técnico                |
 | **Complejidad** | Fácil         |
 | **Entrega**     | v1             |
-
+| **Incidencia**  | [38](https://github.com/anarp14/FincaMonterruiz/issues/38) |
 
 | **R39**     | **Registro**         |
 | --------------: | :------------------- |
@@ -350,7 +350,7 @@
 | **Tipo**        | Funcional                |
 | **Complejidad** | Fácil         |
 | **Entrega**     | v1             |
-
+| **Incidencia**  | [39](https://github.com/anarp14/FincaMonterruiz/issues/39) |
 
 | **R40**     | **Iniciar sesión **         |
 | --------------: | :------------------- |
@@ -359,7 +359,7 @@
 | **Tipo**        | Funcional                |
 | **Complejidad** | Fácil         |
 | **Entrega**     | v1             |
-
+| **Incidencia**  | [40](https://github.com/anarp14/FincaMonterruiz/issues/40) |
 
 | **R41**     | **Recuperar contraseña**         |
 | --------------: | :------------------- |
@@ -368,7 +368,7 @@
 | **Tipo**        | Funcional                |
 | **Complejidad** | Media         |
 | **Entrega**     | v1             |
-
+| **Incidencia**  | [41](https://github.com/anarp14/FincaMonterruiz/issues/41) |
 
 | **R42**     | **Validar correo**         |
 | --------------: | :------------------- |
@@ -377,7 +377,7 @@
 | **Tipo**        | Funcional                |
 | **Complejidad** | Media         |
 | **Entrega**     | v1             |
-
+| **Incidencia**  | [42](https://github.com/anarp14/FincaMonterruiz/issues/42) |
 
 | **R43**     | **Perfil usuario**         |
 | --------------: | :------------------- |
@@ -386,7 +386,7 @@
 | **Tipo**        | Funcional                |
 | **Complejidad** | Fácil         |
 | **Entrega**     | v1             |
-
+| **Incidencia**  | [43](https://github.com/anarp14/FincaMonterruiz/issues/43) |
 
 | **R44**     | **Portal administrador**         |
 | --------------: | :------------------- |
@@ -395,7 +395,7 @@
 | **Tipo**        | Funcional                |
 | **Complejidad** | Fácil         |
 | **Entrega**     | v1             |
-
+| **Incidencia**  | [44](https://github.com/anarp14/FincaMonterruiz/issues/44) |
 
 | **R45**     | **Crear actividad**         |
 | --------------: | :------------------- |
@@ -404,7 +404,7 @@
 | **Tipo**        | Funcional                |
 | **Complejidad** | Fácil         |
 | **Entrega**     | v1             |
-
+| **Incidencia**  | [45](https://github.com/anarp14/FincaMonterruiz/issues/45) |
 
 | **R46**     | **Modificar actividad**         |
 | --------------: | :------------------- |
@@ -413,7 +413,7 @@
 | **Tipo**        | Funcional                |
 | **Complejidad** | Fácil         |
 | **Entrega**     | v1             |
-
+| **Incidencia**  | [46](https://github.com/anarp14/FincaMonterruiz/issues/46) |
 
 | **R47**     | **Borrar actividad**         |
 | --------------: | :------------------- |
@@ -422,7 +422,7 @@
 | **Tipo**        | Funcional                |
 | **Complejidad** | Fácil         |
 | **Entrega**     | v1             |
-
+| **Incidencia**  | [47](https://github.com/anarp14/FincaMonterruiz/issues/47) |
 
 | **R48**     | **Bloquear actividad**         |
 | --------------: | :------------------- |
@@ -431,7 +431,7 @@
 | **Tipo**        | Funcional                |
 | **Complejidad** | Fácil         |
 | **Entrega**     | v1             |
-
+| **Incidencia**  | [48](https://github.com/anarp14/FincaMonterruiz/issues/48) |
 
 | **R49**     | **Añadir categoría**         |
 | --------------: | :------------------- |
@@ -440,7 +440,7 @@
 | **Tipo**        | Funcional                |
 | **Complejidad** | Fácil         |
 | **Entrega**     | v1             |
-
+| **Incidencia**  | [49](https://github.com/anarp14/FincaMonterruiz/issues/49) |
 
 | **R50**     | **Modificar categoría**         |
 | --------------: | :------------------- |
@@ -449,7 +449,7 @@
 | **Tipo**        | Funcional                |
 | **Complejidad** | Fácil         |
 | **Entrega**     | v1             |
-
+| **Incidencia**  | [50](https://github.com/anarp14/FincaMonterruiz/issues/50) |
 
 | **R51**     | **Borrar categoría**         |
 | --------------: | :------------------- |
@@ -458,7 +458,7 @@
 | **Tipo**        | Funcional                |
 | **Complejidad** | Fácil         |
 | **Entrega**     | v1             |
-
+| **Incidencia**  | [51](https://github.com/anarp14/FincaMonterruiz/issues/51) |
 
 | **R52**     | **Ver usuarios**         |
 | --------------: | :------------------- |
@@ -467,7 +467,7 @@
 | **Tipo**        | Funcional                |
 | **Complejidad** | Fácil         |
 | **Entrega**     | v1             |
-
+| **Incidencia**  | [52](https://github.com/anarp14/FincaMonterruiz/issues/52) |
 
 | **R53**     | **Bloquear/desbloquear usuarios**         |
 | --------------: | :------------------- |
@@ -476,7 +476,7 @@
 | **Tipo**        | Funcional                |
 | **Complejidad** | Media         |
 | **Entrega**     | v2             |
-
+| **Incidencia**  | [53](https://github.com/anarp14/FincaMonterruiz/issues/53) |
 
 | **R54**     | **Filtro de reservas **         |
 | --------------: | :------------------- |
@@ -485,7 +485,7 @@
 | **Tipo**        | Funcional                |
 | **Complejidad** | Media         |
 | **Entrega**     | v2             |
-
+| **Incidencia**  | [54](https://github.com/anarp14/FincaMonterruiz/issues/54) |
 
 | **R55**     | **Ver reservas**         |
 | --------------: | :------------------- |
@@ -494,7 +494,7 @@
 | **Tipo**        | Funcional                |
 | **Complejidad** | Fácil         |
 | **Entrega**     | v2             |
-
+| **Incidencia**  | [55](https://github.com/anarp14/FincaMonterruiz/issues/55) |
 
 | **R56**     | **Buscar actividades**         |
 | --------------: | :------------------- |
@@ -503,7 +503,7 @@
 | **Tipo**        | Funcional                |
 | **Complejidad** | Fácil         |
 | **Entrega**     | v1             |
-
+| **Incidencia**  | [56](https://github.com/anarp14/FincaMonterruiz/issues/56) |
 
 | **R57**     | **Filtrar actividades**         |
 | --------------: | :------------------- |
@@ -512,7 +512,7 @@
 | **Tipo**        | Funcional                |
 | **Complejidad** | Fácil         |
 | **Entrega**     | v1             |
-
+| **Incidencia**  | [57](https://github.com/anarp14/FincaMonterruiz/issues/57) |
 
 | **R58**     | **Vista de la actividad**         |
 | --------------: | :------------------- |
@@ -521,7 +521,7 @@
 | **Tipo**        | Funcional                |
 | **Complejidad** | Fácil         |
 | **Entrega**     | v1             |
-
+| **Incidencia**  | [58](https://github.com/anarp14/FincaMonterruiz/issues/58) |
 
 | **R59**     | **Reservar actividad**         |
 | --------------: | :------------------- |
@@ -530,7 +530,7 @@
 | **Tipo**        | Funcional                |
 | **Complejidad** | Fácil         |
 | **Entrega**     | v1             |
-
+| **Incidencia**  | [59](https://github.com/anarp14/FincaMonterruiz/issues/59) |
 
 | **R60**     | **Cancelar actividad**         |
 | --------------: | :------------------- |
@@ -539,7 +539,7 @@
 | **Tipo**        | Funcional                |
 | **Complejidad** | Fácil         |
 | **Entrega**     | v1             |
-
+| **Incidencia**  | [60](https://github.com/anarp14/FincaMonterruiz/issues/60) |
 
 | **R61**     | **Escribir una reseña**         |
 | --------------: | :------------------- |
@@ -548,7 +548,7 @@
 | **Tipo**        | Funcional                |
 | **Complejidad** | Fácil         |
 | **Entrega**     | v1             |
-
+| **Incidencia**  | [61](https://github.com/anarp14/FincaMonterruiz/issues/61) |
 
 | **R62**     | **Dejar  valoración **         |
 | --------------: | :------------------- |
@@ -557,7 +557,7 @@
 | **Tipo**        | Funcional                |
 | **Complejidad** | Fácil         |
 | **Entrega**     | v3             |
-
+| **Incidencia**  | [62](https://github.com/anarp14/FincaMonterruiz/issues/62) |
 
 | **R63**     | **Sistema de Pago en Línea**         |
 | --------------: | :------------------- |
@@ -566,7 +566,7 @@
 | **Tipo**        | Funcional                |
 | **Complejidad** | Media         |
 | **Entrega**     | v2             |
-
+| **Incidencia**  | [63](https://github.com/anarp14/FincaMonterruiz/issues/63) |
 
 | **R64**     | **Envío de correo de confirmación de la reserva**         |
 | --------------: | :------------------- |
@@ -575,7 +575,7 @@
 | **Tipo**        | Funcional                |
 | **Complejidad** | Media         |
 | **Entrega**     | v2             |
-
+| **Incidencia**  | [64](https://github.com/anarp14/FincaMonterruiz/issues/64) |
 
 | **R65**     | **Envío de correo de recordatorio**         |
 | --------------: | :------------------- |
@@ -584,7 +584,7 @@
 | **Tipo**        | Funcional                |
 | **Complejidad** | Media         |
 | **Entrega**     | v3             |
-
+| **Incidencia**  | [65](https://github.com/anarp14/FincaMonterruiz/issues/65) |
 
 | **R66**     | **Generar PDF de la reserva **         |
 | --------------: | :------------------- |
@@ -593,7 +593,7 @@
 | **Tipo**        | Funcional                |
 | **Complejidad** | Difícil         |
 | **Entrega**     | v3             |
-
+| **Incidencia**  | [66](https://github.com/anarp14/FincaMonterruiz/issues/66) |
 
 | **R67**     | **Mapa de Ubicación **         |
 | --------------: | :------------------- |
@@ -602,7 +602,7 @@
 | **Tipo**        | Funcional                |
 | **Complejidad** | Media         |
 | **Entrega**     | v2             |
-
+| **Incidencia**  | [67](https://github.com/anarp14/FincaMonterruiz/issues/67) |
 
 | **R68**     | **Formulario contacto**         |
 | --------------: | :------------------- |
@@ -611,7 +611,7 @@
 | **Tipo**        | Funcional                |
 | **Complejidad** | Media         |
 | **Entrega**     | v2             |
-
+| **Incidencia**  | [68](https://github.com/anarp14/FincaMonterruiz/issues/68) |
 
 | **R69**     | **Galería de imágenes**         |
 | --------------: | :------------------- |
@@ -620,7 +620,7 @@
 | **Tipo**        | Información                |
 | **Complejidad** | Fácil         |
 | **Entrega**     | v1             |
-
+| **Incidencia**  | [69](https://github.com/anarp14/FincaMonterruiz/issues/69) |
 
 | **R70**     | **Nuestra historia**         |
 | --------------: | :------------------- |
@@ -629,7 +629,7 @@
 | **Tipo**        | Información                |
 | **Complejidad** | Fácil         |
 | **Entrega**     | v1             |
-
+| **Incidencia**  | [70](https://github.com/anarp14/FincaMonterruiz/issues/70) |
 
 | **R71**     | **Newsletter**         |
 | --------------: | :------------------- |
@@ -638,7 +638,7 @@
 | **Tipo**        | Funcional                |
 | **Complejidad** | Difícil         |
 | **Entrega**     | v3             |
-
+| **Incidencia**  | [71](https://github.com/anarp14/FincaMonterruiz/issues/71) |
 
 | **R72**     | **API de autenticación de Google**         |
 | --------------: | :------------------- |
@@ -647,82 +647,82 @@
 | **Tipo**        | Funcional                |
 | **Complejidad** | Difícil         |
 | **Entrega**     | v3             |
-
+| **Incidencia**  | [72](https://github.com/anarp14/FincaMonterruiz/issues/72) |
 
 
 ## Cuadro resumen
 
-| **Requisito** | **Prioridad** | **Tipo** | **Complejidad** | **Entrega** |
-| :------------ | :-----------: | :------: | :-------------: | :---------: |
-| (**R1**) Requisitos como incidencias | Mínimo | Técnico | Fácil | v1 | 
-| (**R2**) Código fuente | Mínimo | Técnico | Fácil | v1 | 
-| (**R3**) Estilo del código | Mínimo | Técnico | Fácil | v1 | 
-| (**R4**) Tres lanzamientos | Mínimo | Técnico | Fácil | v1 | 
-| (**R5**) README.md | Mínimo | Técnico | Fácil | v1 | 
-| (**R6**) Documentación | Mínimo | Técnico | Fácil | v1 | 
-| (**R7**) Incidencias en GitHub | Mínimo | Técnico | Fácil | v1 | 
-| (**R8**) Etiquetas e hitos | Mínimo | Técnico | Fácil | v1 | 
-| (**R9**) Rama master | Mínimo | Técnico | Fácil | v1 | 
-| (**R10**) Gestión del proyecto | Mínimo | Técnico | Fácil | v1 | 
-| (**R11**) Final de cada iteración | Mínimo | Técnico | Fácil | v1 | 
-| (**R12**) Validación de formularios | Mínimo | Técnico | Fácil | v1 | 
-| (**R13**) Gestión de ventanas | Mínimo | Técnico | Fácil | v1 | 
-| (**R14**) Manejo de eventos | Mínimo | Técnico | Fácil | v1 | 
-| (**R15**) DOM | Mínimo | Técnico | Fácil | v1 | 
-| (**R16**) Almacenamiento en el lado del cliente | Mínimo | Técnico | Fácil | v1 | 
-| (**R17**) Alpine.js | Mínimo | Técnico | Fácil | v1 | 
-| (**R18**) Plugin no trabajado en clase | Mínimo | Técnico | Fácil | v1 | 
-| (**R19**) Utilización de AJAX | Mínimo | Técnico | Fácil | v1 | 
-| (**R20**) ECMAScript2015 (ES6) | Mínimo | Técnico | Fácil | v1 | 
-| (**R21**) PHP | Mínimo | Técnico | Fácil | v1 | 
-| (**R22**) Laravel Framework | Mínimo | Técnico | Fácil | v1 | 
-| (**R23**) PostgreSQL | Mínimo | Técnico | Fácil | v1 | 
-| (**R24**) Cloud computing | Mínimo | Técnico | Fácil | v1 | 
-| (**R25**) Pruebas funcionales | Mínimo | Técnico | Fácil | v1 | 
-| (**R26**) Aplicación escalable | Mínimo | Técnico | Fácil | v1 | 
-| (**R27**) Etiquetas semánticas de HTML5 | Mínimo | Técnico | Fácil | v1 | 
-| (**R28**) Presentación mediante CSS | Mínimo | Técnico | Fácil | v1 | 
-| (**R29**) Diseño flexible | Mínimo | Técnico | Fácil | v1 | 
-| (**R30**) Transiciones, transformaciones, animaciones y contenido multimedia | Mínimo | Técnico | Fácil | v1 | 
-| (**R31**) Uso de microdatos | Mínimo | Técnico | Fácil | v1 | 
-| (**R32**) Validación HTML5, CSS3 y accesibilidad | Mínimo | Técnico | Fácil | v1 | 
-| (**R33**) Diseño para varias resoluciones | Mínimo | Técnico | Fácil | v1 | 
-| (**R34**) Varios navegadores | Mínimo | Técnico | Fácil | v1 | 
-| (**R35**) Despliegue en un Host | Mínimo | Técnico | Fácil | v1 | 
-| (**R36**) Despliegue en un servidor local | Mínimo | Técnico | Fácil | v1 | 
-| (**R37**) Creación base de datos  | Importante | Técnico | Fácil | v1 | 
-| (**R38**) Modelo entidad-relación | Importante | Técnico | Fácil | v1 | 
-| (**R39**) Registro | Importante | Funcional | Fácil | v1 | 
-| (**R40**) Iniciar sesión  | Importante | Funcional | Fácil | v1 | 
-| (**R41**) Recuperar contraseña | Opcional | Funcional | Media | v1 | 
-| (**R42**) Validar correo | Opcional | Funcional | Media | v1 | 
-| (**R43**) Perfil usuario | Importante | Funcional | Fácil | v1 | 
-| (**R44**) Portal administrador | Importante | Funcional | Fácil | v1 | 
-| (**R45**) Crear actividad | Importante | Funcional | Fácil | v1 | 
-| (**R46**) Modificar actividad | Importante | Funcional | Fácil | v1 | 
-| (**R47**) Borrar actividad | Importante | Funcional | Fácil | v1 | 
-| (**R48**) Bloquear actividad | Importante | Funcional | Fácil | v1 | 
-| (**R49**) Añadir categoría | Opcional | Funcional | Fácil | v1 | 
-| (**R50**) Modificar categoría | Opcional | Funcional | Fácil | v1 | 
-| (**R51**) Borrar categoría | Opcional | Funcional | Fácil | v1 | 
-| (**R52**) Ver usuarios | Importante | Funcional | Fácil | v1 | 
-| (**R53**) Bloquear/desbloquear usuarios | Importante | Funcional | Media | v2 | 
-| (**R54**) Filtro de reservas  | Importante | Funcional | Media | v2 | 
-| (**R55**) Ver reservas | Importante | Funcional | Fácil | v2 | 
-| (**R56**) Buscar actividades | Importante | Funcional | Fácil | v1 | 
-| (**R57**) Filtrar actividades | Importante | Funcional | Fácil | v1 | 
-| (**R58**) Vista de la actividad | Importante | Funcional | Fácil | v1 | 
-| (**R59**) Reservar actividad | Importante | Funcional | Fácil | v1 | 
-| (**R60**) Cancelar actividad | Importante | Funcional | Fácil | v1 | 
-| (**R61**) Escribir una reseña | Importante | Funcional | Fácil | v1 | 
-| (**R62**) Dejar  valoración  | Opcional | Funcional | Fácil | v3 | 
-| (**R63**) Sistema de Pago en Línea | Importante | Funcional | Media | v2 | 
-| (**R64**) Envío de correo de confirmación de la reserva | Importante | Funcional | Media | v2 | 
-| (**R65**) Envío de correo de recordatorio | Opcional | Funcional | Media | v3 | 
-| (**R66**) Generar PDF de la reserva  | Opcional | Funcional | Difícil | v3 | 
-| (**R67**) Mapa de Ubicación  | Importante | Funcional | Media | v2 | 
-| (**R68**) Formulario contacto | Importante | Funcional | Media | v2 | 
-| (**R69**) Galería de imágenes | Importante | Información | Fácil | v1 | 
-| (**R70**) Nuestra historia | Importante | Información | Fácil | v1 | 
-| (**R71**) Newsletter | Opcional | Funcional | Difícil | v3 | 
-| (**R72**) API de autenticación de Google | Opcional | Funcional | Difícil | v3 | 
+| **Requisito** | **Prioridad** | **Tipo** | **Complejidad** | **Entrega** | **Incidencia** |
+| :------------ | :-----------: | :------: | :-------------: | :---------: | :------------: |
+| (**R1**) Requisitos como incidencias | Mínimo | Técnico | Fácil | v1 | | **Incidencia**  | [1](https://github.com/anarp14/FincaMonterruiz/issues/1) |
+| (**R2**) Código fuente | Mínimo | Técnico | Fácil | v1 | | **Incidencia**  | [2](https://github.com/anarp14/FincaMonterruiz/issues/2) |
+| (**R3**) Estilo del código | Mínimo | Técnico | Fácil | v1 | | **Incidencia**  | [3](https://github.com/anarp14/FincaMonterruiz/issues/3) |
+| (**R4**) Tres lanzamientos | Mínimo | Técnico | Fácil | v1 | | **Incidencia**  | [4](https://github.com/anarp14/FincaMonterruiz/issues/4) |
+| (**R5**) README.md | Mínimo | Técnico | Fácil | v1 | | **Incidencia**  | [5](https://github.com/anarp14/FincaMonterruiz/issues/5) |
+| (**R6**) Documentación | Mínimo | Técnico | Fácil | v1 | | **Incidencia**  | [6](https://github.com/anarp14/FincaMonterruiz/issues/6) |
+| (**R7**) Incidencias en GitHub | Mínimo | Técnico | Fácil | v1 | | **Incidencia**  | [7](https://github.com/anarp14/FincaMonterruiz/issues/7) |
+| (**R8**) Etiquetas e hitos | Mínimo | Técnico | Fácil | v1 | | **Incidencia**  | [8](https://github.com/anarp14/FincaMonterruiz/issues/8) |
+| (**R9**) Rama master | Mínimo | Técnico | Fácil | v1 | | **Incidencia**  | [9](https://github.com/anarp14/FincaMonterruiz/issues/9) |
+| (**R10**) Gestión del proyecto | Mínimo | Técnico | Fácil | v1 | | **Incidencia**  | [10](https://github.com/anarp14/FincaMonterruiz/issues/10) |
+| (**R11**) Final de cada iteración | Mínimo | Técnico | Fácil | v1 | | **Incidencia**  | [11](https://github.com/anarp14/FincaMonterruiz/issues/11) |
+| (**R12**) Validación de formularios | Mínimo | Técnico | Fácil | v1 | | **Incidencia**  | [12](https://github.com/anarp14/FincaMonterruiz/issues/12) |
+| (**R13**) Gestión de ventanas | Mínimo | Técnico | Fácil | v1 | | **Incidencia**  | [13](https://github.com/anarp14/FincaMonterruiz/issues/13) |
+| (**R14**) Manejo de eventos | Mínimo | Técnico | Fácil | v1 | | **Incidencia**  | [14](https://github.com/anarp14/FincaMonterruiz/issues/14) |
+| (**R15**) DOM | Mínimo | Técnico | Fácil | v1 | | **Incidencia**  | [15](https://github.com/anarp14/FincaMonterruiz/issues/15) |
+| (**R16**) Almacenamiento en el lado del cliente | Mínimo | Técnico | Fácil | v1 | | **Incidencia**  | [16](https://github.com/anarp14/FincaMonterruiz/issues/16) |
+| (**R17**) Alpine.js | Mínimo | Técnico | Fácil | v1 | | **Incidencia**  | [17](https://github.com/anarp14/FincaMonterruiz/issues/17) |
+| (**R18**) Plugin no trabajado en clase | Mínimo | Técnico | Fácil | v1 | | **Incidencia**  | [18](https://github.com/anarp14/FincaMonterruiz/issues/18) |
+| (**R19**) Utilización de AJAX | Mínimo | Técnico | Fácil | v1 | | **Incidencia**  | [19](https://github.com/anarp14/FincaMonterruiz/issues/19) |
+| (**R20**) ECMAScript2015 (ES6) | Mínimo | Técnico | Fácil | v1 | | **Incidencia**  | [20](https://github.com/anarp14/FincaMonterruiz/issues/20) |
+| (**R21**) PHP | Mínimo | Técnico | Fácil | v1 | | **Incidencia**  | [21](https://github.com/anarp14/FincaMonterruiz/issues/21) |
+| (**R22**) Laravel Framework | Mínimo | Técnico | Fácil | v1 | | **Incidencia**  | [22](https://github.com/anarp14/FincaMonterruiz/issues/22) |
+| (**R23**) PostgreSQL | Mínimo | Técnico | Fácil | v1 | | **Incidencia**  | [23](https://github.com/anarp14/FincaMonterruiz/issues/23) |
+| (**R24**) Cloud computing | Mínimo | Técnico | Fácil | v1 | | **Incidencia**  | [24](https://github.com/anarp14/FincaMonterruiz/issues/24) |
+| (**R25**) Pruebas funcionales | Mínimo | Técnico | Fácil | v1 | | **Incidencia**  | [25](https://github.com/anarp14/FincaMonterruiz/issues/25) |
+| (**R26**) Aplicación escalable | Mínimo | Técnico | Fácil | v1 | | **Incidencia**  | [26](https://github.com/anarp14/FincaMonterruiz/issues/26) |
+| (**R27**) Etiquetas semánticas de HTML5 | Mínimo | Técnico | Fácil | v1 | | **Incidencia**  | [27](https://github.com/anarp14/FincaMonterruiz/issues/27) |
+| (**R28**) Presentación mediante CSS | Mínimo | Técnico | Fácil | v1 | | **Incidencia**  | [28](https://github.com/anarp14/FincaMonterruiz/issues/28) |
+| (**R29**) Diseño flexible | Mínimo | Técnico | Fácil | v1 | | **Incidencia**  | [29](https://github.com/anarp14/FincaMonterruiz/issues/29) |
+| (**R30**) Transiciones, transformaciones, animaciones y contenido multimedia | Mínimo | Técnico | Fácil | v1 | | **Incidencia**  | [30](https://github.com/anarp14/FincaMonterruiz/issues/30) |
+| (**R31**) Uso de microdatos | Mínimo | Técnico | Fácil | v1 | | **Incidencia**  | [31](https://github.com/anarp14/FincaMonterruiz/issues/31) |
+| (**R32**) Validación HTML5, CSS3 y accesibilidad | Mínimo | Técnico | Fácil | v1 | | **Incidencia**  | [32](https://github.com/anarp14/FincaMonterruiz/issues/32) |
+| (**R33**) Diseño para varias resoluciones | Mínimo | Técnico | Fácil | v1 | | **Incidencia**  | [33](https://github.com/anarp14/FincaMonterruiz/issues/33) |
+| (**R34**) Varios navegadores | Mínimo | Técnico | Fácil | v1 | | **Incidencia**  | [34](https://github.com/anarp14/FincaMonterruiz/issues/34) |
+| (**R35**) Despliegue en un Host | Mínimo | Técnico | Fácil | v1 | | **Incidencia**  | [35](https://github.com/anarp14/FincaMonterruiz/issues/35) |
+| (**R36**) Despliegue en un servidor local | Mínimo | Técnico | Fácil | v1 | | **Incidencia**  | [36](https://github.com/anarp14/FincaMonterruiz/issues/36) |
+| (**R37**) Creación base de datos  | Importante | Técnico | Fácil | v1 | | **Incidencia**  | [37](https://github.com/anarp14/FincaMonterruiz/issues/37) |
+| (**R38**) Modelo entidad-relación | Importante | Técnico | Fácil | v1 | | **Incidencia**  | [38](https://github.com/anarp14/FincaMonterruiz/issues/38) |
+| (**R39**) Registro | Importante | Funcional | Fácil | v1 | | **Incidencia**  | [39](https://github.com/anarp14/FincaMonterruiz/issues/39) |
+| (**R40**) Iniciar sesión  | Importante | Funcional | Fácil | v1 | | **Incidencia**  | [40](https://github.com/anarp14/FincaMonterruiz/issues/40) |
+| (**R41**) Recuperar contraseña | Opcional | Funcional | Media | v1 | | **Incidencia**  | [41](https://github.com/anarp14/FincaMonterruiz/issues/41) |
+| (**R42**) Validar correo | Opcional | Funcional | Media | v1 | | **Incidencia**  | [42](https://github.com/anarp14/FincaMonterruiz/issues/42) |
+| (**R43**) Perfil usuario | Importante | Funcional | Fácil | v1 | | **Incidencia**  | [43](https://github.com/anarp14/FincaMonterruiz/issues/43) |
+| (**R44**) Portal administrador | Importante | Funcional | Fácil | v1 | | **Incidencia**  | [44](https://github.com/anarp14/FincaMonterruiz/issues/44) |
+| (**R45**) Crear actividad | Importante | Funcional | Fácil | v1 | | **Incidencia**  | [45](https://github.com/anarp14/FincaMonterruiz/issues/45) |
+| (**R46**) Modificar actividad | Importante | Funcional | Fácil | v1 | | **Incidencia**  | [46](https://github.com/anarp14/FincaMonterruiz/issues/46) |
+| (**R47**) Borrar actividad | Importante | Funcional | Fácil | v1 | | **Incidencia**  | [47](https://github.com/anarp14/FincaMonterruiz/issues/47) |
+| (**R48**) Bloquear actividad | Importante | Funcional | Fácil | v1 | | **Incidencia**  | [48](https://github.com/anarp14/FincaMonterruiz/issues/48) |
+| (**R49**) Añadir categoría | Opcional | Funcional | Fácil | v1 | | **Incidencia**  | [49](https://github.com/anarp14/FincaMonterruiz/issues/49) |
+| (**R50**) Modificar categoría | Opcional | Funcional | Fácil | v1 | | **Incidencia**  | [50](https://github.com/anarp14/FincaMonterruiz/issues/50) |
+| (**R51**) Borrar categoría | Opcional | Funcional | Fácil | v1 | | **Incidencia**  | [51](https://github.com/anarp14/FincaMonterruiz/issues/51) |
+| (**R52**) Ver usuarios | Importante | Funcional | Fácil | v1 | | **Incidencia**  | [52](https://github.com/anarp14/FincaMonterruiz/issues/52) |
+| (**R53**) Bloquear/desbloquear usuarios | Importante | Funcional | Media | v2 | | **Incidencia**  | [53](https://github.com/anarp14/FincaMonterruiz/issues/53) |
+| (**R54**) Filtro de reservas  | Importante | Funcional | Media | v2 | | **Incidencia**  | [54](https://github.com/anarp14/FincaMonterruiz/issues/54) |
+| (**R55**) Ver reservas | Importante | Funcional | Fácil | v2 | | **Incidencia**  | [55](https://github.com/anarp14/FincaMonterruiz/issues/55) |
+| (**R56**) Buscar actividades | Importante | Funcional | Fácil | v1 | | **Incidencia**  | [56](https://github.com/anarp14/FincaMonterruiz/issues/56) |
+| (**R57**) Filtrar actividades | Importante | Funcional | Fácil | v1 | | **Incidencia**  | [57](https://github.com/anarp14/FincaMonterruiz/issues/57) |
+| (**R58**) Vista de la actividad | Importante | Funcional | Fácil | v1 | | **Incidencia**  | [58](https://github.com/anarp14/FincaMonterruiz/issues/58) |
+| (**R59**) Reservar actividad | Importante | Funcional | Fácil | v1 | | **Incidencia**  | [59](https://github.com/anarp14/FincaMonterruiz/issues/59) |
+| (**R60**) Cancelar actividad | Importante | Funcional | Fácil | v1 | | **Incidencia**  | [60](https://github.com/anarp14/FincaMonterruiz/issues/60) |
+| (**R61**) Escribir una reseña | Importante | Funcional | Fácil | v1 | | **Incidencia**  | [61](https://github.com/anarp14/FincaMonterruiz/issues/61) |
+| (**R62**) Dejar  valoración  | Opcional | Funcional | Fácil | v3 | | **Incidencia**  | [62](https://github.com/anarp14/FincaMonterruiz/issues/62) |
+| (**R63**) Sistema de Pago en Línea | Importante | Funcional | Media | v2 | | **Incidencia**  | [63](https://github.com/anarp14/FincaMonterruiz/issues/63) |
+| (**R64**) Envío de correo de confirmación de la reserva | Importante | Funcional | Media | v2 | | **Incidencia**  | [64](https://github.com/anarp14/FincaMonterruiz/issues/64) |
+| (**R65**) Envío de correo de recordatorio | Opcional | Funcional | Media | v3 | | **Incidencia**  | [65](https://github.com/anarp14/FincaMonterruiz/issues/65) |
+| (**R66**) Generar PDF de la reserva  | Opcional | Funcional | Difícil | v3 | | **Incidencia**  | [66](https://github.com/anarp14/FincaMonterruiz/issues/66) |
+| (**R67**) Mapa de Ubicación  | Importante | Funcional | Media | v2 | | **Incidencia**  | [67](https://github.com/anarp14/FincaMonterruiz/issues/67) |
+| (**R68**) Formulario contacto | Importante | Funcional | Media | v2 | | **Incidencia**  | [68](https://github.com/anarp14/FincaMonterruiz/issues/68) |
+| (**R69**) Galería de imágenes | Importante | Información | Fácil | v1 | | **Incidencia**  | [69](https://github.com/anarp14/FincaMonterruiz/issues/69) |
+| (**R70**) Nuestra historia | Importante | Información | Fácil | v1 | | **Incidencia**  | [70](https://github.com/anarp14/FincaMonterruiz/issues/70) |
+| (**R71**) Newsletter | Opcional | Funcional | Difícil | v3 | | **Incidencia**  | [71](https://github.com/anarp14/FincaMonterruiz/issues/71) |
+| (**R72**) API de autenticación de Google | Opcional | Funcional | Difícil | v3 | | **Incidencia**  | [72](https://github.com/anarp14/FincaMonterruiz/issues/72) |
