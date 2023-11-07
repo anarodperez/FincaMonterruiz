@@ -16,14 +16,16 @@
             <div class="login"><strong><a class="enlace" href="{{ route('register') }}"> Registrate </a></strong></div>
 
             <div class="login-form" style="background: white">
-                <img src="imagenes/img1.jpg" alt="Imagen" class=" img-fluid login-image">
+                <img src="img/img1.jpg" alt="Imagen" class=" img-fluid login-image">
+                <h3>Iniciar sesión</h3>
+                <a href="{{ url('/login/google') }}" class="boton-google">
+                    <i class="fab fa-google" aria-hidden="true"></i> Iniciar sesión con Google
+                </a>
                 <form method="POST" action="{{ route('login') }}" id="login-box">
                     @csrf
-                    <h3>Iniciar sesión</h3>
-
                     <!-- Email Address -->
                     <div>
-                        <x-input-label for="email" :value="__('Email')" />
+                        <x-input-label for="email" :value="__('Email')"/>
                         <x-text-input id="email" class="input" type="email" name="email"
                             :value="old('email')" required autofocus autocomplete="username" />
                         <x-input-error :messages="$errors->get('email')" class="mt-2" />
@@ -55,7 +57,8 @@
                             </a>
                         @endif
                     </div>
-                    <button type="submit" class="btn-2">Entrar</button>
+
+                    <button type="submit" class="btn-2">ACCEDER</button>
                 </form>
             </div>
         </div>

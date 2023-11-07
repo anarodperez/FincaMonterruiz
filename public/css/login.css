@@ -29,7 +29,7 @@ body {
     border-radius: 24px;
     margin-bottom: 8px;
     background: white;
-    margin: 30px 0px 15px;;
+    margin: 30px 0px 15px;
 }
 
 .login-form,
@@ -39,7 +39,7 @@ body {
     clear: both;
     box-sizing: border-box;
     border-radius: 15px;
-    height: 950px;
+    height: 117vh;
     box-shadow: 0 0 6px 0 rgba(255, 255, 255, 0.8);
 }
 
@@ -47,37 +47,23 @@ body {
     height: auto;
 }
 
-.input {
-    width: 100%;
-    padding: 20px;
-    box-sizing: border-box;
-    margin-bottom: 25px;
-    border: 2px solid #e9eaea;
-    color: #555555;
-    font-size: 18px;
-    outline: none;
-    transform: all 0.5s ease;
-}
-
-.input:focus {
-    border: 2px solid #6fa78a;
+h3{
+    text-align: center;
+margin-bottom: 4vh;
 }
 
 .btn-2 {
     width: 100%;
-    background: #fd917e;
+    background: #4c606d;;
     height: 60px;
     text-align: center;
     line-height: 60px;
-    text-transform: uppercase;
     color: #fff;
     font-weight: bold;
-    letter-spacing: 1px;
     cursor: pointer;
     user-select: none;
     transition: 0.2s;
     margin-top: 30px;
-    filter: drop-shadow(2px 2px 3px #0003);
     border-radius: 4px;
 }
 
@@ -101,15 +87,11 @@ a {
 	padding: 10px;
 	box-sizing: border-box;
 	margin-bottom: 10px;
-	border: 2px solid #e9eaea;
+	border: 1px solid #6fa78a;
 	color: #555555;
 	font-size: 16px;
 	outline: none;
 	transform: all 0.5s ease;
-  }
-
-  .input:focus{
-	border: 2px solid #6fa78a;
   }
 
 ::-webkit-input-placeholder {
@@ -145,3 +127,22 @@ a {
     transform: scale(1.05);
 }
 
+
+/* Estilos para el enlace de inicio de sesión con Google */
+.boton-google {
+    display: inline-flex;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: #5c7c64; /* Color de Google */
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+    border: none;
+    font-weight: bold; /* Texto en negrita */
+    margin-bottom: 3vh;
+  }
+
+  .boton-google i {
+    margin-right: 8px; /* Espacio entre el icono y el texto */
+  }
