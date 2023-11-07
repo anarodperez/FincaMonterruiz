@@ -7,6 +7,23 @@
     <link rel="stylesheet" href="{{ asset('css/login.css') }}">
 @endsection
 
+<script defer>
+    function togglePasswordVisibility() {
+        const passwordInput = document.getElementById('password');
+        const icon = document.getElementById('toggleIcon');
+
+        if (passwordInput.type === 'password') {
+            passwordInput.type = 'text';
+            icon.classList.remove('fa-eye');
+            icon.classList.add('fa-eye-slash');
+        } else {
+            passwordInput.type = 'password';
+            icon.classList.remove('fa-eye-slash');
+            icon.classList.add('fa-eye');
+        }
+    }
+</script>
+
 @section('content')
     <x-auth-session-status class="mb-4" :status="session('status')" />
 
@@ -32,14 +49,21 @@
                     </div>
 
                     <!-- Password -->
-                    <div class="mt-4">
+                    <div class="mt-4" style="position: relative;">
                         <x-input-label for="password" :value="__('Password')" />
 
-                        <x-text-input id="password" class="input" type="password" name="password" required
-                            autocomplete="current-password" />
+                        <div class="input-group">
+                            <x-text-input id="password" class="input" type="password" name="password" required autocomplete="current-password" />
+                            <span class="password-toggle" onclick="togglePasswordVisibility()">
+                                <!-- Ícono para alternar la visibilidad de la contraseña -->
+                                <i id="toggleIcon" class="fas fa-eye"></i>
+                            </span>
+                        </div>
 
                         <x-input-error :messages="$errors->get('password')" class="mt-2" />
                     </div>
+
+
                     <!-- Remember Me -->
                     <div class="block mt-4">
                         <label for="remember_me" class="inline-flex items-center">
