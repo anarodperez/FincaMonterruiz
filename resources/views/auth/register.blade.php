@@ -7,21 +7,7 @@
     <link rel="stylesheet" href="{{ asset('css/navbar.css') }}">
     <link rel="stylesheet" href="{{ asset('css/footer.css') }}">
     {{-- <script src="{{ asset('js/validaciones.js') }}" defer></script> --}}
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@400;700&display=swap">
-
     <style>
-        body {
-            font-family: 'Josefin Sans', sans-serif;
-        }
-
-        .signup,
-        .login {
-            width: 50%;
-            display: inline-block;
-            text-align: center;
-            margin: 2em 0;
-        }
-
         .container-formulario {
             width: 50%;
             text-align: center;
@@ -30,9 +16,14 @@
         label[for="nombre"]:after,
         label[for="apellido1"]:after,
         label[for="email"]:after,
-        label[for="password"]:after {
+        label[for="password"]:after,
+        label[for="password_confirmation"]:after {
             content: "*";
             color: red;
+        }
+
+        .col-md-3{
+            padding-bottom: 3vh;
         }
     </style>
 @endsection
@@ -105,23 +96,26 @@
                     <button type="submit" id="btn-enviar" class="btn-2" style="width: 200px;">REGISTRARSE</button>
                 </div>
             </form>
+
             <script defer>
                 document.addEventListener("DOMContentLoaded", function() {
+                    // Obtención del formulario y establecimiento del evento 'submit'
                     const registerForm = document.getElementById('form');
                     registerForm.addEventListener('submit', function(event) {
-                        event.preventDefault();
+                        event.preventDefault(); // Evita que el formulario se envíe automáticamente
 
+                        // Array con campos a validar y mensajes de error asociados
                         const fieldsToValidate = [{
                                 inputId: 'nombre',
                                 errorMessage: 'Nombre no válido. Introduce un nombre válido.'
                             },
                             {
                                 inputId: 'apellido1',
-                                errorMessage: 'Apellido no válido. Introduce tu apellido.'
+                                errorMessage: 'Apellido no válido. Introduce tu primer apellido.'
                             },
                             {
                                 inputId: 'apellido2',
-                                errorMessage: 'Apellido no válido. '
+                                errorMessage: 'Apellido no válido. Introduce tu segundo apellido. '
                             },
                             {
                                 inputId: 'email',
@@ -133,8 +127,9 @@
                             }
                         ];
 
-                        let errors = false;
+                        let errors = false; // Inicialización de la variable de error
 
+                        // Validación de cada campo
                         fieldsToValidate.forEach(field => {
                             const input = document.getElementById(field.inputId);
                             if (!validateField(input, field.errorMessage)) {
@@ -142,22 +137,41 @@
                             }
                         });
 
+                        // Verificación de la igualdad entre las contraseñas
+                        const passwordInput = document.getElementById('password');
+                        const passwordConfirmationInput = document.getElementById('password_confirmation');
+
+                        if (passwordInput.value !== passwordConfirmationInput.value) {
+                            showError(passwordConfirmationInput, 'Las contraseñas no coinciden');
+                            errors = true;
+                        } else if (passwordConfirmationInput.value.trim().length < 1) {
+                            showError(passwordConfirmationInput, 'Este campo es requerido');
+                            errors = true;
+                        } else {
+                            hideError(passwordConfirmationInput); // Ocultar el error si las contraseñas coinciden
+                        }
+
+                        // Envío del formulario si no hay errores
                         if (!errors) {
                             registerForm.submit();
                         }
                     });
 
+                    // Validación de un campo específico con su mensaje de error
                     function validateField(input, errorMessage) {
                         if (!input) {
-                            return false; // Si el elemento es nulo, salir de la función
+                            return false; // Salir de la función si el elemento es nulo
                         }
 
+                        // Verificación de cada campo según su validación específica
                         if ((!input.value || input.value.trim().length < 1) && input.id !== 'apellido2') {
                             showError(input, 'Este campo es requerido');
                             return false;
-                        } else if ((input.id === 'nombre' && (input.value.length < 3 || !validarInput(input.value))) ||
+                        } else if (
+                            (input.id === 'nombre' && (input.value.length < 3 || !validarInput(input.value))) ||
                             (input.id === 'apellido1' && (input.value.length < 5 || !validarInput(input.value))) ||
-                            (input.id === 'apellido2' && (input.value.length > 0 && input.value.length < 5 && !validarInput(input.value))) ||
+                            (input.id === 'apellido2' && input.value.trim().length > 0 && (input.value.length < 5 || !
+                                validarInput(input.value))) ||
                             (input.id === 'email' && (input.value.length < 10 || !isValidEmail(input.value))) ||
                             (input.id === 'password' && !validarContraseña(input.value))
                         ) {
@@ -169,62 +183,54 @@
                         }
                     }
 
+                    // Muestra un mensaje de error para un campo específico
                     function showError(input, message) {
-                        const errorSpan = input.parentElement.querySelector('.errors-' + input.id);
-                        if (errorSpan) {
-                            errorSpan.innerHTML = `<span class="error-icon">❌</span> ${message}`;
-                            input.classList.add('is-invalid');
-                            errorSpan.classList.add('error-visible');
-                            errorSpan.classList.remove('error-hidden');
-                        } else {
-                            const newErrorSpan = document.createElement('span');
-                            newErrorSpan.classList.add('errors-' + input.id);
-                            newErrorSpan.innerHTML = `<span class="error-icon">❌</span> ${message}`;
-                            input.parentElement.appendChild(newErrorSpan);
-                            input.classList.add('is-invalid');
-                            newErrorSpan.classList.add('error-visible');
-                            newErrorSpan.classList.remove('error-hidden');
-                        }
+                        const errorSpan = createOrGetErrorSpan(input);
+                        errorSpan.innerHTML = `<span class="error-icon">❌</span> ${message}`;
+                        input.classList.add('is-invalid');
+                        errorSpan.classList.add('error-visible');
+                        errorSpan.classList.remove('error-hidden');
                     }
 
+                    // Oculta un mensaje de error para un campo específico
                     function hideError(input) {
-                        if (input) {
-                            const errorSpan = input.parentElement.querySelector('.errors-' + input.id);
-                            if (errorSpan) {
-                                errorSpan.innerHTML = `<span class="valid-icon">✔️</span>`;
-                                input.classList.remove('is-invalid');
-                                errorSpan.classList.add('error-hidden');
-                                errorSpan.classList.remove('error-visible');
-                            }
+                        const errorSpan = input.nextElementSibling;
+                        if (errorSpan && errorSpan.classList.contains('error-message')) {
+                            input.classList.remove('is-invalid');
+                            errorSpan.remove();
                         }
                     }
 
+                    // Crea un elemento de mensaje de error o devuelve el existente si ya está creado
+                    function createOrGetErrorSpan(input) {
+                        let errorSpan = input.nextElementSibling;
+                        if (!errorSpan || !errorSpan.classList.contains('error-message')) {
+                            errorSpan = document.createElement('span');
+                            errorSpan.classList.add('error-message');
+                            input.parentNode.insertBefore(errorSpan, input.nextElementSibling);
+                        }
+                        return errorSpan;
+                    }
+
+                    // Función para validar si el email es válido
                     function isValidEmail(email) {
                         const emailRegex = /^[^\s@]{5,}@[^.\s@]{4,}\.[^.\s@]{2,}$/;
                         return emailRegex.test(email);
                     }
 
+                    // Función para validar si la entrada es un apellido válido
                     function validarInput(input) {
                         const regex = /^[a-zA-ZñÑáéíóúü\s-]+$/;
                         return regex.test(input);
                     }
 
+                    // Función para validar si la contraseña es segura
                     function validarContraseña(password) {
                         const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
                         return regex.test(password);
                     }
-
-                    const passwordInput = document.getElementById('password');
-                    const passwordConfirmationInput = document.getElementById('password_confirmation');
-
-                    if (passwordInput.value !== passwordConfirmationInput.value) {
-                        showError(passwordConfirmationInput, 'Las contraseñas no coinciden');
-                        errors = true;
-                    }
-
                 });
             </script>
-
         </div>
     </div>
 @endsection
