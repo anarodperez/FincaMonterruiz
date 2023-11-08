@@ -10,10 +10,10 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@400;700&display=swap">
 
     <style>
+        body {
+            font-family: 'Josefin Sans', sans-serif;
+        }
 
-body {
-    font-family: 'Josefin Sans', sans-serif;
-}
         .signup,
         .login {
             width: 50%;
@@ -26,6 +26,14 @@ body {
             width: 50%;
             text-align: center;
         }
+
+        label[for="nombre"]:after,
+        label[for="apellido1"]:after,
+        label[for="email"]:after,
+        label[for="password"]:after {
+            content: "*";
+            color: red;
+        }
     </style>
 @endsection
 
@@ -36,7 +44,7 @@ body {
             <div class="signup"><strong>Registrarse</strong></div>
             <div class="login"><strong><a class="enlace" href="{{ route('login') }}">Iniciar sesión</a></strong></div>
         </div>
-        <div class="container shadow-lg p-3 mb-5 bg-body rounded "  style="min-height: 50vh">
+        <div class="container shadow-lg p-3 mb-5 bg-body rounded " style="min-height: 50vh">
             @if ($errors->any())
                 <div class="alert alert-danger">
                     <ul>
@@ -112,6 +120,10 @@ body {
                                 errorMessage: 'Apellido no válido. Introduce tu apellido.'
                             },
                             {
+                                inputId: 'apellido2',
+                                errorMessage: 'Apellido no válido. '
+                            },
+                            {
                                 inputId: 'email',
                                 errorMessage: 'Formato de email no válido.'
                             },
@@ -145,7 +157,7 @@ body {
                             return false;
                         } else if ((input.id === 'nombre' && (input.value.length < 3 || !validarInput(input.value))) ||
                             (input.id === 'apellido1' && (input.value.length < 5 || !validarInput(input.value))) ||
-                            (input.id === 'apellido2' && (input.value.length < 5 || !validarInput(input.value))) ||
+                            (input.id === 'apellido2' && (input.value.length > 0 && input.value.length < 5 && !validarInput(input.value))) ||
                             (input.id === 'email' && (input.value.length < 10 || !isValidEmail(input.value))) ||
                             (input.id === 'password' && !validarContraseña(input.value))
                         ) {
