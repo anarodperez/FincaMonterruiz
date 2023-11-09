@@ -62,8 +62,6 @@
 
                         <x-input-error :messages="$errors->get('password')" class="mt-2" />
                     </div>
-
-
                     <!-- Remember Me -->
                     <div class="block mt-4">
                         <label for="remember_me" class="inline-flex items-center">
@@ -77,11 +75,10 @@
                         @if (Route::has('password.request'))
                             <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                                 href="{{ route('password.request') }}">
-                                {{ __('¿Has olvidado la contraseña?') }}
+                                {{ __('¿Has olvidado la contraseña? Haz click en este enlace.') }}
                             </a>
                         @endif
                     </div>
-
                     <button type="submit" class="btn-2">ACCEDER</button>
                 </form>
             </div>
