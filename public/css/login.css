@@ -1,141 +1,168 @@
 body {
-background-color: #b4c8b1;
-font-family: 'Kurale', serif;
-}
+    background-color: #b4c8b1;
+    font-family: 'Kurale', serif;
+    }
 
-.wrapper {
-display: flex;
-flex-direction: column;
-align-items: center;
-justify-content: center;
-margin-bottom: 4vh;
-}
+    .wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    margin-bottom: 4vh;
+    }
 
-label, .boton-google, .btn-2, input{
-font-size: 1.25rem;
-}
+    label, .boton-google, .btn-2, input{
+    font-size: 1.25rem;
+    }
 
-.login-image {
-max-height: 40%;
-margin: 0 auto;
-}
+    .login-image {
+    max-height: 40%;
+    margin: 0 auto;
+    }
 
-.signup,
-.login {
-width: 50%;
-float: left;
-height: 7vh;
-line-height: 60px;
-text-align: center;
-cursor: pointer;
-text-transform: uppercase;
-border-radius: 24px;
-margin-bottom: 8px;
-background: white;
-margin: 30px 0px 15px;
-font-size: 1.375rem;
-}
+    .signup,
+    .login {
+    width: 50%;
+    float: left;
+    height: 60px;
+    line-height: 60px;
+    text-align: center;
+    cursor: pointer;
+    text-transform: uppercase;
+    border-radius: 24px;
+    margin-bottom: 8px;
+    background: white;
+    margin: 30px 0px 15px;
+    font-size: 1.375rem;
+    }
 
-.login-form,
-.signup-form {
-background: #fff;
-padding: 40px;
-clear: both;
-box-sizing: border-box;
-border-radius: 15px;
-height: 117vh;
-box-shadow: 0 0 6px 0 rgba(255, 255, 255, 0.8);
-}
+    .login-form,
+    .signup-form {
+    background: #fff;
+    padding: 40px;
+    clear: both;
+    box-sizing: border-box;
+    border-radius: 15px;
+    height: 117vh;
+    box-shadow: 0 0 6px 0 rgba(255, 255, 255, 0.8);
+    }
 
-.signup-form {
-height: auto;
-}
+    .signup-form {
+    height: auto;
+    }
 
-h3{
-text-align: center;
-margin-bottom: 3vh;
-margin-top: 1.5vh;
-font-size: 2.75rem;
-}
+    h3{
+    text-align: center;
+    margin-bottom: 3vh;
+    margin-top: 1.5vh;
+    font-size: 2.75rem;
+    }
 
-.btn-2 {
-width: 100%;
-background: #4c606d;
-height: 7vh;
-text-align: center;
-color: #fff;
-font-weight: bold;
-cursor: pointer;
-transition: 0.2s;
-border-radius: 4px;
-border: none;
-margin-top: 2vh;
-}
+    .btn-2 {
+    width: 100%;
+    background: #4c606d;
+    height: 60px;
+    text-align: center;
+    color: #fff;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.2s;
+    border-radius: 4px;
+    border: none;
+    margin-top: 2vh;
+    }
 
-.btn-2:hover {
-transform: scale(1.1, 1.1);
-}
+    .btn-2:hover {
+    transform: scale(1.1, 1.1);
+    }
 
-a {
-text-decoration: none;
-color: #000;
-font-weight: bold;
-}
+    .btn-2:active {
+    transform: scale(1.1, 1.1);
+    filter: sepia(0.5);
+    }
 
-.input{
-width: 100%;
-padding: 10px;
-box-sizing: border-box;
-margin-bottom: 10px;
-border: 1px solid #6fa78a;
-color: #555555;
-outline: none;
-transform: all 0.5s ease;
-}
+    a {
+    text-decoration: none;
+    color: #000;
+    font-weight: bold;
+    }
+
+    .input{
+    width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+    margin-bottom: 10px;
+    border: 1px solid #6fa78a;
+    color: #555555;
+    outline: none;
+    transform: all 0.5s ease;
+    }
+
+    ::-webkit-input-placeholder {
+    /* Chrome/Opera/Safari */
+    color: #3e3e40;
+    }
+
+    ::-moz-placeholder {
+    /* Firefox 19+ */
+    color: #3e3e40;
+
+    }
+
+    :-ms-input-placeholder {
+    /* IE 10+ */
+    color: #3e3e40;
+
+    }
+
+    :-moz-placeholder {
+    /* Firefox 18- */
+    color: #3e3e40;
+
+    }
+
+    .enlace {
+    color: #6fa78a;
+    transition: color 0.3s ease, transform 0.3s ease;
+    }
+
+    .enlace:hover {
+    color: #508d6e;
+    transform: scale(1.05);
+    }
 
 
+    /* Estilos para el enlace de inicio de sesión con Google */
+    .boton-google {
+    display: inline-flex;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: #5c7c64;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+    border: none;
+    font-weight: bold;
+    margin-bottom: 3vh;
+    }
 
-.enlace {
-color: #6fa78a;
-transition: color 0.3s ease, transform 0.3s ease;
-}
+    .boton-google i {
+    margin-right: 8px;
+    }
 
-.enlace:hover {
-color: #508d6e;
-transform: scale(1.05);
-}
+    /* Estilos para icono ver contraseña */
+    .input-group {
+    position: relative;
+    }
 
-
-/* Estilos para el enlace de inicio de sesión con Google */
-.boton-google {
-display: inline-flex;
-align-items: center;
-padding: 10px 20px;
-background-color: #5c7c64;
-color: white;
-text-decoration: none;
-border-radius: 5px;
-transition: background-color 0.3s;
-border: none;
-font-weight: bold;
-margin-bottom: 3vh;
-}
-
-.boton-google i {
-margin-right: 8px;
-}
-
-/* Estilos para icono ver contraseña */
-.input-group {
-position: relative;
-}
-
-.password-toggle {
-position: absolute;
-top: 50%;
-right: 10px;
-transform: translateY(-50%);
-cursor: pointer;
-font-size: 1.5em;
-padding-bottom: 5px;
-}
+    .password-toggle {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    cursor: pointer;
+    font-size: 1.5em; /* Ajusta el tamaño del icono a tu preferencia */
+    padding-bottom: 5px;
+    }
