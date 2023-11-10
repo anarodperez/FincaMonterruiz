@@ -29,14 +29,33 @@
             <x-input-label for="email" :value="__('Email')" />
             <x-text-input id="email" class="input" type="email" name="email" :value="old('email')" required autofocus />
             <x-input-error :messages="$errors->get('email')" class="mt-2" />
+            <span id="emailError" style="color: red; display: none;"></span>
         </div>
 
-              <button type="submit" class="btn-2">
-                {{ __('Enviar') }}
-            </button>
+        <button type="submit" class="btn-2" onclick="return validateForm()">
+            {{ __('Enviar') }}
+        </button>
 
     </form>
     </div>
 </div>
 
+<script>
+    function validateForm() {
+        var email = document.getElementById('email').value;
+        var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        var emailError = document.getElementById('emailError');
+
+        if (!emailRegex.test(email)) {
+            emailError.innerText = 'Por favor, introduce una dirección de correo electrónico válida.';
+            emailError.style.display = 'block';
+            return false; // Evita que el formulario se envíe si la validación falla
+        }
+
+        emailError.style.display = 'none';
+        return true; // Permite el envío del formulario si la validación es exitosa
+    }
+</script>
 @endsection
+
+

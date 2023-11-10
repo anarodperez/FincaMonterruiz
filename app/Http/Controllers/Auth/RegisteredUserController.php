@@ -35,7 +35,7 @@ class RegisteredUserController extends Controller
             'apellido1' => 'required|string|min:5',
             'apellido2' => 'nullable|string|min:5',
             'email' => 'required|string|email|unique:users,email',
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'password' => ['required', 'confirmed'],
         ]);
 
         $user = User::create([
