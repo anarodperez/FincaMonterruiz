@@ -25,16 +25,22 @@
         .col-md-3{
             padding-bottom: 3vh;
         }
+        @media (max-width: 768px) {
+            .signup, .login{
+                width: 55vw;
+            }
+        }
+
     </style>
 @endsection
 
 @section('content')
     <x-auth-session-status class="mb-4" :status="session('status')" />
     <div class="wrapper">
-        <div class="container-formulario">
+        <section class="container-formulario">
             <div class="signup"><strong>Registrarse</strong></div>
             <div class="login"><strong><a class="enlace" href="{{ route('login') }}">Iniciar sesión</a></strong></div>
-        </div>
+        </section>
         <div class="container shadow-lg p-3 mb-5 bg-body rounded " style="min-height: 50vh">
             @if ($errors->any())
                 <div class="alert alert-danger">
