@@ -28,7 +28,7 @@
                     </ul>
                 </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">Sobre nosotros</a>
+                <a class="nav-link" href="{{ route('pages.about-us') }}">Sobre nosotros</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="#">Contáctanos</a>

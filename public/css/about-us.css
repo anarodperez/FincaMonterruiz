@@ -1,0 +1,43 @@
+@import url('https://fonts.googleapis.com/css2?family=Kurale&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Exo+2&family=Kurale&display=swap');
+
+.contenido {
+    position: relative;
+    float: left;
+    overflow: hidden;
+    margin: 10px 1%;
+    min-width: 240px;
+    max-width: 500px;
+    width: 100%;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.15);
+    border-radius: 50%;
+}
+.contenido img {
+    max-width: 100%;
+    vertical-align: top;
+    -webkit-transition: all 2s ease-out;
+    transition: all 2s ease-out;
+    -webkit-transform: scale(1.4);
+    transform: scale(1.4);
+}
+
+.contenido:hover img,
+.contenido.hover img {
+    -webkit-transform: scale(1);
+    transform: scale(1);
+}
+.info-text{
+  top: 50%;
+}
+.container h2{
+    color: #5c7c64;
+    margin-top: 10px;
+}
+.info-text p {
+    font-size: 24px;
+    line-height: 1.4;
+    padding: 7% 4%;
+}
+.info-text .right {
+  float: right;
+}
