@@ -23,7 +23,7 @@
                             <a class="dropdown-item" href="#">Catalogo y reserva</a>
                         </li>
                         <li>
-                            <a class="dropdown-item" href="#">Galeria</a>
+                            <a class="dropdown-item" href="{{ route('pages.gallery') }}">Galeria</a>
                         </li>
                     </ul>
                 </li>

@@ -1,0 +1,81 @@
+/* Importa la fuente de Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Kurale&display=swap');
+
+
+  /* CONTENIDO */
+  .container {
+    margin-top: 3rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 290px));
+    grid-gap: 1rem;
+    padding: 1rem;
+    justify-content: center;
+    margin-bottom: 3rem;
+  }
+  .box img {
+    background-position: top;
+    background-size: cover;
+    height: 200px;
+    width: 290px;
+    box-shadow: 0 2px 10px #000;
+    cursor: pointer;
+    transition: all 0.2s;
+    border-radius: 5px;
+  }
+  .box img:hover {
+    box-shadow: none;
+    transform: scale(1.5);
+  }
+
+  .cabecera {
+    display: flex;
+    justify-content: space-between;
+    max-height: 400px;
+    margin-top: 40px;
+  }
+
+  .text {
+    color: white;
+    width: 50%;
+    max-width: 100%;
+    background-color: #5c7c64;
+    font-family: 'Kurale', serif;
+  }
+
+  .image {
+    width: 50%; /* Establecer el ancho de la imagen al 50% */
+    max-width: 100%;
+  }
+
+  .image img {
+    max-width: 100%; /* La imagen no superará el ancho del contenedor */
+    height: auto;
+    max-height: 400px;
+    width: 100%;
+  }
+
+  .text h1{
+    text-align: center;
+    margin: 30px;
+    color: #3e0a0b;
+    font-size: 2.5vw;
+  }
+  .text p {
+    margin: 20px;
+    font-size: 1.5vw;
+  }
+
+  @media (max-width: 1000px) {
+    .image {
+      display: none;
+    }
+    .text{
+        width: 100%;
+    }
+    .text h1{
+        font-size: 1.8rem;
+    }
+    .text p{
+        font-size: 1.2rem;
+    }
+  }
