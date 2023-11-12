@@ -16,63 +16,62 @@
                             style="color: #3e0a0b;"></i></h1>
                     <p>
                         ¡Prepárense para un recorrido visual que captura la diversión, la emoción y los momentos memorables
-                        de nuestros visitantes mientras exploran las delicias enoturísticas en Finca Monterruiz! <br>
-                        Sumérgete en estas imágenes llenas de sonrisas, copas elevadas y risas compartidas.
+                        de nuestros visitantes mientras exploran las delicias enoturísticas en Finca Monterruiz!
                     </p>
                 </div>
                 <div class="image">
-                    <img src="/imagenes/img36.jpg" />
+                    <img src="storage/img/viña.jpeg" />
                 </div>
             </div>
         </div>
         <div class="container">
             <div class="box">
-                <img src="stotage/img/img3.jpg" />
+                <img src="storage/img/img3.jpg" />
             </div>
             <div class="box">
-                <img src="/stotage/img/img4.jpg" />
+                <img src="storage/img/img4.jpg" />
             </div>
             <div class="box">
-                <img src="/stotage/img/img5.jpg" />
+                <img src="storage/img/img5.jpg" />
             </div>
             <div class="box">
-                <img src="/imagenes/img21.jpg" />
+                <img src="storage/img/img6.jpg" />
             </div>
             <div class="box">
-                <img src="/imagenes/img22.jpg" />
+                <img src="storage/img/img7.jpg" />
             </div>
             <div class="box">
-                <img src="/imagenes/img23.jpg" />
+                <img src="storage/img/img8.jpg" />
             </div>
             <div class="box">
-                <img src="/imagenes/img24.jpg" />
+                <img src="storage/img/img9.jpg" />
             </div>
             <div class="box">
-                <img src="/imagenes/img25.jpg" />
+                <img src="storage/img/img10.jpg" />
             </div>
             <div class="box">
-                <img src="/imagenes/img26.jpg" />
+                <img src="storage/img/img11.jpg" />
             </div>
             <div class="box">
-                <img src="/imagenes/img27.jpg" />
+                <img src="storage/img/img12.jpg" />
             </div>
             <div class="box">
-                <img src="/imagenes/img28.jpg" />
+                <img src="storage/img/img13.jpg" />
             </div>
             <div class="box">
-                <img src="/imagenes/img30.jpg" />
+                <img src="storage/img/img14.jpg" />
             </div>
             <div class="box">
-                <img src="/imagenes/img31.jpg" />
+                <img src="storage/img/img19.jpg" />
             </div>
             <div class="box">
-                <img src="/imagenes/img32.jpg" />
+                <img src="storage/img/img16.jpg" />
             </div>
             <div class="box">
-                <img src="/imagenes/img33.jpg" />
+                <img src="storage/img/img17.jpg" />
             </div>
             <div class="box">
-                <img src="/imagenes/img34.jpg" />
+                <img src="storage/img/img18.jpg" />
             </div>
         </div>
     </main>
