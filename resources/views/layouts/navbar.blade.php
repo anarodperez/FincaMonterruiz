@@ -11,7 +11,7 @@
         <div class="collapse navbar-collapse justify-content-end" id="navbarNavDropdown">
             <ul class="navbar-nav">
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('index') }}">Inicio</a>
+                    <a class="nav-link" href="{{ route('home') }}">Inicio</a>
                 </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
@@ -43,7 +43,7 @@
                         <ul class="dropdown-menu dropdown-menu-end header">
                             <?php
                             if (Auth::user()->es_admin) { ?>
-                            <li><a class="dropdown-item" href="#">Portal Administrador</a></li>
+                            <li><a class="dropdown-item" href={{ route('admin.index') }}>Portal Administrador</a></li>
                             <?php } ?>
                             <li><a class="dropdown-item" href="{{ route('profile.edit') }}">Perfil</a></li>
                             <form method="POST" action="{{ route('logout') }}">

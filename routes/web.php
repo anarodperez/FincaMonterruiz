@@ -4,6 +4,9 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use Laravel\Socialite\Facades\Socialite;
 use App\Models\User;
+use App\Http\Controllers\AdminController;
+use App\Http\Controllers\IndexController;
+use App\Http\Controllers\ActividadController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,11 +19,13 @@ use App\Models\User;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-})->name('index');
+// Vista inicial cuando arrancas la app.
+Route::get('/', [IndexController::class, 'home'])->name('home');
 
 Route::get('/dashboard', function () {
+    if (Auth::user()->es_admin) {
+        return redirect()->route('admin.index');
+    }
     return view('dashboard');
 })
     ->middleware(['auth', 'verified'])
