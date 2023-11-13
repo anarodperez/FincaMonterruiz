@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use Laravel\Socialite\Facades\Socialite;
+use App\Models\User;
 
 /*
 |--------------------------------------------------------------------------
@@ -47,7 +49,35 @@ Route::middleware(['admin'])->group(function () {
     Route::get('/usuarios/index', [UsuarioController::class, 'index'])->name('admin.usuarios.index');
     Route::put('/usuarios/{usuario}/validar', [UsuarioController::class, 'validar'])->name('admin.usuarios.validar');
 
+});
+
+Route::get('/login/google', function () {
+    return Socialite::driver('google')->redirect();
+});
+
+Route::get('/login/google/callback', function () {
+    $user = Socialite::driver('google')->user();
+
+    // Verifica si el usuario existe en la base de datos
+    $existingUser = User::where('email', $user->getEmail())->first();
+
+    if ($existingUser) {
+        // Si el usuario existe, inicia sesión
+        Auth::login($existingUser);
+    } else {
+        // Si el usuario no existe, crea un nuevo usuario y luego inicia sesión
+        $newUser = new User();
+        $newUser->name = $user->getName();
+        $newUser->email = $user->getEmail();
+        $newUser->save();
+
+        Auth::login($newUser);
+    }
+
+    return redirect()->route('index'); // Redirige al usuario a la vista de bienvenida
+
 
 });
+
 
 require __DIR__ . '/auth.php';
