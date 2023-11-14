@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\Actividad;   // Importa el modelo Actividad
 
-use App\Models\Categoria;
+// use App\Models\Categoria;
 
 use Illuminate\Http\Request;
+
+use Illuminate\Support\Facades\Crypt;
 
 
 
@@ -27,8 +29,9 @@ class ActividadController extends Controller
      */
     public function create()
     {
-        $categorias = Categoria::all(); // Obtén todas las categorías para el formulario
-        return view('admin.actividades.create', compact('categorias'));
+        // $categorias = Categoria::all(); // Obtén todas las categorías para el formulario
+        // return view('admin.actividades.create', compact('categorias'));
+        return view('admin.actividades.create');
     }
 
     /**
@@ -46,7 +49,8 @@ class ActividadController extends Controller
             'precio_adulto' => 'required',
             'precio_nino' => 'required',
             'aforo' => 'required',
-            'categoria_id' => 'required', // Asegúrate de tener el campo categoria_id en el formulario
+            'activa' => 'required',
+            // 'categoria_id' => 'required', // Asegúrate de tener el campo categoria_id en el formulario
             'imagen' => 'image|mimes:jpeg,png,jpg,gif|max:2048', // Agrega validación para la imagen si es obligatoria
         ]);
 
@@ -54,10 +58,16 @@ class ActividadController extends Controller
         if ($request->hasFile('imagen')) {
             $imagen = $request->file('imagen');
             $nombreImagen = time() . '_' . $imagen->getClientOriginalName();
-            $rutaImagen = public_path('/imagenes');
-            $imagen->move($rutaImagen, $nombreImagen);
-            $data['imagen'] = $nombreImagen; // Asignar el nombre de la imagen a los datos a guardar
+
+            // Almacenar la imagen en la carpeta storage
+            $rutaImagen = $imagen->storeAs('public/img', $nombreImagen);
+
+            // Obtener la ruta relativa para almacenar en la base de datos
+            $rutaRelativa = 'storage/img/' . $nombreImagen;
+
+            $data['imagen'] = $rutaRelativa; // Asignar la ruta relativa de la nueva imagen a los datos a guardar
         }
+
 
         Actividad::create($data);
 
@@ -71,12 +81,18 @@ class ActividadController extends Controller
      * @param  \App\Models\Actividad  $articulo
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
-    {
-        //servira para obtener un registro de nuestra tabla
-        $actividad = Actividad::find($id);
-        return view("admin.actividades.delete", compact('actividad'));
-    }
+    public function show($actividad)
+{
+    // Desencriptar el ID
+    $realId = Crypt::decrypt($actividad);
+
+    // Obtener la actividad
+    $actividad = Actividad::find($realId);
+
+    // Pasar la variable a la vista
+    return view("admin.actividades.delete", compact('actividad'));
+}
+
 
     /**
      * Este metodo nos sirve para traer los datos que se van a editar y los coloca en un formulario.
@@ -117,17 +133,22 @@ class ActividadController extends Controller
             'precio_adulto' => 'required',
             'precio_nino' => 'required',
             'aforo' => 'required',
-            'categoria_id' => 'required', // Asegúrate de tener el campo categoria_id en el formulario
+            'activa' => 'required',
+            // 'categoria_id' => 'required', // Asegúrate de tener el campo categoria_id en el formulario
             'imagen' => 'image|mimes:jpeg,png,jpg,gif|max:2048', // Agrega validación para la imagen si es obligatoria
         ]);
 
-        // Procesar la carga de nueva imagen si se proporciona
         if ($request->hasFile('imagen')) {
             $imagen = $request->file('imagen');
             $nombreImagen = time() . '_' . $imagen->getClientOriginalName();
-            $rutaImagen = public_path('/imagenes');
-            $imagen->move($rutaImagen, $nombreImagen);
-            $data['imagen'] = $nombreImagen; // Asignar el nombre de la nueva imagen a los datos a guardar
+
+            // Almacenar la imagen en la carpeta storage
+            $rutaImagen = $imagen->storeAs('public/img', $nombreImagen);
+
+            // Obtener la ruta relativa para almacenar en la base de datos
+            $rutaRelativa = 'storage/img/' . $nombreImagen;
+
+            $data['imagen'] = $rutaRelativa; // Asignar la ruta relativa de la nueva imagen a los datos a guardar
         }
 
         $actividad->update($data);
@@ -143,19 +164,29 @@ class ActividadController extends Controller
      */
     public function destroy($id)
     {
-        $actividad = Actividad::find($id);
-        $actividad->delete();
-        return redirect()->route("admin.actividades.index")->with("success", "Eliminada con exito!");
-    }
+        // Desencriptar el ID
+        $realId = Crypt::decrypt($id);
 
+        // Buscar la actividad
+        $actividad = Actividad::find($realId);
+
+        // Verificar si la actividad existe antes de intentar eliminar
+        if ($actividad) {
+            $actividad->delete();
+            return redirect()->route("admin.actividades.index")->with("success", "Eliminada con éxito!");
+        } else {
+            // Manejar el caso en el que la actividad no se encuentra
+            return redirect()->route("admin.actividades.index")->with("error", "La actividad no existe o ya ha sido eliminada.");
+        }
+    }
     public function mostrarActividad($id)
     {
         $actividad = Actividad::find($id);
-        $categoriaDeActividad = $actividad->categoria;
+        // $categoriaDeActividad = $actividad->categoria;
 
         return view('actividad', [
             'actividad' => $actividad,
-            'categoria' => $categoriaDeActividad
+            // 'categoria' => $categoriaDeActividad
         ]);
     }
 }

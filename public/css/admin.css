@@ -1,159 +1,115 @@
-/* .sidebar {
-    margin: 0;
-    padding: 0;
-    width: 200px;
-    background-color: #f1f1f1;
-    position: fixed;
-    height: 60%;
-    overflow: auto;
-  }
 
-  .sidebar a {
-    display: block;
-    color: black;
-    padding: 16px;
-    text-decoration: none;
-  }
+.sidebar {
+    padding: 4vh;
+}
 
-  .sidebar a.active {
-    background-color: #04aa6d;
-    color: white;
-  }
+ .delete, .edit{
 
-  .sidebar a:hover:not(.active) {
-    background-color: #555;
-    color: white;
-  }
+    margin-top: 6vh;
+    margin-bottom: 14vh;
 
-  div.content {
-    margin-left: 200px;
-    padding: 1px 16px;
-    height: 1000px;
-  }
-
-  @media screen and (max-width: 700px) {
-    .sidebar {
-      width: 100%;
-      height: auto;
-      position: relative;
     }
-    .sidebar a {
-      float: left;
-    }
-    div.content {
-      margin-left: 0;
-    }
-  }
 
-  @media screen and (max-width: 400px) {
-    .sidebar a {
-      text-align: center;
-      float: none;
-    }
-  } */
-
-
-    /* TABLA */
+/* TABLA */
 
 .tabla img:hover {
-    opacity: 0.8; /* disminuir la opacidad de la imagen al pasar el ratón por encima */
-    transform: scale(1.05); /* aumentar ligeramente el tamaño de la imagen */
-    transition: all 0.3s ease-in-out; /* crear una transición suave para los efectos */
-  }
+opacity: 0.8; /* disminuir la opacidad de la imagen al pasar el ratón por encima */
+transform: scale(1.05); /* aumentar ligeramente el tamaño de la imagen */
+transition: all 0.3s ease-in-out; /* crear una transición suave para los efectos */
+}
 
-  .tabla {
-      margin: 60px auto;
-      max-width: 90%;
-      border: 1px solid #ccc;
-      border-collapse: collapse;
-      table-layout: fixed;
-      color: #6a6f8c;
-      overflow-y: scroll;
-      border-radius: 5px;
-  }
+.tabla {
+margin: 60px auto;
+max-width: 90%;
+border: 1px solid #ccc;
+border-collapse: collapse;
+table-layout: fixed;
+color: #6a6f8c;
+overflow-y: scroll;
+border-radius: 5px;
+}
 
-  .tabla caption {
-      font-size: 28px;
-      text-transform: uppercase;
-      font-weight: bold;
-      margin: 8px 0px;
-  }
 
-  .tabla tr {
-      background-color: #f8f8f8;
-      border: 1px solid #ddd;
+.tabla caption {
+font-size: 28px;
+text-transform: uppercase;
+font-weight: bold;
+margin: 8px 0px;
+}
 
-  }
+.tabla tr {
+background-color: #f8f8f8;
+border: 1px solid #ddd;
 
-  .tabla th, .tabla td {
-      font-size: 1.125rem;
-      padding: 8px;
-      text-align: center;
-  }
+}
 
-  .tabla thead th{
-      text-transform: uppercase;
-      background-color: #ddd;
-  }
+.tabla th, .tabla td {
+font-size: 1.125rem;
+padding: 8px;
+text-align: center;
+}
 
-  .tabla img {
-    width: 50%;
-  }
+.tabla thead th{
+text-transform: uppercase;
+background-color: #ddd;
+}
 
-  .contenedor-tabla {
+.tabla img {
+width: 50%;
+}
 
-    max-height: 800px;
-
-    overflow-y: scroll;
+.contenedor-tabla {
+min-height: 800px;
+/* overflow-y: scroll; */
 }
 
 
 
-    @media (max-width:900px){
+@media (max-width:900px){
 
-      .tabla {
-          border: 0px;
-          margin-top: 25px;
-      }
-      .tabla caption {
-          font-size: 22px;
-      }
-      .tabla thead {
-          display: none;
-      }
-      .tabla tr {
-          margin-bottom: 8px;
-          border-bottom: 4px solid rgb(221, 221, 221);
-          display: block;
-      }
-      .tabla th, .tabla td {
-          font-size: 18px;
-      }
-      .tabla td {
-          display: block;
-          border-bottom: 1px solid #ddd;
-          text-align: right;
-      }
-      .tabla  td:last-child {
-          border-bottom: 0px;
-      }
-      .tabla td::before {
-          content: attr(data-label);
-          font-weight: bold;
-          text-transform: uppercase;
-          float: left;
-      }
-  }
+.tabla {
+border: 0px;
+margin-top: 25px;
+}
+.tabla caption {
+font-size: 22px;
+}
+.tabla thead {
+display: none;
+}
+.tabla tr {
+margin-bottom: 8px;
+border-bottom: 4px solid rgb(221, 221, 221);
+display: block;
+}
+.tabla th, .tabla td {
+font-size: 18px;
+}
+.tabla td {
+display: block;
+border-bottom: 1px solid #ddd;
+text-align: right;
+}
+.tabla td:last-child {
+border-bottom: 0px;
+}
+.tabla td::before {
+content: attr(data-label);
+font-weight: bold;
+text-transform: uppercase;
+float: left;
+}
+}
 
 
-  /* Estilo para botón azul */
+/* Estilo para botón azul */
 .boton-azul {
-    background-color: blue;
-    color: white;
+background-color: blue;
+color: white;
 }
 
 /* Estilo para botón rojo */
 .boton-rojo {
-    background-color: red;
-    color: white;
+background-color: red;
+color: white;
 }

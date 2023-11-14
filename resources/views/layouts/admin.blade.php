@@ -24,6 +24,12 @@
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
+    <style>
+        /* Estilo adicional para ocultar el menú */
+        #sidebar.collapsed {
+            display: none;
+        }
+    </style>
 
     <!-- Scripts -->
     <script>
@@ -41,7 +47,7 @@
     {{-- Navbar --}}
     @include('layouts.navbar')
 
-    <main class="container-fluid">
+    <main class="container-fluid" style=" min-height: 600px; ">
         <div class="row">
             {{-- Incluir la barra lateral --}}
             @include('layouts.sidebar')

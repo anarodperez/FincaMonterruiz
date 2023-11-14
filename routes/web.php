@@ -45,7 +45,7 @@ Route::middleware(['admin'])->group(function () {
     Route::get('/actividades/index', [ActividadController::class, 'index'])->name('admin.actividades.index');
     Route::get('/actividades/create', [ActividadController::class, 'create'])->name('admin.actividades.create');
     Route::post('/actividades/create', [ActividadController::class, 'store'])->name('admin.actividades.store');
-    Route::get('/actividades/show/{id}', [ActividadController::class, 'show'])->name('admin.actividades.show');
+    Route::get('/actividades/show/{actividad}', [ActividadController::class, 'show'])->name('admin.actividades.show');
     Route::get('/actividades/{id}/edit', [ActividadController::class, 'edit'])->name('admin.actividades.edit');
     Route::put('/actividades/update/{id}', [ActividadController::class, 'update'])->name('admin.actividades.update');
     Route::delete('/actividades/{actividad}/delete', [ActividadController::class, 'destroy'])->name('admin.actividades.delete');

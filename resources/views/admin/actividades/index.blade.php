@@ -21,38 +21,41 @@
                         <th>Precio Adulto</th>
                         <th>Precio niños</th>
                         <th>Aforo</th>
-                        <th>Categoría</th> <!-- Nueva columna para la categoría -->
+                        {{-- <th>Categoría</th>  Nueva columna para la categoría --> --}}
+                        <th>Estado</th>
                         <th>Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach ($actividades as $actividad)
                         <tr>
-                            <td><img src="{{ asset('imagenes/' . $actividad->imagen) }}" alt="{{ $actividad->nombre }}"></td>
+                            <td><img src="{{ asset($actividad->imagen) }}" alt="{{ $actividad->nombre }}"></td>
                             <td>{{ $actividad->nombre }}</td>
                             <td>{{ $actividad->descripcion }}</td>
                             <td>{{ $actividad->duracion }}</td>
                             <td>{{ $actividad->precio_adulto }}</td>
-                            <td>{{ $actividad->precio_niño }}</td>
+                            <td>{{ $actividad->precio_nino }}</td>
                             <td>{{ $actividad->aforo }}</td>
-                            <td>
+                            <td>{{ $actividad->activa == 1 ? 'Activa' : 'Inactiva' }}</td>
+                            {{-- <td>
                                 @if ($actividad->categoria)
                                     {{ $actividad->categoria->nombre }}
                                 @else
                                     Sin categoría
                                 @endif
-                            </td>
+                            </td> --}}
                             <td>
                                 <form action="{{ route('admin.actividades.edit', $actividad->id) }}" method="GET">
                                     <button class="btn btn-warning btn-sm" style="margin-bottom: 5px;">
                                         <span class="fas fa-edit"></span>
                                     </button>
                                 </form>
-                                <form action="{{ route('admin.actividades.show', $actividad->id) }}" method="GET">
+                                <form action="{{ route('admin.actividades.show', ['actividad' => encrypt($actividad->id)]) }}" method="GET">
                                     <button class="btn btn-danger btn-sm">
                                         <span class="fas fa-times"></span>
                                     </button>
                                 </form>
+
                             </td>
                         </tr>
                     @endforeach
