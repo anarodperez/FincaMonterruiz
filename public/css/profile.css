@@ -1,0 +1,41 @@
+body {
+    background-color: #b4c8b1;
+}
+
+.form-section {
+    background-color: #f4f4f4;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin: 20px 0;
+}
+
+.form-section label,
+.form-section input,
+.form-section textarea {
+    display: block;
+    margin-bottom: 10px;
+    color: #333; /* Color de texto más oscuro para mejorar la legibilidad */
+}
+
+.form-section label {
+    font-weight: bold;
+}
+
+.form-section input,
+.form-section textarea {
+    background-color: #fff; /* Fondo blanco para campos de texto */
+    border: 1px solid #ccc; /* Borde suave */
+    border-radius: 5px;
+    padding: 10px;
+    width: 100%;
+}
+
+.form-section button {
+    background-color: #6fa78a; /* Botones en tono de verde grisáceo */
+    color: #fff; /* Texto blanco para resaltar */
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+}

@@ -5,7 +5,6 @@
 @section('css')
     <link rel="stylesheet" href="{{ asset('css/login.css') }}">
     <link rel="stylesheet" href="{{ asset('css/navbar.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/footer.css') }}">
     <script src="{{ asset('js/validaciones.js') }}" defer></script>
     <style>
         .container-formulario {
