@@ -19,7 +19,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">
+                            <a class="nav-link" href="{{ route('admin.usuarios.index') }}">
                                 <i class="fas fa-users"></i> Usuarios
                             </a>
                         </li>

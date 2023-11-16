@@ -1,0 +1,145 @@
+
+
+body {
+    color: #888;
+    font-family: 'IBM Plex Sans', sans-serif;
+}
+
+
+
+
+.card:hover .card__image {
+    filter: contrast(100%);
+  }
+
+  .card__image {
+    border-top-left-radius: 0.25rem;
+    border-top-right-radius: 0.25rem;
+    overflow: hidden;
+    position: relative;
+
+  }
+  .card__image::before {
+    content: "";
+    display: block;
+    padding-top: 56.25%;
+  }
+
+  @media (min-width: 40rem) {
+    .card__image::before {
+      padding-top: 66.6%; /* 3:2 aspect ratio */
+    }
+  }
+
+  .card__content {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    padding: 1rem;
+  }
+
+  .card__title {
+    color:   #696969;
+    font-size: 1.25rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 5px;
+    font-weight: bold;
+  }
+
+  .card__text {
+    flex: 1 1 auto;
+    font-size: 0.975rem;
+    line-height: 1.5;
+    margin-bottom: 1.25rem;
+  }
+
+.card-body .boton,  .newsletter .boton, .row .boton  {
+    background-color: #5c7c64;
+    border: none;
+    z-index: 1;
+    color: #fff;
+  }
+  .boton:after {
+    position: absolute;
+    content: "";
+    width: 0;
+    height: 100%;
+    top: 0;
+    right: 0;
+    z-index: -1;
+    background-color: #bfe2c3;
+    border-radius: 5px;
+     box-shadow:inset 2px 2px 2px 0px rgba(255,255,255,.5),
+     7px 7px 20px 0px rgba(0,0,0,.1),
+     4px 4px 5px 0px rgba(0,0,0,.1);
+    transition: all 0.8s ease;
+
+  }
+  .boton:hover {
+    color: #696969;
+  }
+  .boton:hover:after {
+    left: 0;
+    width: 100%;
+  }
+  .boton:active {
+    top: 2px;
+  }
+
+  button {
+    margin: 10px;
+  }
+  .custom-btn {
+    width: 130px;
+    height: 40px;
+    color: #fff;
+    border-radius: 5px;
+    padding: 10px 25px;
+    font-family: 'Lato', sans-serif;
+    font-weight: 500;
+    background: transparent;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    display: inline-block;
+     box-shadow:inset 2px 2px 2px 0px rgba(255,255,255,.5),
+     7px 7px 20px 0px rgba(0,0,0,.1),
+     4px 4px 5px 0px rgba(0,0,0,.1);
+    outline: none;
+  }
+
+
+/* Newsletter */
+
+.newsletter {
+    background-color: #f1f1f1;
+    text-align: center;
+    padding: 20px 0; /* Espaciado superior e inferior */
+    margin-top: 20px; /* Espacio entre la sección de tarjetas y la sección de newsletter */
+}
+
+.newsletter h2 {
+    font-size: 24px;
+    margin-bottom: 10px; /* Espacio entre el título y el párrafo */
+}
+
+.newsletter p {
+    font-size: 16px;
+    margin-bottom: 20px; /* Espacio entre el párrafo y el formulario */
+}
+
+.newsletter form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.newsletter input[type="email"] {
+    width: 100%;
+    max-width: 300px;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+

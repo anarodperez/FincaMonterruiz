@@ -5,15 +5,14 @@
 @endsection
 
 @section('content')
-    <div class="container" style="display: flex;
-    flex-direction: column;
-    min-height: 80vh;
-    margin-bottom: 20px; margin-top:20px">
+    <div class="container"
+        style="display: flex;flex-direction: column;min-height: 80vh;margin-bottom: 20px; margin-top:20px">
         <div class="card">
             <h5 class="card-header">Crear Actividad</h5>
             <div class="card-body">
                 <p class="card-text">
                 <form action="{{ route('admin.actividades.store') }}" method="POST" enctype="multipart/form-data">
+
                     @csrf
 
                     <label for="imagen">Imagen</label><br>
@@ -31,13 +30,17 @@
                     <label for="precio_adulto">Precio adultos</label>
                     <input type="number" name="precio_adulto" class="form-control" required>
 
-                    <label for="precio_niño">Precio niños</label>
-                    <input type="number" name="precio_niño" class="form-control" required>
+                    <label for="precio_nino">Precio niños</label>
+                    <input type="number" name="precio_nino" class="form-control" required>
 
                     <label for="aforo">Aforo</label>
                     <input type="number" name="aforo" class="form-control" required>
 
-
+                    <label for="activa">Estado</label>
+                    <select name="activa" class="form-control" required>
+                        <option value="1">Activar</option>
+                        <option value="0">Inactivar</option>
+                    </select>
                     {{-- <label for="categoria_id">Categoria</label>
                     <input type="text" name="categoria_id" class="form-control" required> --}}
 

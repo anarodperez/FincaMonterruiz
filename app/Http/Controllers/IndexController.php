@@ -8,7 +8,7 @@ class IndexController extends Controller
 {
     public function home()
     {
-        // $actividades = Actividad::all();
-        return view('welcome');
+        $actividades = Actividad::all();
+        return view('welcome', ['actividades' => $actividades]);
     }
 }

@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\IndexController;
 use App\Http\Controllers\ActividadController;
+use App\Http\Controllers\UsuarioController;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,14 +23,14 @@ use App\Http\Controllers\ActividadController;
 // Vista inicial cuando arrancas la app.
 Route::get('/', [IndexController::class, 'home'])->name('home');
 
-Route::get('/dashboard', function () {
-    if (Auth::user()->es_admin) {
-        return redirect()->route('admin.index');
-    }
-    return view('dashboard');
-})
-    ->middleware(['auth', 'verified'])
-    ->name('dashboard');
+    Route::get('/dashboard', function () {
+        if (Auth::user()->es_admin) {
+            return redirect()->route('admin.index');
+        }
+        return view('dashboard');
+    })
+        ->middleware(['auth', 'verified'])
+        ->name('dashboard');
 
     Route::middleware('auth')->group(function () {
         Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -37,24 +38,23 @@ Route::get('/dashboard', function () {
         Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     });
 
-/************* Admin *************/
-Route::middleware(['admin'])->group(function () {
-    Route::get('/admin', [AdminController::class, 'index'])->name('admin.index');
+    /************* Admin *************/
+    Route::middleware(['admin'])->group(function () {
+        Route::get('/admin', [AdminController::class, 'index'])->name('admin.index');
 
-    // Actividades
-    Route::get('/actividades/index', [ActividadController::class, 'index'])->name('admin.actividades.index');
-    Route::get('/actividades/create', [ActividadController::class, 'create'])->name('admin.actividades.create');
-    Route::post('/actividades/create', [ActividadController::class, 'store'])->name('admin.actividades.store');
-    Route::get('/actividades/show/{actividad}', [ActividadController::class, 'show'])->name('admin.actividades.show');
-    Route::get('/actividades/{id}/edit', [ActividadController::class, 'edit'])->name('admin.actividades.edit');
-    Route::put('/actividades/update/{id}', [ActividadController::class, 'update'])->name('admin.actividades.update');
-    Route::delete('/actividades/{actividad}/delete', [ActividadController::class, 'destroy'])->name('admin.actividades.delete');
+        // Actividades
+        Route::get('/actividades/index', [ActividadController::class, 'index'])->name('admin.actividades.index');
+        Route::get('/actividades/create', [ActividadController::class, 'create'])->name('admin.actividades.create');
+        Route::post('/actividades/create', [ActividadController::class, 'store'])->name('admin.actividades.store');
+        Route::get('/actividades/show/{actividad}', [ActividadController::class, 'show'])->name('admin.actividades.show');
+        Route::get('/actividades/{id}/edit', [ActividadController::class, 'edit'])->name('admin.actividades.edit');
+        Route::put('/actividades/update/{id}', [ActividadController::class, 'update'])->name('admin.actividades.update');
+        Route::delete('/actividades/{actividad}/delete', [ActividadController::class, 'destroy'])->name('admin.actividades.delete');
 
-    // Usuarios
-    Route::get('/usuarios/index', [UsuarioController::class, 'index'])->name('admin.usuarios.index');
-    Route::put('/usuarios/{usuario}/validar', [UsuarioController::class, 'validar'])->name('admin.usuarios.validar');
-
-});
+        // Usuarios
+        Route::get('/usuarios/index', [UsuarioController::class, 'index'])->name('admin.usuarios.index');
+        Route::put('/usuarios/{usuario}/validar', [UsuarioController::class, 'validar'])->name('admin.usuarios.validar');
+    });
 
 Route::get('/login/google', function () {
     return Socialite::driver('google')->redirect();
@@ -80,9 +80,6 @@ Route::get('/login/google/callback', function () {
     }
 
     return redirect()->route('index'); // Redirige al usuario a la vista de bienvenida
-
-
 });
-
 
 require __DIR__ . '/auth.php';

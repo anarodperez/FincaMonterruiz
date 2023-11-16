@@ -49,7 +49,7 @@ class ActividadController extends Controller
             'precio_adulto' => 'required',
             'precio_nino' => 'required',
             'aforo' => 'required',
-            'activa' => 'required',
+            'activa' => 'required|in:0,1',
             // 'categoria_id' => 'required', // Asegúrate de tener el campo categoria_id en el formulario
             'imagen' => 'image|mimes:jpeg,png,jpg,gif|max:2048', // Agrega validación para la imagen si es obligatoria
         ]);
