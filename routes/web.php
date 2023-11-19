@@ -8,6 +8,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\IndexController;
 use App\Http\Controllers\ActividadController;
 use App\Http\Controllers\UsuarioController;
+use App\Http\Controllers\HorarioController;
 
 /*
 |--------------------------------------------------------------------------
@@ -54,6 +55,13 @@ Route::get('/', [IndexController::class, 'home'])->name('home');
         // Usuarios
         Route::get('/usuarios/index', [UsuarioController::class, 'index'])->name('admin.usuarios.index');
         Route::put('/usuarios/{usuario}/validar', [UsuarioController::class, 'validar'])->name('admin.usuarios.validar');
+
+        //Horarios
+
+        Route::get('/horarios/index', [HorarioController::class, 'index'])->name('admin.horarios.index');
+        Route::get('/horarios/create', [HorarioController::class, 'create'])->name('admin.horarios.create');
+        Route::post('/actividades/create', [HorarioController::class, 'store'])->name('admin.horarios.store');
+
     });
 
 Route::get('/login/google', function () {
@@ -81,5 +89,7 @@ Route::get('/login/google/callback', function () {
 
     return redirect()->route('index'); // Redirige al usuario a la vista de bienvenida
 });
+
+Route::get('admin/usuarios/autocomplete', [UsuarioController::class, 'autocomplete'])->name('admin.usuarios.autocomplete');
 
 require __DIR__ . '/auth.php';

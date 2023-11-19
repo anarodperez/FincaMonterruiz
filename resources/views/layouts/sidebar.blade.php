@@ -34,7 +34,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">
+                            <a class="nav-link" href="{{ route('admin.horarios.index') }}">
                                 <i class="fas fa-clock"></i> Horarios de Actividades
                             </a>
                         </li>

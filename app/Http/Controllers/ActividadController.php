@@ -102,8 +102,11 @@ class ActividadController extends Controller
      */
     public function edit($id)
     {
-        // Buscar la actividad en base al ID
-        $actividad = Actividad::find($id);
+        /// Desencriptar el ID
+        $realId = Crypt::decrypt($id);
+
+        // Buscar la actividad
+        $actividad = Actividad::find($realId);
 
         // Verificar si se encontró la actividad
         if (!$actividad) {
@@ -121,7 +124,8 @@ class ActividadController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $actividad = Actividad::find($id);
+
+       $actividad = Actividad::find($id);
         if (!$actividad) {
             return redirect()->route("admin.actividades.index")->with("error", "¡Actividad no encontrada!");
         }

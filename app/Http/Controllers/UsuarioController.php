@@ -33,4 +33,17 @@ class UsuarioController extends Controller
             ->route('admin.usuarios.index')
             ->with('success', 'Usuario validado/invalidado correctamente');
     }
+
+    public function autocomplete(Request $request)
+    {
+        $term = $request->input('term');
+
+        $results = User::where('nombre', 'like', '%' . $term . '%')
+            ->orWhere('apellidos', 'like', '%' . $term . '%')
+            ->orWhere('email', 'like', '%' . $term . '%')
+            ->get();
+
+        return response()->json($results);
+    }
+
 }

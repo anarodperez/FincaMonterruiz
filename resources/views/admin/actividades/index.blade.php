@@ -45,7 +45,7 @@
                                 @endif
                             </td> --}}
                             <td>
-                                <form action="{{ route('admin.actividades.edit', $actividad->id) }}" method="GET">
+                                <form action="{{ route('admin.actividades.edit', encrypt($actividad->id)) }}" method="GET">
                                     <button class="btn btn-warning btn-sm" style="margin-bottom: 5px;">
                                         <span class="fas fa-edit"></span>
                                     </button>
