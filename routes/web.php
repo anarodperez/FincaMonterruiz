@@ -60,7 +60,7 @@ Route::get('/', [IndexController::class, 'home'])->name('home');
 
         Route::get('/horarios/index', [HorarioController::class, 'index'])->name('admin.horarios.index');
         Route::get('/horarios/create', [HorarioController::class, 'create'])->name('admin.horarios.create');
-        Route::post('/actividades/create', [HorarioController::class, 'store'])->name('admin.horarios.store');
+
 
     });
 

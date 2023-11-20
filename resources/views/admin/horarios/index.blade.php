@@ -69,7 +69,7 @@
                 },
                 initialView: 'dayGridMonth',
                 locale: 'es',
-                eventClick: function (info) {
+               eventClick: function (info) {
                     // Obtener el modal por su ID y mostrarlo
                     var modal = new bootstrap.Modal(document.getElementById('exampleModal'));
 

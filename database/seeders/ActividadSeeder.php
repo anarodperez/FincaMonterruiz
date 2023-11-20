@@ -33,9 +33,19 @@ class ActividadSeeder extends Seeder
                 'precio_adulto' => 20.00,
                 'precio_nino' => 10.00,
                 'aforo' => 50,
-                'imagen' => 'storage/img/img1.jpg',
+                'imagen' => 'storage/img/img6.jpg',
                 'activa' => true,
             ],
+            [
+                'nombre' => 'Visita al viñedo 3',
+                'descripcion' => 'Descripción de la actividad 3',
+                'duracion' => 120,
+                'precio_adulto' => 20.00,
+                'precio_nino' => 10.00,
+                'aforo' => 50,
+                'imagen' => 'storage/img/img8.jpg',
+                'activa' => true,
+            ]
             // Puedes agregar más actividades aquí
         ];
 

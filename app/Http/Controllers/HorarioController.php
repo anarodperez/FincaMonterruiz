@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Horario;
 use  App\Models\Actividad;
 use DateTime;
+
 use Illuminate\Http\Request;
 
 class HorarioController extends Controller
@@ -29,7 +30,7 @@ class HorarioController extends Controller
                 'plazas_disponibles' => $plazas_disponibles
             ];
         }
-
+        // dd($events);
 
         return view('admin.horarios.index', [
             'events' => $events,
@@ -41,8 +42,6 @@ class HorarioController extends Controller
         $actividades = Actividad::all();
         return view('admin.horarios.create', compact('actividades'));
     }
-
-
 
 
     public function store(Request $request)

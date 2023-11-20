@@ -5,7 +5,7 @@
 @section('content')
     <div class="container">
         <h2 class="my-4 text-center">Crear Nuevo Horario</h2>
-        <form action="{{ route('admin.horarios.store') }}" method="POST">
+        <form action="" method="POST">
             @csrf
             <div class="mb-3">
                 <label for="actividad" class="form-label">Actividad:</label>
