@@ -10,6 +10,7 @@ use App\Http\Controllers\ActividadController;
 use App\Http\Controllers\UsuarioController;
 use App\Http\Controllers\HorarioController;
 
+use App\Http\Controllers\GalleryController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -91,5 +92,7 @@ Route::get('/login/google/callback', function () {
 });
 
 Route::get('admin/usuarios/autocomplete', [UsuarioController::class, 'autocomplete'])->name('admin.usuarios.autocomplete');
+
+Route::get('/gallery', [GalleryController::class, 'index'])->name('pages.gallery');
 
 require __DIR__ . '/auth.php';
