@@ -21,7 +21,7 @@
 
     <!-- Icons -->
     <script src="https://kit.fontawesome.com/56ace10afe.js" crossorigin="anonymous"></script>
-    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="..." crossorigin="anonymous"></script>
 </head>
 
 <body>

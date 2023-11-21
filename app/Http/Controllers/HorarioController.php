@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Horario;
-use  App\Models\Actividad;
+use App\Models\Actividad;
 use DateTime;
 
 use Illuminate\Http\Request;
@@ -38,12 +38,11 @@ class HorarioController extends Controller
     // }
 
     public function index()
-{
-    $horarios = Horario::all(); // Obtén tus horarios de la base de datos
-    $actividades = Actividad::with('horarios')->get();
-
-    return view('admin.horarios.index', ['horarios' => $horarios],['actividades' => $actividades]);
-}
+    {
+        $horarios = Horario::all();
+        $actividades = Actividad::with('horarios')->paginate(2);
+        return view('admin.horarios.index', compact('actividades'));
+    }
 
 
     public function create()
@@ -52,28 +51,28 @@ class HorarioController extends Controller
         return view('admin.horarios.create', compact('actividades'));
     }
 
-
     public function store(Request $request)
-{
-    $request->validate([
-        // Agrega aquí las reglas de validación para los campos del formulario
-    ]);
+    {
+        $request->validate([
+            // Agrega aquí las reglas de validación para los campos del formulario
+        ]);
 
-    // Crea una nueva instancia de Horario con los datos del formulario
-    $horario = new Horario([
-        'actividad_id' => $request->input('actividad_id'),
-        'fecha' => $request->input('fecha'),
-        'hora' => $request->input('hora'),
-        'idioma' => $request->input('idioma'),
-        'plazas_disponibles' => $request->input('plazas_disponibles'),
-        // Agrega otros campos según sea necesario
-    ]);
+        // Crea una nueva instancia de Horario con los datos del formulario
+        $horario = new Horario([
+            'actividad_id' => $request->input('actividad_id'),
+            'fecha' => $request->input('fecha'),
+            'hora' => $request->input('hora'),
+            'idioma' => $request->input('idioma'),
+            'plazas_disponibles' => $request->input('plazas_disponibles'),
+            // Agrega otros campos según sea necesario
+        ]);
 
-    // Guarda el nuevo horario en la base de datos
-    $horario->save();
+        // Guarda el nuevo horario en la base de datos
+        $horario->save();
 
-    // Redirecciona a la página de horarios o muestra un mensaje de éxito
-    return redirect()->route('horarios.index')->with('success', 'Horario creado exitosamente');
-}
-
+        // Redirecciona a la página de horarios o muestra un mensaje de éxito
+        return redirect()
+            ->route('horarios.index')
+            ->with('success', 'Horario creado exitosamente');
+    }
 }

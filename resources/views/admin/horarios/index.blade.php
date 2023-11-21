@@ -2,16 +2,15 @@
 
 @section('content')
 <style>
-    /* Estilos personalizados para el calendario */
-    #calendar {
-        /* max-width: 60vw; */
-        margin: 0 auto;
-    }
 
-    /* Estilos personalizados para la tabla */
-    #horarios-table {
-        margin-top: 20px;
-    }
+/* Estilos personalizados para la tabla */
+.table-container {
+    max-height: 500px;
+    overflow-y: auto;
+    margin-bottom: 4vh;
+}
+
+
 </style>
 
 <div class="container">
@@ -32,9 +31,6 @@
                 <tr>
                     <th>Actividad</th>
                     <th>Días y Horas</th>
-                    <th>Plazas Disponibles</th>
-                    <th>Idioma</th>
-                    <th>Acciones</th>
                 </tr>
             </thead>
             <tbody>
@@ -42,15 +38,30 @@
                     <tr>
                         <td>{{ $actividad->nombre }}</td>
                         <td>
-                            @foreach($actividad->horarios as $horario)
-                                {{ $horario->dia_semana }} a las {{ \DateTime::createFromFormat('H:i:s', $horario->hora)->format('H:i') }}<br>
-                            @endforeach
-                        </td>
-
-                        <td>{{ $actividad->horarios->first()->plazas_disponibles }}</td>
-                        <td>{{ $actividad->horarios->first()->idioma }}</td>
-                        <td>
-                            <!-- Agrega aquí los enlaces o botones para acciones (editar, eliminar, etc.) -->
+                            <table class="table table-condensed">
+                                <thead>
+                                    <tr>
+                                        <th>Día</th>
+                                        <th>Hora</th>
+                                        <th>Plazas</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach($actividad->horarios as $horario)
+                                        <tr>
+                                            <td>{{ $horario->dia_semana }}</td>
+                                            <td>{{ \DateTime::createFromFormat('H:i:s', $horario->hora)->format('H:i') }}</td>
+                                            <td>{{ $horario->plazas_disponibles }}</td>
+                                            <td>
+                                                <!-- Agregar botones de acción (editar, borrar, etc.) aquí -->
+                                                <button class="btn btn-sm btn-info" onclick="editarHorario({{ $horario->id }})">Editar</button>
+                                                <button class="btn btn-sm btn-danger" onclick="borrarHorario({{ $horario->id }})">Borrar</button>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
                         </td>
                     </tr>
                 @endforeach
@@ -58,6 +69,7 @@
         </table>
     </div>
 
+    {{ $actividades->links() }} <!-- Muestra la paginación -->
     <!-- Modal -->
     <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
         aria-hidden="true">

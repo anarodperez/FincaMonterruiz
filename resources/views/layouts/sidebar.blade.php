@@ -38,11 +38,6 @@
                                 <i class="fas fa-clock"></i> Horarios de Actividades
                             </a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">
-                                <i class="fas fa-cogs"></i> Configuración
-                            </a>
-                        </li>
                     </ul>
                 </div>
             </nav>
