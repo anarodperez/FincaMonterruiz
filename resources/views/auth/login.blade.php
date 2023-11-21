@@ -38,13 +38,20 @@
                 <a href="{{ url('/login/google') }}" class="boton-google">
                     <i class="fab fa-google" aria-hidden="true"></i> Iniciar sesión con Google
                 </a>
+
+                @if (session('status') === 'login-error')
+                    <div class="alert alert-danger">
+                        No estás autorizado para acceder. Por favor, verifica tu cuenta.
+                    </div>
+                @endif
+
                 <form method="POST" action="{{ route('login') }}" id="login-box">
                     @csrf
                     <!-- Email Address -->
                     <div>
-                        <x-input-label for="email" :value="__('Email')"/>
-                        <x-text-input id="email" class="input" type="email" name="email"
-                            :value="old('email')" required autofocus autocomplete="username" />
+                        <x-input-label for="email" :value="__('Email')" />
+                        <x-text-input id="email" class="input" type="email" name="email" :value="old('email')" required
+                            autofocus autocomplete="username" />
                         <x-input-error :messages="$errors->get('email')" class="mt-2" />
                     </div>
 
@@ -53,7 +60,8 @@
                         <x-input-label for="password" :value="__('Password')" />
 
                         <div class="input-group">
-                            <x-text-input id="password" class="input" type="password" name="password" required autocomplete="current-password" />
+                            <x-text-input id="password" class="input" type="password" name="password" required
+                                autocomplete="current-password" />
                             <span class="password-toggle" onclick="togglePasswordVisibility()">
                                 <!-- Ícono para alternar la visibilidad de la contraseña -->
                                 <i id="toggleIcon" class="fas fa-eye"></i>
@@ -85,5 +93,3 @@
         </div>
     </div>
 @endsection
-
-

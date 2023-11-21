@@ -10,32 +10,41 @@ use Illuminate\Http\Request;
 
 class HorarioController extends Controller
 {
+    // public function index()
+    // {
+    //     $horarios = Horario::get();
+
+    //     $events = [];
+
+    //     foreach ($horarios as $horario) {
+    //         $fecha = new DateTime($horario->fecha);
+    //         $hora = new DateTime($horario->hora);
+    //         $idioma = $horario->idioma;
+    //         $plazas_disponibles = $horario->plazas_disponibles;
+
+    //         $events[] = [
+    //             'title' => $horario->actividad->nombre,
+    //             'start' => $fecha->format('Y-m-d') . ' ' . $hora->format('H:i:s'),
+    //             'allDay' => false,
+    //             'idioma' => $idioma,
+    //             'plazas_disponibles' => $plazas_disponibles
+    //         ];
+    //     }
+    //     // dd($events);
+
+    //     return view('admin.horarios.index', [
+    //         'events' => $events,
+    //     ]);
+    // }
+
     public function index()
-    {
-        $horarios = Horario::get();
+{
+    $horarios = Horario::all(); // Obtén tus horarios de la base de datos
+    $actividades = Actividad::with('horarios')->get();
 
-        $events = [];
+    return view('admin.horarios.index', ['horarios' => $horarios],['actividades' => $actividades]);
+}
 
-        foreach ($horarios as $horario) {
-            $fecha = new DateTime($horario->fecha);
-            $hora = new DateTime($horario->hora);
-            $idioma = $horario->idioma;
-            $plazas_disponibles = $horario->plazas_disponibles;
-
-            $events[] = [
-                'title' => $horario->actividad->nombre,
-                'start' => $fecha->format('Y-m-d') . ' ' . $hora->format('H:i:s'),
-                'allDay' => false,
-                'idioma' => $idioma,
-                'plazas_disponibles' => $plazas_disponibles
-            ];
-        }
-        // dd($events);
-
-        return view('admin.horarios.index', [
-            'events' => $events,
-        ]);
-    }
 
     public function create()
     {

@@ -9,6 +9,7 @@ use App\Http\Controllers\IndexController;
 use App\Http\Controllers\ActividadController;
 use App\Http\Controllers\UsuarioController;
 use App\Http\Controllers\HorarioController;
+use App\Http\Controllers\AboutUsController;
 
 use App\Http\Controllers\GalleryController;
 /*
@@ -94,5 +95,6 @@ Route::get('/login/google/callback', function () {
 Route::get('admin/usuarios/autocomplete', [UsuarioController::class, 'autocomplete'])->name('admin.usuarios.autocomplete');
 
 Route::get('/gallery', [GalleryController::class, 'index'])->name('pages.gallery');
+Route::get('/about-us', [AboutUsController::class, 'index'])->name('pages.about-us');
 
 require __DIR__ . '/auth.php';

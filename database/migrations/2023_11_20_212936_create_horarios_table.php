@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -14,11 +13,14 @@ return new class extends Migration
         Schema::create('horarios', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
-            $table->dateTime('fecha');
             $table->time('hora');
+            $table->enum('dia_semana', ['lunes', 'martes', 'miércoles', 'jueves', 'viernes']);
             $table->integer('plazas_disponibles');
             $table->string('idioma');
-            $table->foreignId('actividad_id')->constrained('actividades')->onDelete('cascade');
+            $table
+                ->foreignId('actividad_id')
+                ->constrained('actividades')
+                ->onDelete('cascade');
         });
     }
 

@@ -2,34 +2,39 @@
 
 namespace Database\Seeders;
 
+// database/seeders/HorariosSeeder.php
+
 use Illuminate\Database\Seeder;
-use App\Models\Horario;
 use App\Models\Actividad;
-use Faker;
+use App\Models\Horario;
+use Carbon\Carbon;
 
 class HorarioSeeder extends Seeder
 {
     public function run()
     {
-        // Usar el generador de datos Faker
-        $faker = \Faker\Factory::create();
 
-        // Obtener todas las actividades existentes
+
+        // Días de la semana y horas de ejemplo
+        $diasSemana = ['lunes', 'martes', 'miércoles', 'jueves', 'viernes'];
+        $horas = ['10:00:00', '14:00:00', '18:00:00'];
+
+        // Obtener todas las actividades
         $actividades = Actividad::all();
 
-        // Crear horarios de prueba
+        // Crear horarios de ejemplo para cada actividad en diferentes días y horas
         foreach ($actividades as $actividad) {
-            for ($i = 0; $i < 5; $i++) {
-                Horario::create([
-                    'fecha' => $faker->date,
-                    'hora' => $faker->time,
-                    'actividad_id' => $actividad->id,
-                    'plazas_disponibles' => $faker->numberBetween(1, 20),
-                    'idioma' => $faker->randomElement(['Español', 'Inglés', 'Francés']),
-                ]);
+            foreach ($diasSemana as $dia) {
+                foreach ($horas as $hora) {
+                    Horario::create([
+                        'actividad_id' => $actividad->id,
+                        'dia_semana' => $dia,
+                        'hora' => $hora,
+                        'plazas_disponibles' => rand(5, 20),
+                        'idioma' => 'Español', // Ejemplo de idioma
+                    ]);
+                }
             }
         }
-
     }
 }
-

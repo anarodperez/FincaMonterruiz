@@ -3,7 +3,10 @@
 @section('title', 'Admin | Actividades')
 
 @section('content')
-    <h5 class="card-title text-center">Listado de actividades</h5>
+<div class="text-center my-4">
+    <h2 class="display-4 font-weight-bold text-primary">Listado de Actividades</h2>
+    <p class="lead">Descubre y gestiona la lista de actividades en el sistema.</p>
+</div>
     <div class="content">
         <div class="contenedor-tabla">
             <p>

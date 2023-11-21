@@ -25,11 +25,28 @@ class AuthenticatedSessionController extends Controller
      */
     public function store(LoginRequest $request): RedirectResponse
     {
-        $request->authenticate();
+        $request->validate([
+            'email' => 'required|string',
+            'password' => 'required|string',
+        ]);
 
-        $request->session()->regenerate();
+        $credentials = $request->only('email', 'password');
 
-        return redirect()->intended(RouteServiceProvider::HOME);
+        if (Auth::attempt($credentials)) {
+            // Verificar si el usuario está validado
+            if (Auth::user()->validado) {
+                $request->session()->regenerate();
+                return redirect()->intended(RouteServiceProvider::HOME);
+            } else {
+                // Si el usuario no está validado, cerrar sesión y mostrar un mensaje
+                Auth::logout();
+                return redirect('/login')->with('status', 'login-error');
+            }
+        }
+
+        return back()->withErrors([
+            'email' => __('auth.failed'),
+        ])->withInput();
     }
 
     /**
