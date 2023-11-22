@@ -1,28 +1,43 @@
-<!-- admin/horarios/create.blade.php -->
-
 @extends('layouts.admin')
 
 @section('content')
     <div class="container">
         <h2 class="my-4 text-center">Crear Nuevo Horario</h2>
-        <form action="" method="POST">
+        <form action="{{ route('admin.horarios.store') }}" method="POST" style="min-height: 650px;">
             @csrf
             <div class="mb-3">
                 <label for="actividad" class="form-label">Actividad:</label>
                 <select name="actividad" id="actividad" class="form-select">
-                    <!-- Opciones para seleccionar la actividad -->
-                    <option value="1">Actividad 1</option>
-                    <option value="2">Actividad 2</option>
-                    <!-- Agrega más opciones según sea necesario -->
+                    <!-- Itera sobre las actividades para cargarlas dinámicamente -->
+                    @foreach($actividades as $actividad)
+                        <option value="{{ $actividad->id }}">{{ $actividad->nombre }}</option>
+                    @endforeach
                 </select>
             </div>
             <div class="mb-3">
-                <label for="dias_semana" class="form-label">Días de la Semana:</label>
-                <input type="text" name="dias_semana" id="dias_semana" class="form-control" placeholder="Ej. Lunes, Miércoles, Viernes">
+                <label for="dia_semana" class="form-label">Día de la Semana:</label>
+                <select name="dia_semana" id="dia_semana" class="form-select">
+                    <!-- Opciones para seleccionar el día de la semana -->
+                    <option value="0">Domingo</option>
+                    <option value="1">Lunes</option>
+                    <option value="2">Martes</option>
+                    <option value="3">Miércoles</option>
+                    <option value="4">Jueves</option>
+                    <option value="5">Viernes</option>
+                    <option value="6">Sábado</option>
+                </select>
             </div>
             <div class="mb-3">
                 <label for="hora" class="form-label">Hora:</label>
                 <input type="time" name="hora" id="hora" class="form-control">
+            </div>
+            <div class="mb-3">
+                <label for="idioma" class="form-label">Idioma:</label>
+                <select name="idioma" id="idioma" class="form-select">
+                    <option value="Español">Español</option>
+                    <option value="Inglés">Inglés</option>
+                    <option value="Frances">Francés</option>
+                </select>
             </div>
             <!-- Agrega otros campos según sea necesario -->
             <button type="submit" class="btn btn-primary">Guardar Horario</button>

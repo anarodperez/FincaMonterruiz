@@ -2,8 +2,6 @@
 
 namespace Database\Seeders;
 
-// database/seeders/HorariosSeeder.php
-
 use Illuminate\Database\Seeder;
 use App\Models\Actividad;
 use App\Models\Horario;
@@ -13,27 +11,30 @@ class HorarioSeeder extends Seeder
 {
     public function run()
     {
+        Horario::truncate();
 
-
-        // Días de la semana y horas de ejemplo
         $diasSemana = ['lunes', 'martes', 'miércoles', 'jueves', 'viernes'];
         $horas = ['10:00:00', '14:00:00', '18:00:00'];
 
-        // Obtener todas las actividades
         $actividades = Actividad::all();
 
-        // Crear horarios de ejemplo para cada actividad en diferentes días y horas
+        // Número máximo de horarios por actividad
+        $maxHorariosPorActividad = 5;
+
         foreach ($actividades as $actividad) {
-            foreach ($diasSemana as $dia) {
-                foreach ($horas as $hora) {
-                    Horario::create([
-                        'actividad_id' => $actividad->id,
-                        'dia_semana' => $dia,
-                        'hora' => $hora,
-                        'plazas_disponibles' => rand(5, 20),
-                        'idioma' => 'Español', // Ejemplo de idioma
-                    ]);
-                }
+            // Obtén una cantidad aleatoria de horarios para cada actividad
+            $numHorarios = rand(1, $maxHorariosPorActividad);
+
+            for ($i = 0; $i < $numHorarios; $i++) {
+                $dia = $diasSemana[array_rand($diasSemana)];
+                $hora = $horas[array_rand($horas)];
+
+                Horario::create([
+                    'actividad_id' => $actividad->id,
+                    'dia_semana' => $dia,
+                    'hora' => $hora,
+                    'idioma' => 'Español',
+                ]);
             }
         }
     }
