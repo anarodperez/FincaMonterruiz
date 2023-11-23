@@ -16,18 +16,21 @@ class Horario extends Model
 
  // Atributo de acceso mutador para almacenar solo la hora
  public function setHoraAttribute($value)
- {
-    \Log::info('Valor antes de la conversión: ' . $value);
-
+{
     if (!is_null($value)) {
-        $this->attributes['hora'] = Carbon::createFromFormat('H:i:s', $value);
+        // Verifica si la cadena de tiempo contiene segundos
+        $format = (strpos($value, ':') === false) ? 'H:i' : 'H:i:s';
+        $this->attributes['hora'] = Carbon::createFromFormat($format, $value)->format('H:i:s');
     }
-  }
- // Atributo de acceso para obtener solo la hora
- public function getHoraAttribute($value)
- {
-     return Carbon::parse($value)->format('H:i:s');
- }
+}
+
+
+public function getHoraAttribute($value)
+{
+    // Verifica si la fecha tiene segundos
+    $format = (strpos($value, ':') === false) ? 'H:i' : 'H:i:s';
+    return Carbon::parse($value)->format($format);
+}
 
  public function actividad()
  {
