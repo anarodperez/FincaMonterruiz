@@ -26,43 +26,53 @@ use App\Http\Controllers\GalleryController;
 // Vista inicial cuando arrancas la app.
 Route::get('/', [IndexController::class, 'home'])->name('home');
 
-    Route::get('/dashboard', function () {
-        if (Auth::user()->es_admin) {
-            return redirect()->route('admin.index');
-        }
-        return view('dashboard');
-    })
-        ->middleware(['auth', 'verified'])
-        ->name('dashboard');
+Route::get('/dashboard', function () {
+    if (Auth::user()->es_admin) {
+        return redirect()->route('admin.index');
+    }
+    return view('dashboard');
+})
+    ->middleware(['auth', 'verified'])
+    ->name('dashboard');
 
-    Route::middleware('auth')->group(function () {
-        Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-        Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-        Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-    });
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
 
-    /************* Admin *************/
-    Route::middleware(['admin'])->group(function () {
-        Route::get('/admin', [AdminController::class, 'index'])->name('admin.index');
+/************* Admin *************/
+Route::middleware(['admin'])->group(function () {
+    Route::get('/admin', [AdminController::class, 'index'])->name('admin.index');
 
-        // Actividades
-        Route::get('/actividades/index', [ActividadController::class, 'index'])->name('admin.actividades.index');
-        Route::get('/actividades/create', [ActividadController::class, 'create'])->name('admin.actividades.create');
-        Route::post('/actividades/create', [ActividadController::class, 'store'])->name('admin.actividades.store');
-        Route::get('/actividades/show/{actividad}', [ActividadController::class, 'show'])->name('admin.actividades.show');
-        Route::get('/actividades/{id}/edit', [ActividadController::class, 'edit'])->name('admin.actividades.edit');
-        Route::put('/actividades/update/{id}', [ActividadController::class, 'update'])->name('admin.actividades.update');
-        Route::delete('/actividades/{actividad}/delete', [ActividadController::class, 'destroy'])->name('admin.actividades.delete');
+    // Actividades
+    Route::get('/actividades/index', [ActividadController::class, 'index'])->name('admin.actividades.index');
+    Route::get('/actividades/create', [ActividadController::class, 'create'])->name('admin.actividades.create');
+    Route::post('/actividades/create', [ActividadController::class, 'store'])->name('admin.actividades.store');
+    Route::get('/actividades/show/{actividad}', [ActividadController::class, 'show'])->name('admin.actividades.show');
+    Route::get('/actividades/{id}/edit', [ActividadController::class, 'edit'])->name('admin.actividades.edit');
+    Route::put('/actividades/update/{id}', [ActividadController::class, 'update'])->name('admin.actividades.update');
+    Route::delete('/actividades/{actividad}/delete', [ActividadController::class, 'destroy'])->name('admin.actividades.delete');
 
-        // Usuarios
-        Route::get('/usuarios/index', [UsuarioController::class, 'index'])->name('admin.usuarios.index');
-        Route::put('/usuarios/{usuario}/validar', [UsuarioController::class, 'validar'])->name('admin.usuarios.validar');
+    // Usuarios
+    Route::get('/usuarios/index', [UsuarioController::class, 'index'])->name('admin.usuarios.index');
+    Route::put('/usuarios/{usuario}/validar', [UsuarioController::class, 'validar'])->name('admin.usuarios.validar');
 
-        //Horarios
-        Route::get('/horarios/index', [HorarioController::class, 'index'])->name('admin.horarios.index');
-        Route::get('/horarios/create', [HorarioController::class, 'create'])->name('admin.horarios.create');
-        Route::post('/horarios/create', [HorarioController::class, 'store'])->name('admin.horarios.store');
-    });
+
+    //Horarios
+    Route::get('/horarios/index', [HorarioController::class, 'index'])->name('admin.horarios.index');
+    Route::get('/horarios/create', [HorarioController::class, 'create'])->name('admin.horarios.create');
+    Route::post('/horarios/create', [HorarioController::class, 'store'])->name('admin.horarios.store');
+    Route::get('/admin/horarios/select-delete', [HorarioController::class, 'selectDelete'])->name('admin.horarios.select-delete');
+    Route::delete('/admin/horarios/destroy-selected', [HorarioController::class, 'destroy'])->name('admin.horarios.destroy');
+    Route::delete('admin/horarios/destroy-selected', [HorarioController::class, 'destroySelected'])->name('admin.horarios.destroySelected');
+
+    // Borrar horario completo
+    // Route::delete('/borrarHorarioConcreto/{idActividad}/{diaSemana}/{hora}', [HorarioController::class, 'borrarHorarioConcreto'])->name('admin.horarios.borrarHorarioConcreto');
+
+    // Borrar día concreto
+    // Route::delete('/borrarDiaConcreto/{idActividad}/{diaSemana}/{hora}', [HorarioController::class, ''])->name('borrarHorarioCompleto');
+});
 
 Route::get('/login/google', function () {
     return Socialite::driver('google')->redirect();

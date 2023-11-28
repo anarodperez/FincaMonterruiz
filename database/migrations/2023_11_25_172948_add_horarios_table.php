@@ -14,8 +14,7 @@ return new class extends Migration {
             $table->id();
             $table->timestamps();
             $table->time('hora');
-            $table->enum('dia_semana', ['lunes', 'martes', 'miércoles', 'jueves', 'viernes']);
-            $table->integer('plazas_disponibles');
+            $table->enum('dia_semana', ['lunes', 'martes', 'miércoles', 'jueves', 'viernes','sábado','domingo']);
             $table->string('idioma');
             $table
                 ->foreignId('actividad_id')

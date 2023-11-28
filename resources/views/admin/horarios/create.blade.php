@@ -41,6 +41,9 @@
             </div>
             <!-- Agrega otros campos según sea necesario -->
             <button type="submit" class="btn btn-primary">Guardar Horario</button>
+            <a href="{{ route('admin.horarios.index') }}" class="btn btn-info">
+                <span class="fas fa-undo-alt"></span> Regresar
+            </a>
         </form>
     </div>
 @endsection

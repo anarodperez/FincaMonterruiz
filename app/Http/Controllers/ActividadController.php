@@ -10,8 +10,6 @@ use Illuminate\Http\Request;
 
 use Illuminate\Support\Facades\Crypt;
 
-
-
 class ActividadController extends Controller
 {
     public function index()

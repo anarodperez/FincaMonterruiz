@@ -24,7 +24,6 @@ class Horario extends Model
     }
 }
 
-
 public function getHoraAttribute($value)
 {
     // Verifica si la fecha tiene segundos
@@ -61,8 +60,7 @@ public function getHoraAttribute($value)
          // Agrega la fecha al arreglo
          $fechas[] = $fechaHora;
 
-         // Actualiza la fecha de inicio para la próxima iteración
-         $fechaInicio = $proximoDia->addWeek(); // Otra opción puede ser addDay() para eventos diarios
+         $fechaInicio = $proximoDia;
      }
 
      return $fechas;

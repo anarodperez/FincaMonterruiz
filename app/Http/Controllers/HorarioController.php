@@ -41,9 +41,6 @@ class HorarioController extends Controller
         return view('admin.horarios.create', compact('actividades'));
     }
 
-
-
-
     public function store(Request $request)
     {
         try {
@@ -54,9 +51,6 @@ class HorarioController extends Controller
             'idioma' => 'required|in:Español,Inglés,Francés',
             // Agrega otras reglas de validación según sea necesario
         ]);
-
-
-
 
         // Crea un nuevo horario con los datos del formulario y guárdalo en la base de datos
         Horario::create([
@@ -73,6 +67,58 @@ class HorarioController extends Controller
         dd($e,$request->all(),$request->input('hora'));
     }
     }
+    public function destroySelected(Request $request)
+    {
+        $request->validate([
+            'horarios' => 'required|array',
+            'horarios.*' => 'exists:horarios,id',
+        ]);
+
+        // Obtén los IDs de los horarios seleccionados desde el formulario
+        $horariosIds = $request->input('horarios');
+
+        // Elimina los horarios seleccionados
+        Horario::whereIn('id', $horariosIds)->delete();
+
+        return redirect()->route('admin.horarios.index')->with('success', 'Horarios seleccionados borrados exitosamente');
+    }
+
+
+public function selectDelete()
+{
+    // Obtén todos los horarios u otros datos necesarios y pasa a la vista
+    $horarios = Horario::all(); // O utiliza cualquier lógica que necesites
+
+    return view('admin.horarios.select-delete',[
+        'horarios' => $horarios]);
+}
+
+
+    // public function borrarHorarioCompleto($idHorario)
+    // {
+    //     // Encuentra el horario por su ID y elimínalo
+    //     $horario = Horario::find($idHorario);
+
+    //     if (!$horario) {
+    //         return redirect()->route('admin.horarios.index')->with('error', 'Horario no encontrado');
+    //     }
+
+    //     $horario->delete();
+
+    //     return redirect()->route('admin.horarios.index')->with('success', 'Horario eliminado con éxito');
+    // }
+
+
+//     public function borrarHorarioConcreto($idActividad, $diaSemana, $hora)
+// {
+//     // Encuentra y elimina todos los horarios para una actividad en un día y hora específicos
+//     Horario::where('actividad_id', $idActividad)
+//         ->where('dia_semana', $diaSemana)
+//         ->where('hora', $hora)
+//         ->delete();
+
+//     return redirect()->route('admin.horarios.index')->with('success', 'Horarios del día eliminados con éxito');
+// }
 
 
 

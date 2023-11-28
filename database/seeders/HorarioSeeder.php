@@ -13,13 +13,14 @@ class HorarioSeeder extends Seeder
     {
         Horario::truncate();
 
-        $diasSemana = ['lunes', 'martes', 'miércoles', 'jueves', 'viernes'];
-        $horas = ['10:00:00', '14:00:00', '18:00:00'];
+        $diasSemana = ['lunes', 'martes', 'miércoles', 'jueves', 'viernes','sábado','domingo'];
+        $horas = ['10:00:00', '14:00:00'];
+        $idiomas = ['Español', 'Inglés', 'Francés'];
 
         $actividades = Actividad::all();
 
         // Número máximo de horarios por actividad
-        $maxHorariosPorActividad = 5;
+        $maxHorariosPorActividad = 2;
 
         foreach ($actividades as $actividad) {
             // Obtén una cantidad aleatoria de horarios para cada actividad
@@ -28,12 +29,13 @@ class HorarioSeeder extends Seeder
             for ($i = 0; $i < $numHorarios; $i++) {
                 $dia = $diasSemana[array_rand($diasSemana)];
                 $hora = $horas[array_rand($horas)];
+                $idioma = $idiomas[array_rand($idiomas)];
 
                 Horario::create([
                     'actividad_id' => $actividad->id,
                     'dia_semana' => $dia,
                     'hora' => $hora,
-                    'idioma' => 'Español',
+                    'idioma' => $idioma,
                 ]);
             }
         }
