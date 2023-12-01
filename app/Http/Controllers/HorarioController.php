@@ -44,28 +44,44 @@ class HorarioController extends Controller
     public function store(Request $request)
     {
         try {
-        $request->validate([
-            'actividad' => 'required|exists:actividades,id',
-            'dia_semana' => 'required',
-            'hora' => 'required|date_format:H:i',
-            'idioma' => 'required|in:Español,Inglés,Francés',
-            // Agrega otras reglas de validación según sea necesario
-        ]);
+            $request->validate([
+                'actividad' => 'required|exists:actividades,id',
+                'dia_semana' => 'required',
+                'hora' => 'required|date_format:H:i',
+                'idioma' => 'required|in:Español,Inglés,Francés',
+                // Agrega otras reglas de validación según sea necesario
+            ]);
 
-        // Crea un nuevo horario con los datos del formulario y guárdalo en la base de datos
-        Horario::create([
-            'actividad_id' => $request->input('actividad'),
-            'dia_semana' =>  $request->input('dia_semana'),
-            'hora' => '13:00:00',
-            'idioma' => $request->input('idioma'),
-            // Agrega otros campos según sea necesario
-        ]);
-        // Redirecciona a la página de horarios o muestra un mensaje de éxito
-        return redirect()->route('admin.horarios.index')->with('success', 'Horario creado exitosamente');
-    } catch (\Exception $e) {
-        // Imprime la excepción
-        dd($e,$request->all(),$request->input('hora'));
-    }
+            // Modifica el valor de la hora para asegurarte de incluir segundos
+$horaConSegundos = $request->input('hora') . ':00';
+
+            // Verifica si ya existe un horario con la misma actividad, día de la semana y hora
+            $horarioExistente = Horario::where('actividad_id', $request->input('actividad'))
+                ->where('dia_semana', $request->input('dia_semana'))
+                ->where('hora', $horaConSegundos )
+                ->first();
+
+            if ($horarioExistente) {
+                // Si ya existe, muestra un mensaje de error
+                return redirect()->back()->withInput()->withErrors(['error' => 'Ya existe un horario con la misma actividad, día de la semana y hora.']);
+            }
+
+
+            // Crea un nuevo horario con los datos del formulario y guárdalo en la base de datos
+            Horario::create([
+                'actividad_id' => $request->input('actividad'),
+                'dia_semana' =>  $request->input('dia_semana'),
+                'hora' => $horaConSegundos ,
+                'idioma' => $request->input('idioma'),
+                // Agrega otros campos según sea necesario
+            ]);
+
+            // Redirecciona a la página de horarios o muestra un mensaje de éxito
+            return redirect()->route('admin.horarios.index')->with('success', 'Horario creado exitosamente');
+        } catch (\Exception $e) {
+            // Imprime la excepción
+            dd($e, $request->all(), $horaConSegundos );
+        }
     }
     public function destroySelected(Request $request)
     {
@@ -88,9 +104,18 @@ public function selectDelete()
 {
     // Obtén todos los horarios u otros datos necesarios y pasa a la vista
     $horarios = Horario::all(); // O utiliza cualquier lógica que necesites
+    $actividades = Actividad::all();
 
     return view('admin.horarios.select-delete',[
-        'horarios' => $horarios]);
+        'horarios' => $horarios, 'actividades' => $actividades]);
+}
+
+
+public function getDias($actividadId)
+{
+    $dias = Horario::where('actividad_id', $actividadId)->pluck('dia_semana')->unique()->values()->all();
+
+    return response()->json($dias);
 }
 
 

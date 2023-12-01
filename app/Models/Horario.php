@@ -36,7 +36,7 @@ public function getHoraAttribute($value)
      return $this->belongsTo(Actividad::class);
  }
 
- public function getFechasRecurrentes($numFechas = 8)
+ public function getFechasRecurrentes($numFechas = 36)
  {
      $fechas = [];
      $fechaInicio = Carbon::now();

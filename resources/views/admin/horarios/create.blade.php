@@ -3,6 +3,18 @@
 @section('content')
     <div class="container">
         <h2 class="my-4 text-center">Crear Nuevo Horario</h2>
+        <!-- Aquí puedes agregar el resto de tu código de formulario -->
+@if($errors->any())
+<div class="alert alert-danger">
+    <ul>
+        @foreach($errors->all() as $error)
+            <li>{{ $error }}</li>
+        @endforeach
+    </ul>
+</div>
+@endif
+<!-- Resto del formulario -->
+
         <form action="{{ route('admin.horarios.store') }}" method="POST" style="min-height: 650px;">
             @csrf
             <div class="mb-3">
