@@ -3,37 +3,44 @@
 namespace App\Http\Controllers;
 
 use App\Models\Horario;
-use  App\Models\Actividad;
+use App\Models\Actividad;
 use DateTime;
 use Illuminate\Http\Request;
 
 class HorarioController extends Controller
 {
     public function index()
-{
-    $horarios = Horario::all();
+    {
+        // Obtén los horarios con la relación 'actividad' cargada
+        $horarios = Horario::all();
 
-    $events = [];
+        $events = collect([]);
 
-    foreach ($horarios as $horario) {
-        // Obtiene las fechas recurrentes utilizando el nuevo método
-        $fechasRecurrentes = $horario->getFechasRecurrentes();
-
-        foreach ($fechasRecurrentes as $fecha) {
-            $events[] = [
-                'title' => $horario->actividad->nombre,
-                'start' => $fecha->format('Y-m-d H:i:s'),
-                'allDay' => false,
-                'idioma' => $horario->idioma,
-                'color' => $horario->color, // Nuevo atributo de color
-            ];
+        foreach ($horarios as $horario) {
+            foreach ($horario->getFechasRecurrentes() as $fecha) {
+                $events->push([
+                    'title' => $horario->actividad->nombre,
+                    'start' => $fecha->format('Y-m-d H:i:s'),
+                    'allDay' => false,
+                    'idioma' => $horario->idioma,
+                    'color' => $horario->color,
+                    'horario_id' => $horario->id
+                ]);
+            }
         }
-    }
 
-    return view('admin.horarios.index', [
-        'events' => $events,
-    ]);
-}
+        // Convierte la colección a un array para evitar problemas al renderizar en la vista
+        $events = $events
+            ->unique('start')
+            ->values()
+            ->all();
+        return view('admin.horarios.index', [
+            'events' => $events,
+        ]);
+
+
+
+    }
 
     public function create()
     {
@@ -42,81 +49,140 @@ class HorarioController extends Controller
     }
 
     public function store(Request $request)
-    {
-        try {
-            $request->validate([
-                'actividad' => 'required|exists:actividades,id',
-                'dia_semana' => 'required',
-                'hora' => 'required|date_format:H:i',
-                'idioma' => 'required|in:Español,Inglés,Francés',
-                // Agrega otras reglas de validación según sea necesario
-            ]);
-
-            // Modifica el valor de la hora para asegurarte de incluir segundos
-$horaConSegundos = $request->input('hora') . ':00';
-
-            // Verifica si ya existe un horario con la misma actividad, día de la semana y hora
-            $horarioExistente = Horario::where('actividad_id', $request->input('actividad'))
-                ->where('dia_semana', $request->input('dia_semana'))
-                ->where('hora', $horaConSegundos )
-                ->first();
-
-            if ($horarioExistente) {
-                // Si ya existe, muestra un mensaje de error
-                return redirect()->back()->withInput()->withErrors(['error' => 'Ya existe un horario con la misma actividad, día de la semana y hora.']);
-            }
-
-
-            // Crea un nuevo horario con los datos del formulario y guárdalo en la base de datos
-            Horario::create([
-                'actividad_id' => $request->input('actividad'),
-                'dia_semana' =>  $request->input('dia_semana'),
-                'hora' => $horaConSegundos ,
-                'idioma' => $request->input('idioma'),
-                // Agrega otros campos según sea necesario
-            ]);
-
-            // Redirecciona a la página de horarios o muestra un mensaje de éxito
-            return redirect()->route('admin.horarios.index')->with('success', 'Horario creado exitosamente');
-        } catch (\Exception $e) {
-            // Imprime la excepción
-            dd($e, $request->all(), $horaConSegundos );
-        }
-    }
-    public function destroySelected(Request $request)
-    {
+{
+    try {
         $request->validate([
-            'horarios' => 'required|array',
-            'horarios.*' => 'exists:horarios,id',
+            'actividad' => 'required|exists:actividades,id',
+            'fecha' => 'required|date',
+            'hora' => 'required|date_format:H:i',
+            'idioma' => 'required|in:Español,Inglés,Francés',
+            'frecuencia' => 'required|in:unico,diario,semanal', // Ajusta las opciones según tus necesidades
+            'repeticiones' => 'required_if:frecuencia,diario,semanal|numeric|min:1',
         ]);
 
-        // Obtén los IDs de los horarios seleccionados desde el formulario
-        $horariosIds = $request->input('horarios');
+        $actividadId = $request->input('actividad');
+        $fecha = $request->input('fecha');
+        $hora = $request->input('hora');
+        $idioma = $request->input('idioma');
+        $frecuencia = $request->input('frecuencia');
+        $repeticiones = $request->input('repeticiones');
 
-        // Elimina los horarios seleccionados
-        Horario::whereIn('id', $horariosIds)->delete();
+        // Crea un horario único
+        if ($frecuencia === 'unico') {
+            $this->crearHorarioUnico($actividadId, $fecha, $hora, $idioma);
+        }
+        // Crea horarios diarios
+        elseif ($frecuencia === 'diario') {
+            $this->crearHorariosDiarios($actividadId, $fecha, $hora, $idioma, $repeticiones);
+        }
+        // Crea horarios semanales
+        elseif ($frecuencia === 'semanal') {
+            $this->crearHorariosSemanalmente($actividadId, $fecha, $hora, $idioma, $repeticiones);
+        }
 
-        return redirect()->route('admin.horarios.index')->with('success', 'Horarios seleccionados borrados exitosamente');
+        // Redirecciona a la página de horarios o muestra un mensaje de éxito
+        return redirect()
+            ->route('admin.horarios.index')
+            ->with('success', 'Horario(s) creado(s) exitosamente');
+    } catch (\Exception $e) {
+        // Maneja la excepción
+        dd($e->getMessage(), $request->all());
+    }
+}
+
+private function crearHorarioUnico($actividadId, $fecha, $hora, $idioma)
+{
+    // Crea un horario único con los datos del formulario y guárdalo en la base de datos
+    Horario::create([
+        'actividad_id' => $actividadId,
+        'fecha' => $fecha,
+        'hora' => $hora,
+        'idioma' => $idioma,
+        // Otros campos según sea necesario
+    ]);
+}
+
+private function crearHorariosDiarios($actividadId, $fecha, $hora, $idioma, $repeticiones)
+{
+    // Crea horarios diarios a partir de la fecha seleccionada
+    for ($i = 0; $i < $repeticiones; $i++) {
+        $fechaActual = Carbon::parse($fecha)->addDays($i);
+        Horario::create([
+            'actividad_id' => $actividadId,
+            'fecha' => $fechaActual,
+            'hora' => $hora,
+            'idioma' => $idioma,
+            // Otros campos según sea necesario
+        ]);
+    }
+}
+
+private function crearHorariosSemanalmente($actividadId, $fecha, $hora, $idioma, $repeticiones)
+{
+    // Crea horarios semanales a partir de la fecha seleccionada
+    for ($i = 0; $i < $repeticiones; $i++) {
+        $fechaActual = Carbon::parse($fecha)->addWeeks($i);
+        Horario::create([
+            'actividad_id' => $actividadId,
+            'fecha' => $fechaActual,
+            'hora' => $hora,
+            'idioma' => $idioma,
+            // Otros campos según sea necesario
+        ]);
+    }
+}
+
+    public function getDias($actividadId)
+    {
+        $dias = Horario::where('actividad_id', $actividadId)
+            ->pluck('dia_semana')
+            ->unique()
+            ->values()
+            ->all();
+
+        return response()->json($dias);
+    }
+
+    public function getActividadColorMap()
+    {
+        // Lógica para obtener colores de las actividades
+        $actividades = Actividad::all();
+        $actividadColorMap = [];
+
+        foreach ($actividades as $actividad) {
+            // Agrega más lógica si es necesario para asignar colores
+            $actividadColorMap[$actividad->id] = '#' . substr(md5(rand()), 0, 6);
+        }
+
+        return $actividadColorMap;
+    }
+
+    public function destroy($id)
+    {
+        // Obtén el horario por su ID
+        $horario = Horario::findOrFail($id);
+
+
+        // Elimina el horario
+        $horario->delete();
+
+        return redirect()
+            ->route('admin.horarios.index')
+            ->with('success', 'Horario eliminado con éxito');
+    }
+
+    public function borrarHorarioConcreto($fecha, $hora)
+    {
+        // Encuentra y elimina el horario en la fecha y hora especificadas
+        Horario::where('fecha', $fecha)
+            ->where('hora', $hora)
+            ->delete();
+
+        return redirect()->route('admin.horarios.index')->with('success', 'Horario eliminado con éxito');
     }
 
 
-public function selectDelete()
-{
-    // Obtén todos los horarios u otros datos necesarios y pasa a la vista
-    $horarios = Horario::all(); // O utiliza cualquier lógica que necesites
-    $actividades = Actividad::all();
 
-    return view('admin.horarios.select-delete',[
-        'horarios' => $horarios, 'actividades' => $actividades]);
-}
-
-
-public function getDias($actividadId)
-{
-    $dias = Horario::where('actividad_id', $actividadId)->pluck('dia_semana')->unique()->values()->all();
-
-    return response()->json($dias);
-}
 
 
     // public function borrarHorarioCompleto($idHorario)
@@ -133,18 +199,14 @@ public function getDias($actividadId)
     //     return redirect()->route('admin.horarios.index')->with('success', 'Horario eliminado con éxito');
     // }
 
+    //     public function borrarHorarioConcreto($idActividad, $diaSemana, $hora)
+    // {
+    //     // Encuentra y elimina todos los horarios para una actividad en un día y hora específicos
+    //     Horario::where('actividad_id', $idActividad)
+    //         ->where('dia_semana', $diaSemana)
+    //         ->where('hora', $hora)
+    //         ->delete();
 
-//     public function borrarHorarioConcreto($idActividad, $diaSemana, $hora)
-// {
-//     // Encuentra y elimina todos los horarios para una actividad en un día y hora específicos
-//     Horario::where('actividad_id', $idActividad)
-//         ->where('dia_semana', $diaSemana)
-//         ->where('hora', $hora)
-//         ->delete();
-
-//     return redirect()->route('admin.horarios.index')->with('success', 'Horarios del día eliminados con éxito');
-// }
-
-
-
+    //     return redirect()->route('admin.horarios.index')->with('success', 'Horarios del día eliminados con éxito');
+    // }
 }

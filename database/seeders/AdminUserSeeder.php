@@ -20,6 +20,7 @@ class AdminUserSeeder extends Seeder
             'apellido2' => 'Pérez',
             'email' => 'anarodpe8@gmail.com',
             'es_admin' => true,
+            'validado' => true,
             'password' => Hash::make('Administradora.1'),
     ]);
     }

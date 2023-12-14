@@ -4,40 +4,34 @@
     <div class="container">
         <h2 class="my-4 text-center">Crear Nuevo Horario</h2>
         <!-- Aquí puedes agregar el resto de tu código de formulario -->
-@if($errors->any())
-<div class="alert alert-danger">
-    <ul>
-        @foreach($errors->all() as $error)
-            <li>{{ $error }}</li>
-        @endforeach
-    </ul>
-</div>
-@endif
-<!-- Resto del formulario -->
-
+        @if ($errors->any())
+            <div class="alert alert-danger">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+        <!-- Resto del formulario -->
         <form action="{{ route('admin.horarios.store') }}" method="POST" style="min-height: 650px;">
             @csrf
             <div class="mb-3">
                 <label for="actividad" class="form-label">Actividad:</label>
                 <select name="actividad" id="actividad" class="form-select">
                     <!-- Itera sobre las actividades para cargarlas dinámicamente -->
-                    @foreach($actividades as $actividad)
+                    @foreach ($actividades as $actividad)
                         <option value="{{ $actividad->id }}">{{ $actividad->nombre }}</option>
                     @endforeach
                 </select>
             </div>
             <div class="mb-3">
-                <label for="dia_semana" class="form-label">Día de la Semana:</label>
-                <select name="dia_semana" id="dia_semana" class="form-select">
-                    <!-- Opciones para seleccionar el día de la semana -->
-                    <option value="domingo">Domingo</option>
-                    <option value="lunes">Lunes</option>
-                    <option value="martes">Martes</option>
-                    <option value="miercoles">Miércoles</option>
-                    <option value="jueves">Jueves</option>
-                    <option value="viernes">Viernes</option>
-                    <option value="sabado">Sábado</option>
-                </select>
+                <label for="fecha" class="form-label">Fecha:</label>
+                <input type="date" name="fecha" id="fecha"
+                    class="form-control @error('fecha') is-invalid @enderror" value="{{ old('fecha') }}">
+                @error('fecha')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
             </div>
             <div class="mb-3">
                 <label for="hora" class="form-label">Hora:</label>
@@ -49,6 +43,15 @@
                     <option value="Español">Español</option>
                     <option value="Inglés">Inglés</option>
                     <option value="Frances">Francés</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="frecuencia" class="form-label">Frecuencia:</label>
+                <select name="frecuencia" id="frecuencia" class="form-select">
+                    <option value="unico">Horario único</option>
+                    <option value="diario">Diario</option>
+                    <option value="semanal">Semanal</option>
+                    <!-- Agrega otras opciones de frecuencia según tus necesidades -->
                 </select>
             </div>
             <!-- Agrega otros campos según sea necesario -->

@@ -24,14 +24,15 @@
                     </div>
                     <div class="modal-footer">
                         <!-- Formulario para borrar el horario -->
-                        {{-- <form id="borrarHorarioForm" method="POST">
+                        <!-- Formulario para borrar el horario -->
+                        <form id="borrarHorarioForm" method="POST">
                             @csrf
                             @method('DELETE')
-                            <input type="hidden" name="actividad_id" id="actividad_id" value="">
-                            <input type="hidden" name="dia_semana" id="dia_semana" value="">
-                            <input type="hidden" name="hora" id="hora" value="">
-                            <button type="submit" class="btn btn-danger">Borrar</button>
-                        </form> --}}
+                            <!-- Agrega el input para el ID del horario -->
+                            <input type="hidden" name="horario_id" id="horario_id" value="">
+                            <!-- Agrega el botón de confirmación en tu modal -->
+                            <button type="button" class="btn btn-danger" onclick="confirmDelete()">Borrar</button>
+                        </form>
                         <button type="button" class="btn btn-primary">Guardar cambios</button>
                     </div>
                 </div>
@@ -44,11 +45,10 @@
                     <a href="{{ route('admin.horarios.create') }}" class="btn btn-primary">
                         <span class="fas fa-plus"></span> Crear evento
                     </a>
-
                     <!-- Enlace para redirigir a la página de selección de horario para borrar -->
-                    <a href="{{ route('admin.horarios.select-delete') }}" class="btn btn-danger">
+                    {{-- <a href="{{ route('admin.horarios.select-delete') }}" class="btn btn-danger">
                         <span class="fas fa-minus"></span> Borrar evento
-                    </a>
+                    </a> --}}
                 </p>
 
                 <!-- Calendario de horarios existentes -->
@@ -73,50 +73,60 @@
         integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous">
     </script>
     <script>
-       document.addEventListener('DOMContentLoaded', function() {
-    var calendarEl = document.getElementById('calendar');
-    var calendar = new FullCalendar.Calendar(calendarEl, {
-        headerToolbar: {
-            left: 'dayGridMonth,timeGridWeek,timeGridDay',
-            center: 'title'
-        },
-        initialView: 'dayGridMonth',
-        locale: 'es',
-        eventClick: function(info) {
-            // Obtener el modal por su ID y mostrarlo
-            var modal = new bootstrap.Modal(document.getElementById('exampleModal'));
+        document.addEventListener('DOMContentLoaded', function() {
+            var calendarEl = document.getElementById('calendar');
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                headerToolbar: {
+                    left: 'dayGridMonth,timeGridWeek,timeGridDay',
+                    center: 'title'
+                },
+                initialView: 'dayGridMonth',
+                locale: 'es',
+                eventClick: function(info) {
+                    var modal = new bootstrap.Modal(document.getElementById('exampleModal'));
+                    // Construir el contenido dinámico del modal con información del evento
+                    var modalBody = document.getElementById('modal-body-content');
+                    modalBody.innerHTML = "<p><strong>Actividad:</strong> " + info.event.title + "</p>";
+                    modalBody.innerHTML += "<p><strong>Fecha y Hora:</strong> " + info.event.start
+                        .toLocaleString() + "</p>";
+                    modalBody.innerHTML += "<p><strong>Idioma:</strong> " + info.event.extendedProps
+                        .idioma + "</p>";
+                        modalBody.innerHTML += "<p><strong>Id:</strong> " + info.event.extendedProps
+                        .horario_id + "</p>";
 
-            // Construir el contenido dinámico del modal con información del evento
-            var modalBody = document.getElementById('modal-body-content');
-            var fechaHoraConSegundos = new Intl.DateTimeFormat('es-ES', {
-                year: 'numeric',
-                month: 'numeric',
-                day: 'numeric',
-                hour: 'numeric',
-                minute: 'numeric',
-                second: 'numeric'
-            }).format(info.event.start);
 
-            modalBody.innerHTML = "<p><strong>Actividad:</strong> " + info.event.title + "</p>";
-            modalBody.innerHTML += "<p><strong>Fecha y Hora:</strong> " + fechaHoraConSegundos + "</p>";
-            modalBody.innerHTML += "<p><strong>Idioma:</strong> " + info.event.extendedProps.idioma + "</p>";
-            // Agregar más líneas para otros atributos si es necesario
+                    modal.show();
+                },
 
-            // Mostrar el modal
-            modal.show();
-        },
-        events: @json($events, JSON_PRETTY_PRINT) // Convertir los eventos de PHP a JSON
-    });
-    calendar.render();
-});
+                events: @json($events, JSON_PRETTY_PRINT)
+
+
+
+            });
+
+            // Antes de agregar nuevos eventos, limpiar los eventos existentes
+            // calendar.getEvents().forEach(function(event) {
+            //     event.remove();
+            // });
+
+
+            // Renderizar el calendario
+            calendar.render();
+        });
+
 
     </script>
-    <script>
-        function mostrarModalBorrar() {
-            // Aquí puedes agregar lógica para obtener el ID del horario seleccionado y pasarlo al modal
-            // Luego, puedes mostrar el modal de borrar
-            var modal = new bootstrap.Modal(document.getElementById('exampleModal'));
-            modal.show();
+    {{-- <script>
+        function confirmDelete() {
+            // Obtener el valor del horario_id desde el formulario
+            var horarioId = document.getElementById('horario_id').value;
+
+            if (confirm('¿Estás seguro de que deseas borrar este horario?')) {
+                // Establecer la URL con el ID del horario
+                var deleteUrl = '/admin/horarios/' + horarioId; // Usar el valor de horarioId
+                document.getElementById('borrarHorarioForm').action = deleteUrl;
+                document.getElementById('borrarHorarioForm').submit();
+            }
         }
-    </script>
+    </script> --}}
 @endsection

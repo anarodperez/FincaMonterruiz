@@ -63,10 +63,13 @@ Route::middleware(['admin'])->group(function () {
     Route::get('/horarios/index', [HorarioController::class, 'index'])->name('admin.horarios.index');
     Route::get('/horarios/create', [HorarioController::class, 'create'])->name('admin.horarios.create');
     Route::post('/horarios/create', [HorarioController::class, 'store'])->name('admin.horarios.store');
-    Route::get('/admin/horarios/select-delete', [HorarioController::class, 'selectDelete'])->name('admin.horarios.select-delete');
-    Route::delete('/admin/horarios/destroy-selected', [HorarioController::class, 'destroy'])->name('admin.horarios.destroy');
-    Route::delete('admin/horarios/destroy-selected', [HorarioController::class, 'destroySelected'])->name('admin.horarios.destroySelected');
+    // Route::get('/admin/horarios/select-delete', [HorarioController::class, 'selectDelete'])->name('admin.horarios.select-delete');
+    // Route::delete('admin/horarios/destroy-selected', [HorarioController::class, 'destroySelected'])->name('admin.horarios.destroySelected');
     Route::get('/api/get-dias/{actividad}', [HorarioController::class, 'getDias']);
+    Route::delete('/horarios/{horario}/index', [HorarioController::class, 'destroy'])->name('admin.horarios.destroy');
+    Route::delete('/admin/horarios/{id}/borrar/{fecha}', [HorarioController::class, 'borrarHorarioConcreto'])->name('admin.horarios.delete');
+
+
     // Borrar horario completo
     // Route::delete('/borrarHorarioConcreto/{idActividad}/{diaSemana}/{hora}', [HorarioController::class, 'borrarHorarioConcreto'])->name('admin.horarios.borrarHorarioConcreto');
 

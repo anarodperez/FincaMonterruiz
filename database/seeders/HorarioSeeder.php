@@ -11,33 +11,17 @@ class HorarioSeeder extends Seeder
 {
     public function run()
     {
+        // Borra los horarios existentes antes de recrearlos
         Horario::truncate();
 
-        $diasSemana = ['lunes', 'martes', 'miércoles', 'jueves', 'viernes','sábado','domingo'];
-        $horas = ['10:00:00', '14:00:00'];
-        $idiomas = ['Español', 'Inglés', 'Francés'];
+        $horario = new Horario();
+        $horario->fecha = '2023-12-18'; // Fecha de inicio
+        $horario->hora = '10:00:00'; // Hora
+        $horario->idioma = 'Español';
+        $horario->actividad_id = 1; // ID de la actividad
+        $horario->save();
 
-        $actividades = Actividad::all();
-
-        // Número máximo de horarios por actividad
-        $maxHorariosPorActividad = 2;
-
-        foreach ($actividades as $actividad) {
-            // Obtén una cantidad aleatoria de horarios para cada actividad
-            $numHorarios = rand(1, $maxHorariosPorActividad);
-
-            for ($i = 0; $i < $numHorarios; $i++) {
-                $dia = $diasSemana[array_rand($diasSemana)];
-                $hora = $horas[array_rand($horas)];
-                $idioma = $idiomas[array_rand($idiomas)];
-
-                Horario::create([
-                    'actividad_id' => $actividad->id,
-                    'dia_semana' => $dia,
-                    'hora' => $hora,
-                    'idioma' => $idioma,
-                ]);
-            }
-        }
+        // Llama al método para crear fechas recurrentes
+        $horario->getFechasRecurrentes();
     }
 }
