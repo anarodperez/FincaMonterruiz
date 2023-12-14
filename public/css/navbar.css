@@ -1,104 +1,103 @@
 @import url('https://fonts.googleapis.com/css2?family=Kurale&display=swap');
 
-  @keyframes fade-in {
-    from {
-      opacity: 0;
-    }
-    to {
-      opacity: 1;
-    }
-  }
+@keyframes fade-in {
+from {
+opacity: 0;
+}
+to {
+opacity: 1;
+}
+}
 
-  .logo{
-    height: 40px;
-    margin-right: 10px;
-    animation-name: fade-in;
-    animation-duration: 1.5s;
-    animation-fill-mode: forwards;
-  }
+.logo{
+height: 40px;
+margin-right: 10px;
+animation-name: fade-in;
+animation-duration: 1.5s;
+animation-fill-mode: forwards;
+}
 
-  nav,footer {
+nav,footer {
+background: linear-gradient(90deg, #5c7c64 0%, #6fa78a 100%);
+font-family: 'Kurale', serif;
+}
 
-    background: linear-gradient(90deg, #5c7c64 0%, #6fa78a 100%);
-    font-family: 'Kurale', serif;
-  }
-  .navbar-nav .nav-link {
-    margin-right: 10px;
-  }
+.navbar-nav .nav-link {
+margin-right: 10px;
+}
 
-  .nav-item a {
-    font-size: 24px;
-    color: white;
-  }
-  .nav-item a:hover {
-    color:  #3e0a0b;
+.nav-item a {
+font-size: 24px;
+color: white;
+}
+.nav-item a:hover {
+color: #3e0a0b;
+}
 
-  }
+.navbar-brand h1 {
+color: #550d0e;
+font-size: 2rem;
+-webkit-box-sizing: border-box;
+-moz-box-sizing: border-box;
+box-sizing: border-box;
+-o-text-overflow: clip;
+text-overflow: clip;
+white-space: pre;
+text-shadow: 0 0 10px rgba(255, 255, 255, 1), 0 0 20px rgba(255, 255, 255, 1),
+0 0 30px rgba(255, 255, 255, 1), 0 0 30px #913785, 0 0 30px #913785,
+0 0 80px #913785, 0 0 100px #913785;
+-webkit-transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
+-moz-transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
+-o-transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
+transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
+}
 
-  .navbar-brand h1 {
-    color: #550d0e;
-    font-size: 2rem;
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    box-sizing: border-box;
-    -o-text-overflow: clip;
-    text-overflow: clip;
-    white-space: pre;
-    text-shadow: 0 0 10px rgba(255, 255, 255, 1), 0 0 20px rgba(255, 255, 255, 1),
-      0 0 30px rgba(255, 255, 255, 1), 0 0 30px #913785, 0 0 30px #913785,
-      0 0 80px #913785, 0 0 100px #913785;
-    -webkit-transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
-    -moz-transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
-    -o-transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
-    transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
-  }
-
-  .navbar h1:hover {
-    text-shadow: 0 0 10px rgba(255, 255, 255, 1), 0 0 20px rgba(255, 255, 255, 1),
-      0 0 30px rgba(255, 255, 255, 1), 0 0 40px #6fa78a, 0 0 70px #6fa78a,
-      0 0 80px #6fa78a, 0 0 100px #6fa78a;
-  }
+.navbar h1:hover {
+text-shadow: 0 0 10px rgba(255, 255, 255, 1), 0 0 20px rgba(255, 255, 255, 1),
+0 0 30px rgba(255, 255, 255, 1), 0 0 40px #6fa78a, 0 0 70px #6fa78a,
+0 0 80px #6fa78a, 0 0 100px #6fa78a;
+}
 
 .nav-item {
-    list-style: none;
+list-style: none;
 }
 
 
-  li .btn  {
-    background: #4c606d;
-    border-radius: 15px;
-    cursor: pointer;
-    padding: 10px 20px;
-    transition: all 0.3s ease 0s;
-  }
+li .btn {
+background: #4c606d;
+border-radius: 15px;
+cursor: pointer;
+padding: 10px 20px;
+transition: all 0.3s ease 0s;
+}
 
-  li:hover .btn {
-    background-color: #a8c9b1;
-    transform: scale(1.1);
-    color: #3e0a0b;
-  }
+li:hover .btn {
+background-color: #a8c9b1;
+transform: scale(1.1);
+color: #3e0a0b;
+}
 
-  .dropdown-menu{
-    display: none;
-    position: absolute;
-    background: #e6fbe3;
-    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-    z-index: 100;
-    border-radius: 5px;
-    border: none;
-    width: 240px;
-    padding: 10px 0;
+.dropdown-menu{
+display: none;
+position: absolute;
+background: #e6fbe3;
+box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+z-index: 100;
+border-radius: 5px;
+border: none;
+width: 240px;
+padding: 10px 0;
 
-  }
+}
 
-  .dropdown-menu a{
-    color: black;
-  }
+.dropdown-menu a{
+color: black;
+}
 
-  .dropdown-menu a:hover{
-    background: #83b099;
-    transform: scale(1.2);
-    padding-left: 20px;
-    font-size: 20px;
-    box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.5);
-  }
+.dropdown-menu a:hover{
+background: #83b099;
+transform: scale(1.2);
+padding-left: 20px;
+font-size: 20px;
+box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.5);
+}
