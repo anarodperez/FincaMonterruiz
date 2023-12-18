@@ -1,7 +1,7 @@
 <nav class="navbar navbar-expand-lg navbar-dark header">
     <div class="container-fluid">
         <a class="navbar-brand d-flex align-items-center" href="#">
-            <picture><img src="" alt="Logo" class="logo" /></picture>
+            <picture><img src="/storage/img/logo.png" alt="Logo" class="logo" /></picture>
             <h1 class="nombre-empresa m-0 pl-3">Finca Monterruiz</h1>
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"
@@ -11,7 +11,7 @@
         <div class="collapse navbar-collapse justify-content-end" id="navbarNavDropdown">
             <ul class="navbar-nav">
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('index') }}">Inicio</a>
+                    <a class="nav-link" href="{{ route('home') }}">Inicio</a>
                 </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
@@ -23,12 +23,12 @@
                             <a class="dropdown-item" href="/catalogo">Catalogo y reserva</a>
                         </li>
                         <li>
-                            <a class="dropdown-item" href="#">Galeria</a>
+                            <a class="dropdown-item" href="{{ route('pages.gallery') }}">Galeria</a>
                         </li>
                     </ul>
                 </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">Sobre nosotros</a>
+                <a class="nav-link" href="{{ route('pages.about-us') }}">Sobre nosotros</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="#">Contáctanos</a>
@@ -43,7 +43,7 @@
                         <ul class="dropdown-menu dropdown-menu-end header">
                             <?php
                             if (Auth::user()->es_admin) { ?>
-                            <li><a class="dropdown-item" href="#">Portal Administrador</a></li>
+                            <li><a class="dropdown-item" href={{ route('admin.index') }}>Portal Administrador</a></li>
                             <?php } ?>
                             <li><a class="dropdown-item" href="{{ route('profile.edit') }}">Perfil</a></li>
                             <form method="POST" action="{{ route('logout') }}">

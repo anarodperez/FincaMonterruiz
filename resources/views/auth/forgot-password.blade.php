@@ -1,6 +1,20 @@
-<x-guest-layout>
+@extends('layouts.guest')
+
+@section('title')
+    Recuperación contraseña
+@endsection
+@section('css')
+    <link rel="stylesheet" href="{{ asset('css/login.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/navbar.css') }}">
+@endsection
+
+@section('content')
+    <div class="wrapper">
+      <div class="signup-form" style="background: white">
+       <h3>Reestablece la contraseña</h3>
     <div class="mb-4 text-sm text-gray-600">
-        {{ __('Forgot your password? No problem. Just let us know your email address and we will email you a password reset link that will allow you to choose a new one.') }}
+       {{ __('¿Has olvidado tu contraseña? ¿No te preocupes!') }} <br>
+{{ __('Proporciona tu correo electrónico y recibirás un enlace para restablecerla.') }}
     </div>
 
     <!-- Session Status -->
@@ -10,16 +24,37 @@
         @csrf
 
         <!-- Email Address -->
-        <div>
+          <div>
             <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus />
+            <x-text-input id="email" class="input" type="email" name="email" :value="old('email')" required autofocus />
             <x-input-error :messages="$errors->get('email')" class="mt-2" />
+            <span id="emailError" style="color: red; display: none;"></span>
         </div>
 
-        <div class="flex items-center justify-end mt-4">
-            <x-primary-button>
-                {{ __('Email Password Reset Link') }}
-            </x-primary-button>
-        </div>
+        <button type="submit" class="btn-2" onclick="return validateForm()">
+            {{ __('Enviar') }}
+        </button>
+
     </form>
-</x-guest-layout>
+    </div>
+</div>
+
+<script>
+    function validateForm() {
+        var email = document.getElementById('email').value;
+        var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        var emailError = document.getElementById('emailError');
+
+        if (!emailRegex.test(email)) {
+            emailError.innerText = 'Por favor, introduce una dirección de correo electrónico válida.';
+            emailError.style.display = 'block';
+            return false; // Evita que el formulario se envíe si la validación falla
+        }
+
+        emailError.style.display = 'none';
+        return true; // Permite el envío del formulario si la validación es exitosa
+    }
+</script>
+@endsection
+
+

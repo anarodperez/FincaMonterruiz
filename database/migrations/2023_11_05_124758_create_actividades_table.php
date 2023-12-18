@@ -22,7 +22,6 @@ return new class extends Migration
             $table->integer('aforo');
             $table->string('imagen');
             $table->boolean('activa')->default(true);
-
         });
     }
 
