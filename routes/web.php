@@ -11,8 +11,9 @@ use App\Http\Controllers\ActividadController;
 use App\Http\Controllers\UsuarioController;
 use App\Http\Controllers\HorarioController;
 use App\Http\Controllers\AboutUsController;
-
 use App\Http\Controllers\GalleryController;
+use App\Http\Controllers\FormContactController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -41,8 +42,6 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
-
-
 
 Route::get('/catalogo', [CatalogoController::class, 'index'])->name('catalogo');
 /************* Admin *************/
@@ -113,6 +112,8 @@ Route::get('admin/usuarios/autocomplete', [UsuarioController::class, 'autocomple
 
 Route::get('/gallery', [GalleryController::class, 'index'])->name('pages.gallery');
 Route::get('/about-us', [AboutUsController::class, 'index'])->name('pages.about-us');
+Route::get('/form-contact', [FormContactController::class, 'index'])->name('pages.form-contact');
 
+Route::post('/contact', [FormContactController::class, 'submit'])->name('contact.submit');
 
 require __DIR__ . '/auth.php';

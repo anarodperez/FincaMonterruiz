@@ -1,8 +1,9 @@
 // Escucha el evento 'DOMContentLoaded' para asegurarse de que el DOM está completamente cargado
 
-document.addEventListener("DOMContentLoaded", function() {
+    document.addEventListener("DOMContentLoaded", function() {
     // Obtención del formulario y establecimiento del evento 'submit'
     const registerForm = document.getElementById('form');
+
     registerForm.addEventListener('submit', function(event) {
         event.preventDefault(); // Evita que el formulario se envíe automáticamente
 
@@ -71,9 +72,8 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     }
 
-
-// Función para mostrar un mensaje de error asociado a un campo específico
-function showError(input, message) {
+    // Función para mostrar un mensaje de error asociado a un campo específico
+    function showError(input, message) {
     let errorSpan = input.nextElementSibling; // Obtiene el siguiente hermano del campo
 
     // Si no existe el mensaje de error o no tiene la clase 'error-message'
@@ -86,11 +86,10 @@ function showError(input, message) {
     errorSpan.innerHTML = `<span class="error-icon">❌</span> ${message}`; // Establece el mensaje de error dentro del elemento
     input.classList.add('is-invalid'); // Agrega una clase para resaltar visualmente el campo con error
     errorSpan.classList.add('error-visible'); // Hace visible el mensaje de error
-}
+    }
 
-
-// Función para ocultar el mensaje de error asociado a un campo específico
-function hideError(input) {
+    // Función para ocultar el mensaje de error asociado a un campo específico
+    function hideError(input) {
     const errorSpan = input.nextElementSibling; // Obtiene el siguiente hermano del campo
 
     // Verifica si hay un mensaje de error y si tiene la clase 'error-message'
@@ -98,7 +97,7 @@ function hideError(input) {
         input.classList.remove('is-invalid'); // Elimina la clase de resaltado del campo
         errorSpan.remove(); // Elimina el mensaje de error
     }
-}
+    }
 
     // Función para validar si el email es válido
     function isValidEmail(email) {
@@ -112,12 +111,10 @@ function hideError(input) {
         return regex.test(input);
     }
 
-
-
     // Función para validar si la entrada es un número de teléfono válido
-function validatePhone(phone) {
-    // Puedes ajustar la expresión regular según tus necesidades
-    const phoneRegex = /^(\+\d{1,4}|\d{1,4})?[6-9]\d{8}$/;
-    return phoneRegex.test(phone);
-}
+    function validatePhone(phone) {
+        // Puedes ajustar la expresión regular según tus necesidades
+        const phoneRegex = /^(\+\d{1,4}|\d{1,4})?[6-9]\d{8}$/;
+        return phoneRegex.test(phone);
+    }
 });
