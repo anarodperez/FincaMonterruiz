@@ -24,7 +24,6 @@
                     </div>
                     <div class="modal-footer">
                         <!-- Formulario para borrar el horario -->
-                        <!-- Formulario para borrar el horario -->
                         <form id="borrarHorarioForm" method="POST">
                             @csrf
                             @method('DELETE')
@@ -83,6 +82,12 @@
                 initialView: 'dayGridMonth',
                 locale: 'es',
                 eventClick: function(info) {
+
+                    // Utiliza la propiedad horario_id del evento para obtener el ID del horario
+    var horarioId = info.event.extendedProps.horario_id;
+
+// Actualiza el valor del campo oculto en el formulario del modal
+document.getElementById('horario_id').value = horarioId;
                     var modal = new bootstrap.Modal(document.getElementById('exampleModal'));
                     // Construir el contenido dinámico del modal con información del evento
                     var modalBody = document.getElementById('modal-body-content');
@@ -91,7 +96,7 @@
                         .toLocaleString() + "</p>";
                     modalBody.innerHTML += "<p><strong>Idioma:</strong> " + info.event.extendedProps
                         .idioma + "</p>";
-                        modalBody.innerHTML += "<p><strong>Id:</strong> " + info.event.extendedProps
+                    modalBody.innerHTML += "<p><strong>Id:</strong> " + info.event.extendedProps
                         .horario_id + "</p>";
 
 
@@ -99,8 +104,6 @@
                 },
 
                 events: @json($events, JSON_PRETTY_PRINT)
-
-
 
             });
 
@@ -113,10 +116,8 @@
             // Renderizar el calendario
             calendar.render();
         });
-
-
     </script>
-    {{-- <script>
+    <script>
         function confirmDelete() {
             // Obtener el valor del horario_id desde el formulario
             var horarioId = document.getElementById('horario_id').value;
@@ -128,5 +129,5 @@
                 document.getElementById('borrarHorarioForm').submit();
             }
         }
-    </script> --}}
+    </script>
 @endsection
