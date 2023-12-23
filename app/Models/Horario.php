@@ -21,5 +21,11 @@ class Horario extends Model
         return $this->belongsTo(Actividad::class, 'actividad_id');
     }
 
+    public function reservas()
+{
+    return $this->hasMany(Reserva::class);
+}
+
+
     // Aquí puedes añadir más métodos del modelo, como scopes o métodos auxiliares
 }

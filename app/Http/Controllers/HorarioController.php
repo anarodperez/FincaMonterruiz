@@ -7,6 +7,7 @@ use App\Models\Actividad;
 use DateTime;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use App\Models\Reserva;
 
 
 class HorarioController extends Controller
@@ -33,9 +34,11 @@ class HorarioController extends Controller
 
     public function create()
     {
-        $actividades = Actividad::all();
+        // Obtener solo actividades activas
+        $actividades = Actividad::where('activa', true)->get();
         return view('admin.horarios.create', compact('actividades'));
     }
+
 
     public function store(Request $request)
     {
@@ -65,6 +68,7 @@ class HorarioController extends Controller
                     break;
                 case 'diario':
                     $this->crearHorariosRecurrentes($actividadId, $fecha, $hora, $idioma, $frecuencia, $repeticiones);
+                    break;
                 case 'semanal':
                     $this->crearHorariosRecurrentes($actividadId, $fecha, $hora, $idioma, $frecuencia, $repeticiones);
                     break;
@@ -76,19 +80,41 @@ class HorarioController extends Controller
         }
     }
     private function crearHorario($actividadId, $fecha, $hora, $idioma)
-    {
-        $horario = new Horario();
-        $horario->actividad_id = $actividadId;
-        $horario->fecha = $fecha;
-        $horario->hora = $hora;
-        $horario->idioma = $idioma;
-        $horario->frecuencia = 'unico';
-        $horario->save();
-    }
-    private function crearHorariosRecurrentes($actividadId, $fechaInicio, $hora, $idioma, $frecuencia, $repeticiones)
-    {
-        $fecha = Carbon::parse($fechaInicio);
-        for ($i = 0; $i < $repeticiones; $i++) {
+{
+    // Verificar si ya existe un horario con las mismas características
+    $existeHorario = Horario::where('actividad_id', $actividadId)
+                             ->where('fecha', $fecha)
+                             ->where('hora', $hora)
+                             ->where('idioma', $idioma)
+                             ->exists();
+
+                             if (!$existeHorario) {
+                                $horario = new Horario();
+                                $horario->actividad_id = $actividadId;
+                                $horario->fecha = $fecha;
+                                $horario->hora = $hora;
+                                $horario->idioma = $idioma;
+                                $horario->frecuencia = 'unico';
+                                $horario->save();
+                            } else {
+                                // Redirigir con un mensaje de error
+                                return redirect()->back()->with('error', 'El horario que intenta crear ya existe.');
+                            }
+
+}
+
+private function crearHorariosRecurrentes($actividadId, $fechaInicio, $hora, $idioma, $frecuencia, $repeticiones)
+{
+    $fecha = Carbon::parse($fechaInicio);
+    for ($i = 0; $i < $repeticiones; $i++) {
+        // Verificar si ya existe un horario con las mismas características
+        $existeHorario = Horario::where('actividad_id', $actividadId)
+                                 ->where('fecha', $fecha->toDateString())
+                                 ->where('hora', $hora)
+                                 ->where('idioma', $idioma)
+                                 ->exists();
+
+        if (!$existeHorario) {
             $horario = new Horario();
             $horario->actividad_id = $actividadId;
             $horario->fecha = $fecha->toDateString();
@@ -96,64 +122,15 @@ class HorarioController extends Controller
             $horario->idioma = $idioma;
             $horario->frecuencia = $frecuencia;
             $horario->save();
-
-            $frecuencia === 'diario' ? $fecha->addDay() : $fecha->addWeek();
+        } else {
+            // Manejar el caso de horario duplicado, por ejemplo, lanzar una excepción o devolver un mensaje de error
         }
-    }
 
-
-private function crearHorarioUnico($actividadId, $fecha, $hora, $idioma)
-{
-    // Crea un horario único con los datos del formulario y guárdalo en la base de datos
-    Horario::create([
-        'actividad_id' => $actividadId,
-        'fecha' => $fecha,
-        'hora' => $hora,
-        'idioma' => $idioma,
-        // Otros campos según sea necesario
-    ]);
-}
-
-private function crearHorariosDiarios($actividadId, $fecha, $hora, $idioma, $repeticiones)
-{
-    // Crea horarios diarios a partir de la fecha seleccionada
-    for ($i = 0; $i < $repeticiones; $i++) {
-        $fechaActual = Carbon::parse($fecha)->addDays($i);
-        Horario::create([
-            'actividad_id' => $actividadId,
-            'fecha' => $fechaActual,
-            'hora' => $hora,
-            'idioma' => $idioma,
-            // Otros campos según sea necesario
-        ]);
+        $frecuencia === 'diario' ? $fecha->addDay() : $fecha->addWeek();
     }
 }
 
-private function crearHorariosSemanalmente($actividadId, $fecha, $hora, $idioma, $repeticiones)
-{
-    // Crea horarios semanales a partir de la fecha seleccionada
-    for ($i = 0; $i < $repeticiones; $i++) {
-        $fechaActual = Carbon::parse($fecha)->addWeeks($i);
-        Horario::create([
-            'actividad_id' => $actividadId,
-            'fecha' => $fechaActual,
-            'hora' => $hora,
-            'idioma' => $idioma,
-            // Otros campos según sea necesario
-        ]);
-    }
-}
 
-    public function getDias($actividadId)
-    {
-        $dias = Horario::where('actividad_id', $actividadId)
-            ->pluck('dia_semana')
-            ->unique()
-            ->values()
-            ->all();
-
-        return response()->json($dias);
-    }
 
     public function getActividadColorMap()
     {
@@ -169,19 +146,23 @@ private function crearHorariosSemanalmente($actividadId, $fecha, $hora, $idioma,
         return $actividadColorMap;
     }
 
-    public function destroy($id)
+    public function destroy($horarioId)
     {
-        // Obtén el horario por su ID
-        $horario = Horario::findOrFail($id);
+        // Comprobar si hay reservas para este horario
+        $reservas = Reserva::where('horario_id', $horarioId)->count();
 
+        if ($reservas > 0) {
+            // No permitir borrar el horario y enviar un mensaje de error
+            return redirect()->route('admin.horarios.index')->with('error', 'No se puede borrar el horario ya que existen reservas asociadas.');
+        }
 
-        // Elimina el horario
+        // Si no hay reservas, proceder con el borrado
+        $horario = Horario::findOrFail($horarioId);
         $horario->delete();
 
-        return redirect()
-            ->route('admin.horarios.index')
-            ->with('success', 'Horario eliminado con éxito');
+        return redirect()->route('admin.horarios.index')->with('success', 'Horario eliminado con éxito');
     }
+
 
     public function borrarHorarioConcreto($fecha, $hora)
     {

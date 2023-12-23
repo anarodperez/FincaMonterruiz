@@ -1,3 +1,9 @@
+<style>
+    form{
+        margin-bottom: 6vh;
+    }
+</style>
+
 @extends('layouts.admin')
 
 @section('content')
@@ -15,7 +21,7 @@
         @endif
 
         <!-- Formulario de creación de horarios -->
-        <form action="{{ route('admin.horarios.store') }}" method="POST">
+        <form class="create" action="{{ route('admin.horarios.store') }}" method="POST">
             @csrf
             <div class="mb-3">
                 <label for="actividad" class="form-label">Actividad:</label>
@@ -25,6 +31,7 @@
                     @endforeach
                 </select>
             </div>
+
             <div class="mb-3">
                 <label for="fecha" class="form-label">Fecha:</label>
                 <input type="date" name="fecha" id="fecha"
@@ -66,7 +73,7 @@
             </div>
 
             <!-- Agrega otros campos según sea necesario -->
-            <button type="submit" class="btn btn-primary">Guardar Horario</button>
+            <button type="submit" class="btn btn-primary">Guardar</button>
             <a href="{{ route('admin.horarios.index') }}" class="btn btn-info">
                 <span class="fas fa-undo-alt"></span> Regresar
             </a>

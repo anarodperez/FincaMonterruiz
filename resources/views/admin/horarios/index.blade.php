@@ -9,6 +9,13 @@
         }
     </style>
     <div class="container">
+        @if (session('error'))
+    <div class="alert alert-danger">
+        {{ session('error') }}
+    </div>
+@endif
+
+
         <h2 class="my-4 text-center">Gestión de Horarios</h2>
         <!-- Modal -->
         <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
@@ -67,10 +74,13 @@
 
     <!-- Agregar FullCalendar y su script -->
     <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.9/index.global.min.js'></script>
+     <!-- Agregar FullCalendar Locales -->
+     <script src='fullcalendar/core/locales/es.global.js'></script>
     <!-- Agregar el script de Bootstrap (asegúrate de que tu proyecto ya tiene Bootstrap) -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous">
     </script>
+
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             var calendarEl = document.getElementById('calendar');
@@ -82,45 +92,33 @@
                 initialView: 'dayGridMonth',
                 locale: 'es',
                 eventClick: function(info) {
-    // Extraer los detalles del horario del evento seleccionado
-    var horarioId = info.event.extendedProps.horario_id;
-    var actividad = info.event.title;
-    var fechaHora = info.event.start.toLocaleString();
-    var idioma = info.event.extendedProps.idioma;
+                    // Extraer los detalles del horario del evento seleccionado
+                    var horarioId = info.event.extendedProps.horario_id;
+                    var actividad = info.event.title;
+                    var fechaHora = info.event.start.toLocaleString();
+                    var idioma = info.event.extendedProps.idioma;
 
-    // Actualizar el contenido del modal con los detalles del horario
-    var modalBody = document.getElementById('modal-body-content');
-    modalBody.innerHTML = "<p><strong>Actividad:</strong> " + actividad + "</p>" +
-                          "<p><strong>Fecha y Hora:</strong> " + fechaHora + "</p>" +
-                          "<p><strong>Idioma:</strong> " + idioma + "</p>" +
-                          "<p><strong>Id:</strong> " + horarioId + "</p>";
+                    // Actualizar el contenido del modal con los detalles del horario
+                    var modalBody = document.getElementById('modal-body-content');
+                    modalBody.innerHTML = "<p><strong>Actividad:</strong> " + actividad + "</p>" +
+                        "<p><strong>Fecha y Hora:</strong> " + fechaHora + "</p>" +
+                        "<p><strong>Idioma:</strong> " + idioma + "</p>" +
+                        "<p><strong>Id:</strong> " + horarioId + "</p>";
 
-    // Actualizar la acción del formulario para el borrado
-    var form = document.getElementById('borrarHorarioForm');
-    form.action = '/admin/horarios/' + horarioId;
+                    // Actualizar la acción del formulario para el borrado
+                    var form = document.getElementById('borrarHorarioForm');
+                    form.action = '/admin/horarios/' + horarioId;
 
-    // Establecer el valor del horario_id en el formulario oculto
-    document.getElementById('horario_id').value = horarioId;
+                    // Establecer el valor del horario_id en el formulario oculto
+                    document.getElementById('horario_id').value = horarioId;
 
-    // Mostrar el modal
-    var modal = new bootstrap.Modal(document.getElementById('exampleModal'));
-    modal.show();
-},
-
-
-
+                    // Mostrar el modal
+                    var modal = new bootstrap.Modal(document.getElementById('exampleModal'));
+                    modal.show();
+                },
 
                 events: @json($events, JSON_PRETTY_PRINT)
-
-
-
             });
-
-            // Antes de agregar nuevos eventos, limpiar los eventos existentes
-            // calendar.getEvents().forEach(function(event) {
-            //     event.remove();
-            // });
-
 
             // Renderizar el calendario
             calendar.render();
@@ -128,10 +126,9 @@
     </script>
     <script>
         function confirmDelete() {
-    if (confirm('¿Estás seguro de que deseas borrar este horario?')) {
-        document.getElementById('borrarHorarioForm').submit();
-    }
-}
-
+            if (confirm('¿Estás seguro de que deseas borrar este horario?')) {
+                document.getElementById('borrarHorarioForm').submit();
+            }
+        }
     </script>
 @endsection
