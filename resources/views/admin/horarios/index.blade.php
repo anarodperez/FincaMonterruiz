@@ -24,14 +24,14 @@
                     </div>
                     <div class="modal-footer">
                         <!-- Formulario para borrar el horario -->
-                        <form id="borrarHorarioForm" method="POST">
+                        <form id="borrarHorarioForm" method="POST" action="">
                             @csrf
                             @method('DELETE')
-                            <!-- Agrega el input para el ID del horario -->
                             <input type="hidden" name="horario_id" id="horario_id" value="">
-                            <!-- Agrega el botón de confirmación en tu modal -->
                             <button type="button" class="btn btn-danger" onclick="confirmDelete()">Borrar</button>
                         </form>
+
+
                         <button type="button" class="btn btn-primary">Guardar cambios</button>
                     </div>
                 </div>
@@ -82,20 +82,33 @@
                 initialView: 'dayGridMonth',
                 locale: 'es',
                 eventClick: function(info) {
-                    var modal = new bootstrap.Modal(document.getElementById('exampleModal'));
-                    // Construir el contenido dinámico del modal con información del evento
-                    var modalBody = document.getElementById('modal-body-content');
-                    modalBody.innerHTML = "<p><strong>Actividad:</strong> " + info.event.title + "</p>";
-                    modalBody.innerHTML += "<p><strong>Fecha y Hora:</strong> " + info.event.start
-                        .toLocaleString() + "</p>";
-                    modalBody.innerHTML += "<p><strong>Idioma:</strong> " + info.event.extendedProps
-                        .idioma + "</p>";
-                        modalBody.innerHTML += "<p><strong>Id:</strong> " + info.event.extendedProps
-                        .horario_id + "</p>";
+    // Extraer los detalles del horario del evento seleccionado
+    var horarioId = info.event.extendedProps.horario_id;
+    var actividad = info.event.title;
+    var fechaHora = info.event.start.toLocaleString();
+    var idioma = info.event.extendedProps.idioma;
+
+    // Actualizar el contenido del modal con los detalles del horario
+    var modalBody = document.getElementById('modal-body-content');
+    modalBody.innerHTML = "<p><strong>Actividad:</strong> " + actividad + "</p>" +
+                          "<p><strong>Fecha y Hora:</strong> " + fechaHora + "</p>" +
+                          "<p><strong>Idioma:</strong> " + idioma + "</p>" +
+                          "<p><strong>Id:</strong> " + horarioId + "</p>";
+
+    // Actualizar la acción del formulario para el borrado
+    var form = document.getElementById('borrarHorarioForm');
+    form.action = '/admin/horarios/' + horarioId;
+
+    // Establecer el valor del horario_id en el formulario oculto
+    document.getElementById('horario_id').value = horarioId;
+
+    // Mostrar el modal
+    var modal = new bootstrap.Modal(document.getElementById('exampleModal'));
+    modal.show();
+},
 
 
-                    modal.show();
-                },
+
 
                 events: @json($events, JSON_PRETTY_PRINT)
 
@@ -112,20 +125,13 @@
             // Renderizar el calendario
             calendar.render();
         });
-
-
     </script>
     <script>
         function confirmDelete() {
-            // Obtener el valor del horario_id desde el formulario
-            var horarioId = document.getElementById('horario_id').value;
+    if (confirm('¿Estás seguro de que deseas borrar este horario?')) {
+        document.getElementById('borrarHorarioForm').submit();
+    }
+}
 
-            if (confirm('¿Estás seguro de que deseas borrar este horario?')) {
-                // Establecer la URL con el ID del horario
-                var deleteUrl = '/admin/horarios/' + horarioId; // Usar el valor de horarioId
-                document.getElementById('borrarHorarioForm').action = deleteUrl;
-                document.getElementById('borrarHorarioForm').submit();
-            }
-        }
     </script>
 @endsection

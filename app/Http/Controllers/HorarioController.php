@@ -64,14 +64,11 @@ class HorarioController extends Controller
                     $this->crearHorario($actividadId, $fecha, $hora, $idioma);
                     break;
                 case 'diario':
+                    $this->crearHorariosRecurrentes($actividadId, $fecha, $hora, $idioma, $frecuencia, $repeticiones);
                 case 'semanal':
                     $this->crearHorariosRecurrentes($actividadId, $fecha, $hora, $idioma, $frecuencia, $repeticiones);
                     break;
             }
-
-
-
-
             return redirect()->route('admin.horarios.index')->with('success', 'Horario(s) creado(s) exitosamente');
         } catch (\Exception $e) {
             \Log::error('Error al crear horario: ' . $e->getMessage());
