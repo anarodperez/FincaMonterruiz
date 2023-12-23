@@ -6,41 +6,30 @@ use App\Models\Horario;
 use App\Models\Actividad;
 use DateTime;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
+
 
 class HorarioController extends Controller
 {
     public function index()
     {
-        // Obtén los horarios con la relación 'actividad' cargada
-        $horarios = Horario::all();
+        $horarios = Horario::with('actividad')->get(); // Obtiene todos los horarios con su actividad relacionada
 
-        $events = collect([]);
-
-        foreach ($horarios as $horario) {
-            foreach ($horario->getFechasRecurrentes() as $fecha) {
-                $events->push([
-                    'title' => $horario->actividad->nombre,
-                    'start' => $fecha->format('Y-m-d H:i:s'),
-                    'allDay' => false,
+        $events = $horarios->map(function ($horario) {
+            return [
+                'title' => $horario->actividad->nombre, // Asumiendo que la actividad tiene un campo 'nombre'
+                'start' => $horario->fecha . 'T' . $horario->hora,
+                'extendedProps' => [
                     'idioma' => $horario->idioma,
-                    'color' => $horario->color,
-                    'horario_id' => $horario->id
-                ]);
-            }
-        }
-
-        // Convierte la colección a un array para evitar problemas al renderizar en la vista
-        $events = $events
-            ->unique('start')
-            ->values()
-            ->all();
-        return view('admin.horarios.index', [
-            'events' => $events,
-        ]);
+                    'horario_id' => $horario->id,
+                ],
+            ];
+        });
 
 
-
+        return view('admin.horarios.index', compact('events'));
     }
+
 
     public function create()
     {
@@ -49,46 +38,72 @@ class HorarioController extends Controller
     }
 
     public function store(Request $request)
-{
-    try {
-        $request->validate([
-            'actividad' => 'required|exists:actividades,id',
-            'fecha' => 'required|date',
-            'hora' => 'required|date_format:H:i',
-            'idioma' => 'required|in:Español,Inglés,Francés',
-            'frecuencia' => 'required|in:unico,diario,semanal', // Ajusta las opciones según tus necesidades
-            'repeticiones' => 'required_if:frecuencia,diario,semanal|numeric|min:1',
-        ]);
+    {
+        // dd($request->all());
+        try {
+            $request->validate([
+                'actividad' => 'required|exists:actividades,id',
+                'fecha' => 'required|date|after_or_equal:today',
+                'hora' => 'required|date_format:H:i',
+                'idioma' => 'required|in:Español,Inglés,Francés',
+                'frecuencia' => 'required|in:unico,diario,semanal',
+                'repeticiones' => 'nullable|numeric|min:1|required_if:frecuencia,diario,semanal',
 
-        $actividadId = $request->input('actividad');
-        $fecha = $request->input('fecha');
-        $hora = $request->input('hora');
-        $idioma = $request->input('idioma');
-        $frecuencia = $request->input('frecuencia');
-        $repeticiones = $request->input('repeticiones');
+            ]);
 
-        // Crea un horario único
-        if ($frecuencia === 'unico') {
-            $this->crearHorarioUnico($actividadId, $fecha, $hora, $idioma);
-        }
-        // Crea horarios diarios
-        elseif ($frecuencia === 'diario') {
-            $this->crearHorariosDiarios($actividadId, $fecha, $hora, $idioma, $repeticiones);
-        }
-        // Crea horarios semanales
-        elseif ($frecuencia === 'semanal') {
-            $this->crearHorariosSemanalmente($actividadId, $fecha, $hora, $idioma, $repeticiones);
-        }
+            $actividadId = $request->input('actividad');
+            $fecha = $request->input('fecha');
+            $hora = $request->input('hora');
+            $idioma = $request->input('idioma');
+            $frecuencia = $request->input('frecuencia');
+            $repeticiones = $request->input('repeticiones', 1); // Valor por defecto en caso de ser único
 
-        // Redirecciona a la página de horarios o muestra un mensaje de éxito
-        return redirect()
-            ->route('admin.horarios.index')
-            ->with('success', 'Horario(s) creado(s) exitosamente');
-    } catch (\Exception $e) {
-        // Maneja la excepción
-        dd($e->getMessage(), $request->all());
+            // Lógica para crear horarios
+            switch ($frecuencia) {
+                case 'unico':
+                    $this->crearHorario($actividadId, $fecha, $hora, $idioma);
+                    break;
+                case 'diario':
+                case 'semanal':
+                    $this->crearHorariosRecurrentes($actividadId, $fecha, $hora, $idioma, $frecuencia, $repeticiones);
+                    break;
+            }
+
+
+
+
+            return redirect()->route('admin.horarios.index')->with('success', 'Horario(s) creado(s) exitosamente');
+        } catch (\Exception $e) {
+            \Log::error('Error al crear horario: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Hubo un problema al crear el horario')->withInput();
+        }
     }
-}
+    private function crearHorario($actividadId, $fecha, $hora, $idioma)
+    {
+        $horario = new Horario();
+        $horario->actividad_id = $actividadId;
+        $horario->fecha = $fecha;
+        $horario->hora = $hora;
+        $horario->idioma = $idioma;
+        $horario->frecuencia = 'unico';
+        $horario->save();
+    }
+    private function crearHorariosRecurrentes($actividadId, $fechaInicio, $hora, $idioma, $frecuencia, $repeticiones)
+    {
+        $fecha = Carbon::parse($fechaInicio);
+        for ($i = 0; $i < $repeticiones; $i++) {
+            $horario = new Horario();
+            $horario->actividad_id = $actividadId;
+            $horario->fecha = $fecha->toDateString();
+            $horario->hora = $hora;
+            $horario->idioma = $idioma;
+            $horario->frecuencia = $frecuencia;
+            $horario->save();
+
+            $frecuencia === 'diario' ? $fecha->addDay() : $fecha->addWeek();
+        }
+    }
+
 
 private function crearHorarioUnico($actividadId, $fecha, $hora, $idioma)
 {

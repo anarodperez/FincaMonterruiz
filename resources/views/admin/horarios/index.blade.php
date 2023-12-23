@@ -24,7 +24,6 @@
                     </div>
                     <div class="modal-footer">
                         <!-- Formulario para borrar el horario -->
-                        <!-- Formulario para borrar el horario -->
                         <form id="borrarHorarioForm" method="POST">
                             @csrf
                             @method('DELETE')
@@ -116,7 +115,7 @@
 
 
     </script>
-    {{-- <script>
+    <script>
         function confirmDelete() {
             // Obtener el valor del horario_id desde el formulario
             var horarioId = document.getElementById('horario_id').value;
@@ -128,5 +127,5 @@
                 document.getElementById('borrarHorarioForm').submit();
             }
         }
-    </script> --}}
+    </script>
 @endsection
