@@ -9,11 +9,21 @@
         }
     </style>
     <div class="container">
+        @if (session('success'))
+            <div class="alert alert-success alert-dismissible fade show">
+                {{ session('success') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        @endif
+
         @if (session('error'))
-    <div class="alert alert-danger">
-        {{ session('error') }}
-    </div>
-@endif
+            <div class="alert alert-danger alert-dismissible fade show">
+                {{ session('error') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        @endif
+
+
 
 
         <h2 class="my-4 text-center">Gestión de Horarios</h2>
@@ -39,7 +49,9 @@
                         </form>
 
 
-                        <button type="button" class="btn btn-primary">Guardar cambios</button>
+                        <!-- Dentro del modal -->
+                        <a href="#" id="editHorarioLink" class="btn btn-primary">Editar</a>
+
                     </div>
                 </div>
             </div>
@@ -74,8 +86,8 @@
 
     <!-- Agregar FullCalendar y su script -->
     <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.9/index.global.min.js'></script>
-     <!-- Agregar FullCalendar Locales -->
-     <script src='fullcalendar/core/locales/es.global.js'></script>
+    <!-- Agregar FullCalendar Locales -->
+    <script src='fullcalendar/core/locales/es.global.js'></script>
     <!-- Agregar el script de Bootstrap (asegúrate de que tu proyecto ya tiene Bootstrap) -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous">
@@ -112,6 +124,11 @@
                     // Establecer el valor del horario_id en el formulario oculto
                     document.getElementById('horario_id').value = horarioId;
 
+                    // Actualiza el enlace del botón de edición
+            var editLink = document.getElementById('editHorarioLink');
+            editLink.href = `/admin/horarios/edit/${horarioId}`;
+
+
                     // Mostrar el modal
                     var modal = new bootstrap.Modal(document.getElementById('exampleModal'));
                     modal.show();
@@ -130,5 +147,13 @@
                 document.getElementById('borrarHorarioForm').submit();
             }
         }
+    </script>
+    <script>
+        $(document).ready(function() {
+            // Ocultar los mensajes de alerta después de 5 segundos
+            setTimeout(function() {
+                $('.alert').fadeOut('slow');
+            }, 5000); // 5 segundos
+        });
     </script>
 @endsection

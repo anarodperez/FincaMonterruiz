@@ -63,8 +63,8 @@ Route::middleware(['admin'])->group(function () {
     Route::get('/horarios/create', [HorarioController::class, 'create'])->name('admin.horarios.create');
     Route::post('/horarios/create', [HorarioController::class, 'store'])->name('admin.horarios.store');
     Route::delete('/admin/horarios/{horario}', [HorarioController::class, 'destroy'])->name('admin.horarios.destroy');
-    Route::get('/horarios/{horario}/edit', [HorarioController::class, 'edit'])->name('admin.horarios.edit');
-    Route::put('/horarios/{horario}', [HorarioController::class, 'update'])->name('admin.horarios.update');
+    Route::get('/admin/horarios/edit/{id}', [HorarioController::class, 'edit'])->name('admin.horarios.edit');
+    Route::put('/admin/horarios/update/{id}', [HorarioController::class, 'update'])->name('admin.horarios.update');
 });
 
 Route::get('/login/google', function () {

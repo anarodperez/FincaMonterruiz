@@ -1,22 +1,23 @@
-{{-- resources/views/horarios/edit.blade.php --}}
-
 @extends('layouts.admin')
 
 @section('content')
+<div class="container">
     <h2>Editar Horario</h2>
-
-    <form action="{{ route('horarios.update', $horario->id) }}" method="POST">
+    <form action="{{ route('admin.horarios.update', $horario->id) }}" method="POST">
         @csrf
         @method('PUT')
 
-        {{-- Aquí tus campos de formulario, prellenados con los datos de $horario --}}
-        {{-- ... --}}
+        <div class="mb-3">
+            <label class="form-label">Actividad:</label>
+            <input type="text" class="form-control" value="{{ $horario->actividad->nombre }}" disabled>
+            <input type="hidden" name="actividad" value="{{ $horario->actividad_id }}">
+        </div>
 
-        <label>
-            <input type="checkbox" name="editar_todos" value="1">
-            Aplicar cambios a todos los eventos futuros
-        </label>
+        <!-- Otros campos del formulario -->
+        <input type="date" name="fecha" value="{{ $horario->fecha }}" required>
+        <input type="time" name="hora" value="{{ $horario->hora }}" required>
 
         <button type="submit" class="btn btn-primary">Actualizar Horario</button>
     </form>
+</div>
 @endsection
