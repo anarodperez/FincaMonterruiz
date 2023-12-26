@@ -8,6 +8,8 @@ use DateTime;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use App\Models\Reserva;
+use Illuminate\Support\Facades\DB;
+
 
 
 class HorarioController extends Controller
@@ -23,10 +25,11 @@ class HorarioController extends Controller
                 'extendedProps' => [
                     'idioma' => $horario->idioma,
                     'horario_id' => $horario->id,
+                    'frecuencia' => $horario->frecuencia, // Añade la frecuencia aquí
+                    'color' => $this->getColorForActividad($horario->actividad->nombre),
                 ],
             ];
         });
-
 
         return view('admin.horarios.index', compact('events'));
     }
@@ -103,8 +106,6 @@ class HorarioController extends Controller
                                 // Redirigir con un mensaje de error
                                 return redirect()->back()->with('error', 'El horario que intenta crear ya existe.');
                             }
-
-
 }
 
 private function crearHorariosRecurrentes($actividadId, $fechaInicio, $hora, $idioma, $frecuencia, $repeticiones)
@@ -137,41 +138,70 @@ private function crearHorariosRecurrentes($actividadId, $fechaInicio, $hora, $id
 public function edit($id)
 {
     $horario = Horario::findOrFail($id);
-    $actividades = Actividad::where('activa', true)->get(); // Asumiendo que necesitas esto para un dropdown, por ejemplo
-    return view('admin.horarios.edit', compact('horario', 'actividades'));
+    $actividades = Actividad::where('activa', true)->get();
+    // Determinar si el horario es recurrente (diario o semanal)
+    $esRecurrente = in_array($horario->frecuencia, ['diario', 'semanal']);
+    return view('admin.horarios.edit', compact('horario', 'actividades', 'esRecurrente'));
 }
 
 public function update(Request $request, $id)
 {
     $request->validate([
-        // tus reglas de validación para los otros campos...
+        'fecha' => 'required|date',
+        'hora' => 'required',
+        'idioma' => 'required',
     ]);
 
     $horario = Horario::findOrFail($id);
-    $horario->update([
-        'fecha' => $request->fecha,
-        'hora' => $request->hora,
-        // otros campos, pero no 'actividad_id'
-    ]);
+    $tipoEdicion = $request->input('tipo_edicion', 'instancia');
+
+    if ($tipoEdicion == 'instancia') {
+        // Actualiza solo esta instancia
+        $horario->update($request->only(['fecha', 'hora', 'idioma']));
+    } else {
+        // Actualiza toda la serie
+        $this->updateSerieRecurrente($horario, $request);
+    }
 
     return redirect()->route('admin.horarios.index')->with('success', 'Horario actualizado exitosamente.');
 }
 
 
+private function updateSerieRecurrente($horario, $request)
+{
+    // Resto del código...
 
-    public function getActividadColorMap()
-    {
-        // Lógica para obtener colores de las actividades
-        $actividades = Actividad::all();
-        $actividadColorMap = [];
-
-        foreach ($actividades as $actividad) {
-            // Agrega más lógica si es necesario para asignar colores
-            $actividadColorMap[$actividad->id] = '#' . substr(md5(rand()), 0, 6);
+    try {
+        foreach ($horarios as $horarioRecurrente) {
+            // Asegúrate de no actualizar horarios pasados, si es necesario
+            if ($horarioRecurrente->fecha >= today()) {
+                $horarioRecurrente->update([
+                    'hora' => $request->hora,
+                    'idioma' => $request->idioma, // Actualiza el idioma
+                    // Otros campos, si son necesarios
+                ]);
+            }
         }
 
-        return $actividadColorMap;
+        DB::commit();
+    } catch (\Exception $e) {
+        DB::rollback();
+        throw $e;
     }
+}
+
+private function getColorForActividad($nombreActividad)
+{
+    $colores = [
+        'Visita al viñedo 1' => '#ffadad',
+        'Visita al viñedo 2' => '#ffd6a5',
+        'Visita al viñedo 3' => '#a0c4ff',
+        // Más actividades y sus colores
+    ];
+
+    return $colores[$nombreActividad] ?? '#ccc'; // Color por defecto si no se encuentra la actividad
+}
+
 
     public function destroy($horarioId)
     {

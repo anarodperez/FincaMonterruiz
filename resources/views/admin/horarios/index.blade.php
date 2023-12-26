@@ -2,11 +2,24 @@
 
 @section('content')
     <style>
-        /* Estilos personalizados para el calendario */
-        #calendar {
-            /* max-width: 60vw; */
-            margin: 0 auto;
-        }
+    #calendar {
+        margin: 0 auto;
+        padding: 15px;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+        background-color: #fff;
+    }
+
+    .fc-header-toolbar {
+        margin-bottom: 20px;
+    }
+
+    /* Estilos para los eventos del calendario */
+    /* .fc-event {
+        background-color: #007bff;
+        border-color: #007bff;
+        color: #fff;
+    } */
     </style>
     <div class="container">
         @if (session('success'))
@@ -103,19 +116,21 @@
                 },
                 initialView: 'dayGridMonth',
                 locale: 'es',
+
                 eventClick: function(info) {
                     // Extraer los detalles del horario del evento seleccionado
                     var horarioId = info.event.extendedProps.horario_id;
                     var actividad = info.event.title;
                     var fechaHora = info.event.start.toLocaleString();
                     var idioma = info.event.extendedProps.idioma;
+                     var frecuencia = info.event.extendedProps.frecuencia;
 
                     // Actualizar el contenido del modal con los detalles del horario
                     var modalBody = document.getElementById('modal-body-content');
                     modalBody.innerHTML = "<p><strong>Actividad:</strong> " + actividad + "</p>" +
                         "<p><strong>Fecha y Hora:</strong> " + fechaHora + "</p>" +
                         "<p><strong>Idioma:</strong> " + idioma + "</p>" +
-                        "<p><strong>Id:</strong> " + horarioId + "</p>";
+                        "<p><strong>Id:</strong> " + horarioId + "</p>" +  "<p><strong>Frecuencia:</strong> " + frecuencia + "</p>";
 
                     // Actualizar la acción del formulario para el borrado
                     var form = document.getElementById('borrarHorarioForm');
