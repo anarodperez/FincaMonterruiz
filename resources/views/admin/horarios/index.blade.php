@@ -2,25 +2,27 @@
 
 @section('content')
     <style>
-    #calendar {
-        margin: 0 auto;
-        padding: 15px;
-        border-radius: 8px;
-        box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
-        background-color: #fff;
-    }
+        #calendar {
+            margin: 0 auto;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+            background-color: #fff;
+        }
 
-    .fc-header-toolbar {
-        margin-bottom: 20px;
-    }
+        .fc-header-toolbar {
+            margin-bottom: 20px;
+        }
 
-    /* Estilos para los eventos del calendario */
-    /* .fc-event {
-        background-color: #007bff;
-        border-color: #007bff;
-        color: #fff;
-    } */
+        /* Estilos para los eventos del calendario */
+        /* .fc-event {
+            background-color: #007bff;
+            border-color: #007bff;
+            color: #fff;
+        } */
     </style>
+
+
     <div class="container">
         @if (session('success'))
             <div class="alert alert-success alert-dismissible fade show">
@@ -40,6 +42,16 @@
 
 
         <h2 class="my-4 text-center">Gestión de Horarios</h2>
+        <div class="container my-4">
+            <div class="filtro-idioma text-center">
+                <button class="btn btn-outline-primary mx-1" onclick="filtrarIdioma('Español')">Español</button>
+                <button class="btn btn-outline-secondary mx-1" onclick="filtrarIdioma('Inglés')">Inglés</button>
+                <button class="btn btn-outline-success mx-1" onclick="filtrarIdioma('Alemán')">Alemán</button>
+                <button class="btn btn-outline-danger mx-1" onclick="filtrarIdioma('Italiano')">Italiano</button>
+                <button class="btn btn-outline-warning mx-1" onclick="filtrarIdioma('Francés')">Francés</button>
+                <!-- Agrega más botones según los idiomas que manejes -->
+            </div>
+        </div>
         <!-- Modal -->
         <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
             aria-hidden="true">
@@ -94,17 +106,10 @@
 
     </div>
 
-    <!-- Integrar Bootstrap (asegúrate de que tu proyecto ya tiene Bootstrap) -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css">
-
     <!-- Agregar FullCalendar y su script -->
     <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.9/index.global.min.js'></script>
-    <!-- Agregar FullCalendar Locales -->
-    <script src='fullcalendar/core/locales/es.global.js'></script>
     <!-- Agregar el script de Bootstrap (asegúrate de que tu proyecto ya tiene Bootstrap) -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous">
-    </script>
+
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -115,6 +120,18 @@
                     center: 'title'
                 },
                 initialView: 'dayGridMonth',
+                headerToolbar: {
+                    left: 'dayGridMonth,timeGridWeek,timeGridDay',
+                    center: 'title',
+                    right: 'today prev,next'
+                },
+                buttonText: {
+                    today: 'Hoy',
+                    month: 'Mes',
+                    week: 'Semana',
+                    day: 'Día'
+                },
+
                 locale: 'es',
 
                 eventClick: function(info) {
@@ -123,14 +140,15 @@
                     var actividad = info.event.title;
                     var fechaHora = info.event.start.toLocaleString();
                     var idioma = info.event.extendedProps.idioma;
-                     var frecuencia = info.event.extendedProps.frecuencia;
+                    var frecuencia = info.event.extendedProps.frecuencia;
 
                     // Actualizar el contenido del modal con los detalles del horario
                     var modalBody = document.getElementById('modal-body-content');
                     modalBody.innerHTML = "<p><strong>Actividad:</strong> " + actividad + "</p>" +
                         "<p><strong>Fecha y Hora:</strong> " + fechaHora + "</p>" +
                         "<p><strong>Idioma:</strong> " + idioma + "</p>" +
-                        "<p><strong>Id:</strong> " + horarioId + "</p>" +  "<p><strong>Frecuencia:</strong> " + frecuencia + "</p>";
+                        "<p><strong>Id:</strong> " + horarioId + "</p>" +
+                        "<p><strong>Frecuencia:</strong> " + frecuencia + "</p>";
 
                     // Actualizar la acción del formulario para el borrado
                     var form = document.getElementById('borrarHorarioForm');
@@ -140,8 +158,8 @@
                     document.getElementById('horario_id').value = horarioId;
 
                     // Actualiza el enlace del botón de edición
-            var editLink = document.getElementById('editHorarioLink');
-            editLink.href = `/admin/horarios/edit/${horarioId}`;
+                    var editLink = document.getElementById('editHorarioLink');
+                    editLink.href = `/admin/horarios/edit/${horarioId}`;
 
 
                     // Mostrar el modal
