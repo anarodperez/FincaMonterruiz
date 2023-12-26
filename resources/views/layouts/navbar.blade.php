@@ -20,7 +20,7 @@
                     </a>
                     <ul class="dropdown-menu border-0">
                         <li>
-                            <a class="dropdown-item" href="#">Catalogo y reserva</a>
+                            <a class="dropdown-item" href="{{ route('pages.catalogo') }}">Catalogo y reserva</a>
                         </li>
                         <li>
                             <a class="dropdown-item" href="{{ route('pages.gallery') }}">Galeria</a>

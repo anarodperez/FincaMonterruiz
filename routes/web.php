@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\CatalogoController;
 use Laravel\Socialite\Facades\Socialite;
 use App\Models\User;
 use App\Http\Controllers\AdminController;
@@ -10,8 +11,8 @@ use App\Http\Controllers\ActividadController;
 use App\Http\Controllers\UsuarioController;
 use App\Http\Controllers\HorarioController;
 use App\Http\Controllers\AboutUsController;
-
 use App\Http\Controllers\GalleryController;
+use App\Http\Controllers\ReservaController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -41,6 +42,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+
 /************* Admin *************/
 Route::middleware(['admin'])->group(function () {
     Route::get('/admin', [AdminController::class, 'index'])->name('admin.index');
@@ -59,13 +61,19 @@ Route::middleware(['admin'])->group(function () {
     Route::put('/usuarios/{usuario}/validar', [UsuarioController::class, 'validar'])->name('admin.usuarios.validar');
 
     //Horarios
-    Route::get('/horarios/index', [HorarioController::class, 'index'])->name('admin.horarios.index');
-    Route::get('/horarios/create', [HorarioController::class, 'create'])->name('admin.horarios.create');
-    Route::post('/horarios/create', [HorarioController::class, 'store'])->name('admin.horarios.store');
-    Route::delete('/admin/horarios/{horario}', [HorarioController::class, 'destroy'])->name('admin.horarios.destroy');
-    Route::get('/admin/horarios/edit/{id}', [HorarioController::class, 'edit'])->name('admin.horarios.edit');
-    Route::put('/admin/horarios/update/{id}', [HorarioController::class, 'update'])->name('admin.horarios.update');
+     Route::get('/horarios/index', [HorarioController::class, 'index'])->name('admin.horarios.index');
+     Route::get('/horarios/create', [HorarioController::class, 'create'])->name('admin.horarios.create');
+     Route::post('/horarios/create', [HorarioController::class, 'store'])->name('admin.horarios.store');
+     Route::delete('/admin/horarios/{horario}', [HorarioController::class, 'destroy'])->name('admin.horarios.destroy');
+     Route::get('/admin/horarios/edit/{id}', [HorarioController::class, 'edit'])->name('admin.horarios.edit');
+     Route::put('/admin/horarios/update/{id}', [HorarioController::class, 'update'])->name('admin.horarios.update');
+
+
+
 });
+
+Route::get('/actividades/search', [ActividadController::class, 'search'])->name('actividades.search');
+Route::get('/actividades/filter', [ActividadController::class, 'filter'])->name('actividades.filter');
 
 Route::get('/login/google', function () {
     return Socialite::driver('google')->redirect();
@@ -97,5 +105,11 @@ Route::get('admin/usuarios/autocomplete', [UsuarioController::class, 'autocomple
 
 Route::get('/gallery', [GalleryController::class, 'index'])->name('pages.gallery');
 Route::get('/about-us', [AboutUsController::class, 'index'])->name('pages.about-us');
+Route::get('/catalogo', [CatalogoController::class, 'index'])->name('pages.catalogo');
+
+//Reserva
+Route::get('/actividades/{id}', [ActividadController::class, 'detalleActividad'])->name('pages.detalleActividad');
+Route::get('/reservar/{horarioId}', [ReservaController::class, 'show'])->name('reservar.show');
+
 
 require __DIR__ . '/auth.php';

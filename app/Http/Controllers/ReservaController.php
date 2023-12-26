@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Reserva;
 use Illuminate\Http\Request;
+use App\Models\Actividad;
 
 class ReservaController extends Controller
 {
@@ -22,10 +23,15 @@ class ReservaController extends Controller
         // Método para almacenar una nueva reserva en la base de datos
     }
 
-    public function show(Reserva $reserva)
-    {
-        // Método para mostrar una reserva específica
-    }
+
+public function show($horarioId)
+{
+    // Lógica para obtener los detalles de la actividad basada en $horarioId
+    $actividad = Actividad::where('id', $horarioId)->firstOrFail();
+    // Envía los detalles a la vista
+    return view('pages.reservar', compact('actividad'));
+}
+
 
     public function edit(Reserva $reserva)
     {

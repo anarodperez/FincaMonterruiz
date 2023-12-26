@@ -28,7 +28,6 @@
                             <th>Fecha nacimiento</th>
                             <th>Validado</th>
                             <th>Acciones</th>
-                            <!-- Agrega más encabezados de columnas según sea necesario -->
                         </tr>
                     </thead>
                     <tbody>
@@ -43,7 +42,6 @@
                                     <form action="{{ route('admin.usuarios.validar', $usuario->id) }}" method="POST" class="inline">
                                         @csrf
                                         @method('PUT')
-
                                         <input type="hidden" name="id" value="{{ $usuario->id }}">
 
                                         @if ($usuario->validado)
@@ -60,7 +58,6 @@
             </div>
         </div>
     </div>
-
     <script>
         $(document).ready(function() {
             // Configura el autocompletado

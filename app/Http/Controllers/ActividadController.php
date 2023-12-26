@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Actividad;   // Importa el modelo Actividad
+use App\Models\Actividad; // Importa el modelo Actividad
 
 // use App\Models\Categoria;
 
@@ -66,12 +66,12 @@ class ActividadController extends Controller
             $data['imagen'] = $rutaRelativa; // Asignar la ruta relativa de la nueva imagen a los datos a guardar
         }
 
-
         Actividad::create($data);
 
-        return redirect()->route("admin.actividades.index")->with("success", "¡Agregado con éxito!");
+        return redirect()
+            ->route('admin.actividades.index')
+            ->with('success', '¡Agregado con éxito!');
     }
-
 
     /**
      * Mostrar la actividad especificada.
@@ -80,17 +80,16 @@ class ActividadController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show($actividad)
-{
-    // Desencriptar el ID
-    $realId = Crypt::decrypt($actividad);
+    {
+        // Desencriptar el ID
+        $realId = Crypt::decrypt($actividad);
 
-    // Obtener la actividad
-    $actividad = Actividad::find($realId);
+        // Obtener la actividad
+        $actividad = Actividad::find($realId);
 
-    // Pasar la variable a la vista
-    return view("admin.actividades.delete", compact('actividad'));
-}
-
+        // Pasar la variable a la vista
+        return view('admin.actividades.delete', compact('actividad'));
+    }
 
     /**
      * Este metodo nos sirve para traer los datos que se van a editar y los coloca en un formulario.
@@ -108,7 +107,9 @@ class ActividadController extends Controller
 
         // Verificar si se encontró la actividad
         if (!$actividad) {
-            return redirect()->route('admin.actividades.index')->with('error', 'Actividad no encontrada');
+            return redirect()
+                ->route('admin.actividades.index')
+                ->with('error', 'Actividad no encontrada');
         }
 
         // Mostrar el formulario de edición con los datos de la actividad
@@ -122,10 +123,11 @@ class ActividadController extends Controller
      */
     public function update(Request $request, $id)
     {
-
-       $actividad = Actividad::find($id);
+        $actividad = Actividad::find($id);
         if (!$actividad) {
-            return redirect()->route("admin.actividades.index")->with("error", "¡Actividad no encontrada!");
+            return redirect()
+                ->route('admin.actividades.index')
+                ->with('error', '¡Actividad no encontrada!');
         }
 
         $data = $request->validate([
@@ -155,7 +157,9 @@ class ActividadController extends Controller
 
         $actividad->update($data);
 
-        return redirect()->route("admin.actividades.index")->with("success", "¡Actualizado con éxito!");
+        return redirect()
+            ->route('admin.actividades.index')
+            ->with('success', '¡Actualizado con éxito!');
     }
 
     /**
@@ -175,20 +179,57 @@ class ActividadController extends Controller
         // Verificar si la actividad existe antes de intentar eliminar
         if ($actividad) {
             $actividad->delete();
-            return redirect()->route("admin.actividades.index")->with("success", "Eliminada con éxito!");
+            return redirect()
+                ->route('admin.actividades.index')
+                ->with('success', 'Eliminada con éxito!');
         } else {
             // Manejar el caso en el que la actividad no se encuentra
-            return redirect()->route("admin.actividades.index")->with("error", "La actividad no existe o ya ha sido eliminada.");
+            return redirect()
+                ->route('admin.actividades.index')
+                ->with('error', 'La actividad no existe o ya ha sido eliminada.');
         }
     }
-    public function mostrarActividad($id)
-    {
-        $actividad = Actividad::find($id);
-        // $categoriaDeActividad = $actividad->categoria;
 
-        return view('actividad', [
-            'actividad' => $actividad,
-            // 'categoria' => $categoriaDeActividad
-        ]);
+    public function search(Request $request)
+    {
+        $query = $request->input('buscador');
+        $actividades = Actividad::where('nombre', 'LIKE', "%{$query}%")->get();
+
+        return view('pages.catalogo', compact('actividades'));
     }
+
+    public function detalleActividad($id)
+    {
+        // Obtén los detalles de la actividad con el ID proporcionado.
+        $actividad = Actividad::find($id);
+
+        // Puedes agregar lógica adicional aquí, como verificar la disponibilidad de la actividad.
+
+        // Muestra la vista de detalles de la actividad y pasa los detalles de la actividad.
+        return view('pages.detalleActividad', ['actividad' => $actividad]);
+    }
+
+
+    public function filter(Request $request)
+{
+    $precio = $request->input('precio');
+
+    // Aquí, debes definir la lógica para determinar los rangos de precios
+    // Por ejemplo, 'bajo' podría ser de 0 a 20 euros, 'medio' de 21 a 50, etc.
+
+    $query = Actividad::query();
+
+    if ($precio == 'bajo') {
+        $query->where('precio_adulto', '<=', 20);
+    } elseif ($precio == 'medio') {
+        $query->whereBetween('precio_adulto', [21, 50]);
+    } elseif ($precio == 'alto') {
+        $query->where('precio_adulto', '>', 50);
+    }
+
+    $actividades = $query->get();
+
+    return view('pages.catalogo', compact('actividades'));
+}
+
 }
