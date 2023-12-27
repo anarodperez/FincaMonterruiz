@@ -5,12 +5,14 @@ namespace App\Http\Controllers;
 use App\Models\Reserva;
 use Illuminate\Http\Request;
 use App\Models\Actividad;
+use App\Models\Horario;
 
 class ReservaController extends Controller
 {
     public function index()
     {
         // Método para mostrar una lista de reservas
+
     }
 
     public function create()
@@ -24,13 +26,16 @@ class ReservaController extends Controller
     }
 
 
-public function show($horarioId)
-{
-    // Lógica para obtener los detalles de la actividad basada en $horarioId
-    $actividad = Actividad::where('id', $horarioId)->firstOrFail();
-    // Envía los detalles a la vista
-    return view('pages.reservar', compact('actividad'));
-}
+    public function show($horarioId)
+    {
+        $horario = Horario::findOrFail($horarioId);
+        $actividad = Actividad::where('id', $horario->actividad_id)->firstOrFail();
+
+        return view('pages.reservar', compact('actividad', 'horario'));
+    }
+
+
+
 
 
     public function edit(Reserva $reserva)

@@ -109,7 +109,15 @@ Route::get('/catalogo', [CatalogoController::class, 'index'])->name('pages.catal
 
 //Reserva
 Route::get('/actividades/{id}', [ActividadController::class, 'detalleActividad'])->name('pages.detalleActividad');
-Route::get('/reservar/{horarioId}', [ReservaController::class, 'show'])->name('reservar.show');
+Route::get('/reservar/{horarioId}', [ReservaController::class, 'show'])
+     ->middleware('auth')
+     ->name('reservar.show');
+
+     Route::post('/session/set', function (Request $request) {
+        session(['reserva_fecha' => $request->fecha, 'reserva_hora' => $request->hora]);
+        return response()->json(['message' => 'Session updated']);
+    });
+
 
 
 require __DIR__ . '/auth.php';

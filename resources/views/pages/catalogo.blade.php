@@ -159,35 +159,12 @@
                         <div class="modal-body" id="modal-body-content">
                             <!-- Contenido dinámico del modal -->
                         </div>
-                        <div class="modal-footer">
-                            <!-- Formulario para borrar el horario -->
-                            <form id="borrarHorarioForm" method="POST" action="">
-                                @csrf
-                                @method('DELETE')
-                                <input type="hidden" name="horario_id" id="horario_id" value="">
-                                <button type="button" class="btn btn-danger" onclick="confirmDelete()">Borrar</button>
-                            </form>
-
-
-                            <!-- Dentro del modal -->
-                            <a href="#" id="editHorarioLink" class="btn btn-primary">Editar</a>
-
-                        </div>
                     </div>
                 </div>
             </div>
 
             <div class="row justify-content-center">
                 <div class="col-md-12" style="margin-bottom: 4vh">
-                    <p>
-                        <a href="{{ route('admin.horarios.create') }}" class="btn btn-primary">
-                            <span class="fas fa-plus"></span> Crear evento
-                        </a>
-                        <!-- Enlace para redirigir a la página de selección de horario para borrar -->
-                        {{-- <a href="{{ route('admin.horarios.select-delete') }}" class="btn btn-danger">
-                            <span class="fas fa-minus"></span> Borrar evento
-                        </a> --}}
-                    </p>
 
                     <!-- Calendario de horarios existentes -->
                     <div class="card">
@@ -230,9 +207,15 @@
                     locale: 'es',
 
                     eventClick: function(info) {
-    var horarioId = info.event.extendedProps.horario_id;
-    window.location.href = `/reservar/${horarioId}`; // Asegúrate de que esta ruta coincida con la definida en web.php
-},
+            @if(Auth::check())
+                // Usuario autenticado: permite la reserva
+                var horarioId = info.event.extendedProps.horario_id;
+                window.location.href = `/reservar/${horarioId}`;
+            @else
+                // Usuario no autenticado: redirige al inicio de sesión
+                window.location.href = '/login';
+            @endif
+        },
                     events: @json($events, JSON_PRETTY_PRINT)
                 });
 
@@ -240,13 +223,7 @@
                 calendar.render();
             });
         </script>
-        <script>
-            function confirmDelete() {
-                if (confirm('¿Estás seguro de que deseas borrar este horario?')) {
-                    document.getElementById('borrarHorarioForm').submit();
-                }
-            }
-        </script>
+
         <script>
             $(document).ready(function() {
                 // Ocultar los mensajes de alerta después de 5 segundos
