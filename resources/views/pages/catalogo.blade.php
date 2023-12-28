@@ -7,9 +7,8 @@
 @endsection
 
 @section('content')
-<style>
-
-    #calendar {
+    <style>
+        #calendar {
             margin: 0 auto;
             padding: 15px;
             border-radius: 8px;
@@ -20,23 +19,45 @@
         .fc-header-toolbar {
             margin-bottom: 20px;
         }
-</style>
+
+        .custom-card {
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .custom-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .custom-card .card-img-top {
+            height: 200px;
+            object-fit: cover;
+        }
+
+        #search {
+            margin-top: 2vh;
+            margin-top: 3vh;
+            margin-bottom: 4vh;
+            text-align: center;
+        }
+    </style>
     <main>
         <div class="container-fluid">
+            <!-- Encabezado -->
+            <header class="jumbotron">
+                <div class="container text-center">
+                    <h1>Descubre Nuestras Actividades</h1>
+                    <p>Explora una variedad de actividades emocionantes para todas las edades.</p>
+                </div>
+            </header>
+
             <div class="row">
+
                 <!-- Campo de búsqueda -->
-                <div class="mb-4">
-                    <form action="{{ route('actividades.search') }}" method="GET">
-                        <div class="input-group">
-                            <input type="text" name="buscador" id="search" class="form-control"
-                                placeholder="Escribe el nombre de la actividad">
-                            <div class="input-group-append">
-                                <button type="submit" class="btn btn-primary">
-                                    <i class="fa fa-search"></i> Buscar
-                                </button>
-                            </div>
-                        </div>
-                    </form>
+                <div class="d-flex justify-content-center align-items-center">
+                    <input type="text" id="search" class="form-control" placeholder="Escribe el nombre de la actividad"
+                        onkeyup="buscarActividades()">
+
                 </div>
 
                 <!-- Filtros en el aside -->
@@ -54,34 +75,38 @@
                                 </select>
                             </div>
 
-                                <!-- ... otros campos de filtro ... -->
-                                <div class="form-group">
-                                    <label for="precio">Precio:</label>
-                                    <select name="precio" id="precio" class="form-control">
-                                        <option value="">Cualquier Precio</option>
-                                        <option value="bajo">Bajo</option>
-                                        <option value="medio">Medio</option>
-                                        <option value="alto">Alto</option>
-                                    </select>
-                                </div>
-                                <button type="submit" class="btn btn-primary">Filtrar</button>
-                            </form>
+                            <div class="form-group">
+                                <label for="duracion">Duración:</label>
+                                <select name="duracion" id="duracion" class="form-control">
+                                    <option value="">Cualquier Duración</option>
+                                    <option value="corta">Corta (menos de 1 hora)</option>
+                                    <option value="media">Media (1-2 horas)</option>
+                                    <option value="larga">Larga (más de 2 horas)</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="precio">Precio:</label>
+                                <select name="precio" id="precio" class="form-control">
+                                    <option value="">Cualquier Precio</option>
+                                    <option value="bajo">Bajo</option>
+                                    <option value="medio">Medio</option>
+                                    <option value="alto">Alto</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Filtrar</button>
+                            <button type="button" class="btn btn-secondary" onclick="borrarFiltros()">Borrar Filtros</button>
+                        </form>
                     </div>
                 </aside>
 
                 <!-- Contenido principal -->
                 <div class="col-md-9">
-                    <!-- Encabezado -->
-                    <header class="jumbotron">
-                        <div class="container text-center">
-                            <h1>Descubre Nuestras Actividades</h1>
-                            <p>Explora una variedad de actividades emocionantes para todas las edades.</p>
-                        </div>
-                    </header>
+
 
                     <!-- Catálogo de Actividades -->
                     <section class="my-5">
-                        <div class="row">
+                        <div id="search-results" class="row">
                             <!-- Actividades se mostrarán aquí -->
                             @foreach ($actividades as $actividad)
                                 <div class="col-md-4 mb-4">
@@ -107,7 +132,8 @@
                                             {{-- <a href="{{ route('actividades.show', $actividad->id) }}" class="btn btn-primary mt-3">Ver Detalles</a> --}}
                                             <!-- Agrega el botón "Reservar" -->
                                             <div class="lc-block">
-                                                <button class="custom-btn boton" onclick="verDetalleActividad({{ $actividad->id }})">Ver más</button>
+                                                <button class="custom-btn boton"
+                                                    onclick="verDetalleActividad({{ $actividad->id }})">Ver más</button>
                                             </div>
                                         </div>
                                     </div>
@@ -207,15 +233,15 @@
                     locale: 'es',
 
                     eventClick: function(info) {
-            @if(Auth::check())
-                // Usuario autenticado: permite la reserva
-                var horarioId = info.event.extendedProps.horario_id;
-                window.location.href = `/reservar/${horarioId}`;
-            @else
-                // Usuario no autenticado: redirige al inicio de sesión
-                window.location.href = '/login';
-            @endif
-        },
+                        @if (Auth::check())
+                            // Usuario autenticado: permite la reserva
+                            var horarioId = info.event.extendedProps.horario_id;
+                            window.location.href = `/reservar/${horarioId}`;
+                        @else
+                            // Usuario no autenticado: redirige al inicio de sesión
+                            window.location.href = '/login';
+                        @endif
+                    },
                     events: @json($events, JSON_PRETTY_PRINT)
                 });
 
@@ -242,4 +268,63 @@
             window.location.href = url;
         }
     </script>
+
+    <script>
+        function buscarActividades() {
+            var searchQuery = document.getElementById('search').value;
+            var normalizedQuery = normalizeString(searchQuery);
+
+            fetch('/buscar-actividades?q=' + encodeURIComponent(normalizedQuery))
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Error en la respuesta del servidor');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log("Datos recibidos:", data); // Aquí se imprime la respuesta del servidor
+
+                    var html = '';
+                    data.forEach(actividad => {
+                        html += `
+                        <div class="col-md-4 mb-4">
+                            <div class="card">
+                                <img src="${actividad.imagen}" class="card-img-top" alt="${actividad.nombre}">
+                                <div class="card-body">
+                                    <h5 class="card-title">${actividad.nombre}</h5>
+                                    <p class="card-text">${actividad.descripcion}</p>
+                                    <!-- Otros detalles de la actividad -->
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    });
+                    document.getElementById('search-results').innerHTML = html;
+                })
+                .catch(error => {
+                    console.error('Error al realizar la búsqueda:', error);
+                    // Aquí puedes manejar el error, como mostrar un mensaje al usuario
+                });
+        }
+
+        function normalizeString(string) {
+            string = string.toLowerCase();
+            string = string.normalize("NFD").replace(/[\u0300-\u036f]/g, ""); // Remueve las tildes
+            return string;
+        }
+    </script>
+    <script>
+        function borrarFiltros() {
+            // Restablecer los campos del formulario
+            document.getElementById('categoria').value = '';
+            document.getElementById('precio').value = '';
+
+            // Opcionalmente, puedes enviar el formulario automáticamente después de borrar los filtros
+            // document.getElementById('form-filtro').submit();
+        }
+        </script>
+
+
+
+
 @endsection

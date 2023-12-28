@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Actividad; // Importa el modelo Actividad
-
+use Validator;
 // use App\Models\Categoria;
 
 use Illuminate\Http\Request;
@@ -40,37 +40,44 @@ class ActividadController extends Controller
      */
     public function store(Request $request)
     {
-        $data = $request->validate([
+        // Validaciones básicas
+        $validatedData = $request->validate([
             'nombre' => 'required',
             'descripcion' => 'required',
-            'duracion' => 'required',
-            'precio_adulto' => 'required',
-            'precio_nino' => 'required',
-            'aforo' => 'required',
+            'duracion' => 'required|integer',
+            'aforo' => 'required|integer',
             'activa' => 'required|in:0,1',
-            // 'categoria_id' => 'required', // Asegúrate de tener el campo categoria_id en el formulario
-            'imagen' => 'image|mimes:jpeg,png,jpg,gif|max:2048', // Agrega validación para la imagen si es obligatoria
+            'imagen' => 'image|mimes:jpeg,png,jpg,gif|max:2048', // Valida que el archivo sea una imagen
         ]);
 
-        // Procesar la carga de imagen
+        // Validación personalizada para asegurarse de que al menos uno de los precios sea proporcionado
+        if (empty($request->precio_adulto) && empty($request->precio_nino)) {
+            return redirect()
+                ->back()
+                ->withErrors(['precios' => 'Debe ingresar al menos un precio para crear la actividad.'])
+                ->withInput();
+        }
+
+        // Procesar la carga de la imagen, si se ha proporcionado
         if ($request->hasFile('imagen')) {
             $imagen = $request->file('imagen');
             $nombreImagen = time() . '_' . $imagen->getClientOriginalName();
-
-            // Almacenar la imagen en la carpeta storage
-            $rutaImagen = $imagen->storeAs('public/img', $nombreImagen);
-
-            // Obtener la ruta relativa para almacenar en la base de datos
-            $rutaRelativa = 'storage/img/' . $nombreImagen;
-
-            $data['imagen'] = $rutaRelativa; // Asignar la ruta relativa de la nueva imagen a los datos a guardar
+            $rutaImagen = $imagen->storeAs('public/img', $nombreImagen); // Almacenar en el disco
+            $rutaRelativa = 'storage/img/' . $nombreImagen; // Ruta relativa para guardar en la BD
+            $validatedData['imagen'] = $rutaRelativa;
         }
 
-        Actividad::create($data);
+        // Asignar valores nulos para precios si los campos están vacíos
+        $validatedData['precio_adulto'] = $request->filled('precio_adulto') ? $request->precio_adulto : null;
+        $validatedData['precio_nino'] = $request->filled('precio_nino') ? $request->precio_nino : null;
 
+        // Crear la actividad con los datos validados
+        Actividad::create($validatedData);
+
+        // Redireccionar con un mensaje de éxito
         return redirect()
             ->route('admin.actividades.index')
-            ->with('success', '¡Agregado con éxito!');
+            ->with('success', '¡Actividad agregada con éxito!');
     }
 
     /**
@@ -209,27 +216,5 @@ class ActividadController extends Controller
         return view('pages.detalleActividad', ['actividad' => $actividad]);
     }
 
-
-    public function filter(Request $request)
-{
-    $precio = $request->input('precio');
-
-    // Aquí, debes definir la lógica para determinar los rangos de precios
-    // Por ejemplo, 'bajo' podría ser de 0 a 20 euros, 'medio' de 21 a 50, etc.
-
-    $query = Actividad::query();
-
-    if ($precio == 'bajo') {
-        $query->where('precio_adulto', '<=', 20);
-    } elseif ($precio == 'medio') {
-        $query->whereBetween('precio_adulto', [21, 50]);
-    } elseif ($precio == 'alto') {
-        $query->where('precio_adulto', '>', 50);
-    }
-
-    $actividades = $query->get();
-
-    return view('pages.catalogo', compact('actividades'));
-}
 
 }

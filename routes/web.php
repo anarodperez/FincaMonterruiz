@@ -72,8 +72,7 @@ Route::middleware(['admin'])->group(function () {
 
 });
 
-Route::get('/actividades/search', [ActividadController::class, 'search'])->name('actividades.search');
-Route::get('/actividades/filter', [ActividadController::class, 'filter'])->name('actividades.filter');
+
 
 Route::get('/login/google', function () {
     return Socialite::driver('google')->redirect();
@@ -105,7 +104,11 @@ Route::get('admin/usuarios/autocomplete', [UsuarioController::class, 'autocomple
 
 Route::get('/gallery', [GalleryController::class, 'index'])->name('pages.gallery');
 Route::get('/about-us', [AboutUsController::class, 'index'])->name('pages.about-us');
+
+//Catálogo
 Route::get('/catalogo', [CatalogoController::class, 'index'])->name('pages.catalogo');
+Route::get('/buscar-actividades', [CatalogoController::class, 'buscar'])->name('pages.catalogo.buscar');
+Route::get('/actividades/filter', [CatalogoController::class, 'filter'])->name('actividades.filter');
 
 //Reserva
 Route::get('/actividades/{id}', [ActividadController::class, 'detalleActividad'])->name('pages.detalleActividad');
