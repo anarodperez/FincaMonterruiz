@@ -31,7 +31,7 @@
                 <a class="nav-link" href="{{ route('pages.about-us') }}">Sobre nosotros</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">Contacto</a>
+                <a class="nav-link" href="{{ route('pages.form-contact') }}">Contacto</a>
             </li>
             </ul>
             @if (auth()->check())

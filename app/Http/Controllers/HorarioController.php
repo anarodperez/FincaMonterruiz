@@ -167,28 +167,39 @@ public function update(Request $request, $id)
 }
 
 
-private function updateSerieRecurrente($horario, $request)
+private function updateSerieRecurrente($horarioOriginal, $request)
 {
-    // Resto del código...
+    // Iniciar una transacción para asegurar la integridad de los datos
+    DB::beginTransaction();
 
     try {
-        foreach ($horarios as $horarioRecurrente) {
-            // Asegúrate de no actualizar horarios pasados, si es necesario
-            if ($horarioRecurrente->fecha >= today()) {
+        // Encuentra todos los horarios recurrentes que están asociados con la misma serie
+        // Suponiendo que tienes un identificador o alguna lógica para agrupar horarios en la misma serie
+        $horariosRecurrentes = Horario::where('actividad_id', $horarioOriginal->actividad_id)
+                                      ->where('fecha', '>=', $horarioOriginal->fecha)
+                                      // Agrega cualquier otra condición que defina tu serie
+                                      ->get();
+
+        foreach ($horariosRecurrentes as $horarioRecurrente) {
+            // Asegúrate de no actualizar horarios pasados
+            if ($horarioRecurrente->fecha > today() || ($horarioRecurrente->fecha == today() && $horarioRecurrente->hora > now())) {
                 $horarioRecurrente->update([
-                    'hora' => $request->hora,
-                    'idioma' => $request->idioma, // Actualiza el idioma
-                    // Otros campos, si son necesarios
+                    'hora' => $request->input('hora'),
+                    'idioma' => $request->input('idioma'),
+                    // Otros campos si son necesarios
                 ]);
             }
         }
 
         DB::commit();
+        return true;
     } catch (\Exception $e) {
+        // En caso de error, revertir la transacción
         DB::rollback();
-        throw $e;
+        return false;
     }
 }
+
 
 private function getColorForActividad($nombreActividad)
 {

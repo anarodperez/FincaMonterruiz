@@ -113,39 +113,6 @@
                         </div>
                     </div>
                 </div>
-
-                <!-- Horarios de actividades -->
-                <div class="row mt-4">
-                    <div class="col-md-12">
-                        <div class="card">
-                            <div class="card-body">
-                                <h5 class="card-title">Horarios de Actividades</h5>
-                                <!-- Puedes mostrar una tabla con los horarios de las actividades -->
-                                <table class="table">
-                                    <thead>
-                                        <tr>
-                                            <th>Actividad</th>
-                                            <th>Día</th>
-                                            <th>Hora</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>Actividad 1</td>
-                                            <td>Lunes</td>
-                                            <td>10:00 AM</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Actividad 2</td>
-                                            <td>Miércoles</td>
-                                            <td>3:00 PM</td>
-                                        </tr>
-                                        <!-- Agrega más filas según sea necesario -->
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </main>
         </div>

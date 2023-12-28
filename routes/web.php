@@ -13,6 +13,8 @@ use App\Http\Controllers\HorarioController;
 use App\Http\Controllers\AboutUsController;
 use App\Http\Controllers\GalleryController;
 use App\Http\Controllers\ReservaController;
+use App\Http\Controllers\FormContactController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -41,7 +43,6 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
-
 
 /************* Admin *************/
 Route::middleware(['admin'])->group(function () {
@@ -104,6 +105,7 @@ Route::get('admin/usuarios/autocomplete', [UsuarioController::class, 'autocomple
 
 Route::get('/gallery', [GalleryController::class, 'index'])->name('pages.gallery');
 Route::get('/about-us', [AboutUsController::class, 'index'])->name('pages.about-us');
+Route::get('/form-contact', [FormContactController::class, 'index'])->name('pages.form-contact');
 
 //Catálogo
 Route::get('/catalogo', [CatalogoController::class, 'index'])->name('pages.catalogo');
@@ -122,5 +124,6 @@ Route::get('/reservar/{horarioId}', [ReservaController::class, 'show'])
     });
 
 
+Route::post('/contact', [FormContactController::class, 'submit'])->name('contact.submit');
 
 require __DIR__ . '/auth.php';
