@@ -110,7 +110,7 @@ Route::get('/form-contact', [FormContactController::class, 'index'])->name('page
 //Catálogo
 Route::get('/catalogo', [CatalogoController::class, 'index'])->name('pages.catalogo');
 Route::get('/buscar-actividades', [CatalogoController::class, 'buscar'])->name('pages.catalogo.buscar');
-Route::get('/actividades/filter', [CatalogoController::class, 'filter'])->name('actividades.filter');
+Route::get('/catalogo/filter', [CatalogoController::class, 'filter'])->name('catalogo.filter');
 
 //Reserva
 Route::get('/actividades/{id}', [ActividadController::class, 'detalleActividad'])->name('pages.detalleActividad');

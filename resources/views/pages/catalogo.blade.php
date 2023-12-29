@@ -40,6 +40,29 @@
             margin-bottom: 4vh;
             text-align: center;
         }
+
+        .botones {
+            margin-top: 3vh;
+            text-align: center;
+        }
+
+        section nav {
+            background: transparent;
+        }
+
+        .active>.page-link,
+        .page-link.active {
+
+            background-color: #5c7c64;
+            ;
+            border-color: #5c7c64;
+            ;
+            color: white
+        }
+
+        .page-link {
+            color: #5c7c64;
+        }
     </style>
     <main>
         <div class="container-fluid">
@@ -64,14 +87,22 @@
                 <aside class="col-md-3">
                     <div class="mb-4">
                         <h3>Filtrar Actividades</h3>
-                        <form action="{{ route('actividades.filter') }}" method="GET">
-                            <div class="form-group">
+                        <form action="{{ route('catalogo.filter') }}" method="GET" name="form">
+                            {{-- <div class="form-group">
                                 <label for="categoria">Categoría:</label>
                                 <select name="categoria" id="categoria" class="form-control">
                                     <option value="">Todas</option>
                                     <option value="aventura">Aventura</option>
                                     <option value="naturaleza">Naturaleza</option>
-                                    <!-- Agrega más opciones de categoría aquí -->
+                                </select>
+                            </div> --}}
+                            <div class="form-group">
+                                <label for="publico">Público objetivo:</label>
+                                <select name="publico" id="publico" class="form-control">
+                                    <option value="">Selecciona una opción</option>
+                                    <option value="todos">Para todos los públicos</option>
+                                    <option value="adultos">Solo para adultos</option>
+                                    <option value="ninos">Solo para niños</option>
                                 </select>
                             </div>
 
@@ -86,23 +117,26 @@
                             </div>
 
                             <div class="form-group">
-                                <label for="precio">Precio:</label>
-                                <select name="precio" id="precio" class="form-control">
-                                    <option value="">Cualquier Precio</option>
-                                    <option value="bajo">Bajo</option>
-                                    <option value="medio">Medio</option>
-                                    <option value="alto">Alto</option>
-                                </select>
+                                <label for="precio_min">Precio Mínimo:</label>
+                                <input type="number" name="precio_min" id="precio_min" class="form-control"
+                                    value="{{ $filtros['precio_min'] ?? '' }}">
                             </div>
-                            <button type="submit" class="btn btn-primary">Filtrar</button>
-                            <button type="button" class="btn btn-secondary" onclick="borrarFiltros()">Borrar Filtros</button>
+                            <div class="form-group">
+                                <label for="precio_max">Precio Máximo:</label>
+                                <input type="number" name="precio_max" id="precio_max" class="form-control"
+                                    value="{{ $filtros['precio_max'] ?? '' }}">
+                            </div>
+                            <div class="botones">
+                                <button type="submit" class="btn btn-primary">Filtrar</button>
+                                <button type="button" class="btn btn-secondary" onclick="borrarFiltros()">Borrar
+                                    Filtros</button>
+                            </div>
                         </form>
                     </div>
                 </aside>
 
                 <!-- Contenido principal -->
                 <div class="col-md-9">
-
 
                     <!-- Catálogo de Actividades -->
                     <section class="my-5">
@@ -140,6 +174,10 @@
                                 </div>
                             @endforeach
                         </div>
+                        <!-- Enlaces de paginación -->
+                        {{ $actividades->links('pagination::bootstrap-4', ['class' => 'mi-paginacion-personalizada']) }}
+
+
                     </section>
                 </div>
             </div>
@@ -180,7 +218,8 @@
                     <div class="modal-content">
                         <div class="modal-header">
                             <h5 class="modal-title" id="exampleModalLabel">Detalles del Evento</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                aria-label="Close"></button>
                         </div>
                         <div class="modal-body" id="modal-body-content">
                             <!-- Contenido dinámico del modal -->
@@ -316,13 +355,20 @@
     <script>
         function borrarFiltros() {
             // Restablecer los campos del formulario
-            document.getElementById('categoria').value = '';
-            document.getElementById('precio').value = '';
+            document.getElementById('publico').value = '';
+            document.getElementById('duracion').value = '';
+            // Verifica si cada elemento existe antes de intentar manipularlo
+            if (document.getElementById('precio_min')) {
+                document.getElementById('precio_min').value = '';
+            }
+            if (document.getElementById('precio_max')) {
+                document.getElementById('precio_max').value = '';
+            }
 
-            // Opcionalmente, puedes enviar el formulario automáticamente después de borrar los filtros
-            // document.getElementById('form-filtro').submit();
+            // Asegúrate de que 'form-filtro' es el ID correcto de tu formulario
+            document.forms['form'].submit();
         }
-        </script>
+    </script>
 
 
 

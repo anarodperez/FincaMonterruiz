@@ -129,45 +129,40 @@ class ActividadController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
-    {
-        $actividad = Actividad::find($id);
-        if (!$actividad) {
-            return redirect()
-                ->route('admin.actividades.index')
-                ->with('error', '¡Actividad no encontrada!');
-        }
-
-        $data = $request->validate([
-            'nombre' => 'required',
-            'descripcion' => 'required',
-            'duracion' => 'required',
-            'precio_adulto' => 'required',
-            'precio_nino' => 'required',
-            'aforo' => 'required',
-            'activa' => 'required',
-            // 'categoria_id' => 'required', // Asegúrate de tener el campo categoria_id en el formulario
-            'imagen' => 'image|mimes:jpeg,png,jpg,gif|max:2048', // Agrega validación para la imagen si es obligatoria
-        ]);
-
-        if ($request->hasFile('imagen')) {
-            $imagen = $request->file('imagen');
-            $nombreImagen = time() . '_' . $imagen->getClientOriginalName();
-
-            // Almacenar la imagen en la carpeta storage
-            $rutaImagen = $imagen->storeAs('public/img', $nombreImagen);
-
-            // Obtener la ruta relativa para almacenar en la base de datos
-            $rutaRelativa = 'storage/img/' . $nombreImagen;
-
-            $data['imagen'] = $rutaRelativa; // Asignar la ruta relativa de la nueva imagen a los datos a guardar
-        }
-
-        $actividad->update($data);
-
-        return redirect()
-            ->route('admin.actividades.index')
-            ->with('success', '¡Actualizado con éxito!');
+{
+    $actividad = Actividad::find($id);
+    if (!$actividad) {
+        return redirect()->route('admin.actividades.index')->with('error', '¡Actividad no encontrada!');
     }
+
+    // Validar solo los campos que se han proporcionado
+    $data = $request->validate([
+        'nombre' => 'sometimes|required',
+        'descripcion' => 'sometimes|required',
+        'duracion' => 'sometimes|required|integer',
+        'precio_adulto' => 'nullable',
+        'precio_nino' => 'nullable',
+        'aforo' => 'sometimes|required|integer',
+        'activa' => 'sometimes|required|in:0,1',
+        'imagen' => 'sometimes|image|mimes:jpeg,png,jpg,gif|max:2048',
+    ]);
+
+    // Actualizar la imagen si se ha proporcionado una nueva
+    if ($request->hasFile('imagen')) {
+        $imagen = $request->file('imagen');
+        $nombreImagen = time() . '_' . $imagen->getClientOriginalName();
+        $rutaImagen = $imagen->storeAs('public/img', $nombreImagen);
+        $rutaRelativa = 'storage/img/' . $nombreImagen;
+        $actividad->imagen = $rutaRelativa;
+    }
+
+    // Actualizar solo los campos proporcionados
+    $actividad->fill($data);
+    $actividad->save();
+
+    return redirect()->route('admin.actividades.index')->with('success', '¡Actualizado con éxito!');
+}
+
 
     /**
      * Remove the specified resource from storage.

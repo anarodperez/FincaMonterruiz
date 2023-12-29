@@ -10,8 +10,6 @@ use Carbon\Carbon;
 use App\Models\Reserva;
 use Illuminate\Support\Facades\DB;
 
-
-
 class HorarioController extends Controller
 {
     public function index()

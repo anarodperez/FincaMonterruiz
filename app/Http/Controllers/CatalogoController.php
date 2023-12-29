@@ -16,8 +16,10 @@ class CatalogoController extends Controller
         // Obtiene todos los horarios con su actividad relacionada
         $horarios = Horario::with('actividad')->get();
 
-        // Obtiene solo las actividades que están activas
-        $actividades = Actividad::where('activa', true)->get();
+
+    // Obtiene solo las actividades que están activas con paginación
+    $actividades = Actividad::where('activa', true)->paginate(3);
+
 
         $events = $horarios->map(function ($horario) {
             return [
@@ -41,8 +43,13 @@ class CatalogoController extends Controller
         $normalizedQuery = $this->normalizeString($query);
 
         $actividades = Actividad::where('activa', true)
-                                 ->whereRaw("unaccent(lower(nombre)) LIKE unaccent(lower(?))", ['%' . $normalizedQuery . '%'])
-                                 ->get();
+                                ->whereRaw("unaccent(lower(nombre)) LIKE unaccent(lower(?))", ['%' . $normalizedQuery . '%'])
+                                ->get()
+                                ->map(function ($actividad) {
+                                    // Asegúrate de que la imagen tenga la URL completa
+                                    $actividad->imagen = asset( $actividad->imagen);
+                                    return $actividad;
+                                });
 
         return response()->json($actividades);
     } catch (\Exception $e) {
@@ -50,6 +57,7 @@ class CatalogoController extends Controller
         return response()->json(['error' => 'Error interno del servidor'], 500);
     }
 }
+
 
 
 protected function normalizeString($string)
@@ -69,27 +77,91 @@ protected function normalizeString($string)
 }
 
 
-// public function filter(Request $request)
-//     {
-//         $precio = $request->input('precio');
+public function filter(Request $request)
+{
+    // Validaciones
+    $validatedData = $request->validate([
+        'precio_min' => 'nullable|numeric|min:0',
+        'precio_max' => 'nullable|numeric|min:0|gte:precio_min',
+        'publico' => 'nullable|in:todos,adultos,ninos',
+        'duracion' => 'nullable|in:corta,media,larga',
+    ]);
 
-//         // Aquí, debes definir la lógica para determinar los rangos de precios
-//         // Por ejemplo, 'bajo' podría ser de 0 a 20 euros, 'medio' de 21 a 50, etc.
+    // Iniciar la consulta con la condición base
+    $query = Actividad::where('activa', true);
 
-//         $query = Actividad::query();
+    // Filtrar por precio mínimo
+    if ($request->filled('precio_min')) {
+        $query->where(function ($q) use ($request) {
+            $q->where('precio_adulto', '>=', $request->precio_min)
+              ->orWhere('precio_nino', '>=', $request->precio_min);
+        });
+    }
 
-//         if ($precio == 'bajo') {
-//             $query->where('precio_adulto', '<=', 20);
-//         } elseif ($precio == 'medio') {
-//             $query->whereBetween('precio_adulto', [21, 50]);
-//         } elseif ($precio == 'alto') {
-//             $query->where('precio_adulto', '>', 50);
-//         }
+    // Filtrar por precio máximo
+    if ($request->filled('precio_max')) {
+        $query->where(function ($q) use ($request) {
+            $q->where('precio_adulto', '<=', $request->precio_max)
+              ->orWhere('precio_nino', '<=', $request->precio_max);
+        });
+    }
 
-//         $actividades = $query->get();
+    // Filtro por público objetivo
+    if ($request->filled('publico')) {
+        switch ($request->publico) {
+            case 'todos':
+                $query->whereNotNull('precio_adulto')->whereNotNull('precio_nino');
+                break;
+            case 'adultos':
+                $query->whereNotNull('precio_adulto')->whereNull('precio_nino');
+                break;
+            case 'ninos':
+                $query->whereNull('precio_adulto')->whereNotNull('precio_nino');
+                break;
+        }
+    }
 
-//         return view('pages.catalogo', compact('actividades'));
-//     }
+    // Filtro por duración
+    if ($request->filled('duracion')) {
+        switch ($request->duracion) {
+            case 'corta':
+                $query->where('duracion', '<', 60);
+                break;
+            case 'media':
+                $query->whereBetween('duracion', [60, 120]);
+                break;
+            case 'larga':
+                $query->where('duracion', '>', 120);
+                break;
+        }
+    }
+
+
+    $actividades = $query->get();
+    $horarios = Horario::with('actividad')->get();
+    $events = $horarios->map(function ($horario) {
+        return [
+            'title' => $horario->actividad->nombre, // Asumiendo que la actividad tiene un campo 'nombre'
+            'start' => $horario->fecha . 'T' . $horario->hora,
+            'extendedProps' => [
+                'idioma' => $horario->idioma,
+                'horario_id' => $horario->id,
+                'frecuencia' => $horario->frecuencia, // Añade la frecuencia aquí
+            ],
+        ];
+    });
+
+    $actividades = $query->paginate(3); // Aplicar paginación aquí
+
+    return view('pages.catalogo', [
+        'actividades' => $actividades,
+        'events' => $events,
+        'filtros' => $request->all() // Pasar todos los valores de los filtros
+    ]);
+
+
+}
+
 
 
 }
