@@ -6,6 +6,18 @@
 
 @section('content')
     <div class="container mt-4">
+        @if (session('success'))
+            <div class="alert alert-success">
+                {{ session('success') }}
+            </div>
+        @endif
+
+        @if (session('error'))
+            <div class="alert alert-danger">
+                {{ session('error') }}
+            </div>
+        @endif
+
         <div class="row">
             <!-- Columna de detalles de la reserva -->
             <div class="col-md-6">
@@ -48,13 +60,15 @@
                 </div>
             </div>
 
-            <!-- Columna para rellenar datos por el usuario -->
+
             <div class="col-md-6">
                 <h2 class="mb-4">Completa tus datos</h2>
-                <form action="{{ route('reservar.store') }}" method="POST" id="formularioReserva"
-                    onsubmit="return validarFormulario()">
+                <form id="formularioReserva" action="{{ route('paypal.checkout', ['horarioId' => $horario->id]) }}"
+                    method="POST">
+
                     @csrf
                     <input type="hidden" name="horario_id" value="{{ $horario->id }}">
+                    <input type="hidden" name="amount" id="paypalAmount">
 
                     <div class="mb-3 d-flex align-items-baseline">
                         <label for="nombre"style="margin-right: 10px;">Nombre:</label>
@@ -104,11 +118,22 @@
                         <textarea class="form-control" id="observaciones" name="observaciones" rows="3"></textarea>
                     </div>
 
-                    <button type="submit" class="btn btn-primary">Confirmar reserva</button>
+                    <button type="submit" class="btn btn-primary">Confirmar y Pagar</button>
+
                 </form>
             </div>
         </div>
         <script defer>
+            document.getElementById('formularioReserva').addEventListener('submit', function(event) {
+                event.preventDefault();
+                if (validarFormulario()) {
+                    let total = document.getElementById('total').textContent.replace(' €', '');
+                    document.getElementById('paypalAmount').value = total;
+                    this.submit();
+                }
+            });
+
+
             let precioAdultoRaw = "{{ $horario->actividad->precio_adulto ?? '0' }}";
             let precioNinoRaw = "{{ $horario->actividad->precio_nino ?? '0' }}";
 
@@ -126,17 +151,13 @@
                 document.getElementById('total').textContent = total.toFixed(2) + ' €';
             }
 
-
-
             function validarFormulario() {
                 let numAdultos = document.getElementById('numAdultos').value;
                 let numNinos = document.getElementById('numNinos').value;
 
-                // Convertir a números y validar
                 numAdultos = numAdultos ? parseInt(numAdultos) : 0;
                 numNinos = numNinos ? parseInt(numNinos) : 0;
 
-                // Comprobar si al menos uno de los campos tiene un valor
                 if (numAdultos === 0 && numNinos === 0) {
                     alert('Debes ingresar al menos un adulto o un niño.');
                     return false; // Esto evitará que el formulario se envíe
@@ -144,7 +165,13 @@
 
                 return true; // El formulario se puede enviar
             }
+
+            // Asegúrate de llamar a calcularTotal al cargar la página si es necesario
+            window.onload = function() {
+                calcularTotal();
+            };
         </script>
+
 
     </div>
 @endsection

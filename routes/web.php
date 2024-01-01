@@ -14,6 +14,7 @@ use App\Http\Controllers\AboutUsController;
 use App\Http\Controllers\GalleryController;
 use App\Http\Controllers\ReservaController;
 use App\Http\Controllers\FormContactController;
+use App\Http\Controllers\PaypalController;
 
 /*
 |--------------------------------------------------------------------------
@@ -140,5 +141,13 @@ Route::get('/dashboard/cargar-valoraciones', [UsuarioController::class, 'cargarV
 
 
 Route::post('/contact', [FormContactController::class, 'submit'])->name('contact.submit');
+
+
+//Paypal
+Route::post('/paypal/checkout/{horarioId}', [PaypalController::class, 'checkout'])->name('paypal.checkout');
+Route::get('/paypal/success/{horarioId}', [PaypalController::class, 'success'])->name('paypal.success');
+Route::get('/paypal/cancel/{horarioId}', [PaypalController::class, 'cancel'])->name('paypal.cancel');
+
+
 
 require __DIR__ . '/auth.php';

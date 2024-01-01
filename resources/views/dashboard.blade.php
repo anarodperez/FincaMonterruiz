@@ -89,6 +89,10 @@
                     {{-- Sección Reservas --}}
                     <div id="reservas" class="tab-pane fade show active">
                         <h2 class="tab-section-header">Tus Reservas</h2>
+                        <!-- Permanent Reminder Message -->
+                        <div class="alert alert-danger">
+                            Recuerda que solo puedes cancelar hasta 48 horas antes del evento.
+                        </div>
                         <div id="reservas" class="tab-pane fade show active">
                             <h3>Reservas Activas</h3>
                             <div class="row">
@@ -105,7 +109,8 @@
                                                 $diferenciaHoras = $ahora->diffInHours($fechaReserva, false);
                                             @endphp
                                             @if ($diferenciaHoras >= 48)
-                                                <form action="{{ route('reservas.cancelar', $reserva->id) }}" method="POST">
+                                                <form action="{{ route('reservas.cancelar', $reserva->id) }}"
+                                                    method="POST">
                                                     @csrf
                                                     <button type="submit" class="btn btn-danger">Cancelar Reserva</button>
                                                 </form>
@@ -117,21 +122,39 @@
                         </div>
 
 
+                        <!-- Sección Reservas Pasadas -->
+                        <h3>Reservas Pasadas</h3>
+                        <div class="row">
+                            @foreach ($reservasPasadas as $reserva)
+                                <div class="card card-reserva">
+                                    <div class="card-body">
+                                        <!-- Detalles de la reserva -->
+                                        <p class="card-text">Fecha: {{ $reserva->horario->fecha }}</p>
+                                        <p class="card-text">Hora: {{ $reserva->horario->hora }}</p>
+                                        <p class="card-text">Estado: {{ $reserva->estado }}</p>
 
-                            {{-- Reservas Pasadas --}}
-                            <h3>Reservas Pasadas</h3>
-                            <div class="row">
-                                @foreach ($reservasPasadas as $reserva)
-                                    <p class="card-text">Fecha: {{ $reserva->horario->fecha }}</p>
-                                    <p class="card-text">Hora: {{ $reserva->horario->hora }}</p>
-                                    <p class="card-text">Estado: {{ $reserva->estado }}</p>
-                                @endforeach
-                            </div>
+                                        <!-- Verificar si el usuario ya ha valorado la actividad -->
+                                        {{-- @php
+                                            $usuarioHaValorado = $reserva->actividad->valoraciones->where('user_id', auth()->user()->id)->count() > 0;
+                                        @endphp --}}
+
+                                        <!-- Mostrar el botón de valoración solo si el usuario no ha valorado la actividad -->
+                                        {{-- @if (!$usuarioHaValorado)
+                                            <a href=""
+                                                class="btn btn-primary">Valorar Actividad</a>
+                                        @endif --}}
+                                        <a href=""
+                                        class="btn btn-primary">Valorar Actividad</a>
+                                    </div>
+                                </div>
+                            @endforeach
                         </div>
-                    </div>
 
-                    <!-- Sección Valoraciones -->
-                    {{-- <div id="valoraciones" class="tab-pane fade">
+                    </div>
+                </div>
+
+                <!-- Sección Valoraciones -->
+                {{-- <div id="valoraciones" class="tab-pane fade">
                         <h2 class="tab-section-header">Valoraciones Recientes</h2>
                         <div class="row">
                             <!-- Tarjeta de Valoración de Ejemplo -->
@@ -150,8 +173,8 @@
                         </div>
                         <button class="btn btn-custom-secondary mt-3">Añadir Valoración</button>
                     </div> --}}
-                </div>
             </div>
+        </div>
         </div>
     </main>
 @endsection

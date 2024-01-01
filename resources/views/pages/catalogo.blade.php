@@ -249,44 +249,52 @@
 
 
         <script>
-            document.addEventListener('DOMContentLoaded', function() {
-                var calendarEl = document.getElementById('calendar');
-                var calendar = new FullCalendar.Calendar(calendarEl, {
-                    headerToolbar: {
-                        left: 'dayGridMonth,timeGridWeek,timeGridDay',
-                        center: 'title'
-                    },
-                    initialView: 'dayGridMonth',
-                    headerToolbar: {
-                        left: 'dayGridMonth,timeGridWeek,timeGridDay',
-                        center: 'title',
-                        right: 'today prev,next'
-                    },
-                    buttonText: {
-                        today: 'Hoy',
-                        month: 'Mes',
-                        week: 'Semana',
-                        day: 'Día'
-                    },
+           document.addEventListener('DOMContentLoaded', function() {
+    var calendarEl = document.getElementById('calendar');
+    var calendar = new FullCalendar.Calendar(calendarEl, {
+        headerToolbar: {
+            left: 'dayGridMonth,timeGridWeek,timeGridDay',
+            center: 'title'
+        },
+        initialView: 'dayGridMonth',
+        headerToolbar: {
+            left: 'dayGridMonth,timeGridWeek,timeGridDay',
+            center: 'title',
+            right: 'today prev,next'
+        },
+        buttonText: {
+            today: 'Hoy',
+            month: 'Mes',
+            week: 'Semana',
+            day: 'Día'
+        },
 
-                    locale: 'es',
+        locale: 'es',
 
-                    eventClick: function(info) {
-                        @if (Auth::check())
-                            // Usuario autenticado: permite la reserva
-                            var horarioId = info.event.extendedProps.horario_id;
-                            window.location.href = `/reservar/${horarioId}`;
-                        @else
-                            // Usuario no autenticado: redirige al inicio de sesión
-                            window.location.href = '/login';
-                        @endif
-                    },
-                    events: @json($events, JSON_PRETTY_PRINT)
-                });
+        eventClick: function(info) {
+            @if (Auth::check())
+                // Usuario autenticado: permite la reserva
+                var horarioId = info.event.extendedProps.horario_id;
+                window.location.href = `/reservar/${horarioId}`;
+            @else
+                // Usuario no autenticado: redirige al inicio de sesión
+                window.location.href = '/login';
+            @endif
+        },
+        events: @json($events, JSON_PRETTY_PRINT)
+    });
 
-                // Renderizar el calendario
-                calendar.render();
-            });
+    // Renderizar el calendario
+    calendar.render();
+
+    // Filtrar eventos pasados
+    calendar.getEvents().forEach(function(event) {
+        if (event.start < new Date()) {
+            event.remove(); // Elimina los eventos pasados
+        }
+    });
+});
+
         </script>
 
         <script>

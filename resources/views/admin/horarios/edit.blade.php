@@ -3,6 +3,22 @@
 @section('content')
 <div class="container">
     <h2 class="mb-4">Editar Horario</h2>
+    @if (session('error'))
+    <div class="alert alert-danger alert-dismissible fade show">
+        {{ session('error') }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+@endif
+
+@if ($errors->any())
+    <div class="alert alert-danger">
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
     <form action="{{ route('admin.horarios.update', $horario->id) }}" method="POST" class="border p-4 rounded">
         @csrf
         @method('PUT')

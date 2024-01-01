@@ -52,55 +52,36 @@ class UsuarioController extends Controller
     public function showDashboard()
     {
         $user = Auth::user();
-        $today = Carbon::today();
+        $now = Carbon::now('UTC')->setTimezone('Europe/Madrid');
 
-        // Obtener reservas activas (fechas futuras)
+        // Obtener reservas activas (fechas y horas futuras)
         $reservasActivas = $user
-            ->reservas()
-            ->join('horarios', 'reservas.horario_id', '=', 'horarios.id')
-            ->join('actividades', 'horarios.actividad_id', '=', 'actividades.id')
-            ->where('horarios.fecha', '>=', $today)
-            ->select('reservas.*', 'actividades.nombre as nombre_actividad', 'horarios.fecha as fecha_actividad')
-            ->get();
+        ->reservas()
+        ->join('horarios', 'reservas.horario_id', '=', 'horarios.id')
+        ->join('actividades', 'horarios.actividad_id', '=', 'actividades.id')
+        ->where(function ($query) use ($now) {
+            $query->where('horarios.fecha', '>', $now->toDateString())
+                  ->orWhere(function ($query) use ($now) {
+                      $query->where('horarios.fecha', '=', $now->toDateString())
+                            ->where('horarios.hora', '>', $now->toTimeString());
+                  });
+        })
+        ->select('reservas.*', 'actividades.nombre as nombre_actividad', 'horarios.fecha as fecha_actividad', 'horarios.hora as hora_actividad')
+        ->get();
 
-        // Obtener reservas pasadas (fechas anteriores)
+        // Para reservas pasadas
         $reservasPasadas = $user
             ->reservas()
             ->join('horarios', 'reservas.horario_id', '=', 'horarios.id')
-            ->where('horarios.fecha', '<', $today)
+            ->join('users', 'reservas.user_id', '=', 'users.id')
+            ->where(function ($query) use ($now) {
+                $query->where('horarios.fecha', '<', $now->toDateString())->orWhere(function ($query) use ($now) {
+                    $query->where('horarios.fecha', '=', $now->toDateString())->where('horarios.hora', '<', $now->toTimeString());
+                });
+            })
+            ->where('reservas.user_id', '=', $user->id)
             ->get();
+
         return view('/dashboard', compact('reservasActivas', 'reservasPasadas'));
-    }
-    public function cargarReservas()
-    {
-        $user = auth()->user(); // Obtener el usuario autenticado
-
-        // Obtener reservas activas y pasadas
-        $reservasActivas = Reserva::where('user_id', $user->id)
-                                  ->whereDate('fecha', '>=', now())
-                                  ->get();
-
-        $reservasPasadas = Reserva::where('user_id', $user->id)
-                                  ->whereDate('fecha', '<', now())
-                                  ->get();
-
-        // Devuelve la vista parcial de reservas con los datos
-        return view('dashboard.reservas', compact('reservasActivas', 'reservasPasadas'));
-    }
-    public function cargarValoraciones()
-    {
-        $user = auth()->user();
-        $valoraciones = Valoracion::where('user_id', $user->id)->get();
-
-        return view('dashboard.valoraciones', compact('valoraciones'));
-    }
-
-    public function cargarPerfil()
-    {
-        $user = auth()->user(); // o User::find(auth()->id());
-
-        // Aquí, puedes pasar directamente el usuario a la vista
-        // Si necesitas más datos específicos, puedes obtenerlos y pasarlos a la vista
-        return view('dashboard.perfil', compact('user'));
     }
 }

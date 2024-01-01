@@ -47,7 +47,19 @@ class HorarioController extends Controller
         try {
             $request->validate([
                 'actividad' => 'required|exists:actividades,id',
-                'fecha' => 'required|date|after_or_equal:today',
+                'fecha' => [
+                    'required',
+                    'date',
+                    function ($attribute, $value, $fail) use ($request) {
+                        $fechaHora = Carbon::parse($value . ' ' . $request->hora);
+                        \Log::debug('Fecha y hora de validación: ' . $fechaHora);
+
+                        if ($fechaHora->isPast()) {
+                            $fail('La fecha y hora del horario no pueden estar en el pasado.');
+                        }
+                    },
+
+                ],
                 'hora' => 'required|date_format:H:i',
                 'idioma' => 'required|in:Español,Inglés,Francés',
                 'frecuencia' => 'required|in:unico,diario,semanal',
@@ -62,6 +74,7 @@ class HorarioController extends Controller
             $frecuencia = $request->input('frecuencia');
             $repeticiones = $request->input('repeticiones', 1); // Valor por defecto en caso de ser único
 
+
             // Lógica para crear horarios
             switch ($frecuencia) {
                 case 'unico':
@@ -75,9 +88,17 @@ class HorarioController extends Controller
                     break;
             }
             return redirect()->route('admin.horarios.index')->with('success', 'Horario(s) creado(s) exitosamente');
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            // Redirigir de vuelta con los errores de validación y los datos de entrada
+            return redirect()->back()
+                             ->withErrors($e->validator)
+                             ->withInput();
         } catch (\Exception $e) {
+            // Manejar otros tipos de excepciones
             \Log::error('Error al crear horario: ' . $e->getMessage());
-            return redirect()->back()->with('error', 'Hubo un problema al crear el horario')->withInput();
+            return redirect()->back()
+                             ->with('error', 'Hubo un problema al crear el horario')
+                             ->withInput();
         }
     }
     private function crearHorario($actividadId, $fecha, $hora, $idioma)
@@ -144,25 +165,54 @@ public function edit($id)
 
 public function update(Request $request, $id)
 {
-    $request->validate([
-        'fecha' => 'required|date',
-        'hora' => 'required',
-        'idioma' => 'required',
-    ]);
+    try {
+        $request->validate([
+            'fecha' => [
+                'required',
+                'date',
+                function ($attribute, $value, $fail) use ($request) {
+                    $fechaHora = Carbon::parse($value . ' ' . $request->hora);
+                    if ($fechaHora->isPast()) {
+                        $fail('La fecha y hora del horario no pueden estar en el pasado.');
+                    }
+                },
+            ],
+            'hora' => 'required',
+            'idioma' => 'required',
+        ]);
 
-    $horario = Horario::findOrFail($id);
-    $tipoEdicion = $request->input('tipo_edicion', 'instancia');
+        $horario = Horario::findOrFail($id);
+        $tipoEdicion = $request->input('tipo_edicion', 'instancia');
 
-    if ($tipoEdicion == 'instancia') {
-        // Actualiza solo esta instancia
-        $horario->update($request->only(['fecha', 'hora', 'idioma']));
-    } else {
-        // Actualiza toda la serie
-        $this->updateSerieRecurrente($horario, $request);
+        if ($tipoEdicion == 'instancia') {
+            // Actualiza solo esta instancia
+            $horario->update($request->only(['fecha', 'hora', 'idioma']));
+        } else {
+            // Actualiza toda la serie
+            $this->updateSerieRecurrente($horario, $request);
+        }
+
+        return redirect()->route('admin.horarios.index')->with('success', 'Horario actualizado exitosamente.');
+
+    } catch (\Illuminate\Validation\ValidationException $e) {
+        // Redirigir de vuelta con los errores de validación y los datos de entrada
+        return redirect()->back()
+                         ->withErrors($e->validator)
+                         ->withInput();
+    } catch (\Exception $e) {
+        // Manejar otros tipos de excepciones
+        \Log::error('Error al actualizar el horario: ' . $e->getMessage());
+        return redirect()->back()
+                         ->with('error', 'Hubo un problema al actualizar el horario')
+                         ->withInput();
     }
-
-    return redirect()->route('admin.horarios.index')->with('success', 'Horario actualizado exitosamente.');
 }
+
+
+
+
+
+
 
 
 private function updateSerieRecurrente($horarioOriginal, $request)
@@ -171,20 +221,26 @@ private function updateSerieRecurrente($horarioOriginal, $request)
     DB::beginTransaction();
 
     try {
+        $fechaNueva = $request->input('fecha');
+        $horaNueva = $request->input('hora');
+        $fechaHoraNueva = Carbon::parse($fechaNueva . ' ' . $horaNueva);
+
+        if ($fechaHoraNueva->isPast()) {
+            throw new \Exception('La fecha y hora del horario no pueden estar en el pasado.');
+        }
+
         // Encuentra todos los horarios recurrentes que están asociados con la misma serie
-        // Suponiendo que tienes un identificador o alguna lógica para agrupar horarios en la misma serie
         $horariosRecurrentes = Horario::where('actividad_id', $horarioOriginal->actividad_id)
                                       ->where('fecha', '>=', $horarioOriginal->fecha)
-                                      // Agrega cualquier otra condición que defina tu serie
                                       ->get();
 
         foreach ($horariosRecurrentes as $horarioRecurrente) {
             // Asegúrate de no actualizar horarios pasados
             if ($horarioRecurrente->fecha > today() || ($horarioRecurrente->fecha == today() && $horarioRecurrente->hora > now())) {
                 $horarioRecurrente->update([
-                    'hora' => $request->input('hora'),
+                    'hora' => $horaNueva,
                     'idioma' => $request->input('idioma'),
-                    // Otros campos si son necesarios
+                    'fecha' => $fechaNueva,
                 ]);
             }
         }
@@ -194,7 +250,8 @@ private function updateSerieRecurrente($horarioOriginal, $request)
     } catch (\Exception $e) {
         // En caso de error, revertir la transacción
         DB::rollback();
-        return false;
+        \Log::error('Error al actualizar la serie recurrente: ' . $e->getMessage());
+        return back()->with('error', $e->getMessage());
     }
 }
 
