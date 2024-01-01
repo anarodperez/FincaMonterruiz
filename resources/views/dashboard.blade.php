@@ -21,7 +21,6 @@
             border-top-left-radius: .25rem;
             border-top-right-radius: .25rem;
             color: #0275d8;
-            /* Color de tu elección */
         }
 
         .nav-tabs .nav-link.active {
@@ -29,7 +28,6 @@
             background-color: #fff;
             border-color: #dee2e6 #dee2e6 #fff;
             border-bottom: 2px solid #007bff;
-            /* Color de tu elección */
         }
 
         .tab-content {
@@ -56,7 +54,6 @@
         /* Estilos adicionales para botones y enlaces */
         .btn-custom {
             background-color: #007bff;
-            /* Color de tu elección */
             color: white;
             border-radius: 5px;
             padding: 10px 15px;
@@ -64,7 +61,6 @@
 
         .btn-custom:hover {
             background-color: #0056b3;
-            /* Color más oscuro de tu elección */
         }
     </style>
 @endsection
@@ -72,6 +68,21 @@
 @section('content')
     <main>
         <div class="container py-5">
+
+            @if (session('success'))
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                {{ session('success') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        @endif
+
+        @if (session('error'))
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                {{ session('error') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        @endif
+
             <!-- Panel de Usuario -->
             <div class="user-dashboard">
                 <!-- Pestañas de Navegación -->

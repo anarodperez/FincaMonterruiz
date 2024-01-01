@@ -31,23 +31,19 @@ class AuthenticatedSessionController extends Controller
         ]);
 
         $credentials = $request->only('email', 'password');
+        $remember = $request->filled('remember');
 
-        if (Auth::attempt($credentials)) {
-            // Verificar si el usuario está validado
-            if (Auth::user()->validado) {
-                $request->session()->regenerate();
-                return redirect()->intended(RouteServiceProvider::HOME);
-            } else {
-                // Si el usuario no está validado, cerrar sesión y mostrar un mensaje
-                Auth::logout();
-                return redirect('/login')->with('status', 'login-error');
-            }
+        if (Auth::attempt($credentials, $remember)) {
+            $request->session()->regenerate();
+            return redirect()->intended(RouteServiceProvider::HOME);
         }
 
         return back()->withErrors([
             'email' => __('auth.failed'),
         ])->withInput();
     }
+
+
 
     /**
      * Destroy an authenticated session.

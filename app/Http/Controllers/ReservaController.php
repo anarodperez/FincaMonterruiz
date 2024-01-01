@@ -81,14 +81,28 @@ class ReservaController extends Controller
 
 
 
-public function cancelar($id)
-{
-    $reserva = Reserva::findOrFail($id);
-    $reserva->estado = 'cancelada'; // O el valor que corresponda
-    $reserva->save();
-    // Redirigir de vuelta con un mensaje
-    return back()->with('success', 'Reserva cancelada correctamente.');
-}
+    public function cancelar($id)
+    {
+        $reserva = Reserva::with('actividad')->findOrFail($id);
+
+        // Verificar si la reserva ya está cancelada
+        if ($reserva->estado !== 'cancelada') {
+            $actividad = $reserva->actividad;
+
+            // Aumentar el aforo de la actividad
+            $actividad->aforo += ($reserva->num_adultos + $reserva->num_ninos);
+            $actividad->save();
+
+            // Cambiar el estado de la reserva a 'cancelada'
+            $reserva->estado = 'cancelada';
+            $reserva->save();
+
+            return back()->with('success', 'Reserva cancelada correctamente.');
+        }
+
+        // Manejar el caso en que la reserva ya esté cancelada
+        return back()->with('error', 'La reserva ya estaba cancelada.');
+    }
 
 
 

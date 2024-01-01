@@ -1,69 +1,12 @@
 @extends('layouts.guest')
 
-@section('title', 'Galería de Imágenes')
+@section('title', 'Catálogo de actividades')
 
 @section('css')
     <link rel="stylesheet" href="{{ asset('css/catalogo.css') }}">
 @endsection
 
 @section('content')
-    <style>
-        #calendar {
-            margin: 0 auto;
-            padding: 15px;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-            background-color: #fff;
-        }
-
-        .fc-header-toolbar {
-            margin-bottom: 20px;
-        }
-
-        .custom-card {
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s ease-in-out;
-        }
-
-        .custom-card:hover {
-            transform: translateY(-5px);
-        }
-
-        .custom-card .card-img-top {
-            height: 200px;
-            object-fit: cover;
-        }
-
-        #search {
-            margin-top: 2vh;
-            margin-top: 3vh;
-            margin-bottom: 4vh;
-            text-align: center;
-        }
-
-        .botones {
-            margin-top: 3vh;
-            text-align: center;
-        }
-
-        section nav {
-            background: transparent;
-        }
-
-        .active>.page-link,
-        .page-link.active {
-
-            background-color: #5c7c64;
-            ;
-            border-color: #5c7c64;
-            ;
-            color: white
-        }
-
-        .page-link {
-            color: #5c7c64;
-        }
-    </style>
     <main>
         <div class="container-fluid">
             <!-- Encabezado -->
@@ -76,11 +19,10 @@
 
             <div class="row">
 
-                <!-- Campo de búsqueda -->
-                <div class="d-flex justify-content-center align-items-center">
+                <!-- Campo de búsqueda con ícono de lupa -->
+                <div class="d-flex justify-content-center align-items-center busqueda" style="position: relative;">
                     <input type="text" id="search" class="form-control" placeholder="Escribe el nombre de la actividad"
                         onkeyup="buscarActividades()">
-
                 </div>
 
                 <!-- Filtros en el aside -->
@@ -88,14 +30,6 @@
                     <div class="mb-4">
                         <h3>Filtrar Actividades</h3>
                         <form action="{{ route('catalogo.filter') }}" method="GET" name="form">
-                            {{-- <div class="form-group">
-                                <label for="categoria">Categoría:</label>
-                                <select name="categoria" id="categoria" class="form-control">
-                                    <option value="">Todas</option>
-                                    <option value="aventura">Aventura</option>
-                                    <option value="naturaleza">Naturaleza</option>
-                                </select>
-                            </div> --}}
                             <div class="form-group">
                                 <label for="publico">Público objetivo:</label>
                                 <select name="publico" id="publico" class="form-control">
@@ -128,7 +62,7 @@
                             </div>
                             <div class="botones">
                                 <button type="submit" class="btn btn-primary">Filtrar</button>
-                                <button type="button" class="btn btn-secondary" onclick="borrarFiltros()">Borrar
+                                <button type="button" class="btn btn-danger" onclick="borrarFiltros()">Borrar
                                     Filtros</button>
                             </div>
                         </form>
@@ -196,10 +130,6 @@
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
             @endif
-
-
-
-
             <h2 class="my-4 text-center">Gestión de Horarios</h2>
             <div class="container my-4">
                 <div class="filtro-idioma text-center">
@@ -249,52 +179,51 @@
 
 
         <script>
-           document.addEventListener('DOMContentLoaded', function() {
-    var calendarEl = document.getElementById('calendar');
-    var calendar = new FullCalendar.Calendar(calendarEl, {
-        headerToolbar: {
-            left: 'dayGridMonth,timeGridWeek,timeGridDay',
-            center: 'title'
-        },
-        initialView: 'dayGridMonth',
-        headerToolbar: {
-            left: 'dayGridMonth,timeGridWeek,timeGridDay',
-            center: 'title',
-            right: 'today prev,next'
-        },
-        buttonText: {
-            today: 'Hoy',
-            month: 'Mes',
-            week: 'Semana',
-            day: 'Día'
-        },
+            document.addEventListener('DOMContentLoaded', function() {
+                var calendarEl = document.getElementById('calendar');
+                var calendar = new FullCalendar.Calendar(calendarEl, {
+                    headerToolbar: {
+                        left: 'dayGridMonth,timeGridWeek,timeGridDay',
+                        center: 'title'
+                    },
+                    initialView: 'dayGridMonth',
+                    headerToolbar: {
+                        left: 'dayGridMonth,timeGridWeek,timeGridDay',
+                        center: 'title',
+                        right: 'today prev,next'
+                    },
+                    buttonText: {
+                        today: 'Hoy',
+                        month: 'Mes',
+                        week: 'Semana',
+                        day: 'Día'
+                    },
 
-        locale: 'es',
+                    locale: 'es',
 
-        eventClick: function(info) {
-            @if (Auth::check())
-                // Usuario autenticado: permite la reserva
-                var horarioId = info.event.extendedProps.horario_id;
-                window.location.href = `/reservar/${horarioId}`;
-            @else
-                // Usuario no autenticado: redirige al inicio de sesión
-                window.location.href = '/login';
-            @endif
-        },
-        events: @json($events, JSON_PRETTY_PRINT)
-    });
+                    eventClick: function(info) {
+                        @if (Auth::check())
+                            // Usuario autenticado: permite la reserva
+                            var horarioId = info.event.extendedProps.horario_id;
+                            window.location.href = `/reservar/${horarioId}`;
+                        @else
+                            // Usuario no autenticado: redirige al inicio de sesión
+                            window.location.href = '/login';
+                        @endif
+                    },
+                    events: @json($events, JSON_PRETTY_PRINT)
+                });
 
-    // Renderizar el calendario
-    calendar.render();
+                // Renderizar el calendario
+                calendar.render();
 
-    // Filtrar eventos pasados
-    calendar.getEvents().forEach(function(event) {
-        if (event.start < new Date()) {
-            event.remove(); // Elimina los eventos pasados
-        }
-    });
-});
-
+                // Filtrar eventos pasados
+                calendar.getEvents().forEach(function(event) {
+                    if (event.start < new Date()) {
+                        event.remove(); // Elimina los eventos pasados
+                    }
+                });
+            });
         </script>
 
         <script>
@@ -329,7 +258,7 @@
                     return response.json();
                 })
                 .then(data => {
-                    console.log("Datos recibidos:", data); // Aquí se imprime la respuesta del servidor
+                    console.log("Datos recibidos:", data);
 
                     var html = '';
                     data.forEach(actividad => {
@@ -350,13 +279,12 @@
                 })
                 .catch(error => {
                     console.error('Error al realizar la búsqueda:', error);
-                    // Aquí puedes manejar el error, como mostrar un mensaje al usuario
                 });
         }
 
         function normalizeString(string) {
             string = string.toLowerCase();
-            string = string.normalize("NFD").replace(/[\u0300-\u036f]/g, ""); // Remueve las tildes
+            string = string.normalize("NFD").replace(/[\u0300-\u036f]/g, ""); // Quita las tildes
             return string;
         }
     </script>
@@ -373,12 +301,7 @@
                 document.getElementById('precio_max').value = '';
             }
 
-            // Asegúrate de que 'form-filtro' es el ID correcto de tu formulario
             document.forms['form'].submit();
         }
     </script>
-
-
-
-
 @endsection

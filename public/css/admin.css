@@ -114,3 +114,31 @@ background-color: red;
 color: white;
 }
 
+.crear-actividad{
+    margin-left: 4vw;
+}
+
+/* Paginación  */
+
+.contenedor-tabla nav {
+    background: transparent;
+}
+
+.active>.page-link,
+.page-link.active {
+
+    background-color: #5c7c64;
+    ;
+    border-color: #5c7c64;
+    ;
+    color: white
+}
+
+.page-link {
+    color: #5c7c64;
+}
+
+.pagination{
+    margin-left: 4vw;
+margin-bottom: 6vh;
+}

@@ -15,9 +15,10 @@
 
             <!-- Contenido principal -->
             <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
-                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                <div
+                    class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
                     <h1 class="h2">Panel de Control</h1>
-                    {{-- <div class="btn-toolbar mb-2 mb-md-0">
+                    <div class="btn-toolbar mb-2 mb-md-0">
                         <div class="btn-group mr-2">
                             <button class="btn btn-sm btn-outline-secondary">Acción 1</button>
                             <button class="btn btn-sm btn-outline-secondary">Acción 2</button>
@@ -25,32 +26,56 @@
                         <button class="btn btn-sm btn-outline-secondary dropdown-toggle">
                             Otras acciones
                         </button>
-                    </div> --}}
+                    </div>
                 </div>
 
-                <!-- Resumen del enoturismo -->
                 <div class="row">
                     <div class="col-md-4">
                         <div class="card">
                             <div class="card-body">
                                 <h5 class="card-title">Actividades Disponibles</h5>
-                                <p class="card-text">30</p>
+                                <p class="card-text">{{ $actividadesDisponibles }}</p>
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-4">
+
+                    {{-- <div class="col-md-4">
                         <div class="card">
                             <div class="card-body">
                                 <h5 class="card-title">Categorías</h5>
                                 <p class="card-text">10</p>
                             </div>
                         </div>
-                    </div>
+                    </div> --}}
                     <div class="col-md-4">
                         <div class="card">
                             <div class="card-body">
                                 <h5 class="card-title">Usuarios Registrados</h5>
-                                <p class="card-text">500</p>
+                                <p class="card-text">{{ $usuariosRegistrados }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Reservas recientes -->
+                <div class="row mt-4">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Reservas Recientes</h5>
+                                <ul class="list-group">
+                                    @foreach ($reservasRecientes as $reserva)
+                                        <li class="list-group-item">
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                <span>{{ $reserva->actividad->nombre }}</span>
+                                                <!-- Asumiendo que tienes una relación con Actividad -->
+                                                <span class="badge badge-primary badge-pill">{{ $reserva->hora }}</span>
+                                            </div>
+                                            <p>Usuario: {{ $reserva->usuario->nombre }}</p>
+                                            <!-- Asumiendo que tienes una relación con Usuario -->
+                                        </li>
+                                    @endforeach
+                                </ul>
                             </div>
                         </div>
                     </div>
@@ -59,7 +84,7 @@
                 <!-- Valoraciones y comentarios -->
                 <div class="row mt-4">
                     <div class="col-md-12">
-                        <div class="card">
+                        <div class="card" style="margin-bottom: 8vh;">
                             <div class="card-body">
                                 <h5 class="card-title">Valoraciones y Comentarios</h5>
                                 <!-- Puedes mostrar una lista de las últimas valoraciones y comentarios -->
@@ -84,37 +109,8 @@
                         </div>
                     </div>
                 </div>
-
-                <!-- Reservas recientes -->
-                <div class="row mt-4">
-                    <div class="col-md-12">
-                        <div class="card">
-                            <div class="card-body">
-                                <h5 class="card-title">Reservas Recientes</h5>
-                                <!-- Puedes mostrar una lista de las últimas reservas -->
-                                <ul class="list-group">
-                                    <li class="list-group-item">
-                                        <div class="d-flex justify-content-between align-items-center">
-                                            <span>Actividad 1</span>
-                                            <span class="badge badge-primary badge-pill">10:00 AM</span>
-                                        </div>
-                                        <p>Usuario: Usuario 3</p>
-                                    </li>
-                                    <li class="list-group-item">
-                                        <div class="d-flex justify-content-between align-items-center">
-                                            <span>Actividad 2</span>
-                                            <span class="badge badge-primary badge-pill">2:00 PM</span>
-                                        </div>
-                                        <p>Usuario: Usuario 4</p>
-                                    </li>
-                                    <!-- Agrega más elementos según sea necesario -->
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                </div>
-            </main>
         </div>
+        </main>
+    </div>
     </div>
 @endsection

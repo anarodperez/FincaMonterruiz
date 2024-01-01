@@ -31,13 +31,16 @@ use App\Http\Controllers\PaypalController;
 Route::get('/', [IndexController::class, 'home'])->name('home');
 
 Route::get('/dashboard', function () {
-    if (Auth::user()->es_admin) {
+    if (Auth::user() && Auth::user()->es_admin) {
+        // Redirige al usuario administrador a la ruta 'admin.index'
         return redirect()->route('admin.index');
+    } else {
+
+        return app(UsuarioController::class)->showDashboard();
     }
-    return view('dashboard');
-})
-    ->middleware(['auth', 'verified'])
-    ->name('dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');
+
+
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -132,8 +135,6 @@ Route::post('/reservar/store', [ReservaController::class, 'store'])->name('reser
 //Cancelar reserva
 Route::post('/reservas/{reserva}/cancelar', [ReservaController::class, 'cancelar'])->name('reservas.cancelar');
 
-
-Route::get('/dashboard', [UsuarioController::class, 'showDashboard'])->name('dashboard');
 
 // Carga de contenido dinámico para las secciones del dashboard
 Route::get('/dashboard/cargar-reservas', [UsuarioController::class, 'cargarReservas'])->name('dashboard.cargarReservas');

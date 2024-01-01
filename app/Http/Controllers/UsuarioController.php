@@ -13,19 +13,29 @@ class UsuarioController extends Controller
 {
     public function index(Request $request)
     {
-        $usuarios = User::query();
+        // Inicia la consulta
+        $query = User::query();
 
+        // Aplica filtro si se recibe un nombre
         if ($request->has('nombre')) {
             $nombre = $request->input('nombre');
-            $usuarios->where('nombre', 'like', '%' . $nombre . '%');
+            $query->where('nombre', 'like', '%' . $nombre . '%');
         }
 
-        $usuarios = $usuarios->get();
+        // Aplica paginación
+        $usuarios = $query->paginate(5);
 
+        // Asegura que los parámetros de búsqueda se mantengan durante la paginación
+        if ($request->has('nombre')) {
+            $usuarios->appends(['nombre' => $nombre]);
+        }
+
+        // Retorna la vista con los usuarios
         return view('admin.usuarios.index', [
             'usuarios' => $usuarios,
         ]);
     }
+
 
     public function validar(User $usuario)
     {

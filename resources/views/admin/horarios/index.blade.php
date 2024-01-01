@@ -13,13 +13,6 @@
         .fc-header-toolbar {
             margin-bottom: 20px;
         }
-
-        /* Estilos para los eventos del calendario */
-        /* .fc-event {
-            background-color: #007bff;
-            border-color: #007bff;
-            color: #fff;
-        } */
     </style>
 
 
@@ -32,22 +25,22 @@
         @endif
 
         @if (session('error'))
-        <div class="alert alert-danger alert-dismissible fade show">
-            {{ session('error') }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-    @endif
+            <div class="alert alert-danger alert-dismissible fade show">
+                {{ session('error') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        @endif
 
-    @if ($errors->any())
-        <div class="alert alert-danger alert-dismissible fade show">
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-    @endif
+        @if ($errors->any())
+            <div class="alert alert-danger alert-dismissible fade show">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        @endif
 
 
 
@@ -61,7 +54,6 @@
                 <button class="btn btn-outline-success mx-1" onclick="filtrarIdioma('Alemán')">Alemán</button>
                 <button class="btn btn-outline-danger mx-1" onclick="filtrarIdioma('Italiano')">Italiano</button>
                 <button class="btn btn-outline-warning mx-1" onclick="filtrarIdioma('Francés')">Francés</button>
-                <!-- Agrega más botones según los idiomas que manejes -->
             </div>
         </div>
         <!-- Modal -->
@@ -100,10 +92,6 @@
                     <a href="{{ route('admin.horarios.create') }}" class="btn btn-primary">
                         <span class="fas fa-plus"></span> Crear evento
                     </a>
-                    <!-- Enlace para redirigir a la página de selección de horario para borrar -->
-                    {{-- <a href="{{ route('admin.horarios.select-delete') }}" class="btn btn-danger">
-                        <span class="fas fa-minus"></span> Borrar evento
-                    </a> --}}
                 </p>
 
                 <!-- Calendario de horarios existentes -->
@@ -184,6 +172,13 @@
 
             // Renderizar el calendario
             calendar.render();
+
+            // Filtrar eventos pasados
+            calendar.getEvents().forEach(function(event) {
+                if (event.start < new Date()) {
+                    event.remove(); // Elimina los eventos pasados
+                }
+            });
         });
     </script>
     <script>

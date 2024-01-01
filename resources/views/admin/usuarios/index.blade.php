@@ -12,13 +12,16 @@
         <div class="content contenedor-tabla">
             <form id="searchForm" action="{{ route('admin.usuarios.index') }}" method="GET" class="mb-3">
                 <div class="input-group">
-                    <input type="text" name="nombre" id="nombre" class="form-control" placeholder="Buscar por nombre" value="{{ request('nombre') }}">
+                    <input type="text" name="nombre" id="nombre" class="form-control" placeholder="Buscar por nombre"
+                        value="{{ request('nombre') }}">
                     <button type="submit" class="btn btn-primary">Buscar</button>
                 </div>
             </form>
 
             <div class="table-responsive">
                 <table class="tabla">
+                       {{-- Agregar enlaces de paginación --}}
+                       {{ $usuarios->links() }}
                     <thead>
                         <tr>
                             <th>Nombre</th>
@@ -27,7 +30,6 @@
                             <th>Teléfono</th>
                             <th>Fecha nacimiento</th>
                             <th>Validado</th>
-                            <th>Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -39,44 +41,29 @@
                                 <td>{{ $usuario->telefono }}</td>
                                 <td>{{ $usuario->fecha_nacimiento }}</td>
                                 <td>
-                                    <form action="{{ route('admin.usuarios.validar', $usuario->id) }}" method="POST" class="inline">
+                                    <form action="{{ route('admin.usuarios.validar', $usuario->id) }}" method="POST"
+                                        class="inline">
                                         @csrf
                                         @method('PUT')
                                         <input type="hidden" name="id" value="{{ $usuario->id }}">
 
                                         @if ($usuario->validado)
-                                            <button type="submit" class="btn boton-rojo" style="background-color:red">Invalidar</button>
+                                            <button type="submit" class="btn boton-rojo"
+                                                style="background-color:red">Invalidar</button>
                                         @else
-                                            <button type="submit" class="btn boton-verde" style="background-color:green">Validar</button>
+                                            <button type="submit" class="btn boton-verde"
+                                                style="background-color:green">Validar</button>
                                         @endif
                                     </form>
                                 </td>
                             </tr>
                         @endforeach
+
                     </tbody>
                 </table>
+
             </div>
         </div>
     </div>
-    <script>
-        $(document).ready(function() {
-            // Configura el autocompletado
-            $('#nombre').autocomplete({
-                source: function(request, response) {
-                    // Hacer una solicitud AJAX para obtener los resultados de búsqueda
-                    $.ajax({
-                        url: '{{ route("admin.usuarios.autocomplete") }}',
-                        dataType: 'json',
-                        data: {
-                            term: request.term
-                        },
-                        success: function(data) {
-                            response(data);
-                        }
-                    });
-                },
-                minLength: 2 // Número mínimo de caracteres antes de realizar la búsqueda
-            });
-        });
-    </script>
+
 @endsection

@@ -14,7 +14,7 @@ class ActividadController extends Controller
 {
     public function index()
     {
-        $actividades = Actividad::all();
+        $actividades = Actividad::paginate(4);
         return view('admin.actividades.index', [
             'actividades' => $actividades,
         ]);
