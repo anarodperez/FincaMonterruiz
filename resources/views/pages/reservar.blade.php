@@ -22,17 +22,25 @@
                     <label for="experiencia" style="margin-right: 10px;">Experiencia seleccionada:</label>
                     <p id="experiencia">{{ $horario->actividad->nombre }}</p>
                 </div>
+                <!-- Precio por adulto -->
+                @if (!is_null($horario->actividad->precio_adulto))
+                    <div class="mb-3 d-flex align-items-baseline">
+                        <label for="precio" style="margin-right: 10px;">Precio por persona:</label>
+                        <p id="precio">{{ $horario->actividad->precio_adulto }} €</p>
+                    </div>
+                @endif
+
+                <!-- Precio para niños -->
+                @if (!is_null($horario->actividad->precio_nino))
+                    <div class="mb-3 d-flex align-items-baseline">
+                        <label for="precio_nino" style="margin-right: 10px;">Precio niños:</label>
+                        <p id="precio_nino">{{ $horario->actividad->precio_nino }} €</p>
+                    </div>
+                @endif
+
                 <div class="mb-3 d-flex align-items-baseline">
-                    <label for="precio" style="margin-right: 10px;">Precio por persona:</label>
-                    <p id="precio">{{ $horario->actividad->precio_adulto }} €</p>
-                </div>
-                <div class="mb-3 d-flex align-items-baseline">
-                    <label for="precio_nino" style="margin-right: 10px;">Precio niños:</label>
-                    <p id="precio_nino">{{ $horario->actividad->precio_nino }} €</p>
-                </div>
-                <div class="mb-3 d-flex align-items-baseline">
-                    <label for="total" style="margin-right: 10px;">Total:</label>
-                    <p id="total">€</p>
+                    <label for="total" style="margin-right: 10px;">TOTAL:</label>
+                    <p id="total"></p>
                 </div>
                 <div class="mb-3 d-flex align-items-baseline">
                     <label for="idioma" style="margin-right: 10px;">IDIOMA DE LA ACTIVIDAD:</label>
@@ -43,49 +51,53 @@
             <!-- Columna para rellenar datos por el usuario -->
             <div class="col-md-6">
                 <h2 class="mb-4">Completa tus datos</h2>
-                <form>
-                    <div class="mb-3">
-                        <label for="nombre">Nombre:</label>
-                        <input type="text" class="form-control" id="nombre" required>
+                <form action="{{ route('reservar.store') }}" method="POST" id="formularioReserva"
+                    onsubmit="return validarFormulario()">
+                    @csrf
+                    <input type="hidden" name="horario_id" value="{{ $horario->id }}">
+
+                    <div class="mb-3 d-flex align-items-baseline">
+                        <label for="nombre"style="margin-right: 10px;">Nombre:</label>
+                        <p id="nombre">{{ $usuario->nombre }}</p>
                     </div>
-                    <div class="mb-3">
-                        <label for="apellidos">Apellidos:</label>
-                        <input type="text" class="form-control" id="apellidos" required>
+                    <div class="mb-3 d-flex align-items-baseline">
+                        <label for="apellidos"style="margin-right: 10px;">Apellidos:</label>
+                        <p id="apellidos">{{ $usuario->apellido1 }} {{ $usuario->apellido2 }}</p>
                     </div>
-                    <div class="mb-3">
-                        <label for="email">Email:</label>
-                        <input type="text" class="form-control" id="email" required>
+                    <div class="mb-3 d-flex align-items-baseline">
+                        <label for="email"style="margin-right: 10px;">Email:</label>
+                        <p id="email">{{ $usuario->email }} </p>
                     </div>
-                    <div class="mb-3">
-                        <label for="telefono">Teléfono:</label>
-                        <input type="text" class="form-control" id="telefono" required>
+                    <div class="mb-3 d-flex align-items-baseline">
+                        <label for="telefono"style="margin-right: 10px;">Teléfono:</label>
+                        <p id="telefono">{{ $usuario->telefono }}</p>
                     </div>
                     <div class="mb-3">
                         <label for="numAdultos">Número de Adultos:</label>
                         <input type="number" class="form-control" id="numAdultos" name="num_adultos" min="1"
-                            max="10" value="" required>
+                            max="10" required onchange="calcularTotal()">
                     </div>
                     <div class="mb-3">
                         <label for="numNinos">Número de Niños:</label>
-                        <input type="number" class="form-control" id="numNinos" name="num_ninos" min="0" required>
+                        <input type="number" class="form-control" id="numNinos" name="num_ninos" min="0"
+                            onchange="calcularTotal()">
                     </div>
                     <!-- Desplegable para seleccionar el país -->
-                    <div class="mb-3">
+                    {{-- <div class="mb-3">
                         <label for="pais">País:</label>
                         <select class="form-control" id="pais" name="pais" required>
                             <option value="">-- Seleccionar un país --</option>
                             <option value="espana">España</option>
                             <option value="francia">Francia</option>
                             <option value="alemania">Alemania</option>
-                            <!-- Agrega más opciones de países aquí -->
                         </select>
-                    </div>
+                    </div> --}}
 
                     <!-- Campo para el código postal -->
-                    <div class="mb-3">
+                    {{-- <div class="mb-3">
                         <label for="codigoPostal">Código Postal:</label>
                         <input type="text" class="form-control" id="codigoPostal" name="codigo_postal" required>
-                    </div>
+                    </div> --}}
 
                     <div class="mb-3">
                         <label for="observaciones">Observaciones:</label>
@@ -96,6 +108,44 @@
                 </form>
             </div>
         </div>
+        <script defer>
+            let precioAdultoRaw = "{{ $horario->actividad->precio_adulto ?? '0' }}";
+            let precioNinoRaw = "{{ $horario->actividad->precio_nino ?? '0' }}";
+
+            let precioAdulto = parseFloat(precioAdultoRaw);
+            let precioNino = parseFloat(precioNinoRaw);
+
+            function calcularTotal() {
+                let numAdultos = document.getElementById('numAdultos').value;
+                let numNinos = document.getElementById('numNinos').value;
+
+                numAdultos = numAdultos ? parseInt(numAdultos) : 0;
+                numNinos = numNinos ? parseInt(numNinos) : 0;
+
+                let total = (numAdultos * precioAdulto) + (numNinos * precioNino);
+                document.getElementById('total').textContent = total.toFixed(2) + ' €';
+            }
+
+
+
+            function validarFormulario() {
+                let numAdultos = document.getElementById('numAdultos').value;
+                let numNinos = document.getElementById('numNinos').value;
+
+                // Convertir a números y validar
+                numAdultos = numAdultos ? parseInt(numAdultos) : 0;
+                numNinos = numNinos ? parseInt(numNinos) : 0;
+
+                // Comprobar si al menos uno de los campos tiene un valor
+                if (numAdultos === 0 && numNinos === 0) {
+                    alert('Debes ingresar al menos un adulto o un niño.');
+                    return false; // Esto evitará que el formulario se envíe
+                }
+
+                return true; // El formulario se puede enviar
+            }
+        </script>
+
     </div>
 @endsection
 

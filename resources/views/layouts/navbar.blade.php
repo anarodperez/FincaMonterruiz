@@ -46,6 +46,10 @@
                             <li><a class="dropdown-item" href={{ route('admin.index') }}>Portal Administrador</a></li>
                             <?php } ?>
                             <li><a class="dropdown-item" href="{{ route('profile.edit') }}">Perfil</a></li>
+                            <?php
+                            if (!(Auth::user()->es_admin)) { ?>
+                                <li><a class="dropdown-item" href={{ route('dashboard') }}>Dashboard</a></li>
+                                <?php } ?>
                             <form method="POST" action="{{ route('logout') }}">
                                 @csrf
                                 <li><a class="dropdown-item" href="{{ route('logout') }}"

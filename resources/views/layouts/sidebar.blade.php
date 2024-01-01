@@ -29,7 +29,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">
+                            <a class="nav-link" href="{{ route('admin.reservas.index') }}">
                                 <i class="fas fa-calendar-check"></i> Reservas
                             </a>
                         </li>

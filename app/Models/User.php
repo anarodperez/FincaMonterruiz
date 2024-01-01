@@ -47,4 +47,9 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    public function reservas()
+    {
+        return $this->hasMany(Reserva::class);
+    }
 }

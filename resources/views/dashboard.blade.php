@@ -82,38 +82,56 @@
                     <li class="nav-item">
                         <a class="nav-link" data-bs-toggle="tab" href="#valoraciones">Valoraciones</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" data-bs-toggle="tab" href="#perfil">Perfil</a>
-                    </li>
                 </ul>
 
                 <!-- Contenido de las Pestañas -->
                 <div class="tab-content">
-                    <!-- Sección Reservas -->
+                    {{-- Sección Reservas --}}
                     <div id="reservas" class="tab-pane fade show active">
                         <h2 class="tab-section-header">Tus Reservas</h2>
-                        <div class="row">
-                            <!-- Tarjeta de Reserva de Ejemplo -->
-                            <div class="col-md-4 mb-4">
-                                <div class="card card-detail">
-                                    <div class="card-body">
-                                        <h5 class="card-title">Reserva en Hotel Playa Azul</h5>
-                                        <p class="card-text">Fecha: 2023-07-15</p>
-                                        <p class="card-text">Habitación: Doble con vista al mar</p>
-                                        <p class="card-text">Precio: $200/noche</p>
-                                        <a href="#" class="btn btn-custom-primary">Ver Detalles</a>
-                                        <a href="#" class="btn btn-custom-secondary">Cancelar</a>
+                        <div id="reservas" class="tab-pane fade show active">
+                            <h3>Reservas Activas</h3>
+                            <div class="row">
+                                @foreach ($reservasActivas as $reserva)
+                                    <div class="card card-reserva">
+                                        <div class="card-body">
+                                            <!-- Detalles de la reserva -->
+                                            <p class="card-text">Fecha: {{ $reserva->horario->fecha }}</p>
+                                            <p class="card-text">Hora: {{ $reserva->horario->hora }}</p>
+                                            <p class="card-text">Estado: {{ $reserva->estado }}</p>
+                                            @php
+                                                $fechaReserva = \Carbon\Carbon::parse($reserva->horario->fecha . ' ' . $reserva->horario->hora);
+                                                $ahora = \Carbon\Carbon::now();
+                                                $diferenciaHoras = $ahora->diffInHours($fechaReserva, false);
+                                            @endphp
+                                            @if ($diferenciaHoras >= 48)
+                                                <form action="{{ route('reservas.cancelar', $reserva->id) }}" method="POST">
+                                                    @csrf
+                                                    <button type="submit" class="btn btn-danger">Cancelar Reserva</button>
+                                                </form>
+                                            @endif
+                                        </div>
                                     </div>
-                                </div>
+                                @endforeach
                             </div>
-                            <!-- Repetir con más tarjetas de reserva de prueba... -->
                         </div>
-                        <button class="btn btn-custom-primary mt-3">Nueva Reserva</button>
+
+
+
+                            {{-- Reservas Pasadas --}}
+                            <h3>Reservas Pasadas</h3>
+                            <div class="row">
+                                @foreach ($reservasPasadas as $reserva)
+                                    <p class="card-text">Fecha: {{ $reserva->horario->fecha }}</p>
+                                    <p class="card-text">Hora: {{ $reserva->horario->hora }}</p>
+                                    <p class="card-text">Estado: {{ $reserva->estado }}</p>
+                                @endforeach
+                            </div>
+                        </div>
                     </div>
 
-
                     <!-- Sección Valoraciones -->
-                    <div id="valoraciones" class="tab-pane fade">
+                    {{-- <div id="valoraciones" class="tab-pane fade">
                         <h2 class="tab-section-header">Valoraciones Recientes</h2>
                         <div class="row">
                             <!-- Tarjeta de Valoración de Ejemplo -->
@@ -128,40 +146,12 @@
                                     </div>
                                 </div>
                             </div>
-                            <!-- Repetir con más tarjetas de valoración de prueba... -->
+
                         </div>
                         <button class="btn btn-custom-secondary mt-3">Añadir Valoración</button>
-                    </div>
-
-
-                    <!-- Sección Perfil -->
-                    <div id="perfil" class="tab-pane fade">
-                        <h2 class="tab-section-header">Tu Perfil</h2>
-                        <!-- Detalles del perfil -->
-                        <div class="card card-detail">
-                            <div class="card-body">
-                                <h5 class="card-title">Nombre de Usuario</h5>
-                                <p class="card-text">Correo Electrónico: usuario@ejemplo.com</p>
-                                <p class="card-text">Teléfono: +1 234 567 8901</p>
-                                <p class="card-text">Dirección: Calle Falsa 123, Ciudad, País</p>
-                            </div>
-                        </div>
-                        <button class="btn btn-custom-primary mt-3">Editar Perfil</button>
-                    </div>
-
+                    </div> --}}
                 </div>
             </div>
         </div>
     </main>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Inicialización de Swiper para Reservas
-            const swiperReservas = new Swiper('.swiper-reservas', {
-                // Configuración de Swiper
-            });
-
-            // Repetir para otras secciones si es necesario
-        });
-    </script>
 @endsection

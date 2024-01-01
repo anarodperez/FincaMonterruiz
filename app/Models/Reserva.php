@@ -20,15 +20,13 @@ class Reserva extends Model
         return $this->belongsTo(Horario::class);
     }
 
-    // Si necesitas una relación con el modelo Usuario
     public function usuario()
     {
         return $this->belongsTo(User::class, 'user_id');
     }
 
-     // Si necesitas una relación con el modelo Actividad
-     public function actividad()
-     {
-         return $this->belongsTo(User::class, 'actividad_id');
-     }
+    public function actividad()
+    {
+        return $this->belongsTo(Actividad::class, 'actividad_id');
+    }
 }

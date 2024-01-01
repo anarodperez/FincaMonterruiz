@@ -62,18 +62,17 @@ Route::middleware(['admin'])->group(function () {
     Route::put('/usuarios/{usuario}/validar', [UsuarioController::class, 'validar'])->name('admin.usuarios.validar');
 
     //Horarios
-     Route::get('/horarios/index', [HorarioController::class, 'index'])->name('admin.horarios.index');
-     Route::get('/horarios/create', [HorarioController::class, 'create'])->name('admin.horarios.create');
-     Route::post('/horarios/create', [HorarioController::class, 'store'])->name('admin.horarios.store');
-     Route::delete('/admin/horarios/{horario}', [HorarioController::class, 'destroy'])->name('admin.horarios.destroy');
-     Route::get('/admin/horarios/edit/{id}', [HorarioController::class, 'edit'])->name('admin.horarios.edit');
-     Route::put('/admin/horarios/update/{id}', [HorarioController::class, 'update'])->name('admin.horarios.update');
+    Route::get('/horarios/index', [HorarioController::class, 'index'])->name('admin.horarios.index');
+    Route::get('/horarios/create', [HorarioController::class, 'create'])->name('admin.horarios.create');
+    Route::post('/horarios/create', [HorarioController::class, 'store'])->name('admin.horarios.store');
+    Route::delete('/admin/horarios/{horario}', [HorarioController::class, 'destroy'])->name('admin.horarios.destroy');
+    Route::get('/admin/horarios/edit/{id}', [HorarioController::class, 'edit'])->name('admin.horarios.edit');
+    Route::put('/admin/horarios/update/{id}', [HorarioController::class, 'update'])->name('admin.horarios.update');
 
-
+    //Reservas
+    Route::get('/reservas/index', [ReservaController::class, 'index'])->name('admin.reservas.index');
 
 });
-
-
 
 Route::get('/login/google', function () {
     return Socialite::driver('google')->redirect();
@@ -112,16 +111,32 @@ Route::get('/catalogo', [CatalogoController::class, 'index'])->name('pages.catal
 Route::get('/buscar-actividades', [CatalogoController::class, 'buscar'])->name('pages.catalogo.buscar');
 Route::get('/catalogo/filter', [CatalogoController::class, 'filter'])->name('catalogo.filter');
 
-//Reserva
+// Detalle de la actividad
 Route::get('/actividades/{id}', [ActividadController::class, 'detalleActividad'])->name('pages.detalleActividad');
-Route::get('/reservar/{horarioId}', [ReservaController::class, 'show'])
-     ->middleware('auth')
-     ->name('reservar.show');
 
-     Route::post('/session/set', function (Request $request) {
-        session(['reserva_fecha' => $request->fecha, 'reserva_hora' => $request->hora]);
-        return response()->json(['message' => 'Session updated']);
-    });
+// Mostrar la página de reserva (requiere autenticación)
+Route::get('/reservar/{horarioId}', [ReservaController::class, 'show'])
+    ->middleware('auth')
+    ->name('reservar.show');
+
+// Almacenar los datos de la reserva en la sesión
+Route::post('/session/set', function (Request $request) {
+    session(['reserva_fecha' => $request->fecha, 'reserva_hora' => $request->hora]);
+    return response()->json(['message' => 'Session updated']);
+});
+
+// Procesar y almacenar la reserva
+Route::post('/reservar/store', [ReservaController::class, 'store'])->name('reservar.store');
+
+//Cancelar reserva
+Route::post('/reservas/{reserva}/cancelar', [ReservaController::class, 'cancelar'])->name('reservas.cancelar');
+
+
+Route::get('/dashboard', [UsuarioController::class, 'showDashboard'])->name('dashboard');
+
+// Carga de contenido dinámico para las secciones del dashboard
+Route::get('/dashboard/cargar-reservas', [UsuarioController::class, 'cargarReservas'])->name('dashboard.cargarReservas');
+Route::get('/dashboard/cargar-valoraciones', [UsuarioController::class, 'cargarValoraciones'])->name('dashboard.cargarValoraciones');
 
 
 Route::post('/contact', [FormContactController::class, 'submit'])->name('contact.submit');
