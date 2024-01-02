@@ -5,7 +5,6 @@
 @endsection
 
 @section('css')
-    <!-- Tus estilos y enlaces CSS existentes aquí -->
     <style>
         /* Estilos generales del panel de usuario */
         .user-dashboard {
@@ -20,14 +19,16 @@
             border: 1px solid transparent;
             border-top-left-radius: .25rem;
             border-top-right-radius: .25rem;
-            color: #0275d8;
+            color: #5c7c64;
+            padding: 12px 20px;
+            font-size: 1.5rem;
         }
 
         .nav-tabs .nav-link.active {
             color: #495057;
             background-color: #fff;
             border-color: #dee2e6 #dee2e6 #fff;
-            border-bottom: 2px solid #007bff;
+            border-bottom: 2px solid #5c7c64;
         }
 
         .tab-content {
@@ -62,6 +63,29 @@
         .btn-custom:hover {
             background-color: #0056b3;
         }
+
+        /* Estilos personalizados para la alerta */
+        .alert-info-custom {
+            background-color: #d1ecf1;
+            /* Un azul claro suave */
+            color: #0c5460;
+            /* Un tono de texto que combine con el fondo azul */
+            border-color: #bee5eb;
+            /* Un borde que complemente el color de fondo */
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+        }
+
+        /* Ícono para el mensaje de alerta */
+        .alert-icon {
+            font-size: 20px;
+            /* Tamaño del ícono */
+            margin-right: 10px;
+            /* Espacio entre el ícono y el texto */
+        }
     </style>
 @endsection
 
@@ -70,122 +94,124 @@
         <div class="container py-5">
 
             @if (session('success'))
-            <div class="alert alert-success alert-dismissible fade show" role="alert">
-                {{ session('success') }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-        @endif
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    {{ session('success') }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            @endif
 
-        @if (session('error'))
-            <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                {{ session('error') }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-        @endif
+            @if (session('error'))
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    {{ session('error') }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            @endif
 
-            <!-- Panel de Usuario -->
-            <div class="user-dashboard">
-                <!-- Pestañas de Navegación -->
-                <ul class="nav nav-tabs">
-                    <li class="nav-item">
-                        <a class="nav-link active" data-bs-toggle="tab" href="#reservas">Reservas</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" data-bs-toggle="tab" href="#valoraciones">Valoraciones</a>
-                    </li>
-                </ul>
 
-                <!-- Contenido de las Pestañas -->
-                <div class="tab-content">
-                    {{-- Sección Reservas --}}
-                    <div id="reservas" class="tab-pane fade show active">
-                        <h2 class="tab-section-header">Tus Reservas</h2>
-                        <!-- Permanent Reminder Message -->
-                        <div class="alert alert-danger">
+            <!-- Pestañas de Navegación -->
+
+            <ul class="nav nav-tabs" id="myTab" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="reservas-tab" data-bs-toggle="tab" data-bs-target="#reservas"
+                        type="button" role="tab" aria-controls="reservas" aria-selected="true">Reserevas</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="valoraciones-tab" data-bs-toggle="tab" data-bs-target="#valoraciones"
+                        type="button" role="tab" aria-controls="valoraciones"
+                        aria-selected="false">Valoraciones</button>
+                </li>
+            </ul>
+
+            <!-- Contenido de las Pestañas -->
+            <div class="tab-content" id="myTabContent">
+                {{-- Sección Reservas --}}
+                <div id="reservas" class="tab-pane fade show active" role="tabpanel" aria-labelledby="home-tab">
+                    <h2 class="tab-section-header">Tus Reservas</h2>
+                    <!-- Mensaje de alerta personalizado -->
+                    <div class="alert alert-info-custom">
+                        <i class="fas fa-info-circle alert-icon"></i> <!-- Ícono de información -->
+                        <div>
                             Recuerda que solo puedes cancelar hasta 48 horas antes del evento.
                         </div>
-                        <div id="reservas" class="tab-pane fade show active">
-                            <h3>Reservas Activas</h3>
-                            <div class="row">
-                                @foreach ($reservasActivas as $reserva)
-                                    <div class="card card-reserva">
-                                        <div class="card-body">
-                                            <!-- Detalles de la reserva -->
-                                            <p class="card-text">Fecha: {{ $reserva->horario->fecha }}</p>
-                                            <p class="card-text">Hora: {{ $reserva->horario->hora }}</p>
-                                            <p class="card-text">Estado: {{ $reserva->estado }}</p>
-                                            @php
-                                                $fechaReserva = \Carbon\Carbon::parse($reserva->horario->fecha . ' ' . $reserva->horario->hora);
-                                                $ahora = \Carbon\Carbon::now();
-                                                $diferenciaHoras = $ahora->diffInHours($fechaReserva, false);
-                                            @endphp
-                                            @if ($diferenciaHoras >= 48)
-                                                <form action="{{ route('reservas.cancelar', $reserva->id) }}"
-                                                    method="POST">
-                                                    @csrf
-                                                    <button type="submit" class="btn btn-danger">Cancelar Reserva</button>
-                                                </form>
-                                            @endif
-                                        </div>
-                                    </div>
-                                @endforeach
+                    </div>
+
+                    <h3>Reservas Activas</h3>
+                    <div class="row">
+                        @foreach ($reservasActivas as $reserva)
+                            <div class="card card-reserva">
+                                <div class="card-body">
+                                    <!-- Detalles de la reserva -->
+                                    <p class="card-text">Fecha: {{ $reserva->horario->fecha }}</p>
+                                    <p class="card-text">Hora: {{ $reserva->horario->hora }}</p>
+                                    <p class="card-text">Estado: {{ $reserva->estado }}</p>
+                                    @php
+                                        $fechaReserva = \Carbon\Carbon::parse($reserva->horario->fecha . ' ' . $reserva->horario->hora);
+                                        $ahora = \Carbon\Carbon::now();
+                                        $diferenciaHoras = $ahora->diffInHours($fechaReserva, false);
+                                    @endphp
+                                    @if ($diferenciaHoras >= 48)
+                                        <form action="{{ route('reservas.cancelar', $reserva->id) }}" method="POST">
+                                            @csrf
+                                            <button type="submit" class="btn btn-danger">Cancelar Reserva</button>
+                                        </form>
+                                    @endif
+                                </div>
                             </div>
-                        </div>
+                        @endforeach
+                    </div>
 
 
-                        <!-- Sección Reservas Pasadas -->
-                        <h3>Reservas Pasadas</h3>
-                        <div class="row">
-                            @foreach ($reservasPasadas as $reserva)
-                                <div class="card card-reserva">
-                                    <div class="card-body">
-                                        <!-- Detalles de la reserva -->
-                                        <p class="card-text">Fecha: {{ $reserva->horario->fecha }}</p>
-                                        <p class="card-text">Hora: {{ $reserva->horario->hora }}</p>
-                                        <p class="card-text">Estado: {{ $reserva->estado }}</p>
 
-                                        <!-- Verificar si el usuario ya ha valorado la actividad -->
-                                        {{-- @php
+                    <!-- Sección Reservas Pasadas -->
+                    <h3>Reservas Pasadas</h3>
+                    <div class="row">
+                        @foreach ($reservasPasadas as $reserva)
+                            <div class="card card-reserva">
+                                <div class="card-body">
+                                    <!-- Detalles de la reserva -->
+                                    <p class="card-text">Fecha: {{ $reserva->horario->fecha }}</p>
+                                    <p class="card-text">Hora: {{ $reserva->horario->hora }}</p>
+                                    <p class="card-text">Estado: {{ $reserva->estado }}</p>
+
+                                    <!-- Verificar si el usuario ya ha valorado la actividad -->
+                                    {{-- @php
                                             $usuarioHaValorado = $reserva->actividad->valoraciones->where('user_id', auth()->user()->id)->count() > 0;
                                         @endphp --}}
 
-                                        <!-- Mostrar el botón de valoración solo si el usuario no ha valorado la actividad -->
-                                        {{-- @if (!$usuarioHaValorado)
+                                    <!-- Mostrar el botón de valoración solo si el usuario no ha valorado la actividad -->
+                                    {{-- @if (!$usuarioHaValorado)
                                             <a href=""
                                                 class="btn btn-primary">Valorar Actividad</a>
                                         @endif --}}
-                                        <a href=""
-                                        class="btn btn-primary">Valorar Actividad</a>
-                                    </div>
+                                    <a href="" class="btn btn-primary">Valorar Actividad</a>
                                 </div>
-                            @endforeach
-                        </div>
-
+                            </div>
+                        @endforeach
                     </div>
+
                 </div>
 
                 <!-- Sección Valoraciones -->
-                {{-- <div id="valoraciones" class="tab-pane fade">
-                        <h2 class="tab-section-header">Valoraciones Recientes</h2>
-                        <div class="row">
-                            <!-- Tarjeta de Valoración de Ejemplo -->
-                            <div class="col-md-4 mb-4">
-                                <div class="card card-detail">
-                                    <div class="card-body">
-                                        <h5 class="card-title">Restaurante Mar y Tierra</h5>
-                                        <p class="card-text">Valoración: ★★★★☆</p>
-                                        <p class="card-text">"Excelente comida y servicio. Un ambiente agradable y
-                                            acogedor."</p>
-                                        <a href="#" class="btn btn-custom-primary">Editar Valoración</a>
-                                    </div>
+                <div class="tab-pane fade" id="valoraciones" role="tabpanel" aria-labelledby="valoraciones-tab">
+                    <h2 class="tab-section-header">Tus Valoraciones</h2>
+                    <div class="row">
+                        <!-- Tarjeta de Valoración de Ejemplo -->
+                        <div class="col-md-4 mb-4">
+                            <div class="card card-detail">
+                                <div class="card-body">
+                                    <h5 class="card-title">Restaurante Mar y Tierra</h5>
+                                    <p class="card-text">Valoración: ★★★★☆</p>
+                                    <p class="card-text">"Excelente comida y servicio. Un ambiente agradable y
+                                        acogedor."</p>
+                                    <a href="#" class="btn btn-custom-primary">Editar Valoración</a>
                                 </div>
                             </div>
-
                         </div>
-                        <button class="btn btn-custom-secondary mt-3">Añadir Valoración</button>
-                    </div> --}}
+
+                    </div>
+                    <button class="btn btn-custom-secondary mt-3">Añadir Valoración</button>
+                </div>
             </div>
-        </div>
         </div>
     </main>
 @endsection

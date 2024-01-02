@@ -6,19 +6,34 @@ use Illuminate\Http\Request;
 use App\Models\Actividad;
 use App\Models\User;
 use App\Models\Reserva;
+use Carbon\Carbon;
 
 class AdminController extends Controller
 {
-    public function index(){
-    $cantidadActividades = Actividad::count();
-    $usuariosRegistrados = User::count();
-     $reservasRecientes = Reserva::latest()->take(5)->get();
+    public function index()
+    {
+        $cantidadActividades = Actividad::count();
+        $usuariosRegistrados = User::count();
+        $now = Carbon::now();
 
-    // Pasa esa información a la vista
-    return view('admin.index', [
-        'actividadesDisponibles' => $cantidadActividades,
-        'usuariosRegistrados' => $usuariosRegistrados,
-        'reservasRecientes' => $reservasRecientes
-    ]);
-}
+        $reservasRecientes = Reserva::join('horarios', 'reservas.horario_id', '=', 'horarios.id')
+            ->join('actividades', 'horarios.actividad_id', '=', 'actividades.id')
+            ->where(function ($query) use ($now) {
+                $query->where('horarios.fecha', '>', $now->toDateString())->orWhere(function ($query) use ($now) {
+                    $query->where('horarios.fecha', '=', $now->toDateString())->where('horarios.hora', '>', $now->toTimeString());
+                });
+            })
+            ->select('reservas.*', 'actividades.nombre as nombre_actividad', 'horarios.fecha as fecha_actividad', 'horarios.hora as hora_actividad')
+            ->orderBy('horarios.fecha', 'desc')
+            ->orderBy('horarios.hora', 'desc')
+            ->take(4)
+            ->get();
+
+        // Pasa esa información a la vista
+        return view('admin.index', [
+            'cantidadActividades' => $cantidadActividades,
+            'usuariosRegistrados' => $usuariosRegistrados,
+            'reservasRecientes' => $reservasRecientes,
+        ]);
+    }
 }

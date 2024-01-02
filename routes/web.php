@@ -141,6 +141,7 @@ Route::get('/dashboard/cargar-reservas', [UsuarioController::class, 'cargarReser
 Route::get('/dashboard/cargar-valoraciones', [UsuarioController::class, 'cargarValoraciones'])->name('dashboard.cargarValoraciones');
 
 
+//Página de contacto
 Route::post('/contact', [FormContactController::class, 'submit'])->name('contact.submit');
 
 

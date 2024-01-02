@@ -5,8 +5,31 @@
 @section('css')
     <link rel="stylesheet" href="{{ asset('css/admin.css') }}">
     <style>
-        /* Agrega estilos personalizados aquí si es necesario */
-    </style>
+        <style>
+
+    .card {
+        box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+        transition: 0.3s;
+    }
+
+    .card:hover {
+        box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+    }
+
+    .card-title {
+        color: #007bff; /* Ajusta este color según tu paleta */
+    }
+
+    .badge-pill {
+        background-color: #28a745; /* Color para los badges */
+    }
+
+    .icono {
+        font-size: 24px; /* Ajusta el tamaño de los íconos */
+        margin-right: 10px;
+    }
+</style>
+
 @endsection
 
 @section('content')
@@ -18,15 +41,6 @@
                 <div
                     class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
                     <h1 class="h2">Panel de Control</h1>
-                    <div class="btn-toolbar mb-2 mb-md-0">
-                        <div class="btn-group mr-2">
-                            <button class="btn btn-sm btn-outline-secondary">Acción 1</button>
-                            <button class="btn btn-sm btn-outline-secondary">Acción 2</button>
-                        </div>
-                        <button class="btn btn-sm btn-outline-secondary dropdown-toggle">
-                            Otras acciones
-                        </button>
-                    </div>
                 </div>
 
                 <div class="row">
@@ -34,7 +48,10 @@
                         <div class="card">
                             <div class="card-body">
                                 <h5 class="card-title">Actividades Disponibles</h5>
-                                <p class="card-text">{{ $actividadesDisponibles }}</p>
+                                @if (isset($cantidadActividades))
+                                    <p class="card-text">{{ $cantidadActividades }}</p>
+                                @endif
+
                             </div>
                         </div>
                     </div>
@@ -51,7 +68,9 @@
                         <div class="card">
                             <div class="card-body">
                                 <h5 class="card-title">Usuarios Registrados</h5>
-                                <p class="card-text">{{ $usuariosRegistrados }}</p>
+                                @if (isset($usuariosRegistrados))
+                                    <p class="card-text">{{ $usuariosRegistrados }}</p>
+                                @endif
                             </div>
                         </div>
                     </div>
@@ -64,17 +83,17 @@
                             <div class="card-body">
                                 <h5 class="card-title">Reservas Recientes</h5>
                                 <ul class="list-group">
-                                    @foreach ($reservasRecientes as $reserva)
-                                        <li class="list-group-item">
-                                            <div class="d-flex justify-content-between align-items-center">
-                                                <span>{{ $reserva->actividad->nombre }}</span>
-                                                <!-- Asumiendo que tienes una relación con Actividad -->
-                                                <span class="badge badge-primary badge-pill">{{ $reserva->hora }}</span>
-                                            </div>
-                                            <p>Usuario: {{ $reserva->usuario->nombre }}</p>
-                                            <!-- Asumiendo que tienes una relación con Usuario -->
-                                        </li>
-                                    @endforeach
+                                    @if (isset($reservasRecientes))
+                                        @foreach ($reservasRecientes as $reserva)
+                                            <li class="list-group-item">
+                                                <div class="d-flex justify-content-between align-items-center">
+                                                    <span>{{ $reserva->actividad->nombre }}</span>
+                                                    <span class="badge badge-primary badge-pill">{{ $reserva->hora }}</span>
+                                                </div>
+                                                <p>Usuario: {{ $reserva->usuario->nombre }}</p>
+                                            </li>
+                                        @endforeach
+                                    @endif
                                 </ul>
                             </div>
                         </div>
