@@ -1,0 +1,93 @@
+.valoracion-container {
+    max-width: 600px;
+    margin: auto;
+    background: #ffffff;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border: 1px solid #dee2e6;
+    margin-bottom: 4vh;
+    margin-top: 4vh;
+}
+
+.valoracion-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.valoracion-header h1 {
+    font-size: 2.5rem;
+    color: #007bff;
+    margin-bottom: 10px;
+}
+
+.valoracion-header h2 {
+    font-size: 1.5rem;
+    color: #495057;
+    margin-bottom: 20px;
+}
+
+.valoracion-estrellas {
+    text-align: center;
+    font-size: 40px;
+    color: #ddd;
+    cursor: pointer;
+    display: inline-flex;
+    flex-direction: row-reverse;
+}
+
+.valoracion-estrellas input[type="radio"] {
+    display: none;
+}
+
+.valoracion-estrellas label {
+    margin: 0 5px;
+}
+
+.valoracion-estrellas label:hover,
+.valoracion-estrellas label:hover~label,
+.valoracion-estrellas input[type="radio"]:checked~label {
+    color: #f39c12;
+}
+
+.comentario-section textarea {
+    height: 120px;
+}
+
+.botones-valoracion {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+/* Estilos para los botones */
+.btn-enviar-valoracion,
+.btn-cancelar-valoracion {
+    padding: 10px 20px;
+    font-size: 18px;
+    border-radius: 8px;
+    cursor: pointer;
+    border: none;
+    text-decoration: none;
+    color: white;
+}
+
+.btn-enviar-valoracion {
+    background-color: #007bff;
+}
+
+.btn-enviar-valoracion:hover {
+    background-color: #0056b3;
+}
+
+.btn-cancelar-valoracion {
+    background-color: #6c757d;
+}
+
+.btn-cancelar-valoracion:hover {
+    background-color: #5a6268;
+}
+
+.botones-valoracion {
+    margin-top: 3vh;
+}

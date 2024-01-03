@@ -15,6 +15,7 @@ use App\Http\Controllers\GalleryController;
 use App\Http\Controllers\ReservaController;
 use App\Http\Controllers\FormContactController;
 use App\Http\Controllers\PaypalController;
+use App\Http\Controllers\ValoracionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -136,11 +137,6 @@ Route::post('/reservar/store', [ReservaController::class, 'store'])->name('reser
 Route::post('/reservas/{reserva}/cancelar', [ReservaController::class, 'cancelar'])->name('reservas.cancelar');
 
 
-// Carga de contenido dinámico para las secciones del dashboard
-Route::get('/dashboard/cargar-reservas', [UsuarioController::class, 'cargarReservas'])->name('dashboard.cargarReservas');
-Route::get('/dashboard/cargar-valoraciones', [UsuarioController::class, 'cargarValoraciones'])->name('dashboard.cargarValoraciones');
-
-
 //Página de contacto
 Route::post('/contact', [FormContactController::class, 'submit'])->name('contact.submit');
 
@@ -149,6 +145,14 @@ Route::post('/contact', [FormContactController::class, 'submit'])->name('contact
 Route::post('/paypal/checkout/{horarioId}', [PaypalController::class, 'checkout'])->name('paypal.checkout');
 Route::get('/paypal/success/{horarioId}', [PaypalController::class, 'success'])->name('paypal.success');
 Route::get('/paypal/cancel/{horarioId}', [PaypalController::class, 'cancel'])->name('paypal.cancel');
+
+//Valorar actividad
+Route::get('/valorar/{id}', [ValoracionController::class, 'create'])->name('pages.valorar');
+// Ruta para almacenar la valoración enviada desde el formulario
+Route::post('/valoraciones', [ValoracionController::class, 'store'])->name('valoraciones.store');
+
+Route::delete('/valoraciones/{id}', [ValoracionController::class, 'destroy'])->name('valoraciones.destroy');
+
 
 
 

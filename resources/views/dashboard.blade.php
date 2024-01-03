@@ -1,92 +1,11 @@
 @extends('layouts.guest')
 
 @section('title')
-    Panel de Usuario
+    Dashboard
 @endsection
 
 @section('css')
-    <style>
-        /* Estilos generales del panel de usuario */
-        .user-dashboard {
-            background-color: #f4f4f4;
-            border-radius: 8px;
-            padding: 20px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-
-        /* Estilo para las pestañas y su contenido */
-        .nav-tabs .nav-link {
-            border: 1px solid transparent;
-            border-top-left-radius: .25rem;
-            border-top-right-radius: .25rem;
-            color: #5c7c64;
-            padding: 12px 20px;
-            font-size: 1.5rem;
-        }
-
-        .nav-tabs .nav-link.active {
-            color: #495057;
-            background-color: #fff;
-            border-color: #dee2e6 #dee2e6 #fff;
-            border-bottom: 2px solid #5c7c64;
-        }
-
-        .tab-content {
-            background: white;
-            padding: 20px;
-            border-radius: 5px;
-            margin-top: -1px;
-        }
-
-        /* Estilo para las tarjetas en las secciones */
-        .card-reserva {
-            background-color: #ffffff;
-            border: none;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
-            transition: all 0.3s ease-in-out;
-        }
-
-        .card-reserva:hover {
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
-            transform: scale(1.05);
-        }
-
-        /* Estilos adicionales para botones y enlaces */
-        .btn-custom {
-            background-color: #007bff;
-            color: white;
-            border-radius: 5px;
-            padding: 10px 15px;
-        }
-
-        .btn-custom:hover {
-            background-color: #0056b3;
-        }
-
-        /* Estilos personalizados para la alerta */
-        .alert-info-custom {
-            background-color: #d1ecf1;
-            /* Un azul claro suave */
-            color: #0c5460;
-            /* Un tono de texto que combine con el fondo azul */
-            border-color: #bee5eb;
-            /* Un borde que complemente el color de fondo */
-            padding: 15px;
-            border-radius: 5px;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-        }
-
-        /* Ícono para el mensaje de alerta */
-        .alert-icon {
-            font-size: 20px;
-            /* Tamaño del ícono */
-            margin-right: 10px;
-            /* Espacio entre el ícono y el texto */
-        }
-    </style>
+    <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}">
 @endsection
 
 @section('content')
@@ -107,13 +26,12 @@
                 </div>
             @endif
 
-
             <!-- Pestañas de Navegación -->
 
             <ul class="nav nav-tabs" id="myTab" role="tablist">
                 <li class="nav-item" role="presentation">
                     <button class="nav-link active" id="reservas-tab" data-bs-toggle="tab" data-bs-target="#reservas"
-                        type="button" role="tab" aria-controls="reservas" aria-selected="true">Reserevas</button>
+                        type="button" role="tab" aria-controls="reservas" aria-selected="true">Reservas</button>
                 </li>
                 <li class="nav-item" role="presentation">
                     <button class="nav-link" id="valoraciones-tab" data-bs-toggle="tab" data-bs-target="#valoraciones"
@@ -129,7 +47,7 @@
                     <h2 class="tab-section-header">Tus Reservas</h2>
                     <!-- Mensaje de alerta personalizado -->
                     <div class="alert alert-info-custom">
-                        <i class="fas fa-info-circle alert-icon"></i> <!-- Ícono de información -->
+                        <i class="fas fa-info-circle alert-icon"></i>
                         <div>
                             Recuerda que solo puedes cancelar hasta 48 horas antes del evento.
                         </div>
@@ -138,7 +56,7 @@
                     <h3>Reservas Activas</h3>
                     <div class="row">
                         @foreach ($reservasActivas as $reserva)
-                            <div class="card card-reserva">
+                            <div class="card">
                                 <div class="card-body">
                                     <!-- Detalles de la reserva -->
                                     <p class="card-text">Fecha: {{ $reserva->horario->fecha }}</p>
@@ -160,8 +78,6 @@
                         @endforeach
                     </div>
 
-
-
                     <!-- Sección Reservas Pasadas -->
                     <h3>Reservas Pasadas</h3>
                     <div class="row">
@@ -174,44 +90,97 @@
                                     <p class="card-text">Estado: {{ $reserva->estado }}</p>
 
                                     <!-- Verificar si el usuario ya ha valorado la actividad -->
-                                    {{-- @php
-                                            $usuarioHaValorado = $reserva->actividad->valoraciones->where('user_id', auth()->user()->id)->count() > 0;
-                                        @endphp --}}
+                                    @php
+                                        $usuarioHaValorado = $reserva->actividad->valoraciones->where('user_id', auth()->user()->id)->count() > 0;
+                                    @endphp
 
                                     <!-- Mostrar el botón de valoración solo si el usuario no ha valorado la actividad -->
-                                    {{-- @if (!$usuarioHaValorado)
-                                            <a href=""
-                                                class="btn btn-primary">Valorar Actividad</a>
-                                        @endif --}}
-                                    <a href="" class="btn btn-primary">Valorar Actividad</a>
+                                    @if (!$usuarioHaValorado)
+                                        <a href="{{ route('pages.valorar', ['id' => $reserva->actividad->id]) }}"
+                                            class="btn btn-primary">Valorar Actividad</a>
+                                    @endif
                                 </div>
                             </div>
                         @endforeach
                     </div>
-
                 </div>
 
                 <!-- Sección Valoraciones -->
-                <div class="tab-pane fade" id="valoraciones" role="tabpanel" aria-labelledby="valoraciones-tab">
+                <div class="tab-pane fade valoraciones-container" id="valoraciones" role="tabpanel"
+                    aria-labelledby="valoraciones-tab">
                     <h2 class="tab-section-header">Tus Valoraciones</h2>
                     <div class="row">
-                        <!-- Tarjeta de Valoración de Ejemplo -->
                         <div class="col-md-4 mb-4">
-                            <div class="card card-detail">
-                                <div class="card-body">
-                                    <h5 class="card-title">Restaurante Mar y Tierra</h5>
-                                    <p class="card-text">Valoración: ★★★★☆</p>
-                                    <p class="card-text">"Excelente comida y servicio. Un ambiente agradable y
-                                        acogedor."</p>
-                                    <a href="#" class="btn btn-custom-primary">Editar Valoración</a>
+                            @foreach ($valoracionesUsuario as $valoracion)
+                                <div class="card card-detail">
+                                    <img src="{{ $valoracion->actividad->imagen }}" class="card-img-top"
+                                        alt="Imagen de la actividad">
+                                    <div class="card-body">
+                                        <h5 class="card-title">{{ $valoracion->actividad->nombre }}</h5>
+                                        <p class="text-muted small">Valorado el
+                                            {{ $valoracion->created_at->format('d/m/Y') }}</p>
+                                        <p class="card-text">
+                                            <span class="star-rating">
+                                                @for ($i = 0; $i < 5; $i++)
+                                                    @if ($i < $valoracion->puntuacion)
+                                                        <span class="filled">★</span>
+                                                    @else
+                                                        <span class="empty">★</span>
+                                                    @endif
+                                                @endfor
+                                            </span>
+                                        </p>
+                                        <p class="card-text">{{ $valoracion->comentario }}</p>
+                                        <a href="/actividades/{{ $valoracion->actividad->id }}"
+                                            class="btn btn-primary mt-3">Ver actividad</a>
+                                        <button class="btn btn-secondary mt-3">Editar</button>
+                                        <button class="btn btn-danger mt-3" data-bs-toggle="modal"
+                                            data-bs-target="#deleteValoracionModal"
+                                            data-id="{{ $valoracion->id }}">Borrar</button>
+                                    </div>
                                 </div>
-                            </div>
+                            @endforeach
                         </div>
-
                     </div>
-                    <button class="btn btn-custom-secondary mt-3">Añadir Valoración</button>
                 </div>
             </div>
+            <!-- Modal de Confirmación de Borrado -->
+            <div class="modal fade" id="deleteValoracionModal" tabindex="-1" aria-labelledby="deleteValoracionModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="deleteValoracionModalLabel">Confirmar Borrado</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            ¿Estás seguro de que quieres borrar esta valoración?
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                            <form id="deleteValoracionForm" action="" method="POST">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-danger">Borrar</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </main>
+
+    <script>
+        //Para el modal
+        document.addEventListener("DOMContentLoaded", function() {
+            var valoracionModal = document.getElementById('deleteValoracionModal');
+            valoracionModal.addEventListener('show.bs.modal', function(event) {
+                var button = event.relatedTarget;
+                var valoracionId = button.getAttribute('data-id');
+                var deleteForm = document.getElementById('deleteValoracionForm');
+                deleteForm.action = '/valoraciones/' + valoracionId;
+            });
+        });
+    </script>
 @endsection

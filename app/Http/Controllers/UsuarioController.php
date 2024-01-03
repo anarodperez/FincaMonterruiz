@@ -36,7 +36,6 @@ class UsuarioController extends Controller
         ]);
     }
 
-
     public function validar(User $usuario)
     {
         $usuario->validado = !$usuario->validado;
@@ -66,18 +65,16 @@ class UsuarioController extends Controller
 
         // Obtener reservas activas (fechas y horas futuras)
         $reservasActivas = $user
-        ->reservas()
-        ->join('horarios', 'reservas.horario_id', '=', 'horarios.id')
-        ->join('actividades', 'horarios.actividad_id', '=', 'actividades.id')
-        ->where(function ($query) use ($now) {
-            $query->where('horarios.fecha', '>', $now->toDateString())
-                  ->orWhere(function ($query) use ($now) {
-                      $query->where('horarios.fecha', '=', $now->toDateString())
-                            ->where('horarios.hora', '>', $now->toTimeString());
-                  });
-        })
-        ->select('reservas.*', 'actividades.nombre as nombre_actividad', 'horarios.fecha as fecha_actividad', 'horarios.hora as hora_actividad')
-        ->get();
+            ->reservas()
+            ->join('horarios', 'reservas.horario_id', '=', 'horarios.id')
+            ->join('actividades', 'horarios.actividad_id', '=', 'actividades.id')
+            ->where(function ($query) use ($now) {
+                $query->where('horarios.fecha', '>', $now->toDateString())->orWhere(function ($query) use ($now) {
+                    $query->where('horarios.fecha', '=', $now->toDateString())->where('horarios.hora', '>', $now->toTimeString());
+                });
+            })
+            ->select('reservas.*', 'actividades.nombre as nombre_actividad', 'horarios.fecha as fecha_actividad', 'horarios.hora as hora_actividad')
+            ->get();
 
         // Para reservas pasadas
         $reservasPasadas = $user
@@ -92,6 +89,12 @@ class UsuarioController extends Controller
             ->where('reservas.user_id', '=', $user->id)
             ->get();
 
-        return view('/dashboard', compact('reservasActivas', 'reservasPasadas'));
+        // Obtener las valoraciones del usuario
+        $valoracionesUsuario = $user
+            ->valoraciones()
+            ->with('actividad') // Suponiendo que quieres incluir datos de la actividad valorada
+            ->get();
+
+        return view('/dashboard', compact('reservasActivas', 'reservasPasadas', 'valoracionesUsuario'));
     }
 }

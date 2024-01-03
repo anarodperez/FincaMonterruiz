@@ -8,12 +8,8 @@
         media="all">
     <link href='https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css' rel='stylesheet'>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- lazily load the Swiper CSS file -->
     <link rel="preload" href="https://unpkg.com/swiper@8/swiper-bundle.min.css" as="style"
         onload="this.onload=null;this.rel='stylesheet'">
-
-    <!-- lazily load the Swiper JS file -->
     <script defer="defer" src="https://unpkg.com/swiper@8/swiper-bundle.min.js" onload="initializeSwiperRANDOMID();">
     </script>
     <script>
@@ -42,9 +38,11 @@
         .carousel-item {
             height: 600px;
         }
+
         .mySwiper-RANDOMID .card {
             max-width: 21rem
         }
+
         .custom-pagination .swiper-pagination-bullet {
             background: #5c7c64;
         }
