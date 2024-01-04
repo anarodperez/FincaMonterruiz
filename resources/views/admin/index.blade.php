@@ -5,30 +5,31 @@
 @section('css')
     <link rel="stylesheet" href="{{ asset('css/admin.css') }}">
     <style>
-        <style>
+        <style>.card {
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+            transition: 0.3s;
+        }
 
-    .card {
-        box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
-        transition: 0.3s;
-    }
+        .card:hover {
+            box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+        }
 
-    .card:hover {
-        box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
-    }
+        .card-title {
+            color: #007bff;
+            /* Ajusta este color según tu paleta */
+        }
 
-    .card-title {
-        color: #007bff; /* Ajusta este color según tu paleta */
-    }
+        .badge-pill {
+            background-color: #28a745;
+            /* Color para los badges */
+        }
 
-    .badge-pill {
-        background-color: #28a745; /* Color para los badges */
-    }
-
-    .icono {
-        font-size: 24px; /* Ajusta el tamaño de los íconos */
-        margin-right: 10px;
-    }
-</style>
+        .icono {
+            font-size: 24px;
+            /* Ajusta el tamaño de los íconos */
+            margin-right: 10px;
+        }
+    </style>
 
 @endsection
 
@@ -106,23 +107,21 @@
                         <div class="card" style="margin-bottom: 8vh;">
                             <div class="card-body">
                                 <h5 class="card-title">Valoraciones y Comentarios</h5>
-                                <!-- Puedes mostrar una lista de las últimas valoraciones y comentarios -->
+                                <!-- lista de las últimas valoraciones y comentarios -->
                                 <ul class="list-group">
-                                    <li class="list-group-item">
-                                        <div class="d-flex justify-content-between align-items-center">
-                                            <span>Usuario 1</span>
-                                            <span class="badge badge-primary badge-pill">4.5</span>
-                                        </div>
-                                        <p>¡Excelente actividad! Muy recomendada.</p>
-                                    </li>
-                                    <li class="list-group-item">
-                                        <div class="d-flex justify-content-between align-items-center">
-                                            <span>Usuario 2</span>
-                                            <span class="badge badge-primary badge-pill">3.8</span>
-                                        </div>
-                                        <p>Buena experiencia, pero podría mejorar en algunos aspectos.</p>
-                                    </li>
-                                    <!-- Agrega más elementos según sea necesario -->
+                                    @if (isset($ultimasValoraciones))
+                                        @foreach ($ultimasValoraciones as $valoracion)
+                                            <li class="list-group-item">
+                                                <div class="d-flex justify-content-between align-items-center">
+                                                    <span>{{ $valoracion->user->nombre }}</span>
+                                                    <span
+                                                        class="badge badge-primary badge-pill">{{ $valoracion->puntuacion }}
+                                                    </span>
+                                                </div>
+                                                <p>{{ $valoracion->comentario }}</p>
+                                            </li>
+                                        @endforeach
+                                    @endif
                                 </ul>
                             </div>
                         </div>

@@ -1,21 +1,20 @@
-
 .sidebar {
-    padding: 4vh;
+padding: 4vh;
 }
 
- .delete, .edit{
+.delete, .edit{
 
-    margin-top: 6vh;
-    margin-bottom: 14vh;
+margin-top: 6vh;
+margin-bottom: 14vh;
 
-    }
+}
 
 /* TABLA */
 
 .tabla img:hover {
-opacity: 0.8; /* disminuir la opacidad de la imagen al pasar el ratón por encima */
-transform: scale(1.05); /* aumentar ligeramente el tamaño de la imagen */
-transition: all 0.3s ease-in-out; /* crear una transición suave para los efectos */
+opacity: 0.8;
+transform: scale(1.05);
+transition: all 0.3s ease-in-out;
 }
 
 .tabla {
@@ -115,30 +114,29 @@ color: white;
 }
 
 .crear-actividad{
-    margin-left: 4vw;
+margin-left: 4vw;
 }
 
-/* Paginación  */
+/* Paginación */
 
-.contenedor-tabla nav {
-    background: transparent;
+
+.contenedor-tabla nav, .table-responsive nav {
+background: transparent;
+}
+.pagination {
+justify-content: center; /
 }
 
 .active>.page-link,
 .page-link.active {
 
-    background-color: #5c7c64;
-    ;
-    border-color: #5c7c64;
-    ;
-    color: white
+background-color: #5c7c64;
+;
+border-color: #5c7c64;
+;
+color: white
 }
 
 .page-link {
-    color: #5c7c64;
-}
-
-.pagination{
-    margin-left: 4vw;
-margin-bottom: 6vh;
+color: #5c7c64;
 }

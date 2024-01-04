@@ -20,7 +20,6 @@
 
             <div class="table-responsive">
                 <table class="tabla">
-                       {{-- Agregar enlaces de paginación --}}
                        {{ $usuarios->links() }}
                     <thead>
                         <tr>

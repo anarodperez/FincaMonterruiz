@@ -127,10 +127,11 @@ class PaypalController extends Controller
     }
 
 
-    public function cancel()
+    public function cancel($horarioId)
     {
-        return redirect()->route('reservar.show');
+        return redirect()->route('reservar.show', ['horarioId' => $horarioId]);
     }
+
 
     public function error()
     {

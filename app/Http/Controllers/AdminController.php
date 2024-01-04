@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Actividad;
 use App\Models\User;
 use App\Models\Reserva;
+use App\Models\Valoracion;
 use Carbon\Carbon;
 
 class AdminController extends Controller
@@ -29,11 +30,17 @@ class AdminController extends Controller
             ->take(4)
             ->get();
 
+            $ultimasValoraciones = Valoracion::with(['user', 'actividad'])
+            ->orderBy('created_at', 'desc')
+            ->take(4)
+            ->get();
+
         // Pasa esa información a la vista
         return view('admin.index', [
             'cantidadActividades' => $cantidadActividades,
             'usuariosRegistrados' => $usuariosRegistrados,
             'reservasRecientes' => $reservasRecientes,
+            'ultimasValoraciones' => $ultimasValoraciones,
         ]);
     }
 }

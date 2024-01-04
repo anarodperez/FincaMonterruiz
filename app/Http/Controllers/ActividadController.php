@@ -47,7 +47,7 @@ class ActividadController extends Controller
             'duracion' => 'required|integer',
             'aforo' => 'required|integer',
             'activa' => 'required|in:0,1',
-            'imagen' => 'image|mimes:jpeg,png,jpg,gif|max:2048', // Valida que el archivo sea una imagen
+            'imagen' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
         // Validación personalizada para asegurarse de que al menos uno de los precios sea proporcionado
@@ -204,8 +204,6 @@ class ActividadController extends Controller
     {
         // Obtén los detalles de la actividad con el ID proporcionado.
         $actividad = Actividad::find($id);
-
-        // Puedes agregar lógica adicional aquí, como verificar la disponibilidad de la actividad.
 
         // Muestra la vista de detalles de la actividad y pasa los detalles de la actividad.
         return view('pages.detalleActividad', ['actividad' => $actividad]);

@@ -15,7 +15,7 @@ class ReservaController extends Controller
 {
     public function index()
     {
-        $reservas = Reserva::with(['usuario', 'actividad', 'horario'])->get(); // Asegúrate de incluir todas las relaciones necesarias
+        $reservas = Reserva::with(['usuario', 'actividad', 'horario'])->paginate(3);
 
         return view('admin.reservas.index', compact('reservas'));
     }
