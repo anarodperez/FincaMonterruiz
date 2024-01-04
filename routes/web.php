@@ -153,6 +153,10 @@ Route::post('/valoraciones', [ValoracionController::class, 'store'])->name('valo
 
 Route::delete('/valoraciones/{id}', [ValoracionController::class, 'destroy'])->name('valoraciones.destroy');
 
+//Descarga pdf reserva
+Route::get('/descargar-entrada/{reserva_id}', [ReservaController::class, 'descargarEntrada']);
+
+
 
 
 

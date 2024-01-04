@@ -1,0 +1,55 @@
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 20px;
+    display: flex;
+}
+
+.header {
+    background-color: #5c7c64;
+    color: white;
+    text-align: center;
+    padding: 10px 0;
+    margin-bottom: 20px;
+}
+
+.header h1 {
+    margin: 0;
+}
+
+.info,
+.qr-code {
+    background-color: white;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+
+.activity-image {
+    width: 100%;
+    height: auto;
+    border-bottom: 1px solid #ddd;
+    margin-bottom: 20px;
+}
+
+.qr-code img {
+    margin-top: 15px;
+}
+
+.info-section {
+background-color: #f4f4f4;
+padding: 10px;
+margin-bottom: 10px;
+border-radius: 5px;
+}
+
+.info-section h3 {
+margin-top: 0;
+color: #5c7c64;
+}
+
+.info-detail {
+margin: 5px 0;
+}
