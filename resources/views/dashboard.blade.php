@@ -62,6 +62,7 @@
                                     <p class="card-text">Fecha: {{ $reserva->horario->fecha }}</p>
                                     <p class="card-text">Hora: {{ $reserva->horario->hora }}</p>
                                     <p class="card-text">Estado: {{ $reserva->estado }}</p>
+                                    <a href="{{ url('/descargar-entrada/' . $reserva->id) }}" class="btn btn-success">Descargar Entrada</a>
                                     @php
                                         $fechaReserva = \Carbon\Carbon::parse($reserva->horario->fecha . ' ' . $reserva->horario->hora);
                                         $ahora = \Carbon\Carbon::now();
@@ -88,6 +89,7 @@
                                     <p class="card-text">Fecha: {{ $reserva->horario->fecha }}</p>
                                     <p class="card-text">Hora: {{ $reserva->horario->hora }}</p>
                                     <p class="card-text">Estado: {{ $reserva->estado }}</p>
+                                    <a href="{{ url('/descargar-entrada/' . $reserva->id) }}" class="btn btn-success">Descargar Entrada</a>
 
                                     <!-- Verificar si el usuario ya ha valorado la actividad -->
                                     @php
@@ -99,6 +101,8 @@
                                         <a href="{{ route('pages.valorar', ['id' => $reserva->actividad->id]) }}"
                                             class="btn btn-primary">Valorar Actividad</a>
                                     @endif
+
+
                                 </div>
                             </div>
                         @endforeach
