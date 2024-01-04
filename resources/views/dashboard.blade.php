@@ -97,7 +97,7 @@
                                     @endphp
 
                                     <!-- Mostrar el botón de valoración solo si el usuario no ha valorado la actividad -->
-                                    @if (!$usuarioHaValorado)
+                                    @if (!$usuarioHaValorado && $reserva->estado != 'cancelada')
                                         <a href="{{ route('pages.valorar', ['id' => $reserva->actividad->id]) }}"
                                             class="btn btn-primary">Valorar Actividad</a>
                                     @endif

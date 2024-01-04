@@ -92,7 +92,7 @@ class UsuarioController extends Controller
         // Obtener las valoraciones del usuario
         $valoracionesUsuario = $user
             ->valoraciones()
-            ->with('actividad') // Suponiendo que quieres incluir datos de la actividad valorada
+            ->with('actividad')
             ->get();
 
         return view('/dashboard', compact('reservasActivas', 'reservasPasadas', 'valoracionesUsuario'));
