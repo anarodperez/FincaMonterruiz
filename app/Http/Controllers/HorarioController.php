@@ -14,17 +14,18 @@ class HorarioController extends Controller
 {
     public function index()
     {
-        $horarios = Horario::with('actividad')->get(); // Obtiene todos los horarios con su actividad relacionada
+        $horarios = Horario::with('actividad')->get();
 
         $events = $horarios->map(function ($horario) {
             return [
-                'title' => $horario->actividad->nombre, // Asumiendo que la actividad tiene un campo 'nombre'
+                'id' => $horario->actividad->id,
+                'title' => $horario->actividad->nombre,
                 'start' => $horario->fecha . 'T' . $horario->hora,
                 'extendedProps' => [
                     'idioma' => $horario->idioma,
                     'horario_id' => $horario->id,
-                    'frecuencia' => $horario->frecuencia, // Añade la frecuencia aquí
-                    'color' => $this->getColorForActividad($horario->actividad->nombre),
+                    'frecuencia' => $horario->frecuencia,
+                    'aforo' => $horario->actividad->aforo,
                 ],
             ];
         });
@@ -209,12 +210,6 @@ public function update(Request $request, $id)
 }
 
 
-
-
-
-
-
-
 private function updateSerieRecurrente($horarioOriginal, $request)
 {
     // Iniciar una transacción para asegurar la integridad de los datos
@@ -253,19 +248,6 @@ private function updateSerieRecurrente($horarioOriginal, $request)
         \Log::error('Error al actualizar la serie recurrente: ' . $e->getMessage());
         return back()->with('error', $e->getMessage());
     }
-}
-
-
-private function getColorForActividad($nombreActividad)
-{
-    $colores = [
-        'Visita al viñedo 1' => '#ffadad',
-        'Visita al viñedo 2' => '#ffd6a5',
-        'Visita al viñedo 3' => '#a0c4ff',
-        // Más actividades y sus colores
-    ];
-
-    return $colores[$nombreActividad] ?? '#ccc'; // Color por defecto si no se encuentra la actividad
 }
 
 

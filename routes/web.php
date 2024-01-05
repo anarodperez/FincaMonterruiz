@@ -36,12 +36,11 @@ Route::get('/dashboard', function () {
         // Redirige al usuario administrador a la ruta 'admin.index'
         return redirect()->route('admin.index');
     } else {
-
         return app(UsuarioController::class)->showDashboard();
     }
-})->middleware(['auth', 'verified'])->name('dashboard');
-
-
+})
+    ->middleware(['auth', 'verified'])
+    ->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -77,6 +76,8 @@ Route::middleware(['admin'])->group(function () {
     //Reservas
     Route::get('/reservas/index', [ReservaController::class, 'index'])->name('admin.reservas.index');
 
+    //Valoraciones
+    Route::get('/valoraciones/index', [ValoracionController::class, 'index'])->name('admin.valoraciones.index');
 });
 
 Route::get('/login/google', function () {
@@ -136,10 +137,8 @@ Route::post('/reservar/store', [ReservaController::class, 'store'])->name('reser
 //Cancelar reserva
 Route::post('/reservas/{reserva}/cancelar', [ReservaController::class, 'cancelar'])->name('reservas.cancelar');
 
-
 //Página de contacto
 Route::post('/contact', [FormContactController::class, 'submit'])->name('contact.submit');
-
 
 //Paypal
 Route::post('/paypal/checkout/{horarioId}', [PaypalController::class, 'checkout'])->name('paypal.checkout');
@@ -155,9 +154,5 @@ Route::delete('/valoraciones/{id}', [ValoracionController::class, 'destroy'])->n
 
 //Descarga pdf reserva
 Route::get('/descargar-entrada/{reserva_id}', [ReservaController::class, 'descargarEntrada']);
-
-
-
-
 
 require __DIR__ . '/auth.php';

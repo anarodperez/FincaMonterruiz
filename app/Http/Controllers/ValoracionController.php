@@ -8,6 +8,16 @@ use App\Models\Actividad;
 
 class ValoracionController extends Controller
 {
+
+    public function index()
+    {
+        $valoraciones = Valoracion::with(['user', 'actividad'])
+        ->orderBy('created_at', 'desc')
+        ->paginate(10);
+
+        return view('admin.valoraciones.index', compact('valoraciones'));
+    }
+
     // Método para mostrar el formulario de valoración
     public function create($idActividad)
     {

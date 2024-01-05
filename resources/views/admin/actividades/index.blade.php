@@ -40,6 +40,26 @@
                             <td>{{ $actividad->precio_nino }}</td>
                             <td>{{ $actividad->aforo }}</td>
                             <td>{{ $actividad->activa == 1 ? 'Activa' : 'Inactiva' }}</td>
+                             {{-- <td>
+                                @if ($actividad->categoria)
+                                    {{ $actividad->categoria->nombre }}
+                                @else
+                                    Sin categoría
+                                @endif
+                            </td> --}}
+                            <td>
+                                <form action="{{ route('admin.actividades.edit', encrypt($actividad->id)) }}" method="GET">
+                                    <button class="btn btn-warning btn-sm" style="margin-bottom: 5px;">
+                                        <span class="fas fa-edit"></span>
+                                    </button>
+                                </form>
+                                <form action="{{ route('admin.actividades.show', ['actividad' => encrypt($actividad->id)]) }}" method="GET">
+                                    <button class="btn btn-danger btn-sm">
+                                        <span class="fas fa-times"></span>
+                                    </button>
+                                </form>
+
+                            </td>
                         </tr>
                     @endforeach
                 </tbody>

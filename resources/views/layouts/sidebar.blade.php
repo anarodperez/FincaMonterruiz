@@ -24,7 +24,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">
+                            <a class="nav-link" href="{{ route('admin.valoraciones.index') }}">
                                 <i class="fas fa-star"></i> Valoraciones y Comentarios
                             </a>
                         </li>

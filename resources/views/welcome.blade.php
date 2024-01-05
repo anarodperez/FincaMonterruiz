@@ -98,7 +98,6 @@
             </section>
             <div class="container py-6"><!-- Slider main container -->
                 <div class="swiper mySwiper-RANDOMID">
-                    <!-- Additional required wrapper -->
                     <div class="swiper-wrapper"><!-- Slides -->
                         @foreach ($actividades as $actividad)
                             <div class="swiper-slide h-100">
@@ -146,7 +145,7 @@
                         <div class="col-md-12 text-center">
                             <div class="lc-block text-center text-md-end mb-5">
                                 <div editable="rich">
-                                    <h1 class="display-5 fw-bold">Lo que Nuestros Visitantes Dicen</h1>
+                                    <h1 class="display-5 fw-bold">Lo que Nuestros Visitantes Opinan</h1>
                                 </div>
                             </div>
                         </div>
@@ -154,174 +153,8 @@
                     <div class="row justify-content-center">
                         <div class="col-md-8 col-lg-4 mb-4">
                             <div class="card border-0 shadow">
-                                <div class="card-body py-4">
-                                    <div class="d-flex">
-                                        <img style="width:48px;height:48px"
-                                            src="https://images.unsplash.com/photo-1527980965255-d3b416303d12?crop=entropy&amp;cs=tinysrgb&amp;fit=crop&amp;fm=jpg&amp;ixid=MnwzNzg0fDB8MXxzZWFyY2h8M3x8YXZhdGFyfGVufDB8Mnx8fDE2Mzg4OTExNTE&amp;ixlib=rb-1.2.1&amp;q=80&amp;w=1080&amp;h=1080"
-                                            alt="Photo by Nicolas Horn" class="rounded-2 shadow"
-                                            srcset="https://images.unsplash.com/photo-1527980965255-d3b416303d12?crop=entropy&amp;cs=tinysrgb&amp;fit=crop&amp;fm=jpg&amp;ixid=MnwzNzg0fDB8MXxzZWFyY2h8M3x8YXZhdGFyfGVufDB8Mnx8fDE2Mzg4OTExNTE&amp;ixlib=rb-1.2.1&amp;q=80&amp;w=1080&amp;h=1080 1080w, https://images.unsplash.com/photo-1527980965255-d3b416303d12??crop=entropy&amp;cs=tinysrgb&amp;fit=crop&amp;fm=jpg&amp;ixid=MnwzNzg0fDB8MXxzZWFyY2h8M3x8YXZhdGFyfGVufDB8Mnx8fDE2Mzg4OTExNTE&amp;ixlib=rb-1.2.1&amp;q=80&amp;w=150 150w, https://images.unsplash.com/photo-1527980965255-d3b416303d12??crop=entropy&amp;cs=tinysrgb&amp;fit=crop&amp;fm=jpg&amp;ixid=MnwzNzg0fDB8MXxzZWFyY2h8M3x8YXZhdGFyfGVufDB8Mnx8fDE2Mzg4OTExNTE&amp;ixlib=rb-1.2.1&amp;q=80&amp;w=300 300w, https://images.unsplash.com/photo-1527980965255-d3b416303d12??crop=entropy&amp;cs=tinysrgb&amp;fit=crop&amp;fm=jpg&amp;ixid=MnwzNzg0fDB8MXxzZWFyY2h8M3x8YXZhdGFyfGVufDB8Mnx8fDE2Mzg4OTExNTE&amp;ixlib=rb-1.2.1&amp;q=80&amp;w=768 768w, https://images.unsplash.com/photo-1527980965255-d3b416303d12??crop=entropy&amp;cs=tinysrgb&amp;fit=crop&amp;fm=jpg&amp;ixid=MnwzNzg0fDB8MXxzZWFyY2h8M3x8YXZhdGFyfGVufDB8Mnx8fDE2Mzg4OTExNTE&amp;ixlib=rb-1.2.1&amp;q=80&amp;w=1024 1024w"
-                                            sizes="(max-width: 1080px) 100vw, 1080px" width="1080" height="1080">
-                                        <div class="ps-2">
-                                            <h4 editable="inline" class="rfs-7 ms-2">Mathew Glock</h4>
-                                        </div>
-                                    </div>
-                                    <div class="lc-block mt-4 text-muted">
-                                        <div editable="rich">
-                                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                                            </p>
-                                        </div>
-                                    </div>
-                                    <div class="rating mt-3 text-success">
-                                        <div class="lc-block"> <svg width="1em" height="1em" viewBox="0 0 16 16"
-                                                fill="currentColor" xmlns="http://www.w3.org/2000/svg"
-                                                lc-helper="svg-icon">
-                                                <path
-                                                    d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.283.95l-3.523 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z">
-                                                </path>
-                                            </svg>
-                                            <svg width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor"
-                                                xmlns="http://www.w3.org/2000/svg" lc-helper="svg-icon">
-                                                <path
-                                                    d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.283.95l-3.523 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z">
-                                                </path>
-                                            </svg>
-                                            <svg width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor"
-                                                xmlns="http://www.w3.org/2000/svg" lc-helper="svg-icon">
-                                                <path
-                                                    d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.283.95l-3.523 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z">
-                                                </path>
-                                            </svg>
-                                            <svg width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor"
-                                                xmlns="http://www.w3.org/2000/svg" lc-helper="svg-icon">
-                                                <path
-                                                    d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.283.95l-3.523 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z">
-                                                </path>
-                                            </svg> <svg width="1em" height="1em" viewBox="0 0 16 16"
-                                                fill="currentColor" xmlns="http://www.w3.org/2000/svg"
-                                                lc-helper="svg-icon">
-                                                <path
-                                                    d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.283.95l-3.523 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z">
-                                                </path>
-                                            </svg>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-8 col-lg-4 mb-4">
-                            <div class="card border-0 shadow">
-                                <div class="card-body py-4">
-                                    <div class="d-flex">
-                                        <img style="width:48px;height:48px"
-                                            src="https://images.unsplash.com/photo-1628157588553-5eeea00af15c?crop=entropy&amp;cs=tinysrgb&amp;fit=crop&amp;fm=jpg&amp;ixid=MnwzNzg0fDB8MXxzZWFyY2h8NHx8YXZhdGFyfGVufDB8Mnx8fDE2Mzg4OTExNTE&amp;ixlib=rb-1.2.1&amp;q=80&amp;w=1080&amp;h=1080"
-                                            alt="Photo by Leio McLaren" class="rounded-2 shadow"
-                                            srcset="https://images.unsplash.com/photo-1628157588553-5eeea00af15c?crop=entropy&amp;cs=tinysrgb&amp;fit=crop&amp;fm=jpg&amp;ixid=MnwzNzg0fDB8MXxzZWFyY2h8NHx8YXZhdGFyfGVufDB8Mnx8fDE2Mzg4OTExNTE&amp;ixlib=rb-1.2.1&amp;q=80&amp;w=1080&amp;h=1080 1080w, https://images.unsplash.com/photo-1628157588553-5eeea00af15c??crop=entropy&amp;cs=tinysrgb&amp;fit=crop&amp;fm=jpg&amp;ixid=MnwzNzg0fDB8MXxzZWFyY2h8NHx8YXZhdGFyfGVufDB8Mnx8fDE2Mzg4OTExNTE&amp;ixlib=rb-1.2.1&amp;q=80&amp;w=150 150w, https://images.unsplash.com/photo-1628157588553-5eeea00af15c??crop=entropy&amp;cs=tinysrgb&amp;fit=crop&amp;fm=jpg&amp;ixid=MnwzNzg0fDB8MXxzZWFyY2h8NHx8YXZhdGFyfGVufDB8Mnx8fDE2Mzg4OTExNTE&amp;ixlib=rb-1.2.1&amp;q=80&amp;w=300 300w, https://images.unsplash.com/photo-1628157588553-5eeea00af15c??crop=entropy&amp;cs=tinysrgb&amp;fit=crop&amp;fm=jpg&amp;ixid=MnwzNzg0fDB8MXxzZWFyY2h8NHx8YXZhdGFyfGVufDB8Mnx8fDE2Mzg4OTExNTE&amp;ixlib=rb-1.2.1&amp;q=80&amp;w=768 768w, https://images.unsplash.com/photo-1628157588553-5eeea00af15c??crop=entropy&amp;cs=tinysrgb&amp;fit=crop&amp;fm=jpg&amp;ixid=MnwzNzg0fDB8MXxzZWFyY2h8NHx8YXZhdGFyfGVufDB8Mnx8fDE2Mzg4OTExNTE&amp;ixlib=rb-1.2.1&amp;q=80&amp;w=1024 1024w"
-                                            sizes="(max-width: 1080px) 100vw, 1080px" width="1080" height="1080">
-                                        <div class="ps-2">
-                                            <h4 editable="inline" class="rfs-7 ms-2">Tahmid William&nbsp;<p></p>
-                                                <p></p>
-                                            </h4>
-                                        </div>
-                                    </div>
-                                    <div class="lc-block mt-4 text-muted">
-                                        <div editable="rich">
-                                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc et metus id
-                                                ligula malesuada placerat sit amet quis enim. Aliquam erat volutpat.
-                                            </p>
-                                        </div>
-                                    </div>
-                                    <div class="rating mt-3 text-success">
-                                        <div class="lc-block"> <svg width="1em" height="1em" viewBox="0 0 16 16"
-                                                fill="currentColor" xmlns="http://www.w3.org/2000/svg"
-                                                lc-helper="svg-icon">
-                                                <path
-                                                    d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.283.95l-3.523 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z">
-                                                </path>
-                                            </svg>
-                                            <svg width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor"
-                                                xmlns="http://www.w3.org/2000/svg" lc-helper="svg-icon">
-                                                <path
-                                                    d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.283.95l-3.523 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z">
-                                                </path>
-                                            </svg>
-                                            <svg width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor"
-                                                xmlns="http://www.w3.org/2000/svg" lc-helper="svg-icon">
-                                                <path
-                                                    d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.283.95l-3.523 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z">
-                                                </path>
-                                            </svg>
-                                            <svg width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor"
-                                                xmlns="http://www.w3.org/2000/svg" lc-helper="svg-icon">
-                                                <path
-                                                    d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.283.95l-3.523 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z">
-                                                </path>
-                                            </svg> <svg width="1em" height="1em" viewBox="0 0 16 16"
-                                                fill="currentColor" xmlns="http://www.w3.org/2000/svg"
-                                                lc-helper="svg-icon">
-                                                <path
-                                                    d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.283.95l-3.523 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z">
-                                                </path>
-                                            </svg>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-8 col-lg-4 mb-4">
-                            <div class="card border-0 shadow">
-                                <div class="card-body py-4">
-                                    <div class="d-flex">
-                                        <img style="width:48px;height:48px"
-                                            src="https://images.unsplash.com/photo-1595152452543-e5fc28ebc2b8?crop=entropy&amp;cs=tinysrgb&amp;fit=crop&amp;fm=jpg&amp;ixid=MnwzNzg0fDB8MXxzZWFyY2h8MTh8fGZhY2V8ZW58MHwyfHx8MTYzODg5MTA3MA&amp;ixlib=rb-1.2.1&amp;q=80&amp;w=1080&amp;h=1080"
-                                            alt="Photo by Amir Seilsepour" class="rounded-2 shadow"
-                                            srcset="https://images.unsplash.com/photo-1595152452543-e5fc28ebc2b8?crop=entropy&amp;cs=tinysrgb&amp;fit=crop&amp;fm=jpg&amp;ixid=MnwzNzg0fDB8MXxzZWFyY2h8MTh8fGZhY2V8ZW58MHwyfHx8MTYzODg5MTA3MA&amp;ixlib=rb-1.2.1&amp;q=80&amp;w=1080&amp;h=1080 1080w, https://images.unsplash.com/photo-1595152452543-e5fc28ebc2b8??crop=entropy&amp;cs=tinysrgb&amp;fit=crop&amp;fm=jpg&amp;ixid=MnwzNzg0fDB8MXxzZWFyY2h8MTh8fGZhY2V8ZW58MHwyfHx8MTYzODg5MTA3MA&amp;ixlib=rb-1.2.1&amp;q=80&amp;w=150 150w, https://images.unsplash.com/photo-1595152452543-e5fc28ebc2b8??crop=entropy&amp;cs=tinysrgb&amp;fit=crop&amp;fm=jpg&amp;ixid=MnwzNzg0fDB8MXxzZWFyY2h8MTh8fGZhY2V8ZW58MHwyfHx8MTYzODg5MTA3MA&amp;ixlib=rb-1.2.1&amp;q=80&amp;w=300 300w, https://images.unsplash.com/photo-1595152452543-e5fc28ebc2b8??crop=entropy&amp;cs=tinysrgb&amp;fit=crop&amp;fm=jpg&amp;ixid=MnwzNzg0fDB8MXxzZWFyY2h8MTh8fGZhY2V8ZW58MHwyfHx8MTYzODg5MTA3MA&amp;ixlib=rb-1.2.1&amp;q=80&amp;w=768 768w, https://images.unsplash.com/photo-1595152452543-e5fc28ebc2b8??crop=entropy&amp;cs=tinysrgb&amp;fit=crop&amp;fm=jpg&amp;ixid=MnwzNzg0fDB8MXxzZWFyY2h8MTh8fGZhY2V8ZW58MHwyfHx8MTYzODg5MTA3MA&amp;ixlib=rb-1.2.1&amp;q=80&amp;w=1024 1024w"
-                                            sizes="(max-width: 1080px) 100vw, 1080px" width="1080" height="1080">
-                                        <div class="ps-2">
-                                            <h4 editable="inline" class="rfs-7 ms-2">Jarvis Ridley&nbsp;<p></p>
-                                                <p></p>
-                                            </h4>
-                                        </div>
-                                    </div>
-                                    <div class="lc-block mt-4 text-muted">
-                                        <div editable="rich">
-                                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-                                        </div>
-                                    </div>
-                                    <div class="rating mt-3 text-success">
-                                        <div class="lc-block"> <svg width="1em" height="1em" viewBox="0 0 16 16"
-                                                fill="currentColor" xmlns="http://www.w3.org/2000/svg"
-                                                lc-helper="svg-icon">
-                                                <path
-                                                    d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.283.95l-3.523 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z">
-                                                </path>
-                                            </svg>
-                                            <svg width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor"
-                                                xmlns="http://www.w3.org/2000/svg" lc-helper="svg-icon">
-                                                <path
-                                                    d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.283.95l-3.523 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z">
-                                                </path>
-                                            </svg>
-                                            <svg width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor"
-                                                xmlns="http://www.w3.org/2000/svg" lc-helper="svg-icon">
-                                                <path
-                                                    d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.283.95l-3.523 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z">
-                                                </path>
-                                            </svg>
-                                            <svg width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor"
-                                                xmlns="http://www.w3.org/2000/svg" lc-helper="svg-icon">
-                                                <path
-                                                    d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.283.95l-3.523 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z">
-                                                </path>
-                                            </svg> <svg width="1em" height="1em" viewBox="0 0 16 16"
-                                                fill="currentColor" xmlns="http://www.w3.org/2000/svg"
-                                                lc-helper="svg-icon">
-                                                <path
-                                                    d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.283.95l-3.523 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z">
-                                                </path>
-                                            </svg>
-                                        </div>
-                                    </div>
-                                </div>
+
+
                             </div>
                         </div>
                     </div>

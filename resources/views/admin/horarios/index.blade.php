@@ -13,6 +13,24 @@
         .fc-header-toolbar {
             margin-bottom: 20px;
         }
+
+        .custom-event {
+            padding: 5px;
+            border-radius: 4px;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            text-align: center;
+        }
+
+        .event-title {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .event-aforo {
+            font-size: 0.8em;
+            border-radius: 2px;
+        }
     </style>
 
 
@@ -108,10 +126,25 @@
 
     <!-- Agregar FullCalendar y su script -->
     <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.9/index.global.min.js'></script>
-    <!-- Agregar el script de Bootstrap (asegúrate de que tu proyecto ya tiene Bootstrap) -->
 
 
     <script>
+        function getColorForActivity(activityId) {
+            // Convertir el ID en un número (si no lo es ya)
+            var idNumber = parseInt(activityId);
+            if (isNaN(idNumber)) {
+                // Si el ID no es numérico, usa un hash simple para convertirlo en un número
+                idNumber = activityId.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+            }
+
+            // Generar color
+            var hue = idNumber * 137.508; // Ángulo dorado aproximado
+            var saturation = 70; // Aumentar la saturación para colores más intensos
+            var lightness = 50; // Luminosidad que permite colores vivos pero no demasiado claros u oscuros
+
+            return `hsl(${hue % 360}, ${saturation}%, ${lightness}%)`;
+        }
+
         document.addEventListener('DOMContentLoaded', function() {
             var calendarEl = document.getElementById('calendar');
             var calendar = new FullCalendar.Calendar(calendarEl, {
@@ -141,14 +174,17 @@
                     var fechaHora = info.event.start.toLocaleString();
                     var idioma = info.event.extendedProps.idioma;
                     var frecuencia = info.event.extendedProps.frecuencia;
-
-                    // Actualizar el contenido del modal con los detalles del horario
                     var modalBody = document.getElementById('modal-body-content');
+
+                    var aforo = info.event.extendedProps.aforo;
+                    var estadoAforo = aforo === 0 ? "COMPLETO" : "Disponible";
+
                     modalBody.innerHTML = "<p><strong>Actividad:</strong> " + actividad + "</p>" +
                         "<p><strong>Fecha y Hora:</strong> " + fechaHora + "</p>" +
                         "<p><strong>Idioma:</strong> " + idioma + "</p>" +
                         "<p><strong>Id:</strong> " + horarioId + "</p>" +
-                        "<p><strong>Frecuencia:</strong> " + frecuencia + "</p>";
+                        "<p><strong>Frecuencia:</strong> " + frecuencia + "</p>" +
+                        "<p><strong>Aforo:</strong> " + estadoAforo + "</p>";
 
                     // Actualizar la acción del formulario para el borrado
                     var form = document.getElementById('borrarHorarioForm');
@@ -167,7 +203,49 @@
                     modal.show();
                 },
 
+                eventContent: function(arg) {
+                    var aforo = arg.event.extendedProps.aforo;
+                    var estadoAforo = aforo === 0 ? "COMPLETO" : "Disponible";
+                    var aforoColor = aforo === 0 ? 'red' : 'green';
+                    var actividadId = arg.event.id;
+
+                    // Contenedor principal del evento
+                    var eventWrapper = document.createElement('div');
+                    eventWrapper.classList.add('custom-event');
+
+
+                    // Hora del evento
+                    var timeElement = document.createElement('div');
+                    timeElement.classList.add('event-time');
+                    timeElement.innerHTML = arg.event.start.toLocaleTimeString([], {
+                        hour: '2-digit',
+                        minute: '2-digit'
+                    });
+
+                    // Título del evento
+                    var titleElement = document.createElement('div');
+                    titleElement.classList.add('event-title');
+                    titleElement.innerHTML = arg.event.title;
+                    titleElement.style.color = getColorForActivity(actividadId);
+
+                    // Estado de aforo
+                    var aforoElement = document.createElement('div');
+                    aforoElement.classList.add('event-aforo');
+                    aforoElement.innerHTML = estadoAforo;
+                    aforoElement.style.color = aforoColor;
+
+                    // Construcción del contenido del evento
+                    eventWrapper.appendChild(timeElement);
+                    eventWrapper.appendChild(titleElement);
+                    eventWrapper.appendChild(aforoElement);
+
+                    return {
+                        domNodes: [eventWrapper]
+                    };
+                },
+
                 events: @json($events, JSON_PRETTY_PRINT)
+
             });
 
             // Renderizar el calendario
