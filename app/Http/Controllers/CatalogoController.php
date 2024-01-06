@@ -31,6 +31,7 @@ class CatalogoController extends Controller
                     'horario_id' => $horario->id,
                     'frecuencia' => $horario->frecuencia,
                     'aforo' => $horario->actividad->aforo,
+                    'idioma' => $horario->idioma,
                 ],
             ];
         });

@@ -4,44 +4,45 @@
 
 @section('content')
     <style>
-       #calendar {
-    margin: 0 auto;
-    padding: 15px;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-    background-color: #fff;
-     width: 100%;
-    max-width: 1400px;
-    margin: 0 auto;
-}
+        #calendar {
+            margin: 0 auto;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+            background-color: #fff;
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
 
-.fc-header-toolbar {
-    margin-bottom: 20px;
-}
+        .fc-header-toolbar {
+            margin-bottom: 20px;
+        }
 
-.custom-event {
-    padding: 5px;
-    border-radius: 4px;
-    background-color: #f9f9f9;
-    border: 1px solid #ddd;
-    text-align: center;
-}
+        .custom-event {
+            padding: 5px;
+            border-radius: 4px;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            text-align: center;
+        }
 
-.event-title, .event-time {
-    font-weight: bold;
-    margin-bottom: 5px;
-    font-size: 14px;
-}
+        .event-title,
+        .event-time {
+            font-weight: bold;
+            margin-bottom: 5px;
+            font-size: 14px;
+        }
 
-.event-aforo {
-    font-size: 1.2em;
-    border-radius: 2px;
-}
-.fc-event {
-    display: flex;
-    justify-content: center;
-}
+        .event-aforo {
+            font-size: 1.2em;
+            border-radius: 2px;
+        }
 
+        .fc-event {
+            display: flex;
+            justify-content: center;
+        }
     </style>
 
 
@@ -237,21 +238,24 @@
                     titleElement.innerHTML = arg.event.title;
                     titleElement.style.color = getColorForActivity(actividadId);
 
+                    //Idioma
+                    var idiomaElement = document.createElement('div');
+                    idiomaElement.classList.add('event-idioma');
+                    idiomaElement.innerHTML = arg.event.extendedProps.idioma;
+
                     // Construcción del contenido del evento
                     eventWrapper.appendChild(titleElement);
                     eventWrapper.appendChild(timeElement);
+                    eventWrapper.appendChild(idiomaElement);
 
                     // Estado de aforo
                     if (aforo === 0) {
-                    var aforoElement = document.createElement('div');
-                    aforoElement.classList.add('event-aforo');
-                    aforoElement.innerHTML = "COMPLETO";
-                    aforoElement.style.color = 'red';
-                    eventWrapper.appendChild(aforoElement);
-                        }
-
-
-
+                        var aforoElement = document.createElement('div');
+                        aforoElement.classList.add('event-aforo');
+                        aforoElement.innerHTML = "COMPLETO";
+                        aforoElement.style.color = 'red';
+                        eventWrapper.appendChild(aforoElement);
+                    }
                     return {
                         domNodes: [eventWrapper]
                     };

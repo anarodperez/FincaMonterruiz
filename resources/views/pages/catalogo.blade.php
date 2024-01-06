@@ -258,9 +258,16 @@
                         titleElement.innerHTML = arg.event.title;
                         titleElement.style.color = getColorForActivity(actividadId);
 
+                        //Idioma
+                        var idiomaElement = document.createElement('div');
+                        idiomaElement.classList.add('event-idioma');
+                        idiomaElement.innerHTML = arg.event.extendedProps.idioma;
+
+
                         // Construcción del contenido del evento
                         eventWrapper.appendChild(titleElement);
                         eventWrapper.appendChild(timeElement);
+                        eventWrapper.appendChild(idiomaElement);
 
 
                         // Estado de aforo
