@@ -134,7 +134,8 @@ class ReservaController extends Controller
         }
 
         // Usa el token de la reserva en lugar del ID en el contenido del QR
-        $contenidoQR = 'https://tu-sitio-web.com/validar-reserva/' . $reserva->token;
+        // $contenidoQR = 'https://tu-sitio-web.com/validar-reserva/' . $reserva->token;
+        $contenidoQR = 'https://tu-sitio-web.com/validar-reserva/';
         $qrCode = base64_encode(
             QrCode::format('png')
                 ->size(200)

@@ -31,12 +31,12 @@ class Reserva extends Model
         return $this->belongsTo(Actividad::class, 'actividad_id');
     }
 
-    protected static function boot()
-    {
-        parent::boot();
+    // protected static function boot()
+    // {
+    //     parent::boot();
 
-        static::creating(function ($reserva) {
-            $reserva->token = Str::random(16); // Genera un token de 16 caracteres
-        });
-    }
+    //     static::creating(function ($reserva) {
+    //         $reserva->token = Str::random(16); // Genera un token de 16 caracteres
+    //     });
+    // }
 }

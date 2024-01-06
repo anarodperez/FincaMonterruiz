@@ -1,85 +1,59 @@
-.reserva-container {
-max-width: 900px;
-margin: auto;
-padding: 20px;
-background-color: #fff;
-border-radius: 8px;
-box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+.detalles-reserva, .formulario-reserva {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-left: 5px solid #6fa78a; /* Borde lateral colorido */
+    margin-bottom: 5vh;
+    margin-top: 3vh;
 }
 
-.reserva-heading {
-color: #333;
-font-size: 24px;
-font-weight: bold;
-margin-bottom: 1.5rem;
+.formulario-reserva label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #6fa78a;
 }
 
-.reserva-form {
-background-color: #f9f9f9;
-padding: 20px;
-border-radius: 8px;
+.formulario-reserva input, .formulario-reserva select, .formulario-reserva textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    border: 2px solid #6fa78a; /* Bordes azules */
 }
 
-.reserva-form-group {
-margin-bottom: 1rem;
+.btn-primary {
+    background-color: #4c606d;
+    border-color: #4c606d;
+    color: white;
 }
 
-.reserva-form-label {
-display: block;
-margin-bottom: .5rem;
-color: #666;
-font-size: 16px;
+.btn-primary:hover {
+    background-color: #4c606d;
+    border-color: #4c606d;
 }
 
-.reserva-form-input {
-display: block;
-width: 100%;
-padding: .375rem .75rem;
-font-size: 1rem;
-line-height: 1.5;
-color: #495057;
-background-color: #fff;
-background-clip: padding-box;
-border: 1px solid #ced4da;
-border-radius: .25rem;
-transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+#alertas {
+    margin-bottom: 20px;
 }
 
-.reserva-form-input[readonly] {
-background-color: #e9ecef;
-opacity: 1;
+
+
+.detalles-reserva .info-reserva .etiqueta {
+    font-weight: bold;
+    margin-right: 10px;
+    color: #5D4037; /* Color oscuro para destacar */
 }
 
-.reserva-button {
-background-color: #5cb85c;
-color: white;
-padding: .75rem 1.5rem;
-font-size: 16px;
-border-radius: 4px;
-border: none;
-cursor: pointer;
-display: inline-block;
+.detalles-reserva .info-reserva .valor {
+    color: #757575; /* Color más suave para los valores */
 }
 
-.reserva-button:hover {
-background-color: #4cae4c;
-}
-
-.reserva-subheading  {
-color: #555;
-margin-top: 0;
-margin-bottom: 20px;
-font-size: 18px;
-
-}
-
-.btn-reservar{
-background-color: #5cb85c; color: white; padding: .75rem 1.5rem; border-radius: 4px; border: none; cursor: pointer;
-}
-
-.d-flex {
+.detalles-reserva .info-reserva > div {
     display: flex;
-}
-.align-items-baseline {
     align-items: baseline;
+    margin-bottom: 10px;
 }

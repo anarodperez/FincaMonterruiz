@@ -23,12 +23,14 @@ class CatalogoController extends Controller
 
         $events = $horarios->map(function ($horario) {
             return [
-                'title' => $horario->actividad->nombre, // Asumiendo que la actividad tiene un campo 'nombre'
+                'id' => $horario->actividad->id,
+                'title' => $horario->actividad->nombre,
                 'start' => $horario->fecha . 'T' . $horario->hora,
                 'extendedProps' => [
                     'idioma' => $horario->idioma,
                     'horario_id' => $horario->id,
-                    'frecuencia' => $horario->frecuencia, // Añade la frecuencia aquí
+                    'frecuencia' => $horario->frecuencia,
+                    'aforo' => $horario->actividad->aforo,
                 ],
             ];
         });

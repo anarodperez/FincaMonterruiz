@@ -141,18 +141,21 @@
                     <!-- Agrega más botones según los idiomas que manejes -->
                 </div>
             </div>
-            <!-- Modal -->
-            <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+            <!-- Modal: mensaje AFORO COMPLETO -->
+            <div class="modal fade" id="eventoCompletoModal" tabindex="-1" aria-labelledby="eventoCompletoModalLabel"
                 aria-hidden="true">
-                <div class="modal-dialog" role="document">
+                <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLabel">Detalles del Evento</h5>
+                            <h5 class="modal-title" id="eventoCompletoModalLabel">Horario Completo</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal"
                                 aria-label="Close"></button>
                         </div>
-                        <div class="modal-body" id="modal-body-content">
-                            <!-- Contenido dinámico del modal -->
+                        <div class="modal-body">
+                            Este horario está completo. Por favor, selecciona otro horario.
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
                         </div>
                     </div>
                 </div>
@@ -175,10 +178,23 @@
 
         <!-- Agregar FullCalendar y su script -->
         <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.9/index.global.min.js'></script>
-        <!-- Agregar el script de Bootstrap (asegúrate de que tu proyecto ya tiene Bootstrap) -->
-
 
         <script>
+            function getColorForActivity(activityId) {
+                // Convertir el ID en un número (si no lo es ya)
+                var idNumber = parseInt(activityId);
+                if (isNaN(idNumber)) {
+                    // Si el ID no es numérico, usa un hash simple para convertirlo en un número
+                    idNumber = activityId.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+                }
+
+                // Generar color
+                var hue = idNumber * 137.508; // Ángulo dorado aproximado
+                var saturation = 70; // Aumentar la saturación para colores más intensos
+                var lightness = 50; // Luminosidad que permite colores vivos pero no demasiado claros u oscuros
+
+                return `hsl(${hue % 360}, ${saturation}%, ${lightness}%)`;
+            }
             document.addEventListener('DOMContentLoaded', function() {
                 var calendarEl = document.getElementById('calendar');
                 var calendar = new FullCalendar.Calendar(calendarEl, {
@@ -202,14 +218,63 @@
                     locale: 'es',
 
                     eventClick: function(info) {
-                        @if (Auth::check())
-                            // Usuario autenticado: permite la reserva
-                            var horarioId = info.event.extendedProps.horario_id;
-                            window.location.href = `/reservar/${horarioId}`;
-                        @else
-                            // Usuario no autenticado: redirige al inicio de sesión
-                            window.location.href = '/login';
-                        @endif
+                        var aforo = info.event.extendedProps.aforo;
+
+                        if (aforo === 0) {
+                            // Si el aforo es 0, muestra un mensaje y no redirige
+                            $('#eventoCompletoModal').modal('show');
+                        } else {
+                            // Si hay aforo, procede con la lógica de redirección
+                            @if (Auth::check())
+                                // Usuario autenticado: permite la reserva
+                                var horarioId = info.event.extendedProps.horario_id;
+                                window.location.href = `/reservar/${horarioId}`;
+                            @else
+                                // Usuario no autenticado: redirige al inicio de sesión
+                                window.location.href = '/login';
+                            @endif
+                        }
+                    },
+                    eventContent: function(arg) {
+                        var aforo = arg.event.extendedProps.aforo;
+                        var actividadId = arg.event.id;
+
+                        // Contenedor principal del evento
+                        var eventWrapper = document.createElement('div');
+                        eventWrapper.classList.add('custom-event');
+
+
+                        // Hora del evento
+                        var timeElement = document.createElement('div');
+                        timeElement.classList.add('event-time');
+                        timeElement.innerHTML = arg.event.start.toLocaleTimeString([], {
+                            hour: '2-digit',
+                            minute: '2-digit'
+                        });
+
+                        // Título del evento
+                        var titleElement = document.createElement('div');
+                        titleElement.classList.add('event-title');
+                        titleElement.innerHTML = arg.event.title;
+                        titleElement.style.color = getColorForActivity(actividadId);
+
+                        // Construcción del contenido del evento
+                        eventWrapper.appendChild(titleElement);
+                        eventWrapper.appendChild(timeElement);
+
+
+                        // Estado de aforo
+                        if (aforo === 0) {
+                            var aforoElement = document.createElement('div');
+                            aforoElement.classList.add('event-aforo');
+                            aforoElement.innerHTML = "COMPLETO";
+                            aforoElement.style.color = 'red'; // Color rojo para destacar que está completo
+                            eventWrapper.appendChild(aforoElement);
+                        }
+
+                        return {
+                            domNodes: [eventWrapper]
+                        };
                     },
                     events: @json($events, JSON_PRETTY_PRINT)
                 });
