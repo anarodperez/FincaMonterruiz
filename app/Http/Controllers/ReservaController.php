@@ -12,6 +12,7 @@ use PDF;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\ReservationConfirmationMail;
+use App\Mail\ReservationCancellationMail;
 use Illuminate\Support\Facades\DB;
 
 class ReservaController extends Controller
@@ -104,7 +105,6 @@ class ReservaController extends Controller
         // Calcular las plazas disponibles
         $aforoDisponible = max(0, $horario->actividad->aforo - $plazasReservadas);
 
-
         return view('pages.reservar', compact('actividad', 'horario', 'usuario', 'aforoDisponible'));
     }
 
@@ -117,6 +117,9 @@ class ReservaController extends Controller
             // Cambiar el estado de la reserva a 'cancelada'
             $reserva->estado = 'cancelada';
             $reserva->save();
+
+            // Enviar correo de cancelación
+            Mail::to($reserva->usuario->email)->send(new ReservationCancellationMail($reserva));
 
             return back()->with('success', 'Reserva cancelada correctamente.');
         }
