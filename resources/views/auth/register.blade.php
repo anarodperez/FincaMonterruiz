@@ -5,6 +5,7 @@
 @section('css')
     <link rel="stylesheet" href="{{ asset('css/login.css') }}">
     <link rel="stylesheet" href="{{ asset('css/navbar.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/footer.css') }}">
     <script src="{{ asset('js/validaciones.js') }}" defer></script>
     <style>
         .container-formulario {
@@ -21,50 +22,19 @@
             color: red;
         }
 
-        .col-md-3 {
+        .col-md-3{
             padding-bottom: 3vh;
-        }
-
-        @media (max-width: 768px) {
-
-            .signup,
-            .login {
-                width: 55vw;
-            }
-        }
-
-        .password-toggle {
-            top: 61%;
-            right: 16px;
-            font-size: 1.3em;
-
         }
     </style>
 @endsection
-<script defer>
-    function togglePasswordVisibility(passwordInputId, toggleIconId) {
-        const passwordInput = document.getElementById(passwordInputId);
-        const icon = document.getElementById(toggleIconId);
-
-        if (passwordInput.type === 'password') {
-            passwordInput.type = 'text';
-            icon.classList.remove('fa-eye');
-            icon.classList.add('fa-eye-slash');
-        } else {
-            passwordInput.type = 'password';
-            icon.classList.remove('fa-eye-slash');
-            icon.classList.add('fa-eye');
-        }
-    }
-</script>
 
 @section('content')
     <x-auth-session-status class="mb-4" :status="session('status')" />
     <div class="wrapper">
-        <section class="container-formulario">
+        <div class="container-formulario">
             <div class="signup"><strong>Registrarse</strong></div>
             <div class="login"><strong><a class="enlace" href="{{ route('login') }}">Iniciar sesión</a></strong></div>
-        </section>
+        </div>
         <div class="container shadow-lg p-3 mb-5 bg-body rounded " style="min-height: 50vh">
             @if ($errors->any())
                 <div class="alert alert-danger">
@@ -108,29 +78,19 @@
                     <x-input-error :messages="$errors->get('email')" class=" badge text-danger errors-email" />
                 </div>
                 <!-- Contraseña -->
-                <div class="col-md-3" style="position: relative;">
+                <div class="col-md-3">
                     <x-input-label for="password" :value="__('Contraseña')" class="form-label" />
-                    <x-text-input id="password" class="form-control" type="password" name="password" required
-                        autocomplete="new-password" />
-                    <span class="password-toggle" onclick="togglePasswordVisibility('password', 'toggleIconRegister')">
-                        <i id="toggleIconRegister" class="fas fa-eye"></i>
-                    </span>
+                    <x-text-input id="password" class="form-control" type="password" name="password" :value="old('password')"
+                        autofocus autocomplete="new-password" />
                     <x-input-error :messages="$errors->get('password')" class=" badge text-danger errors-password" />
                 </div>
-
-                <!-- Confirmación de Contraseña -->
-                <div class="col-md-3" style="position: relative;">
+                <!-- Campo de confirmación de contraseña -->
+                <div class="col-md-3">
                     <x-input-label for="password_confirmation" :value="__('Confirmar contraseña')" class="form-label" />
                     <x-text-input id="password_confirmation" class="form-control" type="password"
-                        name="password_confirmation" required autocomplete="new-password" />
-                    <span class="password-toggle"
-                        onclick="togglePasswordVisibility('password_confirmation', 'toggleIconConfirmRegister')">
-                        <i id="toggleIconConfirmRegister" class="fas fa-eye"></i>
-                    </span>
+                        name="password_confirmation" :value="old('password_confirmation')" autofocus autocomplete="password_confirmation" />
                     <x-input-error :messages="$errors->get('password_confirmation')" class=" badge text-danger errors-password_confirmation" />
                 </div>
-
-
 
                 <div class="col-12" style="text-align: center;">
                     <button type="submit" id="btn-enviar" class="btn-2" style="width: 200px;">REGISTRARSE</button>

@@ -10,12 +10,15 @@ use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use PDF;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\ReservationConfirmationMail;
+use Illuminate\Support\Facades\DB;
 
 class ReservaController extends Controller
 {
     public function index()
     {
-        $reservas = Reserva::with(['usuario', 'actividad', 'horario'])->paginate(3);
+        $reservas = Reserva::with(['usuario', 'actividad', 'horario'])->paginate(5);
 
         return view('admin.reservas.index', compact('reservas'));
     }
@@ -42,9 +45,15 @@ class ReservaController extends Controller
         // Calcular el número total de personas para la reserva
         $numPersonas = $validated['num_adultos'] + $validated['num_ninos'];
 
+        // Calcular plazas ya reservadas para esta actividad
+        $plazasReservadas = Reserva::where('actividad_id', $horario->actividad->id)
+            ->where('estado', 'confirmado')
+            ->sum(DB::raw('num_adultos + num_ninos'));
+        $aforoDisponible = $horario->actividad->aforo - $plazasReservadas;
+
         // Verificar si hay suficiente aforo disponible
-        if ($actividad->aforo < $numPersonas) {
-            return back()->withErrors(['error' => 'No hay suficiente aforo disponible para esta reserva.']);
+        if ($actividad->aforo - $plazasReservadas < $numPersonas) {
+            return back()->withErrors(['aforo_error' => 'No hay suficiente aforo disponible para esta reserva.']);
         }
 
         // Crear la reserva
@@ -59,9 +68,22 @@ class ReservaController extends Controller
         // Guardar la reserva
         $reserva->save();
 
-        // Actualizar el aforo de la actividad
-        $actividad->aforo -= $numPersonas;
-        $actividad->save();
+        //Intenta procesar el pago
+        // Enviar correo electrónico de confirmación
+        try {
+            $precioPorAdulto = $reserva->actividad->precio_adulto;
+            $precioPorNino = $reserva->actividad->precio_nino;
+
+            $totalPagado = $reserva->num_adultos * $precioPorAdulto + $reserva->num_ninos * $precioPorNino;
+            $reserva->total_pagado = $totalPagado;
+
+            // Enviar correo electrónico de confirmación
+            Mail::to(Auth::user()->email)->send(new ReservationConfirmationMail($reserva, $totalPagado));
+        } catch (Exception $e) {
+            // Manejo de la excepción, por ejemplo, loguear el error
+            // Log::error('Error al enviar correo de confirmación: '.$e->getMessage());
+            // Opcionalmente, puedes redirigir al usuario con un mensaje de error
+        }
 
         return redirect()
             ->route('dashboard')
@@ -74,7 +96,16 @@ class ReservaController extends Controller
         $actividad = Actividad::where('id', $horario->actividad_id)->firstOrFail();
         $usuario = auth()->user();
 
-        return view('pages.reservar', compact('actividad', 'horario', 'usuario'));
+        // Sumar las plazas reservadas para esta actividad
+        $plazasReservadas = Reserva::where('actividad_id', $actividad->id)
+            ->where('estado', 'confirmado')
+            ->sum(DB::raw('num_adultos + num_ninos'));
+
+        // Calcular las plazas disponibles
+        $aforoDisponible = max(0, $horario->actividad->aforo - $plazasReservadas);
+
+
+        return view('pages.reservar', compact('actividad', 'horario', 'usuario', 'aforoDisponible'));
     }
 
     public function cancelar($id)
@@ -83,12 +114,6 @@ class ReservaController extends Controller
 
         // Verificar si la reserva ya está cancelada
         if ($reserva->estado !== 'cancelada') {
-            $actividad = $reserva->actividad;
-
-            // Aumentar el aforo de la actividad
-            $actividad->aforo += $reserva->num_adultos + $reserva->num_ninos;
-            $actividad->save();
-
             // Cambiar el estado de la reserva a 'cancelada'
             $reserva->estado = 'cancelada';
             $reserva->save();

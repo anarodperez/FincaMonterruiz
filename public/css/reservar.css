@@ -57,3 +57,17 @@
     align-items: baseline;
     margin-bottom: 10px;
 }
+
+.aforo{
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    border: 1px solid #ff5722;
+    padding: 5px;
+    border-radius: 5px;
+    animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}

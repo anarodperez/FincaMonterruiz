@@ -188,8 +188,8 @@
                     var frecuencia = info.event.extendedProps.frecuencia;
                     var modalBody = document.getElementById('modal-body-content');
 
-                    var aforo = info.event.extendedProps.aforo;
-                    var estadoAforo = aforo === 0 ? "COMPLETO" : "Disponible";
+                    var aforoDisponible = info.event.extendedProps.aforoDisponible;
+                    var estadoAforo = aforoDisponible === 0 ? "COMPLETO" : "Disponible";
 
                     modalBody.innerHTML = "<p><strong>Actividad:</strong> " + actividad + "</p>" +
                         "<p><strong>Fecha y Hora:</strong> " + fechaHora + "</p>" +
@@ -216,7 +216,7 @@
                 },
 
                 eventContent: function(arg) {
-                    var aforo = arg.event.extendedProps.aforo;
+                    var aforoDisponible = arg.event.extendedProps.aforoDisponible;
                     var actividadId = arg.event.id;
 
                     // Contenedor principal del evento
@@ -248,8 +248,9 @@
                     eventWrapper.appendChild(timeElement);
                     eventWrapper.appendChild(idiomaElement);
 
+
                     // Estado de aforo
-                    if (aforo === 0) {
+                    if (aforoDisponible === 0) {
                         var aforoElement = document.createElement('div');
                         aforoElement.classList.add('event-aforo');
                         aforoElement.innerHTML = "COMPLETO";
