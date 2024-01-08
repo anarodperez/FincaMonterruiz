@@ -30,7 +30,7 @@
             margin-top: 0;
         }
 
-        p strong{
+        p strong {
             font-size: 16px;
             color: #555555;
         }
@@ -84,6 +84,10 @@
         .button:hover {
             background-color: #6fa78a;
         }
+
+        .ii a[href] {
+            color: white;
+        }
     </style>
 </head>
 
@@ -107,7 +111,7 @@
         <a href="{{ url('/descargar-entrada/' . $reserva->id) }}" class="button">Descargar Entrada</a>
 
 
-        <p class="footer">¡Gracias por reservar con nosotros!</p>
+        <p class="footer">Gracias por elegirnos,<br>El equipo de {{ config('app.name') }}</p>
     </div>
 </body>
 
