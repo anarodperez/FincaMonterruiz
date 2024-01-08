@@ -8,6 +8,35 @@
 @endsection
 
 <script defer>
+    // document.addEventListener('DOMContentLoaded', function() {
+    //     const loginForm = document.getElementById('login-box');
+    //     loginForm.addEventListener('submit', function(event) {
+    //         let isValid = true;
+    //         const emailInput = document.getElementById('email');
+    //         const passwordInput = document.getElementById('password');
+    //         const emailError = document.getElementById('email-error');
+    //         const passwordError = document.getElementById('password-error');
+
+    //         // Limpiar mensajes de error previos
+    //         emailError.textContent = '';
+    //         passwordError.textContent = '';
+
+    //         if (!validateEmail(emailInput.value)) {
+    //             emailError.textContent = 'Por favor, introduce un correo electrónico válido.';
+    //             isValid = false;
+    //         }
+
+    //         if (!validatePassword(passwordInput.value)) {
+    //             passwordError.textContent = 'La contraseña debe tener al menos 6 caracteres.';
+    //             isValid = false;
+    //         }
+
+    //         if (!isValid) {
+    //             event.preventDefault(); // Prevenir el envío del formulario si la validación falla
+    //         }
+    //     });
+    // });
+
     function togglePasswordVisibility() {
         const passwordInput = document.getElementById('password');
         const icon = document.getElementById('toggleIcon');
@@ -22,6 +51,18 @@
             icon.classList.add('fa-eye');
         }
     }
+
+    // Función para validar el correo electrónico
+    function validateEmail(email) {
+        const re =
+            /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        return re.test(email);
+    }
+
+    // Función para validar la contraseña
+    function validatePassword(password) {
+        return password.length >= 6; // Ejemplo: una validación simple que requiere 6 caracteres como mínimo
+    }
 </script>
 
 @section('content')
@@ -35,9 +76,6 @@
             <div class="login-form" style="background: white">
                 <img src="img/img1.jpg" alt="Imagen" class=" img-fluid login-image">
                 <h3>Iniciar sesión</h3>
-                <a href="{{ url('/login/google') }}" class="boton-google">
-                    <i class="fab fa-google" aria-hidden="true"></i> Iniciar sesión con Google
-                </a>
 
                 @if (session('status') === 'login-error')
                     <div class="alert alert-danger">
@@ -52,11 +90,11 @@
                         <x-input-label for="email" :value="__('Email')" />
                         <x-text-input id="email" class="input" type="email" name="email" :value="old('email')" required
                             autofocus autocomplete="username" />
-                        <x-input-error :messages="$errors->get('email')" class="mt-2" />
+                        <x-input-error :messages="$errors->get('email')" class="mt-2 error-message" />
                     </div>
 
                     <!-- Password -->
-                    <div class="mt-4" style="position: relative;">
+                    <div >
                         <x-input-label for="password" :value="__('Password')" />
 
                         <div class="input-group">
@@ -67,7 +105,7 @@
                                 <i id="toggleIcon" class="fas fa-eye"></i>
                             </span>
                         </div>
-                        <x-input-error :messages="$errors->get('password')" class="mt-2" />
+                        <x-input-error :messages="$errors->get('password')" class="mt-2 error-message" />
                     </div>
                     <!-- Remember Me -->
                     <div class="block mt-4">

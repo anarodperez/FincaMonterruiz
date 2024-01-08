@@ -12,6 +12,12 @@
             </div>
         @endif
 
+        @if ($errors->has('aforo_error'))
+            <div class="alert alert-danger">
+                {{ $errors->first('aforo_error') }}
+            </div>
+        @endif
+
         @if (session('error'))
             <div class="alert alert-danger">
                 {{ session('error') }}
@@ -60,6 +66,12 @@
                         <span class="etiqueta">Idioma de la actividad:</span>
                         <span id="idioma" class="valor">{{ $horario->idioma }}</span>
                     </div>
+                    <div class="mb-3">
+                        <span class="etiqueta">Aforo disponible:</span>
+                        <span id="aforo" class="aforo">{{ max($aforoDisponible, 0) }}</span>
+
+                    </div>
+
                 </div>
             </div>
 

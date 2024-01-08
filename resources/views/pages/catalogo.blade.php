@@ -16,9 +16,7 @@
                     <p>Explora una variedad de actividades emocionantes para todas las edades.</p>
                 </div>
             </header>
-
             <div class="row">
-
                 <!-- Campo de búsqueda con ícono de lupa -->
                 <div class="d-flex justify-content-center align-items-center busqueda" style="position: relative;">
                     <input type="text" id="search" class="form-control" placeholder="Escribe el nombre de la actividad"
@@ -218,9 +216,9 @@
                     locale: 'es',
 
                     eventClick: function(info) {
-                        var aforo = info.event.extendedProps.aforo;
+                        var aforoDisponible = info.event.extendedProps.aforoDisponible;
 
-                        if (aforo === 0) {
+                        if (aforoDisponible === 0) {
                             // Si el aforo es 0, muestra un mensaje y no redirige
                             $('#eventoCompletoModal').modal('show');
                         } else {
@@ -236,7 +234,7 @@
                         }
                     },
                     eventContent: function(arg) {
-                        var aforo = arg.event.extendedProps.aforo;
+                        var aforoDisponible = arg.event.extendedProps.aforoDisponible;
                         var actividadId = arg.event.id;
 
                         // Contenedor principal del evento
@@ -258,19 +256,26 @@
                         titleElement.innerHTML = arg.event.title;
                         titleElement.style.color = getColorForActivity(actividadId);
 
+                        //Idioma
+                        var idiomaElement = document.createElement('div');
+                        idiomaElement.classList.add('event-idioma');
+                        idiomaElement.innerHTML = arg.event.extendedProps.idioma;
+
+
                         // Construcción del contenido del evento
                         eventWrapper.appendChild(titleElement);
                         eventWrapper.appendChild(timeElement);
+                        eventWrapper.appendChild(idiomaElement);
 
 
-                        // Estado de aforo
-                        if (aforo === 0) {
-                            var aforoElement = document.createElement('div');
-                            aforoElement.classList.add('event-aforo');
-                            aforoElement.innerHTML = "COMPLETO";
-                            aforoElement.style.color = 'red'; // Color rojo para destacar que está completo
-                            eventWrapper.appendChild(aforoElement);
-                        }
+                       // Estado de aforo
+                    if (aforoDisponible === 0) {
+                        var aforoElement = document.createElement('div');
+                        aforoElement.classList.add('event-aforo');
+                        aforoElement.innerHTML = "COMPLETO";
+                        aforoElement.style.color = 'red';
+                        eventWrapper.appendChild(aforoElement);
+                    }
 
                         return {
                             domNodes: [eventWrapper]

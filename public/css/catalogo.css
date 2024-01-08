@@ -140,7 +140,7 @@ section nav {
     text-align: center;
 }
 
-.event-title, .event-time {
+.event-title, .event-time, .event-idioma {
     font-weight: bold;
     margin-bottom: 5px;
     font-size: 14px;
