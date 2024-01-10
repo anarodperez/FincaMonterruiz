@@ -2,13 +2,111 @@
 
 @section('title', 'Admin | Reservas')
 
+<style>
+    .buscador {
+        max-width: 500px;
+        margin-bottom: 20px;
+        border-radius: 5px;
+        border: 1px solid #ced4da;
+    }
+
+    .form-control {
+        border-radius: 5px;
+        border: 1px solid #ced4da;
+    }
+</style>
+
 @section('content')
     <div class="container">
+
         <div class="text-center my-4">
             <h2 class="display-4 font-weight-bold text-primary">Listado de Reservas</h2>
             <p class="lead">Descubre y gestiona la lista de reservas en el sistema.</p>
         </div>
-        <div class="table-responsive">
+        <div class="table-responsive" style="min-height: 600px;" x-effect="updateHasResults()" x-data="{
+            search: '',
+            startDate: '',
+            endDate: '',
+            estadoSeleccionado: '',
+            normalizeStr(str) {
+                return str.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+            },
+            inDateRange(date) {
+                const d = new Date(date);
+                const start = new Date(this.startDate);
+                const end = new Date(this.endDate);
+                return (!this.startDate || d >= start) && (!this.endDate || d <= end);
+            },
+            currentReservaEstado: null,
+            openCancelModal(reservaId, estado) {
+                this.currentCancelFormId = 'cancel-form-' + reservaId;
+                this.currentReservaEstado = estado;
+                var modal = new bootstrap.Modal(document.getElementById('cancelModal'));
+                modal.show();
+            },
+            confirmCancel() {
+                if (this.currentReservaEstado !== 'cancelada') {
+                    document.getElementById(this.currentCancelFormId).submit();
+                }
+            },
+            hasResults: true,
+            updateHasResults() {
+                this.$nextTick(() => {
+                    console.log(this.$refs.tbody); // Para depurar
+                    let rows = Array.from(this.$refs.tbody.querySelectorAll('tr:not(.no-results)'));
+                    let visibleRows = rows.filter(row => row.style.display !== 'none').length;
+                    this.hasResults = visibleRows > 0;
+                    console.log('hasResults:', this.hasResults);
+                });
+            },
+            init() {
+                this.updateHasResults();
+            },
+        }">
+
+            <!-- Buscador -->
+            <div class="d-flex justify-content-center mb-3">
+                <input x-model="search" @input="updateHasResults()" type="text"
+                    placeholder="Buscar por usuario (nombre, apellidos) o actividad..." class="form-control buscador"
+                    style="text-align: center">
+            </div>
+
+            <div class="d-flex justify-content-center gap-2 mb-3">
+                <!-- Filtros de Fecha -->
+                <input x-model="startDate" @input="updateHasResults()" type="date" class="form-control">
+                <input x-model="endDate" @input="updateHasResults()" type="date" class="form-control">
+
+                <!-- Selector de Estado -->
+                <select x-model="estadoSeleccionado" @input="updateHasResults()" class="form-control">
+                    <option value="">Todos los estados</option>
+                    <option value="confirmado">Confirmado</option>
+                    <option value="cancelada">Cancelada</option>
+                </select>
+                <!-- Selector de Actividad -->
+                <select x-model="actividadSeleccionada" @input="updateHasResults()" class="form-control">
+                    <option value="">Todas las actividades</option>
+                    <!-- Generar opciones para actividades -->
+                    @foreach ($actividadesDisponibles as $actividad)
+                        <option value="{{ $actividad->id }}">{{ $actividad->nombre }}</option>
+                    @endforeach
+                </select>
+
+                <!-- Selector de Horario -->
+                <select x-model="horarioSeleccionado" @input="updateHasResults()" class="form-control">
+                    <option value="">Todos los horarios</option>
+                    <!-- Generar opciones para horarios -->
+                    @foreach ($horariosDisponibles as $horario)
+                        <option value="{{ $horario->id }}">{{ $horario->fecha }} {{ $horario->hora }}</option>
+                    @endforeach
+                </select>
+
+            </div>
+            <div class="d-flex justify-content-center">
+                <button type="button" class="btn btn-danger" @click="cancelarReservasEnLote">Cancelar Reservas en
+                    Lote</button>
+            </div>
+
+            <!-- Tabla de Reservas -->
             <table class="tabla">
                 <thead>
                     <tr>
@@ -21,9 +119,10 @@
                         <th>Acciones</th>
                     </tr>
                 </thead>
-                <tbody>
-                    @foreach ($reservas as $reserva)
-                        <tr>
+                <tbody x-ref="tbody">
+                    @forelse ($reservas as $reserva)
+                        <tr
+                            x-show="(!search || normalizeStr(`{{ $reserva->usuario->nombre }} {{ $reserva->usuario->apellido1 }} {{ $reserva->usuario->apellido2 }} {{ $reserva->actividad->nombre }}`).toLowerCase().includes(normalizeStr(search).toLowerCase())) && inDateRange('{{ $reserva->horario->fecha }}') && (!estadoSeleccionado || estadoSeleccionado === '{{ $reserva->estado }}')">
                             <td>{{ $reserva->id }}</td>
                             <td>{{ $reserva->usuario->nombre }} {{ $reserva->usuario->apellido1 }}
                                 {{ $reserva->usuario->apellido2 }}</td>
@@ -32,16 +131,106 @@
                             <td>{{ $reserva->horario->hora }}</td>
                             <td>{{ $reserva->estado }}</td>
                             <td>
-                                <form action="{{ route('reservas.cancelar', $reserva->id) }}" method="POST">
+                                <form id="cancel-form-{{ $reserva->id }}"
+                                    action="{{ route('reservas.cancelar', $reserva->id) }}" method="POST">
                                     @csrf
-                                    <button type="submit" class="btn btn-danger">Cancelar</button>
+                                    <button type="button" class="btn btn-danger" ... data-toggle="tooltip"
+                                        title="Cancelar reserva"
+                                        onclick="openCancelModal({{ $reserva->id }}, '{{ strtolower($reserva->estado) }}')">
+                                        <i class="fa fa-cancel"></i> Cancelar
+                                    </button>
                                 </form>
                             </td>
                         </tr>
-                    @endforeach
+                    @empty
+                    @endforelse
+                    <!-- Fila de No Resultados -->
+                    <tr x-show="!hasResults">
+                        <td colspan="7" class="text-center">No se encontraron resultados para tu búsqueda.</td>
+                    </tr>
+
                 </tbody>
             </table>
             {{-- Enlaces de paginación --}}
             {{ $reservas->links() }}
+
+
+            <!-- Cambiar el Modal de Confirmación -->
+            <div class="modal fade" id="cancelModal" tabindex="-1" role="dialog" aria-labelledby="cancelModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="cancelModalLabel">Confirmar Cancelación</h5>
+                            <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <p id="cancelMessage"></p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                            <button type="button" class="btn btn-danger" id="confirmCancel">Confirmar Cancelación</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </div>
-    @endsection
+    </div>
+    <script>
+        var currentCancelFormId = null;
+
+        var actividadSeleccionada = '';
+        var horarioSeleccionado = '';
+
+        function openCancelModal(reservaId, estado) {
+            currentCancelFormId = 'cancel-form-' + reservaId;
+            var modal = new bootstrap.Modal(document.getElementById('cancelModal'));
+            var messageElement = document.getElementById('cancelMessage');
+
+            if (estado === 'cancelada') {
+                // Si el estado es 'cancelada', mostrar el mensaje correspondiente
+                messageElement.textContent = 'Esta reserva ya está cancelada.';
+                document.getElementById('confirmCancel').disabled = true; // Deshabilitar el botón de confirmación
+            } else {
+                // Si el estado no es 'cancelada', mostrar el otro mensaje
+                messageElement.textContent = '¿Estás seguro de que deseas cancelar esta reserva?';
+                document.getElementById('confirmCancel').disabled = false; // Habilitar el botón de confirmación
+            }
+
+            modal.show();
+        }
+
+        document.getElementById('confirmCancel').addEventListener('click', function() {
+            document.getElementById(currentCancelFormId).submit();
+        });
+
+
+        function cancelarReservasEnLote() {
+            // Validar que se hayan seleccionado actividad y horario
+            if (!actividadSeleccionada || !horarioSeleccionado) {
+                alert('Por favor, selecciona una actividad y un horario.');
+                return;
+            }
+
+            // Obtener la lista de reservas que coinciden con la actividad y horario seleccionados
+            const reservasACancelar = $reservas.filter(reserva => reserva.actividad === actividadSeleccionada && reserva
+                .horario === horarioSeleccionado);
+
+            // Mostrar una ventana de confirmación con las reservas que se cancelarán
+            const confirmacion = confirm(
+                `¿Estás seguro de que deseas cancelar ${reservasACancelar.length} reservas para la actividad "${actividadSeleccionada}" y el horario "${horarioSeleccionado}"?`
+            );
+
+            // Si el usuario confirmó, proceder con la cancelación en lote
+            if (confirmacion) {
+                // Aquí debes implementar el proceso de cancelación en lote
+                // Itera sobre las reservas en reservasACancelar y cáncela una por una
+                // Actualiza la interfaz de usuario después de la cancelación en lote
+            }
+        }
+    </script>
+
+@endsection

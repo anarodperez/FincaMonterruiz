@@ -30,7 +30,7 @@ class ReservationCancellationMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Reservation Cancellation Mail',
+            subject: 'Reserva cancelada',
         );
     }
 

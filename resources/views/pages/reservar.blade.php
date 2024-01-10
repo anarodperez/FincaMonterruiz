@@ -54,9 +54,10 @@
                     @if (!is_null($horario->actividad->precio_nino))
                         <div class="mb-3">
                             <span class="etiqueta">Precio niños:</span>
-                            <span id="precio_nino" class="valor">{{ $horario->actividad->precio_nino }} €</span>
+                            <span id="precio_nino" class="valor">{{ $horario->actividad->precio_nino ?? '0' }} €</span>
                         </div>
                     @endif
+
 
                     <div class="mb-3">
                         <span class="etiqueta">TOTAL:</span>
@@ -102,14 +103,18 @@
                     </div>
                     <div class="mb-3">
                         <label for="numAdultos">Número de Adultos:</label>
-                        <input type="number" class="form-control" id="numAdultos" name="num_adultos" min="1"
-                            max="10" required onchange="calcularTotal()">
-                    </div>
-                    <div class="mb-3">
-                        <label for="numNinos">Número de Niños:</label>
-                        <input type="number" class="form-control" id="numNinos" name="num_ninos" min="0"
+                        <input type="number" class="form-control" id="numAdultos" name="num_adultos" min="0"
                             onchange="calcularTotal()">
                     </div>
+
+                    @if (!is_null($horario->actividad->precio_nino))
+                        <div class="mb-3">
+                            <label for="numNinos">Número de Niños:</label>
+                            <input type="number" class="form-control" id="numNinos" name="num_ninos" min="0"
+                                onchange="calcularTotal()">
+                        </div>
+                    @endif
+
                     <!-- Desplegable para seleccionar el país -->
                     {{-- <div class="mb-3">
                         <label for="pais">País:</label>
@@ -148,7 +153,6 @@
                 }
             });
 
-
             let precioAdultoRaw = "{{ $horario->actividad->precio_adulto ?? '0' }}";
             let precioNinoRaw = "{{ $horario->actividad->precio_nino ?? '0' }}";
 
@@ -157,7 +161,13 @@
 
             function calcularTotal() {
                 let numAdultos = document.getElementById('numAdultos').value;
-                let numNinos = document.getElementById('numNinos').value;
+                let numNinos = 0; // Valor predeterminado para niños
+
+                // Verifica si el campo "Número de Niños" está presente en la página
+                let numNinosInput = document.getElementById('numNinos');
+                if (numNinosInput) {
+                    numNinos = numNinosInput.value;
+                }
 
                 numAdultos = numAdultos ? parseInt(numAdultos) : 0;
                 numNinos = numNinos ? parseInt(numNinos) : 0;
@@ -168,7 +178,13 @@
 
             function validarFormulario() {
                 let numAdultos = document.getElementById('numAdultos').value;
-                let numNinos = document.getElementById('numNinos').value;
+                let numNinos = 0; // Valor predeterminado para niños
+
+                // Verifica si el campo "Número de Niños" está presente en la página
+                let numNinosInput = document.getElementById('numNinos');
+                if (numNinosInput) {
+                    numNinos = numNinosInput.value;
+                }
 
                 numAdultos = numAdultos ? parseInt(numAdultos) : 0;
                 numNinos = numNinos ? parseInt(numNinos) : 0;
@@ -186,6 +202,7 @@
                 calcularTotal();
             };
         </script>
+
 
     </div>
 @endsection

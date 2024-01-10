@@ -13,6 +13,11 @@
         integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
     <link rel="stylesheet" href="{{ asset('css/navbar.css') }}">
     <link rel="stylesheet" href="{{ asset('css/admin.css') }}">
+
+    {{-- Alpine --}}
+
+    <script src="//unpkg.com/alpinejs" defer></script>
+
     <!-- CSS -->
     @yield('css')
 

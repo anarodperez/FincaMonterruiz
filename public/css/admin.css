@@ -9,6 +9,14 @@ margin-bottom: 14vh;
 
 }
 
+.editar-horario {
+    min-height: 700px;
+}
+
+.editar-horario h2{
+    margin-top: 4vh;
+}
+
 /* TABLA */
 
 .tabla img:hover {

@@ -19,10 +19,17 @@ class ReservaController extends Controller
 {
     public function index()
     {
-        $reservas = Reserva::with(['usuario', 'actividad', 'horario'])->paginate(5);
+        $reservas = Reserva::with(['usuario', 'actividad', 'horario'])->paginate(10);
 
-        return view('admin.reservas.index', compact('reservas'));
+        // Obtener la lista de actividades disponibles
+        $actividadesDisponibles = Actividad::all(); // Suponiendo que tengas un modelo 'Actividad'
+
+        // Obtener la lista de horarios disponibles
+        $horariosDisponibles = Horario::all(); // Suponiendo que tengas un modelo 'Horario'
+
+        return view('admin.reservas.index', compact('reservas', 'actividadesDisponibles', 'horariosDisponibles'));
     }
+
 
     public function create(Request $request, $horarioId)
     {
@@ -34,7 +41,7 @@ class ReservaController extends Controller
         // Validar los datos del formulario
         $validated = $request->validate([
             'num_adultos' => 'required|integer|min:0',
-            'num_ninos' => 'required|integer|min:0',
+            'num_ninos' => 'nullable|integer|min:0', // Cambiar a nullable
             'observaciones' => 'nullable|string',
             'horario_id' => 'required|exists:horarios,id',
         ]);
@@ -44,7 +51,7 @@ class ReservaController extends Controller
         $actividad = $horario->actividad;
 
         // Calcular el número total de personas para la reserva
-        $numPersonas = $validated['num_adultos'] + $validated['num_ninos'];
+        $numPersonas = $validated['num_adultos'] + ($validated['num_ninos'] ?? 0); // Usar ?? para establecer un valor predeterminado de 0 si num_ninos está vacío
 
         // Calcular plazas ya reservadas para esta actividad
         $plazasReservadas = Reserva::where('actividad_id', $horario->actividad->id)
@@ -60,7 +67,7 @@ class ReservaController extends Controller
         // Crear la reserva
         $reserva = new Reserva();
         $reserva->num_adultos = $validated['num_adultos'];
-        $reserva->num_ninos = $validated['num_ninos'];
+        $reserva->num_ninos = $validated['num_ninos'] ?? 0; // Usar ?? para establecer un valor predeterminado de 0 si num_ninos está vacío
         $reserva->horario_id = $validated['horario_id'];
         $reserva->user_id = Auth::id();
         $reserva->actividad_id = $actividad->id;
@@ -90,6 +97,7 @@ class ReservaController extends Controller
             ->route('dashboard')
             ->with('success', 'Reserva realizada con éxito');
     }
+
 
     public function show($horarioId)
     {

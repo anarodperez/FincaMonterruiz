@@ -2,6 +2,21 @@
     form{
         margin-bottom: 6vh;
     }
+    html, body {
+    height: 100%;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+}
+
+.container {
+    flex: 1; /* Esto hace que el contenedor crezca para ocupar el espacio disponible */
+    padding: 20px; /* Ajusta esto según tu diseño */
+}
+
+
 </style>
 
 @extends('layouts.admin')
