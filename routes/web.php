@@ -120,6 +120,13 @@ Route::get('/catalogo/filter', [CatalogoController::class, 'filter'])->name('cat
 // Detalle de la actividad
 Route::get('/actividades/{id}', [ActividadController::class, 'detalleActividad'])->name('pages.detalleActividad');
 
+//Politica de cancelacion
+
+Route::get('/politica-cancelacion', function () {
+    return view('pages.politica-cancelacion');
+});
+
+
 // Mostrar la página de reserva (requiere autenticación)
 Route::get('/reservar/{horarioId}', [ReservaController::class, 'show'])
     ->middleware('auth')
@@ -154,5 +161,7 @@ Route::delete('/valoraciones/{id}', [ValoracionController::class, 'destroy'])->n
 
 //Descarga pdf reserva
 Route::get('/descargar-entrada/{reserva_id}', [ReservaController::class, 'descargarEntrada']);
+
+
 
 require __DIR__ . '/auth.php';
