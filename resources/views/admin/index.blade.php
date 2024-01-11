@@ -57,14 +57,16 @@
                         </div>
                     </div>
 
-                    {{-- <div class="col-md-4">
+                    <div class="col-md-4">
                         <div class="card">
                             <div class="card-body">
-                                <h5 class="card-title">Categorías</h5>
-                                <p class="card-text">10</p>
+                                <h5 class="card-title">Valoraciones</h5>
+                                @if (isset($cantidadValoraciones))
+                                    <p class="card-text">{{ $cantidadValoraciones }}</p>
+                                @endif
                             </div>
                         </div>
-                    </div> --}}
+                    </div>
                     <div class="col-md-4">
                         <div class="card">
                             <div class="card-body">

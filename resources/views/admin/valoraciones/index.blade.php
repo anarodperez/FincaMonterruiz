@@ -1,67 +1,88 @@
 @extends('layouts.admin')
+
 @section('content')
-    <style>
-        .valoraciones-container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 20px;
-            /* Espacio entre tarjetas */
-        }
-
-        .valoracion-card {
-            background-color: #f4f4f4;
-            border-left: 5px solid #5c7c64;
-            padding: 10px;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-        }
-
-        .valoracion-card h3 {
-            color: #550d0e;
-        }
-
-        .valoracion-card p {
-            color: #000000;
-        }
-
-        .star-rating {
-            color: #fdd835;
-            font-size: 25px;
-        }
-    </style>
-  <div class="container">
     <div class="text-center my-4">
         <h2 class="display-4 font-weight-bold text-primary">Valoraciones de los usuarios</h2>
         <p class="lead">Descubre y gestiona la lista de valoraciones de los usuarios.</p>
     </div>
 
-    <div class="row">
-        @foreach ($valoraciones as $valoracion)
-            <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
-                <div class="card h-100 valoracion-card">
-                    <div class="card-body">
-                        <h3 class="card-title">{{ $valoracion->actividad->nombre }}</h3>
-                        <p class="card-text">
-                            <strong>Valorado por: </strong>{{ $valoracion->user->nombre }} {{ $valoracion->user->apellido1 }} {{ $valoracion->user->apellido2 }}
-                        </p>
-                        <div class="star-rating">
-                            @for ($i = 0; $i < 5; $i++)
-                                @if ($i < $valoracion->puntuacion)
-                                    <span class="text-warning">★</span>
-                                @else
-                                    <span class="text-secondary">★</span>
-                                @endif
-                            @endfor
+    <div class="content">
+        <div class="contenedor-tabla">
+            <table class="tabla">
+                <thead>
+                    <tr>
+                        <th>Actividad</th>
+                        <th>Usuario</th>
+                        <th>Puntuación</th>
+                        <th>Comentario</th>
+                        <th>Fecha</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($valoraciones as $valoracion)
+                        <tr>
+                            <td>{{ $valoracion->actividad->nombre }}</td>
+                            <td>{{ $valoracion->user->nombre }} {{ $valoracion->user->apellido1 }}
+                                {{ $valoracion->user->apellido2 }}</td>
+                            <td>
+                                @for ($i = 0; $i < 5; $i++)
+                                    @if ($i < $valoracion->puntuacion)
+                                        <span class="text-warning">★</span>
+                                    @else
+                                        <span class="text-secondary">★</span>
+                                    @endif
+                                @endfor
+                            </td>
+                            <td>{{ $valoracion->comentario }}</td>
+                            <td>{{ $valoracion->created_at->format('d/m/Y') }}</td>
+                            <td>
+                                <button class="btn btn-danger" data-bs-toggle="modal"
+                                    data-bs-target="#deleteValoracionModal" data-id="{{ $valoracion->id }}">Borrar</button>
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+
+            <!-- Modal de Confirmación de Borrado -->
+            <div class="modal fade" id="deleteValoracionModal" tabindex="-1" aria-labelledby="deleteValoracionModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="deleteValoracionModalLabel">Confirmar Borrado</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
-                        <p><strong>Comentario: </strong>{{ $valoracion->comentario }}</p>
-                        <p class="text-muted card-text">{{ $valoracion->created_at->format('d/m/Y') }}</p>
+                        <div class="modal-body">
+                            ¿Estás seguro de que quieres borrar esta valoración?
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                            <form id="deleteValoracionForm" action="" method="POST">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-danger">Borrar</button>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
-        @endforeach
-    </div>
-     <!-- Enlaces de paginación -->
-     {{ $valoraciones->links() }}
-</div>
 
+            <!-- Enlaces de paginación -->
+            {{ $valoraciones->links('pagination::bootstrap-4') }}
+        </div>
+    </div>
+    <script>
+        //Para el modal
+        document.addEventListener("DOMContentLoaded", function() {
+            var valoracionModal = document.getElementById('deleteValoracionModal');
+            valoracionModal.addEventListener('show.bs.modal', function(event) {
+                var button = event.relatedTarget;
+                var valoracionId = button.getAttribute('data-id');
+                var deleteForm = document.getElementById('deleteValoracionForm');
+                deleteForm.action = '/valoraciones/' + valoracionId;
+            });
+        });
+    </script>
 @endsection

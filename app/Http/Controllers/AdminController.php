@@ -15,6 +15,7 @@ class AdminController extends Controller
     {
         $cantidadActividades = Actividad::count();
         $usuariosRegistrados = User::count();
+        $cantidadValoraciones = Valoracion::count();
         $now = Carbon::now();
 
         $reservasRecientes = Reserva::join('horarios', 'reservas.horario_id', '=', 'horarios.id')
@@ -41,6 +42,7 @@ class AdminController extends Controller
             'usuariosRegistrados' => $usuariosRegistrados,
             'reservasRecientes' => $reservasRecientes,
             'ultimasValoraciones' => $ultimasValoraciones,
+            'cantidadValoraciones' => $cantidadValoraciones
         ]);
     }
 }

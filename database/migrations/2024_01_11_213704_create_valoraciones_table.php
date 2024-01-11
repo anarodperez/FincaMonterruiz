@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('valoraciones', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
-            $table->text('comentario');
+            $table->text('comentario')->nullable();
             $table->integer('puntuacion');
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->foreignId('actividad_id')->constrained('actividades')->onDelete('cascade');
