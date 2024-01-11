@@ -18,9 +18,8 @@
         </section>
         <!-- Section: Social media -->
         <section class="mb-4">
-            <a href="#!" class="btn text-white">Políticas y términos</a>
-            <a id="btnCancelacion">Política de Cancelación</a>
-
+            <a id="btnAviso-legal" class="btn text-white">Aviso legal</a>
+            <a id="btnCancelacion" class="btn text-white">Política de Cancelación</a>
         </section>
     </div>
 
@@ -35,6 +34,10 @@
     document.addEventListener('DOMContentLoaded', (event) => {
         document.getElementById('btnCancelacion').addEventListener('click', function() {
             window.open('/politica-cancelacion', '_blank');
+        });
+
+        document.getElementById('btnAviso-legal').addEventListener('click', function() {
+            window.open('/aviso-legal', '_blank');
         });
     });
 </script>

@@ -126,6 +126,12 @@ Route::get('/politica-cancelacion', function () {
     return view('pages.politica-cancelacion');
 });
 
+//Aviso legal
+
+Route::get('/aviso-legal', function () {
+    return view('pages.aviso-legal');
+});
+
 
 // Mostrar la página de reserva (requiere autenticación)
 Route::get('/reservar/{horarioId}', [ReservaController::class, 'show'])

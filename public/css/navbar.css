@@ -157,9 +157,37 @@ transition: color 0.3s ease;
   }
 
 
+/* FOOTER*/
 
-/* footer */
-
-footer a {
-font-size: 16px;
+/* Estilo base para los botones */
+footer .btn {
+    transition: background-color 0.3s ease;
 }
+
+/* Estilo de hover para los botones sociales */
+footer .btn-floating:hover {
+    opacity: 0.9;
+}
+
+/* Estilo de hover para los botones de texto */
+footer .btn:hover {
+    background-color: #536b59;
+    color: #fff;
+}
+
+footer a.btn-floating.m-1:hover {
+    background-color: #4d4d4d; /* Ejemplo de color de fondo al hacer hover */
+}
+
+footer a.btn-floating.m-1:hover {
+    transform: scale(1.1); /* Aumenta el tamaño del botón */
+}
+
+/* Estilo específico para el hover en los botones de Aviso Legal y Política de Cancelación */
+footer #btnAviso-legal:hover, footer #btnCancelacion:hover {
+    background-color: #536b59;
+    color: #fff;
+}
+
+
+
