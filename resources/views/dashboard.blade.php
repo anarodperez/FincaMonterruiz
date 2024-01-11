@@ -63,18 +63,20 @@
                                     <p class="card-text">Hora: {{ $reserva->horario->hora }}</p>
                                     <p class="card-text">Estado: {{ $reserva->estado }}</p>
                                     <div class="d-flex align-items-center mt-2">
-                                    <a href="{{ url('/descargar-entrada/' . $reserva->id) }}" class="btn btn-success" style="margin-right: 1vw">Descargar Entrada</a>
-                                    @php
-                                        $fechaReserva = \Carbon\Carbon::parse($reserva->horario->fecha . ' ' . $reserva->horario->hora);
-                                        $ahora = \Carbon\Carbon::now();
-                                        $diferenciaHoras = $ahora->diffInHours($fechaReserva, false);
-                                    @endphp
-                                    @if ($diferenciaHoras >= 48)
-                                        <form action="{{ route('reservas.cancelar', $reserva->id) }}" method="POST">
-                                            @csrf
-                                            <button type="submit" class="btn btn-danger">Cancelar Reserva</button>
-                                        </form>
-                                    @endif
+                                        <a href="{{ url('/descargar-entrada/' . $reserva->id) }}" class="btn btn-success"
+                                            style="margin-right: 1vw">Descargar Entrada</a>
+                                        @php
+                                            $fechaReserva = \Carbon\Carbon::parse($reserva->horario->fecha . ' ' . $reserva->horario->hora);
+                                            $ahora = \Carbon\Carbon::now();
+                                            $diferenciaHoras = $ahora->diffInHours($fechaReserva, false);
+                                        @endphp
+                                     <form action="{{ route('reservas.cancelar', $reserva->id) }}" method="POST">
+                                        @csrf
+                                        <!-- Agrega un campo oculto para el ID de la actividad -->
+                                        <input type="hidden" name="actividad_id" value="{{ $reserva->actividad->id }}">
+                                        <button type="submit" class="btn btn-danger">Cancelar Reserva</button>
+                                    </form>
+
                                     </div>
                                 </div>
                             </div>
@@ -92,18 +94,19 @@
                                     <p class="card-text">Hora: {{ $reserva->horario->hora }}</p>
                                     <p class="card-text">Estado: {{ $reserva->estado }}</p>
                                     <div class="d-flex align-items-center">
-                                    <a href="{{ url('/descargar-entrada/' . $reserva->id) }}" class="btn btn-success" style="margin-right: 1vw">Descargar Entrada</a>
+                                        <a href="{{ url('/descargar-entrada/' . $reserva->id) }}" class="btn btn-success"
+                                            style="margin-right: 1vw">Descargar Entrada</a>
 
-                                    <!-- Verificar si el usuario ya ha valorado la actividad -->
-                                    @php
-                                        $usuarioHaValorado = $reserva->actividad->valoraciones->where('user_id', auth()->user()->id)->count() > 0;
-                                    @endphp
+                                        <!-- Verificar si el usuario ya ha valorado la actividad -->
+                                        @php
+                                            $usuarioHaValorado = $reserva->actividad->valoraciones->where('user_id', auth()->user()->id)->count() > 0;
+                                        @endphp
 
-                                    <!-- Mostrar el botón de valoración solo si el usuario no ha valorado la actividad -->
-                                    @if (!$usuarioHaValorado && $reserva->estado != 'cancelada')
-                                        <a href="{{ route('pages.valorar', ['id' => $reserva->actividad->id]) }}"
-                                            class="btn btn-primary">Valorar Actividad</a>
-                                    @endif
+                                        <!-- Mostrar el botón de valoración solo si el usuario no ha valorado la actividad -->
+                                        @if (!$usuarioHaValorado && $reserva->estado != 'cancelada')
+                                            <a href="{{ route('pages.valorar', ['id' => $reserva->actividad->id]) }}"
+                                                class="btn btn-primary">Valorar Actividad</a>
+                                        @endif
                                     </div>
 
                                 </div>
@@ -117,8 +120,8 @@
                     aria-labelledby="valoraciones-tab">
                     <h2 class="tab-section-header">Tus Valoraciones</h2>
                     <div class="row">
-                        <div class="col-md-4 mb-4">
-                            @foreach ($valoracionesUsuario as $valoracion)
+                        @foreach ($valoracionesUsuario as $valoracion)
+                            <div class="col-md-4 mb-4">
                                 <div class="card card-detail">
                                     <img src="{{ $valoracion->actividad->imagen }}" class="card-img-top"
                                         alt="Imagen de la actividad">
@@ -146,19 +149,21 @@
                                             data-id="{{ $valoracion->id }}">Borrar</button>
                                     </div>
                                 </div>
-                            @endforeach
-                        </div>
+                            </div>
+                        @endforeach
+                        {{ $valoracionesUsuario->links() }}
                     </div>
                 </div>
             </div>
             <!-- Modal de Confirmación de Borrado -->
-            <div class="modal fade" id="deleteValoracionModal" tabindex="-1" aria-labelledby="deleteValoracionModalLabel"
-                aria-hidden="true">
+            <div class="modal fade" id="deleteValoracionModal" tabindex="-1"
+                aria-labelledby="deleteValoracionModalLabel" aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
                             <h5 class="modal-title" id="deleteValoracionModalLabel">Confirmar Borrado</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
                             ¿Estás seguro de que quieres borrar esta valoración?

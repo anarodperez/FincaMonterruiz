@@ -20,7 +20,6 @@
 
             <div class="table-responsive">
                 <table class="tabla">
-                       {{ $usuarios->links() }}
                     <thead>
                         <tr>
                             <th>Nombre</th>
@@ -57,10 +56,9 @@
                                 </td>
                             </tr>
                         @endforeach
-
                     </tbody>
                 </table>
-
+                {{ $usuarios->links() }}
             </div>
         </div>
     </div>

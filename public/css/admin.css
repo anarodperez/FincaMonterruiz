@@ -2,6 +2,13 @@
 padding: 4vh;
 }
 
+.badge-warning {
+    background-color: #ffcc00; /* Color de fondo */
+    color: #000000; /* Color del texto */
+    /* Otros estilos como bordes redondeados, etc. */
+}
+
+
 .delete, .edit{
 
 margin-top: 6vh;

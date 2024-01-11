@@ -8,9 +8,18 @@ use App\Models\Actividad;
 use App\Models\Horario;
 use App\Models\Reserva;
 use Illuminate\Support\Facades\DB;
+use Hashids\Hashids;
 
 class CatalogoController extends Controller
 {
+    private $hashids;
+
+    public function __construct()
+    {
+        // Inicializa Hashids con una sal secreta y una longitud mínima
+        $this->hashids = new Hashids('tu-sal-secreta', 10);
+    }
+
     public function index()
     {
         // Obtiene todos los horarios con su actividad relacionada
@@ -34,7 +43,7 @@ class CatalogoController extends Controller
                 'start' => $horario->fecha . 'T' . $horario->hora,
                 'extendedProps' => [
                     'idioma' => $horario->idioma,
-                    'horario_id' => $horario->id,
+                    'horario_id' => $this->hashids->encode($horario->id),
                     'frecuencia' => $horario->frecuencia,
                     'aforoDisponible' => $aforoDisponible,
                     'idioma' => $horario->idioma,

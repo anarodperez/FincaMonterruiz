@@ -14,11 +14,27 @@ use Illuminate\Support\Facades\Mail;
 use App\Mail\ReservationConfirmationMail;
 use App\Mail\ReservationCancellationMail;
 use Illuminate\Support\Facades\DB;
+use Hashids\Hashids;
+use App\Models\AdminNotification;
 
 class ReservaController extends Controller
 {
+    private $hashids;
+
+    public function __construct()
+    {
+        // Inicializa Hashids con una sal secreta y una longitud mínima
+        $this->hashids = new Hashids('tu-sal-secreta', 10);
+    }
+
     public function index()
     {
+        // Resetear el contador de nuevos reservas
+        $notification = AdminNotification::first();
+        if ($notification && $notification->nuevos_reservas_count > 0) {
+            $notification->update(['nuevos_reservas_count' => 0]);
+        }
+
         $reservas = Reserva::with(['usuario', 'actividad', 'horario'])->paginate(10);
 
         // Obtener la lista de actividades disponibles
@@ -29,7 +45,6 @@ class ReservaController extends Controller
 
         return view('admin.reservas.index', compact('reservas', 'actividadesDisponibles', 'horariosDisponibles'));
     }
-
 
     public function create(Request $request, $horarioId)
     {
@@ -76,6 +91,14 @@ class ReservaController extends Controller
         // Guardar la reserva
         $reserva->save();
 
+         // Actualizar contador de nuevos reservas
+         $notification = AdminNotification::first();
+         if ($notification) {
+             $notification->increment('nuevos_reservas_count');
+         } else {
+             AdminNotification::create(['nuevos_reservas_count' => 1]);
+         }
+
         //Intenta procesar el pago
         // Enviar correo electrónico de confirmación
         try {
@@ -85,8 +108,13 @@ class ReservaController extends Controller
             $totalPagado = $reserva->num_adultos * $precioPorAdulto + $reserva->num_ninos * $precioPorNino;
             $reserva->total_pagado = $totalPagado;
 
+            // Definir la dirección de email del administrador
+            $adminEmail = 'anarodpe8@gmail.com';
+
             // Enviar correo electrónico de confirmación
-            Mail::to(Auth::user()->email)->send(new ReservationConfirmationMail($reserva, $totalPagado));
+            Mail::to(Auth::user()->email)
+                ->cc($adminEmail)
+                ->send(new ReservationConfirmationMail($reserva, $totalPagado));
         } catch (Exception $e) {
             // Manejo de la excepción, por ejemplo, loguear el error
             // Log::error('Error al enviar correo de confirmación: '.$e->getMessage());
@@ -98,10 +126,18 @@ class ReservaController extends Controller
             ->with('success', 'Reserva realizada con éxito');
     }
 
-
-    public function show($horarioId)
+    public function show($hashid)
     {
-        $horario = Horario::findOrFail($horarioId);
+        $decodedArray = $this->hashids->decode($hashid);
+
+        if (empty($decodedArray)) {
+            // Maneja el caso donde la decodificación falla (por ejemplo, redirigir o mostrar un error)
+            abort(404, 'Horario no encontrado.');
+        }
+
+        $realId = $decodedArray[0];
+
+        $horario = Horario::findOrFail($realId);
         $actividad = Actividad::where('id', $horario->actividad_id)->firstOrFail();
         $usuario = auth()->user();
 
@@ -112,6 +148,9 @@ class ReservaController extends Controller
 
         // Calcular las plazas disponibles
         $aforoDisponible = max(0, $horario->actividad->aforo - $plazasReservadas);
+
+        // Codifica el ID del horario antes de enviarlo a la vista
+        $horarioHashid = $this->hashids->encode($horario->id);
 
         return view('pages.reservar', compact('actividad', 'horario', 'usuario', 'aforoDisponible'));
     }
@@ -126,8 +165,13 @@ class ReservaController extends Controller
             $reserva->estado = 'cancelada';
             $reserva->save();
 
+            // Definir la dirección de email del administrador
+            $adminEmail = 'anarodpe8@gmail.com';
+
             // Enviar correo de cancelación
-            Mail::to($reserva->usuario->email)->send(new ReservationCancellationMail($reserva));
+            Mail::to($reserva->usuario->email)
+                ->cc($adminEmail)
+                ->send(new ReservationCancellationMail($reserva));
 
             return back()->with('success', 'Reserva cancelada correctamente.');
         }

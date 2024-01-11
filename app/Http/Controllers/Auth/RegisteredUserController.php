@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Illuminate\View\View;
+use App\Models\AdminNotification;
 
 class RegisteredUserController extends Controller
 {
@@ -45,6 +46,14 @@ class RegisteredUserController extends Controller
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);
+
+        // Actualizar contador de nuevos usuarios
+        $notification = AdminNotification::first();
+        if ($notification) {
+            $notification->increment('nuevos_usuarios_count');
+        } else {
+            AdminNotification::create(['nuevos_usuarios_count' => 1]);
+        }
 
         event(new Registered($user));
 

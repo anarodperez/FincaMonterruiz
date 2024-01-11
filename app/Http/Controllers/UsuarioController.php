@@ -8,11 +8,18 @@ use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Reserva;
+use Illuminate\Pagination\Paginator;
+use App\Models\AdminNotification;
 
 class UsuarioController extends Controller
 {
     public function index(Request $request)
     {
+        // Resetear el contador de nuevos usuarios
+        $notification = AdminNotification::first();
+        if ($notification && $notification->nuevos_usuarios_count > 0) {
+            $notification->update(['nuevos_usuarios_count' => 0]);
+        }
         // Inicia la consulta
         $query = User::query();
 
@@ -74,7 +81,7 @@ class UsuarioController extends Controller
                 });
             })
             ->select('reservas.*', 'actividades.nombre as nombre_actividad', 'horarios.fecha as fecha_actividad', 'horarios.hora as hora_actividad')
-            ->get();
+            ->paginate(5);
 
         // Para reservas pasadas
         $reservasPasadas = $user
@@ -87,13 +94,13 @@ class UsuarioController extends Controller
                 });
             })
             ->where('reservas.user_id', '=', $user->id)
-            ->get();
+            ->paginate(5);
 
         // Obtener las valoraciones del usuario
         $valoracionesUsuario = $user
             ->valoraciones()
             ->with('actividad')
-            ->get();
+            ->paginate(3);
 
         return view('/dashboard', compact('reservasActivas', 'reservasPasadas', 'valoracionesUsuario'));
     }

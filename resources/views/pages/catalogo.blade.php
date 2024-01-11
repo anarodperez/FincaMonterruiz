@@ -95,12 +95,10 @@
                                                 <li class="list-group-item"><strong>Aforo:</strong>
                                                     {{ $actividad->aforo }}</li>
                                             </ul>
-                                            {{-- <a href="{{ route('actividades.show', $actividad->id) }}" class="btn btn-primary mt-3">Ver Detalles</a> --}}
-                                            <!-- Agrega el botón "Reservar" -->
-                                            <div class="lc-block">
+                                            {{-- <div class="lc-block">
                                                 <button class="custom-btn boton"
                                                     onclick="verDetalleActividad({{ $actividad->id }})">Ver más</button>
-                                            </div>
+                                            </div> --}}
                                         </div>
                                     </div>
                                 </div>
