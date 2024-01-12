@@ -61,6 +61,35 @@ class ValoracionController extends Controller
             ->with('success', 'Valoración enviada con éxito.');
     }
 
+     // Método para mostrar el formulario de edición de la valoración
+     public function edit($id)
+     {
+         $valoracion = Valoracion::findOrFail($id);
+
+         return view('pages.editar_valoracion', compact('valoracion'));
+     }
+
+     // Método para actualizar la valoración
+     public function update(Request $request, $id)
+     {
+         $valoracion = Valoracion::findOrFail($id);
+
+         $request->validate([
+             'puntuacion' => 'required|integer|min:1|max:5',
+             'comentario' => 'nullable|string',
+         ]);
+
+         $valoracion->update([
+             'puntuacion' => $request->puntuacion,
+             'comentario' => $request->comentario,
+         ]);
+
+         return redirect()
+             ->route('dashboard')
+             ->with('success', 'Valoración actualizada con éxito.');
+     }
+
+
     public function destroy($id)
     {
         $valoracion = Valoracion::findOrFail($id);

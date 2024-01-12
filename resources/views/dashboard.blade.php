@@ -70,12 +70,12 @@
                                             $ahora = \Carbon\Carbon::now();
                                             $diferenciaHoras = $ahora->diffInHours($fechaReserva, false);
                                         @endphp
-                                     <form action="{{ route('reservas.cancelar', $reserva->id) }}" method="POST">
-                                        @csrf
-                                        <!-- Agrega un campo oculto para el ID de la actividad -->
-                                        <input type="hidden" name="actividad_id" value="{{ $reserva->actividad->id }}">
-                                        <button type="submit" class="btn btn-danger">Cancelar Reserva</button>
-                                    </form>
+                                        <form action="{{ route('reservas.cancelar', $reserva->id) }}" method="POST">
+                                            @csrf
+                                            <!-- Agrega un campo oculto para el ID de la actividad -->
+                                            <input type="hidden" name="actividad_id" value="{{ $reserva->actividad->id }}">
+                                            <button type="submit" class="btn btn-danger">Cancelar Reserva</button>
+                                        </form>
 
                                     </div>
                                 </div>
@@ -141,9 +141,11 @@
                                             </span>
                                         </p>
                                         <p class="card-text">{{ $valoracion->comentario }}</p>
-                                        <a href="/actividades/{{ $valoracion->actividad->id }}"
-                                            class="btn btn-primary mt-3">Ver actividad</a>
-                                        <button class="btn btn-secondary mt-3">Editar</button>
+                                        {{-- <a href="/actividades/{{ $valoracion->actividad->id }}"
+                                            class="btn btn-primary mt-3">Ver actividad</a> --}}
+                                        <button class="btn btn-secondary mt-3" data-bs-toggle="modal"
+                                            data-bs-target="#editValoracionModal"
+                                            data-id="{{ $valoracion->id }}">Editar</button>
                                         <button class="btn btn-danger mt-3" data-bs-toggle="modal"
                                             data-bs-target="#deleteValoracionModal"
                                             data-id="{{ $valoracion->id }}">Borrar</button>
@@ -152,6 +154,35 @@
                             </div>
                         @endforeach
                         {{ $valoracionesUsuario->links() }}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal para Edición de Valoración -->
+            <div class="modal fade" id="editValoracionModal" tabindex="-1" aria-labelledby="editValoracionModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="editValoracionModalLabel">Editar Valoración</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form action="{{ route('valoraciones.actualizar', $valoracion->id) }}" method="POST">
+                                @csrf
+                                @method('PUT')
+                                <div class="mb-3">
+                                    <label for="puntuacion" class="form-label">Puntuación</label>
+                                    <input type="number" class="form-control" id="puntuacion" name="puntuacion">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="comentario" class="form-label">Comentario</label>
+                                    <textarea class="form-control" id="comentario" name="comentario" rows="3"></textarea>
+                                </div>
+                                <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -179,7 +210,6 @@
                     </div>
                 </div>
             </div>
-
         </div>
     </main>
 
@@ -192,6 +222,18 @@
                 var valoracionId = button.getAttribute('data-id');
                 var deleteForm = document.getElementById('deleteValoracionForm');
                 deleteForm.action = '/valoraciones/' + valoracionId;
+            });
+        });
+
+        // Para el modal de edición
+        document.addEventListener("DOMContentLoaded", function() {
+            var editValoracionModal = document.getElementById('editValoracionModal');
+            editValoracionModal.addEventListener('show.bs.modal', function(event) {
+                var button = event.relatedTarget;
+                var valoracionId = button.getAttribute('data-id');
+                var editForm = document.getElementById('editValoracionForm');
+                editForm.action = '/valoraciones/actualizar/' + valoracionId;
+
             });
         });
     </script>

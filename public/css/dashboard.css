@@ -8,6 +8,7 @@ main {
     flex: 1;
 }
 
+
 /* Estilo para las pestañas y su contenido */
 .nav-tabs .nav-link {
 border: 1px solid transparent;
@@ -88,7 +89,6 @@ margin-right: 10px;
 
 /* Valoración */
 .valoraciones-container {
-max-height: 500px;
 margin-bottom: 14vh;
 
 }
