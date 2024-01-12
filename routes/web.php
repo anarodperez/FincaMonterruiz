@@ -150,6 +150,9 @@ Route::post('/reservar/store', [ReservaController::class, 'store'])->name('reser
 //Cancelar reserva
 Route::post('/reservas/{reserva}/cancelar', [ReservaController::class, 'cancelar'])->name('reservas.cancelar');
 
+Route::post('/reservas/cancelar-en-lote', [ReservaController::class, 'cancelarEnLote'])->name('reservas.cancelarEnLote');
+
+
 //Página de contacto
 Route::post('/contact', [FormContactController::class, 'submit'])->name('contact.submit');
 

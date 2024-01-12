@@ -5,7 +5,7 @@
 @section('css')
     <link rel="stylesheet" href="{{ asset('css/admin.css') }}">
     <style>
-        <style>.card {
+        .card {
             box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
             transition: 0.3s;
         }
@@ -16,19 +16,19 @@
 
         .card-title {
             color: #007bff;
-            /* Ajusta este color según tu paleta */
         }
 
         .badge-pill {
             background-color: #28a745;
-            /* Color para los badges */
         }
 
         .icono {
             font-size: 24px;
-            /* Ajusta el tamaño de los íconos */
             margin-right: 10px;
         }
+        main {
+    min-height: 80vh;
+}
     </style>
 
 @endsection
@@ -129,8 +129,7 @@
                         </div>
                     </div>
                 </div>
+            </main>
         </div>
-        </main>
-    </div>
     </div>
 @endsection

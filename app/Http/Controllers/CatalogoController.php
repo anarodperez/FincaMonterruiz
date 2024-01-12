@@ -17,7 +17,7 @@ class CatalogoController extends Controller
     public function __construct()
     {
         // Inicializa Hashids con una sal secreta y una longitud mínima
-        $this->hashids = new Hashids('tu-sal-secreta', 10);
+        $this->hashids = new Hashids(env('HASHID_SALT'), 10);
     }
 
     public function index()
@@ -78,7 +78,7 @@ class CatalogoController extends Controller
 
     protected function normalizeString($string)
     {
-        $string = mb_strtolower($string, 'UTF-8'); // Usa mb_strtolower para soporte de caracteres multibyte
+        $string = mb_strtolower($string, 'UTF-8'); // mb_strtolower para soporte de caracteres multibyte
         $replacements = [
             'á' => 'a',
             'é' => 'e',
@@ -87,7 +87,7 @@ class CatalogoController extends Controller
             'ú' => 'u',
         ];
 
-        $string = strtr($string, $replacements); // Usa strtr para reemplazar los caracteres
+        $string = strtr($string, $replacements); // strtr para reemplazar los caracteres
 
         return $string;
     }
@@ -153,17 +153,17 @@ class CatalogoController extends Controller
         $horarios = Horario::with('actividad')->get();
         $events = $horarios->map(function ($horario) {
             return [
-                'title' => $horario->actividad->nombre, // Asumiendo que la actividad tiene un campo 'nombre'
+                'title' => $horario->actividad->nombre,
                 'start' => $horario->fecha . 'T' . $horario->hora,
                 'extendedProps' => [
                     'idioma' => $horario->idioma,
                     'horario_id' => $horario->id,
-                    'frecuencia' => $horario->frecuencia, // Añade la frecuencia aquí
+                    'frecuencia' => $horario->frecuencia,
                 ],
             ];
         });
 
-        $actividades = $query->paginate(3); // Aplicar paginación aquí
+        $actividades = $query->paginate(3); //paginación
 
         return view('pages.catalogo', [
             'actividades' => $actividades,

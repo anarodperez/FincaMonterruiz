@@ -24,24 +24,28 @@ class ReservaController extends Controller
     public function __construct()
     {
         // Inicializa Hashids con una sal secreta y una longitud mínima
-        $this->hashids = new Hashids('tu-sal-secreta', 10);
+        $this->hashids = new Hashids(env('HASHID_SALT'), 10);
     }
 
     public function index()
     {
-        // Resetear el contador de nuevos reservas
+        // Resetear el contador de nuevas reservas
         $notification = AdminNotification::first();
         if ($notification && $notification->nuevos_reservas_count > 0) {
             $notification->update(['nuevos_reservas_count' => 0]);
         }
 
-        $reservas = Reserva::with(['usuario', 'actividad', 'horario'])->paginate(10);
+        $reservas = Reserva::with(['usuario', 'actividad', 'horario'])
+        ->join('horarios', 'reservas.horario_id', '=', 'horarios.id')
+        ->orderBy('horarios.fecha', 'desc') // Ordena por la fecha del horario
+        ->select('reservas.*')
+        ->paginate(10);
 
         // Obtener la lista de actividades disponibles
-        $actividadesDisponibles = Actividad::all(); // Suponiendo que tengas un modelo 'Actividad'
+        $actividadesDisponibles = Actividad::all();
 
         // Obtener la lista de horarios disponibles
-        $horariosDisponibles = Horario::all(); // Suponiendo que tengas un modelo 'Horario'
+        $horariosDisponibles = Horario::all();
 
         return view('admin.reservas.index', compact('reservas', 'actividadesDisponibles', 'horariosDisponibles'));
     }
@@ -91,7 +95,7 @@ class ReservaController extends Controller
         // Guardar la reserva
         $reserva->save();
 
-         // Actualizar contador de nuevos reservas
+         // Actualizar contador de nuevas reservas
          $notification = AdminNotification::first();
          if ($notification) {
              $notification->increment('nuevos_reservas_count');
@@ -225,4 +229,36 @@ class ReservaController extends Controller
         $pdf = PDF::loadView('pdf.entrada', compact('reserva', 'qrCode', 'totalPagado'));
         return $pdf->download('entrada-reserva.pdf');
     }
+
+
+    public function cancelarEnLote(Request $request)
+{
+    $reservaIds = json_decode($request->input('reservas'));
+
+    // Validar que los IDs de reserva existen
+    $reservas = Reserva::whereIn('id', $reservaIds)->get();
+
+    foreach ($reservas as $reserva) {
+        if ($reserva->estado !== 'cancelada') {
+            $reserva->estado = 'cancelada';
+            $reserva->save();
+
+            // Definir la dirección de email del administrador
+            $adminEmail = 'anarodpe8@gmail.com';
+
+            // Enviar correo de cancelación
+            try {
+                Mail::to($reserva->usuario->email)
+                    ->cc($adminEmail)
+                    ->send(new ReservationCancellationMail($reserva));
+            } catch (Exception $e) {
+                // Manejo de excepciones si algo va mal con el envío del correo
+                // Log::error('Error al enviar correo de cancelación: ' . $e->getMessage());
+            }
+        }
+    }
+
+    return back()->with('success', 'Reservas canceladas correctamente.');
+}
+
 }

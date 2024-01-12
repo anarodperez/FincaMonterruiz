@@ -29,8 +29,7 @@ class ValoracionController extends Controller
     // Método para mostrar el formulario de valoración
     public function create($idActividad)
     {
-        $actividad = Actividad::findOrFail($idActividad);
-        return view('pages.valorar', compact('actividad'));
+        return view('pages.valorar');
     }
 
     // Método para almacenar la valoración
@@ -64,10 +63,12 @@ class ValoracionController extends Controller
      // Método para mostrar el formulario de edición de la valoración
      public function edit($id)
      {
-         $valoracion = Valoracion::findOrFail($id);
+        $valoracion = Valoracion::findOrFail($id);
 
          return view('pages.editar_valoracion', compact('valoracion'));
      }
+
+
 
      // Método para actualizar la valoración
      public function update(Request $request, $id)

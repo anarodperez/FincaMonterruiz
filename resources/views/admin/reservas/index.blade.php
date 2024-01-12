@@ -17,9 +17,9 @@
 </style>
 
 @section('content')
-    <div class="container">
+    <div class="container  py-4">
 
-        <div class="text-center my-4">
+        <div class="text-center mb-4">
             <h2 class="display-4 font-weight-bold text-primary">Listado de Reservas</h2>
             <p class="lead">Descubre y gestiona la lista de reservas en el sistema.</p>
         </div>
@@ -83,33 +83,39 @@
                     <option value="cancelada">Cancelada</option>
                 </select>
                 <!-- Selector de Actividad -->
-                <select x-model="actividadSeleccionada" @input="updateHasResults()" class="form-control">
+                {{-- <select x-model="actividadSeleccionada" @input="updateHasResults()" class="form-control">
                     <option value="">Todas las actividades</option>
                     <!-- Generar opciones para actividades -->
                     @foreach ($actividadesDisponibles as $actividad)
                         <option value="{{ $actividad->id }}">{{ $actividad->nombre }}</option>
                     @endforeach
-                </select>
+                </select> --}}
 
                 <!-- Selector de Horario -->
-                <select x-model="horarioSeleccionado" @input="updateHasResults()" class="form-control">
+                {{-- <select x-model="horarioSeleccionado" @input="updateHasResults()" class="form-control">
                     <option value="">Todos los horarios</option>
                     <!-- Generar opciones para horarios -->
                     @foreach ($horariosDisponibles as $horario)
                         <option value="{{ $horario->id }}">{{ $horario->fecha }} {{ $horario->hora }}</option>
                     @endforeach
-                </select>
+                </select> --}}
 
             </div>
             <div class="d-flex justify-content-center">
-                <button type="button" class="btn btn-danger" @click="cancelarReservasEnLote">Cancelar Reservas en
-                    Lote</button>
+                <button type="button" id="cancelarReservasEnLote" class="btn btn-danger">Cancelar Reservas en Lote</button>
             </div>
+
+            <form id="batchCancelForm" action="{{ route('reservas.cancelarEnLote') }}" method="post" style="display: none;">
+                @csrf
+                <input type="hidden" name="reservas" id="batchCancelInput">
+            </form>
+
 
             <!-- Tabla de Reservas -->
             <table class="tabla">
                 <thead>
                     <tr>
+                        <th><input type="checkbox" id="selectAll"></th>
                         <th>ID</th>
                         <th>Usuario</th>
                         <th>Actividad</th>
@@ -123,6 +129,7 @@
                     @forelse ($reservas as $reserva)
                         <tr
                             x-show="(!search || normalizeStr(`{{ $reserva->usuario->nombre }} {{ $reserva->usuario->apellido1 }} {{ $reserva->usuario->apellido2 }} {{ $reserva->actividad->nombre }}`).toLowerCase().includes(normalizeStr(search).toLowerCase())) && inDateRange('{{ $reserva->horario->fecha }}') && (!estadoSeleccionado || estadoSeleccionado === '{{ $reserva->estado }}')">
+                            <td><input type="checkbox" class="reserva-checkbox" value="{{ $reserva->id }}"></td>
                             <td>{{ $reserva->id }}</td>
                             <td>{{ $reserva->usuario->nombre }} {{ $reserva->usuario->apellido1 }}
                                 {{ $reserva->usuario->apellido2 }}</td>
@@ -142,6 +149,7 @@
                                 </form>
                             </td>
                         </tr>
+
                     @empty
                     @endforelse
                     <!-- Fila de No Resultados -->
@@ -207,30 +215,32 @@
             document.getElementById(currentCancelFormId).submit();
         });
 
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('selectAll').addEventListener('change', function(e) {
+                const checkboxes = document.querySelectorAll('.reserva-checkbox');
+                checkboxes.forEach(checkbox => {
+                    checkbox.checked = e.target.checked;
+                });
+            });
+        });
 
-        function cancelarReservasEnLote() {
-            // Validar que se hayan seleccionado actividad y horario
-            if (!actividadSeleccionada || !horarioSeleccionado) {
-                alert('Por favor, selecciona una actividad y un horario.');
+        // Cancelar reservas en lote
+        document.getElementById('cancelarReservasEnLote').addEventListener('click', function() {
+            let selectedReservas = Array.from(document.querySelectorAll('.reserva-checkbox:checked')).map(cb => cb
+                .value);
+
+            if (selectedReservas.length === 0) {
+                alert('Por favor, selecciona al menos una reserva para cancelar.');
                 return;
             }
 
-            // Obtener la lista de reservas que coinciden con la actividad y horario seleccionados
-            const reservasACancelar = $reservas.filter(reserva => reserva.actividad === actividadSeleccionada && reserva
-                .horario === horarioSeleccionado);
+            document.getElementById('batchCancelInput').value = JSON.stringify(selectedReservas);
+            document.getElementById('batchCancelForm').submit();
+        });
 
-            // Mostrar una ventana de confirmación con las reservas que se cancelarán
-            const confirmacion = confirm(
-                `¿Estás seguro de que deseas cancelar ${reservasACancelar.length} reservas para la actividad "${actividadSeleccionada}" y el horario "${horarioSeleccionado}"?`
-            );
 
-            // Si el usuario confirmó, proceder con la cancelación en lote
-            if (confirmacion) {
-                // Aquí debes implementar el proceso de cancelación en lote
-                // Itera sobre las reservas en reservasACancelar y cáncela una por una
-                // Actualiza la interfaz de usuario después de la cancelación en lote
-            }
-        }
+
+
     </script>
 
 @endsection
