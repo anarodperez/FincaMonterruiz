@@ -5,7 +5,7 @@
 @section('content')
     <div class="container">
         <div class="text-center my-4">
-            <h2 class="display-4 font-weight-bold text-primary">Listado de Usuarios</h2>
+            <h2 class="display-4 font-weight-bold titulo">Listado de Usuarios</h2>
             <p class="lead">Descubre y gestiona la lista de usuarios en el sistema.</p>
         </div>
 

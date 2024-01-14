@@ -4,32 +4,6 @@
 
 @section('css')
     <link rel="stylesheet" href="{{ asset('css/admin.css') }}">
-    <style>
-        .card {
-            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-            transition: 0.3s;
-        }
-
-        .card:hover {
-            box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
-        }
-
-        .card-title {
-            color: #007bff;
-        }
-
-        .badge-pill {
-            background-color: #28a745;
-        }
-
-        .icono {
-            font-size: 24px;
-            margin-right: 10px;
-        }
-        main {
-    min-height: 80vh;
-}
-    </style>
 
 @endsection
 
@@ -41,7 +15,7 @@
             <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
                 <div
                     class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-                    <h1 class="h2">Panel de Control</h1>
+                    <h1>Panel de Control</h1>
                 </div>
 
                 <div class="row">

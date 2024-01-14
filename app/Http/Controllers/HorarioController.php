@@ -17,29 +17,37 @@ class HorarioController extends Controller
         $horarios = Horario::with('actividad')->get();
 
         $events = $horarios->map(function ($horario) {
-            // Calcular las plazas reservadas para esta actividad
-            $plazasReservadas = Reserva::where('actividad_id', $horario->actividad->id)
-                ->where('estado', 'confirmado')
-                ->sum(DB::raw('num_adultos + num_ninos'));
+            // Verificar si la actividad está presente
+            if (!is_null($horario->actividad)) {
+                // Calcular las plazas reservadas para esta actividad
+                $plazasReservadas = Reserva::where('actividad_id', $horario->actividad->id)
+                    ->where('estado', 'confirmado')
+                    ->sum(DB::raw('num_adultos + num_ninos'));
 
-            // Calcular las plazas disponibles
-            $aforoDisponible = max(0, $horario->actividad->aforo - $plazasReservadas);
+                // Calcular las plazas disponibles
+                $aforoDisponible = max(0, $horario->actividad->aforo - $plazasReservadas);
 
-            return [
-                'id' => $horario->actividad->id,
-                'title' => $horario->actividad->nombre,
-                'start' => $horario->fecha . 'T' . $horario->hora,
-                'extendedProps' => [
-                    'idioma' => $horario->idioma,
-                    'horario_id' => $horario->id,
-                    'frecuencia' => $horario->frecuencia,
-                    'aforoDisponible' => $aforoDisponible,
-                ],
-            ];
+                return [
+                    'id' => $horario->actividad->id,
+                    'title' => $horario->actividad->nombre,
+                    'start' => $horario->fecha . 'T' . $horario->hora,
+                    'extendedProps' => [
+                        'idioma' => $horario->idioma,
+                        'horario_id' => $horario->id,
+                        'frecuencia' => $horario->frecuencia,
+                        'aforoDisponible' => $aforoDisponible,
+                    ],
+                ];
+            }
+            return null;
         });
+
+        // Filtrar los eventos nulos
+        $events = $events->filter();
 
         return view('admin.horarios.index', compact('events'));
     }
+
 
     public function create()
     {

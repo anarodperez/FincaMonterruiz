@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="text-center my-4">
-        <h2 class="display-4 font-weight-bold text-primary">Valoraciones de los usuarios</h2>
+        <h2 class="display-4 font-weight-bold titulo">Valoraciones de los usuarios</h2>
         <p class="lead">Descubre y gestiona la lista de valoraciones de los usuarios.</p>
     </div>
 

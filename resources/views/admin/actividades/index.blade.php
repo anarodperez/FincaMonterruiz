@@ -4,7 +4,7 @@
 
 @section('content')
 <div class="text-center my-4">
-    <h2 class="display-4 font-weight-bold text-primary">Listado de Actividades</h2>
+    <h2 class="display-4 font-weight-bold">Listado de Actividades</h2>
     <p class="lead">Descubre y gestiona la lista de actividades en el sistema.</p>
 </div>
     <div class="content">

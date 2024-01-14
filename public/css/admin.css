@@ -8,6 +8,18 @@ padding: 4vh;
     /* Otros estilos como bordes redondeados, etc. */
 }
 
+h2{
+    /* color: #550d0e; */
+    color: #fff;
+    background-color: #536b59;
+    padding: 10px;
+    border-radius: 5px;
+
+}
+
+legend{
+    color: #536b59;
+}
 
 .delete, .edit{
 
@@ -154,4 +166,30 @@ color: white
 
 .page-link {
 color: #5c7c64;
+}
+
+
+.card {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    transition: 0.3s;
+}
+
+.card:hover {
+    box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+}
+
+.card-title {
+    color: #007bff;
+}
+
+.badge-pill {
+    background-color: #28a745;
+}
+
+.icono {
+    font-size: 24px;
+    margin-right: 10px;
+}
+main {
+min-height: 80vh;
 }

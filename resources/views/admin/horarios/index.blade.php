@@ -13,10 +13,12 @@
             width: 100%;
             max-width: 1400px;
             margin: 0 auto;
+            background-color: #fff;
         }
 
         .fc-header-toolbar {
             margin-bottom: 20px;
+            background-color: #F8F9FA;
         }
 
         .custom-event {
@@ -25,6 +27,12 @@
             background-color: #f9f9f9;
             border: 1px solid #ddd;
             text-align: center;
+            color: blue;
+        }
+
+        .fc-h-event {
+            background-color: transparent;
+            border: none;
         }
 
         .event-title,
@@ -78,17 +86,11 @@
             </div>
         @endif
 
-
-
-
-
-        <h2 class="my-4 text-center">Gestión de Horarios</h2>
+        <h2 class="my-4 text-center display-4 font-weight-bold titulo">Gestión de Horarios</h2>
         <div class="container my-4">
             <div class="filtro-idioma text-center">
                 <button class="btn btn-outline-primary mx-1" onclick="filtrarIdioma('Español')">Español</button>
                 <button class="btn btn-outline-secondary mx-1" onclick="filtrarIdioma('Inglés')">Inglés</button>
-                <button class="btn btn-outline-success mx-1" onclick="filtrarIdioma('Alemán')">Alemán</button>
-                <button class="btn btn-outline-danger mx-1" onclick="filtrarIdioma('Italiano')">Italiano</button>
                 <button class="btn btn-outline-warning mx-1" onclick="filtrarIdioma('Francés')">Francés</button>
             </div>
         </div>
@@ -163,9 +165,12 @@
             return `hsl(${hue % 360}, ${saturation}%, ${lightness}%)`;
         }
 
+        var calendar;
+
         document.addEventListener('DOMContentLoaded', function() {
+
             var calendarEl = document.getElementById('calendar');
-            var calendar = new FullCalendar.Calendar(calendarEl, {
+            calendar = new FullCalendar.Calendar(calendarEl, {
                 headerToolbar: {
                     left: 'dayGridMonth,timeGridWeek,timeGridDay',
                     center: 'title'
@@ -281,7 +286,22 @@
                     event.remove(); // Elimina los eventos pasados
                 }
             });
+
+            filtrarIdioma('Todos');
         });
+
+        function filtrarIdioma(idiomaSeleccionado) {
+            // Utiliza la instancia del calendario almacenada en la variable global
+            var eventos = calendar.getEvents();
+
+            eventos.forEach(function(event) {
+                if (idiomaSeleccionado === 'Todos' || event.extendedProps.idioma === idiomaSeleccionado) {
+                    event.setProp('display', 'block'); // Muestra el evento
+                } else {
+                    event.setProp('display', 'none'); // Oculta el evento
+                }
+            });
+        }
     </script>
     <script>
         function confirmDelete() {
@@ -289,8 +309,7 @@
                 document.getElementById('borrarHorarioForm').submit();
             }
         }
-    </script>
-    <script>
+
         $(document).ready(function() {
             // Ocultar los mensajes de alerta después de 5 segundos
             setTimeout(function() {

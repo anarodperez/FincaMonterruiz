@@ -14,13 +14,18 @@
         border-radius: 5px;
         border: 1px solid #ced4da;
     }
+
+
+    .titulo h2{
+    color: #550d0e;
+}
 </style>
 
 @section('content')
     <div class="container  py-4">
 
         <div class="text-center mb-4">
-            <h2 class="display-4 font-weight-bold text-primary">Listado de Reservas</h2>
+            <h2 class="display-4 font-weight-bold titulo">Listado de Reservas</h2>
             <p class="lead">Descubre y gestiona la lista de reservas en el sistema.</p>
         </div>
         <div class="table-responsive" style="min-height: 600px;" x-effect="updateHasResults()" x-data="{
@@ -82,30 +87,13 @@
                     <option value="confirmado">Confirmado</option>
                     <option value="cancelada">Cancelada</option>
                 </select>
-                <!-- Selector de Actividad -->
-                {{-- <select x-model="actividadSeleccionada" @input="updateHasResults()" class="form-control">
-                    <option value="">Todas las actividades</option>
-                    <!-- Generar opciones para actividades -->
-                    @foreach ($actividadesDisponibles as $actividad)
-                        <option value="{{ $actividad->id }}">{{ $actividad->nombre }}</option>
-                    @endforeach
-                </select> --}}
-
-                <!-- Selector de Horario -->
-                {{-- <select x-model="horarioSeleccionado" @input="updateHasResults()" class="form-control">
-                    <option value="">Todos los horarios</option>
-                    <!-- Generar opciones para horarios -->
-                    @foreach ($horariosDisponibles as $horario)
-                        <option value="{{ $horario->id }}">{{ $horario->fecha }} {{ $horario->hora }}</option>
-                    @endforeach
-                </select> --}}
-
             </div>
             <div class="d-flex justify-content-center">
                 <button type="button" id="cancelarReservasEnLote" class="btn btn-danger">Cancelar Reservas en Lote</button>
             </div>
 
-            <form id="batchCancelForm" action="{{ route('reservas.cancelarEnLote') }}" method="post" style="display: none;">
+            <form id="batchCancelForm" action="{{ route('reservas.cancelarEnLote') }}" method="post"
+                style="display: none;">
                 @csrf
                 <input type="hidden" name="reservas" id="batchCancelInput">
             </form>
@@ -163,7 +151,7 @@
             {{ $reservas->links() }}
 
 
-            <!-- Cambiar el Modal de Confirmación -->
+            <!-- Modal de Confirmación -->
             <div class="modal fade" id="cancelModal" tabindex="-1" role="dialog" aria-labelledby="cancelModalLabel"
                 aria-hidden="true">
                 <div class="modal-dialog" role="document">
@@ -189,9 +177,6 @@
     </div>
     <script>
         var currentCancelFormId = null;
-
-        var actividadSeleccionada = '';
-        var horarioSeleccionado = '';
 
         function openCancelModal(reservaId, estado) {
             currentCancelFormId = 'cancel-form-' + reservaId;
@@ -237,10 +222,5 @@
             document.getElementById('batchCancelInput').value = JSON.stringify(selectedReservas);
             document.getElementById('batchCancelForm').submit();
         });
-
-
-
-
     </script>
-
 @endsection
