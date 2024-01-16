@@ -28,7 +28,7 @@
             </form>
 
             <div class="table-responsive">
-                <table class="tabla table-striped">
+                <table class="tabla table">
                     <thead>
                         <tr>
                             <th>

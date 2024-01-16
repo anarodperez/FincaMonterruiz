@@ -5,18 +5,29 @@ namespace App\Http\Controllers;
 use App\Models\Actividad; // Importa el modelo Actividad
 use Validator;
 // use App\Models\Categoria;
+use App\Models\Reserva;
 
 use Illuminate\Http\Request;
 
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\DB;
+
 
 class ActividadController extends Controller
 {
     public function index()
     {
         $actividades = Actividad::paginate(4);
+
+         // Obtener datos de reservas
+         $datosReservas = Reserva::select(DB::raw("to_char(created_at, 'YYYY-MM-DD') as fecha"), DB::raw('count(*) as total'))
+         ->groupBy('fecha')
+         ->orderBy('fecha', 'asc')
+         ->get();
+
         return view('admin.actividades.index', [
             'actividades' => $actividades,
+            'datosReservas' => $datosReservas
         ]);
     }
 

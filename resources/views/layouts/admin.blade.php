@@ -11,6 +11,7 @@
     <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('css/navbar.css') }}">
     <link rel="stylesheet" href="{{ asset('css/admin.css') }}">
 
@@ -45,6 +46,9 @@
     </script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+
 
     {{-- @vite(['resources/css/app.css', 'resources/js/app.js']) --}}
 </head>
@@ -53,17 +57,17 @@
     {{-- Navbar --}}
     @include('layouts.navbar')
 
-    <main class="container-fluid" style=" min-height: 600px; ">
+    <div class="container-fluid" style=" min-height: 600px; ">
         <div class="row">
             {{-- Incluir la barra lateral --}}
-            @include('layouts.sidebar')
+            @include('layouts.sidebar', ['class' => 'col-md-4 col-lg-3'])
 
             {{-- Contenido principal --}}
-            <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
+            <main role="main" class="col-md-8 ml-sm-auto col-lg-10 px-4">
                 @yield('content')
             </main>
         </div>
-    </main>
+    </div>
 
     {{-- Footer --}}
     @include('layouts.footer')
@@ -75,6 +79,3 @@
 </body>
 
 </html>
-
-
-

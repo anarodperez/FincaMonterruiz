@@ -14,21 +14,32 @@
         border-radius: 5px;
         border: 1px solid #ced4da;
     }
-
-
-    .titulo h2{
-    color: #550d0e;
-}
 </style>
 
 @section('content')
-    <div class="container  py-4">
+    <div class="text-center my-4">
+        <h2 class="display-4 font-weight-bold">Listado de Reservas</h2>
+        <p class="lead">Descubre y gestiona la lista de reservas en el sistema.</p>
+    </div>
 
-        <div class="text-center mb-4">
-            <h2 class="display-4 font-weight-bold titulo">Listado de Reservas</h2>
-            <p class="lead">Descubre y gestiona la lista de reservas en el sistema.</p>
-        </div>
-        <div class="table-responsive" style="min-height: 600px;" x-effect="updateHasResults()" x-data="{
+    <div class="content">
+        {{-- Mensaje de éxito --}}
+        @if (session('success'))
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                {{ session('success') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        @endif
+
+        {{-- Mensaje de error --}}
+        @if (session('error'))
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                {{ session('error') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        @endif
+
+        <div class="contenedor-tabla" style="min-height: 600px;" x-effect="updateHasResults()" x-data="{
             search: '',
             startDate: '',
             endDate: '',
@@ -100,7 +111,7 @@
 
 
             <!-- Tabla de Reservas -->
-            <table class="tabla">
+            <table class="tabla table ">
                 <thead>
                     <tr>
                         <th><input type="checkbox" id="selectAll"></th>
@@ -139,10 +150,10 @@
                         </tr>
 
                     @empty
-                    <!-- Fila de No Resultados -->
-                    <tr x-show="!hasResults">
-                        <td colspan="7" class="text-center">No se encontraron resultados para tu búsqueda.</td>
-                    </tr>
+                        <!-- Fila de No Resultados -->
+                        <tr x-show="!hasResults">
+                            <td colspan="7" class="text-center">No se encontraron resultados para tu búsqueda.</td>
+                        </tr>
                     @endforelse
 
                 </tbody>
@@ -172,9 +183,9 @@
                     </div>
                 </div>
             </div>
-
         </div>
     </div>
+
     <script>
         var currentCancelFormId = null;
 

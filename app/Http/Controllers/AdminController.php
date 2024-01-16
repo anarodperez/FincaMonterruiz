@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Models\Reserva;
 use App\Models\Valoracion;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class AdminController extends Controller
 {
@@ -31,10 +32,16 @@ class AdminController extends Controller
             ->take(4)
             ->get();
 
-            $ultimasValoraciones = Valoracion::with(['user', 'actividad'])
+        $ultimasValoraciones = Valoracion::with(['user', 'actividad'])
             ->orderBy('created_at', 'desc')
             ->take(4)
             ->get();
+
+        // Obtener datos de reservas
+        $datosReservas = Reserva::select(DB::raw("to_char(created_at, 'YYYY-MM-DD') as fecha"), DB::raw('count(*) as total'))
+        ->groupBy('fecha')
+        ->orderBy('fecha', 'asc')
+        ->get();
 
         // Pasa esa información a la vista
         return view('admin.index', [
@@ -42,7 +49,8 @@ class AdminController extends Controller
             'usuariosRegistrados' => $usuariosRegistrados,
             'reservasRecientes' => $reservasRecientes,
             'ultimasValoraciones' => $ultimasValoraciones,
-            'cantidadValoraciones' => $cantidadValoraciones
+            'cantidadValoraciones' => $cantidadValoraciones,
+            'datosReservas' => $datosReservas
         ]);
     }
 }

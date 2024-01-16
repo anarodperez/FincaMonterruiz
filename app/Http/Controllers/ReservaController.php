@@ -47,7 +47,13 @@ class ReservaController extends Controller
         // Obtener la lista de horarios disponibles
         $horariosDisponibles = Horario::all();
 
-        return view('admin.reservas.index', compact('reservas', 'actividadesDisponibles', 'horariosDisponibles'));
+         // Obtener datos de reservas
+         $datosReservas = Reserva::select(DB::raw("to_char(created_at, 'YYYY-MM-DD') as fecha"), DB::raw('count(*) as total'))
+         ->groupBy('fecha')
+         ->orderBy('fecha', 'asc')
+         ->get();
+
+        return view('admin.reservas.index', compact('reservas', 'actividadesDisponibles', 'horariosDisponibles', 'datosReservas'));
     }
 
     public function create(Request $request, $horarioId)

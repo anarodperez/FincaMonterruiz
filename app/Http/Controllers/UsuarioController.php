@@ -11,6 +11,7 @@ use App\Models\Reserva;
 use Illuminate\Pagination\Paginator;
 use App\Models\AdminNotification;
 use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\DB;
 
 class UsuarioController extends Controller
 {
@@ -53,9 +54,16 @@ class UsuarioController extends Controller
             $usuarios->appends(['termino_busqueda' => $terminoBusqueda]);
         }
 
+        // Obtener datos de reservas
+        $datosReservas = Reserva::select(DB::raw("to_char(created_at, 'YYYY-MM-DD') as fecha"), DB::raw('count(*) as total'))
+        ->groupBy('fecha')
+        ->orderBy('fecha', 'asc')
+        ->get();
+
         // Retorna la vista con los usuarios
         return view('admin.usuarios.index', [
             'usuarios' => $usuarios,
+            'datosReservas' => $datosReservas
         ]);
     }
 

@@ -85,7 +85,7 @@ width: 50%;
 }
 
 .contenedor-tabla {
-min-height: 800px;
+min-height: 600px;
 /* overflow-y: scroll; */
 }
 
@@ -203,3 +203,9 @@ color: #5c7c64;
 main {
 min-height: 80vh;
 }
+
+
+/* Gráfico */
+ .card-grafico {
+        margin-bottom: 8vh;
+    }

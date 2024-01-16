@@ -8,7 +8,7 @@
 
     <div class="content">
         <div class="contenedor-tabla">
-            <table class="tabla">
+            <table class="tabla table">
                 <thead>
                     <tr>
                         <th>Actividad</th>
@@ -20,7 +20,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($valoraciones as $valoracion)
+                    @forelse($valoraciones as $valoracion)
                         <tr>
                             <td>{{ $valoracion->actividad->nombre }}</td>
                             <td>{{ $valoracion->user->nombre }} {{ $valoracion->user->apellido1 }}
@@ -37,11 +37,15 @@
                             <td>{{ $valoracion->comentario }}</td>
                             <td>{{ $valoracion->created_at->format('d/m/Y') }}</td>
                             <td>
-                                <button class="btn btn-danger" data-bs-toggle="modal"
-                                    data-bs-target="#deleteValoracionModal" data-id="{{ $valoracion->id }}">Borrar</button>
+                                <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteValoracionModal"
+                                    data-id="{{ $valoracion->id }}">Borrar</button>
                             </td>
                         </tr>
-                    @endforeach
+                    @empty
+                        <tr>
+                            <td colspan="6" class="text-center">No existen valoraciones aún</td>
+                        </tr>
+                    @endforelse
                 </tbody>
             </table>
 
