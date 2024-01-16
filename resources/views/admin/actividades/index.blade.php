@@ -3,11 +3,27 @@
 @section('title', 'Admin | Actividades')
 
 @section('content')
-<div class="text-center my-4">
-    <h2 class="display-4 font-weight-bold">Listado de Actividades</h2>
-    <p class="lead">Descubre y gestiona la lista de actividades en el sistema.</p>
-</div>
+    <div class="text-center my-4">
+        <h2 class="display-4 font-weight-bold">Listado de Actividades</h2>
+        <p class="lead">Descubre y gestiona la lista de actividades en el sistema.</p>
+    </div>
     <div class="content">
+        {{-- Mensaje de éxito --}}
+        @if (session('success'))
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                {{ session('success') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        @endif
+
+        {{-- Mensaje de error --}}
+        @if (session('error'))
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                {{ session('error') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        @endif
+
         <div class="contenedor-tabla">
             <p>
                 <a href="{{ route('admin.actividades.create') }}" class="btn btn-primary crear-actividad">
@@ -40,7 +56,7 @@
                             <td>{{ $actividad->precio_nino }}</td>
                             <td>{{ $actividad->aforo }}</td>
                             <td>{{ $actividad->activa == 1 ? 'Activa' : 'Inactiva' }}</td>
-                             {{-- <td>
+                            {{-- <td>
                                 @if ($actividad->categoria)
                                     {{ $actividad->categoria->nombre }}
                                 @else
@@ -48,12 +64,15 @@
                                 @endif
                             </td> --}}
                             <td>
-                                <form action="{{ route('admin.actividades.edit', encrypt($actividad->id)) }}" method="GET">
+                                <form action="{{ route('admin.actividades.edit', encrypt($actividad->id)) }}"
+                                    method="GET">
                                     <button class="btn btn-warning btn-sm" style="margin-bottom: 5px;">
                                         <span class="fas fa-edit"></span>
                                     </button>
                                 </form>
-                                <form action="{{ route('admin.actividades.show', ['actividad' => encrypt($actividad->id)]) }}" method="GET">
+                                <form
+                                    action="{{ route('admin.actividades.show', ['actividad' => encrypt($actividad->id)]) }}"
+                                    method="GET">
                                     <button class="btn btn-danger btn-sm">
                                         <span class="fas fa-times"></span>
                                     </button>

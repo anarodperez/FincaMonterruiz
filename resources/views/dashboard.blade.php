@@ -58,6 +58,7 @@
                                 <div class="card">
                                     <div class="card-body">
                                         <!-- Detalles de la reserva -->
+                                        <p class="card-text">Actividad: <strong>{{ $reserva->actividad->nombre}}</strong> </p>
                                         <p class="card-text">Fecha: {{ $reserva->horario->fecha }}</p>
                                         <p class="card-text">Hora: {{ $reserva->horario->hora }}</p>
                                         <p class="card-text">Estado: {{ $reserva->estado }}</p>
@@ -93,6 +94,7 @@
                                 <div class="card card-reserva">
                                     <div class="card-body">
                                         <!-- Detalles de la reserva -->
+                                        <p class="card-text">Actividad: {{ $reserva->actividad->nombre}}</p>
                                         <p class="card-text">Fecha: {{ $reserva->horario->fecha }}</p>
                                         <p class="card-text">Hora: {{ $reserva->horario->hora }}</p>
                                         <p class="card-text">Estado: {{ $reserva->estado }}</p>

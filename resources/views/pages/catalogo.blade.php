@@ -28,17 +28,18 @@
                     <div class="mb-4">
                         <h3>Filtrar Actividades</h3>
                         <form action="{{ route('catalogo.filter') }}" method="GET" name="form">
-                            <div class="form-group">
+                            <!-- Público objetivo -->
+                            <div class="form-group mb-3">
                                 <label for="publico">Público objetivo:</label>
                                 <select name="publico" id="publico" class="form-control">
                                     <option value="">Selecciona una opción</option>
                                     <option value="todos">Para todos los públicos</option>
                                     <option value="adultos">Solo para adultos</option>
-                                    <option value="ninos">Solo para niños</option>
                                 </select>
                             </div>
 
-                            <div class="form-group">
+                            <!-- Duración -->
+                            <div class="form-group mb-3">
                                 <label for="duracion">Duración:</label>
                                 <select name="duracion" id="duracion" class="form-control">
                                     <option value="">Cualquier Duración</option>
@@ -48,16 +49,22 @@
                                 </select>
                             </div>
 
-                            <div class="form-group">
-                                <label for="precio_min">Precio Mínimo:</label>
-                                <input type="number" name="precio_min" id="precio_min" class="form-control"
-                                    value="{{ $filtros['precio_min'] ?? '' }}">
+                            <!-- Grupo de Precios -->
+                            <div class="form-group mb-3">
+                                <label>Precios:</label>
+                                <div class="input-group">
+                                    <!-- Precio Mínimo -->
+                                    <input type="number" name="precio_min" id="precio_min" class="form-control"
+                                        value="{{ $filtros['precio_min'] ?? '' }}" placeholder="Precio mínimo"
+                                        min="0">
+                                    <span class="input-group-text">-</span>
+                                    <!-- Precio Máximo -->
+                                    <input type="number" name="precio_max" id="precio_max" class="form-control"
+                                        value="{{ $filtros['precio_max'] ?? '' }}" placeholder="Precio máximo"
+                                        min="0">
+                                </div>
                             </div>
-                            <div class="form-group">
-                                <label for="precio_max">Precio Máximo:</label>
-                                <input type="number" name="precio_max" id="precio_max" class="form-control"
-                                    value="{{ $filtros['precio_max'] ?? '' }}">
-                            </div>
+                            <!-- Botones -->
                             <div class="botones">
                                 <button type="submit" class="btn btn-primary">Filtrar</button>
                                 <button type="button" class="btn btn-danger" onclick="borrarFiltros()">Borrar
@@ -74,7 +81,7 @@
                     <section class="my-5">
                         <div id="search-results" class="row">
                             <!-- Actividades se mostrarán aquí -->
-                            @foreach ($actividades as $actividad)
+                            @forelse ($actividades as $actividad)
                                 <div class="col-md-4 mb-4">
                                     <div class="card">
                                         <img src="{{ asset($actividad->imagen) }}" alt="{{ $actividad->nombre }}"
@@ -84,16 +91,19 @@
                                             <p class="card-text">{{ $actividad->descripcion }}</p>
                                             <ul class="list-group">
                                                 <li class="list-group-item"><strong>Duración:</strong>
-                                                    {{ $actividad->duracion }} min</li>
+                                                    {{ $actividad->duracion }} min
+                                                </li>
                                                 <li class="list-group-item"><strong>Precio adulto:</strong>
                                                     {{ $actividad->precio_adulto }} €
                                                 </li>
-                                                <li class="list-group-item"><strong>Precio niño:</strong>
-                                                    {{ $actividad->precio_nino }} €
-                                                </li>
-                                                </li>
+                                                @if (!is_null($actividad->precio_nino) && $actividad->precio_nino != '')
+                                                    <li class="list-group-item"><strong>Precio niño:</strong>
+                                                        {{ $actividad->precio_nino }} €
+                                                    </li>
+                                                @endif
                                                 <li class="list-group-item"><strong>Aforo:</strong>
-                                                    {{ $actividad->aforo }}</li>
+                                                    {{ $actividad->aforo }}
+                                                </li>
                                             </ul>
                                             {{-- <div class="lc-block">
                                                 <button class="custom-btn boton"
@@ -102,8 +112,17 @@
                                         </div>
                                     </div>
                                 </div>
-                            @endforeach
+                            @empty
+                                @if ($filtrosAplicados)
+                                    <div class="col-12">
+                                        <div class="alert-info text-center">
+                                            No hay resultados de búsqueda.
+                                        </div>
+                                    </div>
+                                @endif
+                            @endforelse
                         </div>
+
                         <!-- Enlaces de paginación -->
                         {{ $actividades->links('pagination::bootstrap-4', ['class' => 'mi-paginacion-personalizada']) }}
 
@@ -131,10 +150,10 @@
                 <div class="filtro-idioma text-center">
                     <button class="btn btn-outline-primary mx-1" onclick="filtrarIdioma('Español')">Español</button>
                     <button class="btn btn-outline-secondary mx-1" onclick="filtrarIdioma('Inglés')">Inglés</button>
-                    <button class="btn btn-outline-success mx-1" onclick="filtrarIdioma('Alemán')">Alemán</button>
-                    <button class="btn btn-outline-danger mx-1" onclick="filtrarIdioma('Italiano')">Italiano</button>
                     <button class="btn btn-outline-warning mx-1" onclick="filtrarIdioma('Francés')">Francés</button>
-                    <!-- Agrega más botones según los idiomas que manejes -->
+                    <!-- Botón para borrar filtros -->
+                    <button class="btn btn-outline-danger mx-1" onclick="borrarFiltroIdioma()">Borrar Filtros</button>
+
                 </div>
             </div>
             <!-- Modal: mensaje AFORO COMPLETO -->
@@ -191,9 +210,12 @@
 
                 return `hsl(${hue % 360}, ${saturation}%, ${lightness}%)`;
             }
+
+            var calendar;
+
             document.addEventListener('DOMContentLoaded', function() {
                 var calendarEl = document.getElementById('calendar');
-                var calendar = new FullCalendar.Calendar(calendarEl, {
+                calendar = new FullCalendar.Calendar(calendarEl, {
                     headerToolbar: {
                         left: 'dayGridMonth,timeGridWeek,timeGridDay',
                         center: 'title'
@@ -266,14 +288,14 @@
                         eventWrapper.appendChild(idiomaElement);
 
 
-                       // Estado de aforo
-                    if (aforoDisponible === 0) {
-                        var aforoElement = document.createElement('div');
-                        aforoElement.classList.add('event-aforo');
-                        aforoElement.innerHTML = "COMPLETO";
-                        aforoElement.style.color = 'red';
-                        eventWrapper.appendChild(aforoElement);
-                    }
+                        // Estado de aforo
+                        if (aforoDisponible === 0) {
+                            var aforoElement = document.createElement('div');
+                            aforoElement.classList.add('event-aforo');
+                            aforoElement.innerHTML = "COMPLETO";
+                            aforoElement.style.color = 'red';
+                            eventWrapper.appendChild(aforoElement);
+                        }
 
                         return {
                             domNodes: [eventWrapper]
@@ -291,17 +313,23 @@
                         event.remove(); // Elimina los eventos pasados
                     }
                 });
+                filtrarIdioma('Todos');
             });
+
+            function filtrarIdioma(idiomaSeleccionado) {
+                // Utiliza la instancia del calendario almacenada en la variable global
+                var eventos = calendar.getEvents();
+
+                eventos.forEach(function(event) {
+                    if (idiomaSeleccionado === 'Todos' || event.extendedProps.idioma === idiomaSeleccionado) {
+                        event.setProp('display', 'block'); // Muestra el evento
+                    } else {
+                        event.setProp('display', 'none'); // Oculta el evento
+                    }
+                });
+            }
         </script>
 
-        <script>
-            $(document).ready(function() {
-                // Ocultar los mensajes de alerta después de 5 segundos
-                setTimeout(function() {
-                    $('.alert').fadeOut('slow');
-                }, 5000); // 5 segundos
-            });
-        </script>
     </main>
     <script>
         function verDetalleActividad(actividadId) {
@@ -355,8 +383,7 @@
             string = string.normalize("NFD").replace(/[\u0300-\u036f]/g, ""); // Quita las tildes
             return string;
         }
-    </script>
-    <script>
+
         function borrarFiltros() {
             // Restablecer los campos del formulario
             document.getElementById('publico').value = '';
@@ -371,5 +398,18 @@
 
             document.forms['form'].submit();
         }
+
+        function borrarFiltroIdioma() {
+            filtrarIdioma('Todos');
+        }
+
+
+
+        // $(document).ready(function() {
+        //     // Ocultar los mensajes de alerta después de 5 segundos
+        //     setTimeout(function() {
+        //         $('.alert').fadeOut('slow');
+        //     }, 5000); // 5 segundos
+        // });
     </script>
 @endsection

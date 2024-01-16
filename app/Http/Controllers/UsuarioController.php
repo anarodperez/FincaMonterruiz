@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User; // Importa el modelo Usuario
+use App\Models\User;
 
 use Illuminate\Http\Request;
 use Carbon\Carbon;
@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Reserva;
 use Illuminate\Pagination\Paginator;
 use App\Models\AdminNotification;
+use Illuminate\Support\Facades\Response;
 
 class UsuarioController extends Controller
 {
@@ -20,21 +21,36 @@ class UsuarioController extends Controller
         if ($notification && $notification->nuevos_usuarios_count > 0) {
             $notification->update(['nuevos_usuarios_count' => 0]);
         }
+
+        $terminoBusqueda = $request->input('termino_busqueda', '');
+
         // Inicia la consulta
         $query = User::query();
 
-        // Aplica filtro si se recibe un nombre
-        if ($request->has('nombre')) {
-            $nombre = $request->input('nombre');
-            $query->where('nombre', 'like', '%' . $nombre . '%');
+        // Aplica filtro si se recibe un término de búsqueda
+        if ($request->has('termino_busqueda')) {
+            $terminoBusqueda = $request->input('termino_busqueda');
+
+            // Busca en varias columnas
+            $query->where(function ($query) use ($terminoBusqueda) {
+                $query
+                    ->where('nombre', 'like', '%' . $terminoBusqueda . '%')
+                    ->orWhere('apellido1', 'like', '%' . $terminoBusqueda . '%')
+                    ->orWhere('email', 'like', '%' . $terminoBusqueda . '%')
+                    ->orWhere('telefono', 'like', '%' . $terminoBusqueda . '%');
+            });
         }
 
+        // Ordenación
+        if ($request->has('sort')) {
+            $query->orderBy($request->input('sort'));
+        }
         // Aplica paginación
         $usuarios = $query->paginate(5);
 
         // Asegura que los parámetros de búsqueda se mantengan durante la paginación
         if ($request->has('nombre')) {
-            $usuarios->appends(['nombre' => $nombre]);
+            $usuarios->appends(['termino_busqueda' => $terminoBusqueda]);
         }
 
         // Retorna la vista con los usuarios
@@ -103,5 +119,29 @@ class UsuarioController extends Controller
             ->paginate(3);
 
         return view('/dashboard', compact('reservasActivas', 'reservasPasadas', 'valoracionesUsuario'));
+    }
+
+    public function exportCsv()
+    {
+        $usuarios = User::all();
+        $headers = [
+            'Content-type' => 'text/csv',
+            'Content-Disposition' => 'attachment; filename=usuarios.csv',
+            'Pragma' => 'no-cache',
+            'Cache-Control' => 'must-revalidate, post-check=0, pre-check=0',
+            'Expires' => '0',
+        ];
+
+        $callback = function () use ($usuarios) {
+            $file = fopen('php://output', 'w');
+            fputcsv($file, ['ID', 'Nombre', 'Apellido', 'Email', 'Teléfono', 'Fecha de Nacimiento']);
+
+            foreach ($usuarios as $usuario) {
+                fputcsv($file, [$usuario->id, $usuario->nombre, $usuario->apellido1, $usuario->email, $usuario->telefono, $usuario->fecha_nacimiento]);
+            }
+            fclose($file);
+        };
+
+        return Response::stream($callback, 200, $headers);
     }
 }

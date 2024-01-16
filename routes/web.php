@@ -64,6 +64,7 @@ Route::middleware(['admin'])->group(function () {
     // Usuarios
     Route::get('/usuarios/index', [UsuarioController::class, 'index'])->name('admin.usuarios.index');
     Route::put('/usuarios/{usuario}/validar', [UsuarioController::class, 'validar'])->name('admin.usuarios.validar');
+    Route::get('/admin/usuarios/export', [UsuarioController::class, 'exportCsv'])->name('admin.usuarios.exportCsv');
 
     //Horarios
     Route::get('/horarios/index', [HorarioController::class, 'index'])->name('admin.horarios.index');

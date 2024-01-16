@@ -48,6 +48,8 @@ class ActividadController extends Controller
             'aforo' => 'required|integer',
             'activa' => 'required|in:0,1',
             'imagen' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
+            'precio_adulto' => 'required|numeric',
+            'precio_nino' => 'nullable|numeric',
         ]);
 
         // Validación personalizada para asegurarse de que al menos uno de los precios sea proporcionado
@@ -129,40 +131,43 @@ class ActividadController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
-{
-    $actividad = Actividad::find($id);
-    if (!$actividad) {
-        return redirect()->route('admin.actividades.index')->with('error', '¡Actividad no encontrada!');
+    {
+        $actividad = Actividad::find($id);
+        if (!$actividad) {
+            return redirect()
+                ->route('admin.actividades.index')
+                ->with('error', '¡Actividad no encontrada!');
+        }
+
+        // Validar solo los campos que se han proporcionado
+        $data = $request->validate([
+            'nombre' => 'sometimes|required',
+            'descripcion' => 'sometimes|required',
+            'duracion' => 'sometimes|required|integer',
+            'precio_adulto' => 'nullable',
+            'precio_nino' => 'nullable',
+            'aforo' => 'sometimes|required|integer',
+            'activa' => 'sometimes|required|in:0,1',
+            'imagen' => 'sometimes|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+
+        // Actualizar la imagen si se ha proporcionado una nueva
+        if ($request->hasFile('imagen')) {
+            $imagen = $request->file('imagen');
+            $nombreImagen = time() . '_' . $imagen->getClientOriginalName();
+            $rutaImagen = $imagen->storeAs('public/img', $nombreImagen);
+            $rutaRelativa = 'storage/img/' . $nombreImagen;
+            $actividad->imagen = $rutaRelativa;
+        }
+
+        // Actualizar solo los campos proporcionados
+        $actividad->fill($data);
+        $actividad->save();
+
+        return redirect()
+            ->route('admin.actividades.index')
+            ->with('success', 'Actividad modificada con éxito.');
     }
-
-    // Validar solo los campos que se han proporcionado
-    $data = $request->validate([
-        'nombre' => 'sometimes|required',
-        'descripcion' => 'sometimes|required',
-        'duracion' => 'sometimes|required|integer',
-        'precio_adulto' => 'nullable',
-        'precio_nino' => 'nullable',
-        'aforo' => 'sometimes|required|integer',
-        'activa' => 'sometimes|required|in:0,1',
-        'imagen' => 'sometimes|image|mimes:jpeg,png,jpg,gif|max:2048',
-    ]);
-
-    // Actualizar la imagen si se ha proporcionado una nueva
-    if ($request->hasFile('imagen')) {
-        $imagen = $request->file('imagen');
-        $nombreImagen = time() . '_' . $imagen->getClientOriginalName();
-        $rutaImagen = $imagen->storeAs('public/img', $nombreImagen);
-        $rutaRelativa = 'storage/img/' . $nombreImagen;
-        $actividad->imagen = $rutaRelativa;
-    }
-
-    // Actualizar solo los campos proporcionados
-    $actividad->fill($data);
-    $actividad->save();
-
-    return redirect()->route('admin.actividades.index')->with('success', '¡Actualizado con éxito!');
-}
-
 
     /**
      * Remove the specified resource from storage.
@@ -180,10 +185,18 @@ class ActividadController extends Controller
 
         // Verificar si la actividad existe antes de intentar eliminar
         if ($actividad) {
+            // Verificar si la actividad tiene reservas
+            if ($actividad->reservas()->count() > 0) {
+                return redirect()
+                    ->route('admin.actividades.index')
+                    ->with('error', 'No se puede eliminar la actividad porque ya tiene reservas.');
+            }
+
+            // Si no hay reservas, eliminar la actividad
             $actividad->delete();
             return redirect()
                 ->route('admin.actividades.index')
-                ->with('success', 'Eliminada con éxito!');
+                ->with('success', 'Actividad eliminada con éxito.');
         } else {
             // Manejar el caso en el que la actividad no se encuentra
             return redirect()
@@ -208,6 +221,4 @@ class ActividadController extends Controller
         // Muestra la vista de detalles de la actividad y pasa los detalles de la actividad.
         return view('pages.detalleActividad', ['actividad' => $actividad]);
     }
-
-
 }

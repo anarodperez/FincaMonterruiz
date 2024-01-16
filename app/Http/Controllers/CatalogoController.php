@@ -28,30 +28,36 @@ class CatalogoController extends Controller
         // Obtiene solo las actividades que están activas con paginación
         $actividades = Actividad::where('activa', true)->paginate(3);
 
-        $events = $horarios->map(function ($horario) {
-            // Calcular las plazas reservadas para esta actividad
-            $plazasReservadas = Reserva::where('actividad_id', $horario->actividad->id)
-                ->where('estado', 'confirmado')
-                ->sum(DB::raw('num_adultos + num_ninos'));
+        $events = $horarios
+            ->filter(function ($horario) {
+                return !is_null($horario->actividad);
+            })
+            ->map(function ($horario) {
+                // Calcular las plazas reservadas para esta actividad
+                $plazasReservadas = Reserva::where('actividad_id', $horario->actividad->id)
+                    ->where('estado', 'confirmado')
+                    ->sum(DB::raw('num_adultos + num_ninos'));
 
-            // Calcular las plazas disponibles
-            $aforoDisponible = max(0, $horario->actividad->aforo - $plazasReservadas);
+                // Calcular las plazas disponibles
+                $aforoDisponible = max(0, $horario->actividad->aforo - $plazasReservadas);
 
-            return [
-                'id' => $horario->actividad->id,
-                'title' => $horario->actividad->nombre,
-                'start' => $horario->fecha . 'T' . $horario->hora,
-                'extendedProps' => [
-                    'idioma' => $horario->idioma,
-                    'horario_id' => $this->hashids->encode($horario->id),
-                    'frecuencia' => $horario->frecuencia,
-                    'aforoDisponible' => $aforoDisponible,
-                    'idioma' => $horario->idioma,
-                ],
-            ];
-        });
+                return [
+                    'id' => $horario->actividad->id,
+                    'title' => $horario->actividad->nombre,
+                    'start' => $horario->fecha . 'T' . $horario->hora,
+                    'extendedProps' => [
+                        'idioma' => $horario->idioma,
+                        'horario_id' => $this->hashids->encode($horario->id),
+                        'frecuencia' => $horario->frecuencia,
+                        'aforoDisponible' => $aforoDisponible,
+                        'idioma' => $horario->idioma,
+                    ],
+                ];
+            });
 
-        return view('pages.catalogo', compact('events', 'actividades'));
+            // En el index, no se han aplicado filtros todavía
+    $filtrosAplicados = false;
+        return view('pages.catalogo', compact('events', 'actividades', 'filtrosAplicados'));
     }
 
     public function buscar(Request $request)
@@ -165,10 +171,18 @@ class CatalogoController extends Controller
 
         $actividades = $query->paginate(3); //paginación
 
+        /// Determina si hay actividades después de aplicar filtros
+        $hayResultados = $actividades->isNotEmpty();
+
+        // verifica si se han aplicado filtros
+        $filtrosAplicados = count(array_filter($request->all())) > 0;
+
         return view('pages.catalogo', [
             'actividades' => $actividades,
             'events' => $events,
-            'filtros' => $request->all(), // Pasar todos los valores de los filtros
+            'filtros' => $request->all(),
+            'hayResultados' => $hayResultados,
+            'filtrosAplicados' => $filtrosAplicados
         ]);
     }
 }

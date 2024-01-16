@@ -51,7 +51,7 @@
                                 <div class="form-group col-md-6">
                                     <label for="precio_adulto" class="mb-2">Precio adultos</label>
                                     <input type="number" name="precio_adulto" value="{{ old('precio_adulto') }}"
-                                        class="form-control">
+                                        class="form-control" required>
                                 </div>
 
                                 <div class="form-group col-md-6">

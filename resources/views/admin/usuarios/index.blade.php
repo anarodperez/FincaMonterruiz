@@ -10,20 +10,37 @@
         </div>
 
         <div class="content contenedor-tabla">
+
+            {{-- Botón para exportar datos --}}
+            <div class="mb-4">
+                <a href="{{ route('admin.usuarios.exportCsv') }}" class="btn btn-info">Exportar a CSV</a>
+            </div>
+
+            <!-- Formulario de búsqueda -->
             <form id="searchForm" action="{{ route('admin.usuarios.index') }}" method="GET" class="mb-3">
                 <div class="input-group">
-                    <input type="text" name="nombre" id="nombre" class="form-control" placeholder="Buscar por nombre"
-                        value="{{ request('nombre') }}">
+                    <input type="text" name="termino_busqueda" class="form-control text-center"
+                        placeholder="Buscar por nombre, apellido, email o teléfono"
+                        value="{{ request('termino_busqueda') }}">
                     <button type="submit" class="btn btn-primary">Buscar</button>
+                    <a href="{{ route('admin.usuarios.index') }}" class="btn btn-secondary ml-2">Limpiar</a>
                 </div>
             </form>
 
             <div class="table-responsive">
-                <table class="tabla">
+                <table class="tabla table-striped">
                     <thead>
                         <tr>
-                            <th>Nombre</th>
-                            <th>Apellidos</th>
+                            <th>
+                                <a href="{{ route('admin.usuarios.index', ['sort' => 'nombre']) }}" class="header-text">
+                                    Nombre <i class="fas fa-sort"></i>
+                                </a>
+                            </th>
+                            <th>
+                                <a href="{{ route('admin.usuarios.index', ['sort' => 'apellido1']) }}" class="header-text">
+                                    Apellidos <i class="fas fa-sort"></i>
+                                </a>
+                            </th>
                             <th>Email</th>
                             <th>Teléfono</th>
                             <th>Fecha nacimiento</th>
@@ -46,11 +63,13 @@
                                         <input type="hidden" name="id" value="{{ $usuario->id }}">
 
                                         @if ($usuario->validado)
-                                            <button type="submit" class="btn boton-rojo"
-                                                style="background-color:red">Invalidar</button>
+                                            <button type="submit" class="btn btn-success">
+                                                <i class="fas fa-check"></i> Validar
+                                            </button>
                                         @else
-                                            <button type="submit" class="btn boton-verde"
-                                                style="background-color:green">Validar</button>
+                                            <button type="submit" class="btn btn-danger">
+                                                <i class="fas fa-times"></i> Invalidar
+                                            </button>
                                         @endif
                                     </form>
                                 </td>

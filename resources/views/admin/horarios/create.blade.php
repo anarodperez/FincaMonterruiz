@@ -67,7 +67,7 @@ body {
                 <select name="idioma" id="idioma" class="form-select">
                     <option value="Español">Español</option>
                     <option value="Inglés">Inglés</option>
-                    <option value="Frances">Francés</option>
+                    <option value="Francés">Francés</option>
                     <!-- Agrega otras opciones de idioma según tus necesidades -->
                 </select>
             </div>

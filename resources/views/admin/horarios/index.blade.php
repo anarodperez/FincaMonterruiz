@@ -36,7 +36,7 @@
         }
 
         .event-title,
-        .event-time {
+        .event-time, .event-idioma {
             font-weight: bold;
             margin-bottom: 5px;
             font-size: 14px;
@@ -46,6 +46,12 @@
             font-size: 1.2em;
             border-radius: 2px;
         }
+
+        .event-idioma {
+            color: rgb(219, 155, 36);
+            text-transform: uppercase;
+        }
+
 
         .fc-event {
             display: flex;
@@ -104,7 +110,6 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body" id="modal-body-content">
-                        <!-- Contenido dinámico del modal -->
                     </div>
                     <div class="modal-footer">
                         <!-- Formulario para borrar el horario -->

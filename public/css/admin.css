@@ -89,6 +89,16 @@ min-height: 800px;
 /* overflow-y: scroll; */
 }
 
+.header-text {
+    color: inherit; /* Hereda el color del texto del elemento padre */
+    text-decoration: none; /* Elimina el subrayado */
+    cursor: pointer; /* cambia el cursor para indicar que es clickeable */
+}
+
+.header-text:hover {
+    text-decoration: underline;
+}
+
 
 
 @media (max-width:900px){
