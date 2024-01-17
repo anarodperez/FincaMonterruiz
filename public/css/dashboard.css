@@ -8,6 +8,15 @@ main {
     flex: 1;
 }
 
+h2{
+    color: #fff;
+    background-color: #536b59;
+    padding: 10px;
+    border-radius: 5px;
+
+}
+
+
 /* Estilo para las pestañas y su contenido */
 .nav-tabs .nav-link {
 border: 1px solid transparent;
@@ -88,7 +97,6 @@ margin-right: 10px;
 
 /* Valoración */
 .valoraciones-container {
-max-height: 500px;
 margin-bottom: 14vh;
 
 }

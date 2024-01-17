@@ -11,27 +11,28 @@
         <div class="collapse navbar-collapse justify-content-end" id="navbarNavDropdown">
             <ul class="navbar-nav">
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('home') }}">Inicio</a>
+                    <a class="nav-link {{ Request::routeIs('home') ? 'active' : '' }}" href="{{ route('home') }}">Inicio</a>
                 </li>
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
-                        aria-expanded="false">
+                    <a class="nav-link dropdown-toggle {{ Request::routeIs('pages.catalogo') || Request::routeIs('pages.gallery') ? 'experiencia-activa' : '' }}" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         Experiencias
                     </a>
+
                     <ul class="dropdown-menu border-0">
                         <li>
-                            <a class="dropdown-item" href="{{ route('pages.catalogo') }}">Catalogo y reserva</a>
+                            <a class="dropdown-item {{ Request::routeIs('pages.catalogo') ? 'active' : '' }}" href="{{ route('pages.catalogo') }}">Catálogo y reserva</a>
                         </li>
                         <li>
-                            <a class="dropdown-item" href="{{ route('pages.gallery') }}">Galeria</a>
+                            <a class="dropdown-item {{ Request::routeIs('pages.gallery') ? 'active' : '' }}" href="{{ route('pages.gallery') }}">Galeria</a>
                         </li>
                     </ul>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link {{ Request::routeIs('pages.about-us') ? 'active' : '' }}" href="{{ route('pages.about-us') }}">Sobre nosotros</a>
+                </li>
+
             <li class="nav-item">
-                <a class="nav-link" href="{{ route('pages.about-us') }}">Sobre nosotros</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="{{ route('pages.form-contact') }}">Contacto</a>
+                <a class="nav-link {{ Request::routeIs('pages.form-contact') ? 'active' : '' }}" href="{{ route('pages.form-contact') }}">Contacto</a>
             </li>
             </ul>
             @if (auth()->check())

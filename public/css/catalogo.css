@@ -57,100 +57,116 @@ top: 2px;
 }
 
 #calendar {
-    margin: 0 auto;
-    padding: 15px;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-    background-color: #fff;
+margin: 0 auto;
+padding: 15px;
+border-radius: 8px;
+box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+background-color: #fff;
+width: 100%;
+max-width: 1400px;
+margin: 0 auto;
+background-color: #fff;
 }
 
 .fc-header-toolbar {
-    margin-bottom: 20px;
+margin-bottom: 20px;
+background-color: #F8F9FA;
 }
 
 .custom-card {
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease-in-out;
+box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+transition: transform 0.3s ease-in-out;
 }
 
 .custom-card:hover {
-    transform: translateY(-5px);
+transform: translateY(-5px);
 }
 
 .custom-card .card-img-top {
-    height: 200px;
-    object-fit: cover;
+height: 200px;
+object-fit: cover;
 }
 
 #search {
-    margin-top: 2vh;
-    margin-top: 3vh;
-    margin-bottom: 4vh;
-    text-align: center;
-    width: 50%;
+margin-top: 2vh;
+margin-top: 3vh;
+margin-bottom: 4vh;
+text-align: center;
+width: 50%;
 }
 
 .botones {
-    margin-top: 3vh;
-    text-align: center;
+margin-top: 3vh;
+text-align: center;
 }
 
 /* Paginación */
 
 section nav {
-    background: transparent;
+background: transparent;
 }
 
 .active>.page-link,
 .page-link.active {
 
-    background-color: #5c7c64;
-    ;
-    border-color: #5c7c64;
-    ;
-    color: white
+background-color: #5c7c64;
+;
+border-color: #5c7c64;
+;
+color: white
 }
 
 .page-link {
-    color: #5c7c64;
+color: #5c7c64;
 }
 
 
 /* Calendario */
 #calendar {
-    margin: 0 auto;
-    padding: 15px;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-    background-color: #fff;
-     width: 100%;
-    max-width: 1400px;
-    margin: 0 auto;
+margin: 0 auto;
+padding: 15px;
+border-radius: 8px;
+box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+background-color: #fff;
+width: 100%;
+max-width: 1400px;
+margin: 0 auto;
 }
 
 .fc-header-toolbar {
-    margin-bottom: 20px;
+margin-bottom: 20px;
 }
 
 .custom-event {
-    padding: 5px;
-    border-radius: 4px;
-    background-color: #f9f9f9;
-    border: 1px solid #ddd;
-    text-align: center;
+padding: 5px;
+border-radius: 4px;
+background-color: #f9f9f9;
+border: 1px solid #ddd;
+text-align: center;
+color: blue;
 }
 
 .event-title, .event-time, .event-idioma {
-    font-weight: bold;
-    margin-bottom: 5px;
-    font-size: 14px;
+font-weight: bold;
+margin-bottom: 5px;
+font-size: 14px;
+}
+
+.event-idioma{
+    color: rgb(219, 155, 36);
+    text-transform: uppercase;
 }
 
 .event-aforo {
-    font-size: 1.2em;
-    border-radius: 2px;
+font-size: 1.2em;
+border-radius: 2px;
 }
 .fc-event {
-    display: flex;
-    justify-content: center;
+display: flex;
+justify-content: center;
+}
+
+.fc-h-event {
+    background-color: transparent;
+    border: none;
 }

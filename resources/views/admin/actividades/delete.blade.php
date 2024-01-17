@@ -6,8 +6,8 @@
 
 @section('content')
     <div class="content">
+        <h2 class="my-4 text-center">Eliminar Actividad</h2>
         <div class="card delete">
-            <h5 class="card-header">Eliminar Actividad</h5>
             <div class="card-body">
                 <p class="card-text">
                 <div class="alert alert-danger" role="alert">
@@ -40,7 +40,7 @@
                         @csrf
                         @method('DELETE')
                         <a href="{{ route('admin.actividades.index') }}" class="btn btn-info">
-                            <span class="fas fa-undo-alt"></span> Regresar
+                            <i class="fas fa-arrow-left"></i>  Regresar
                         </a>
                         <button class="btn btn-danger" >
                             <span class="fas fa-times"></span> Eliminar

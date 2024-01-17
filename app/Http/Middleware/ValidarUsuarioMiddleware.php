@@ -10,11 +10,16 @@ class ValidarUsuarioMiddleware
 {
     public function handle($request, Closure $next)
     {
+        // Verifica si el usuario está autenticado y validado
         if (Auth::check() && !Auth::user()->validado) {
-            // Agrega un mensaje de error a la sesión
-            Session::flash('error', 'Tu cuenta no está validada. Por favor, verifica tu cuenta.');
-        }
+            Auth::logout(); // Cierra la sesión del usuario
 
+            // Opcionalmente, invalida la sesión actual para prevenir su uso
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+
+            return redirect('/login')->with('error', 'Tu cuenta no está validada.');
+        }
         return $next($request);
     }
 }

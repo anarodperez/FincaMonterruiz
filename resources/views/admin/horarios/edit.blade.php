@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 
 @section('content')
-<div class="container">
+<div class="container editar-horario">
     <h2 class="mb-4">Editar Horario</h2>
     @if (session('error'))
     <div class="alert alert-danger alert-dismissible fade show">

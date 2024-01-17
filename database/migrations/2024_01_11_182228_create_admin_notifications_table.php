@@ -11,13 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('valoraciones', function (Blueprint $table) {
+        Schema::create('admin_notifications', function (Blueprint $table) {
             $table->id();
+            $table->unsignedInteger('nuevos_usuarios_count')->default(0);
+            $table->unsignedInteger('nuevos_reservas_count')->default(0);
+            $table->unsignedInteger('nuevos_valoraciones_count')->default(0);
             $table->timestamps();
-            $table->text('comentario');
-            $table->integer('puntuacion');
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->foreignId('actividad_id')->constrained('actividades')->onDelete('cascade');
         });
     }
 
@@ -26,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('valoraciones');
+        Schema::dropIfExists('admin_notifications');
     }
 };

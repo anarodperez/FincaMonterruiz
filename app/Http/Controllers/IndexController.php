@@ -1,7 +1,8 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Models\Actividad; // Importa el modelo Actividad
+use App\Models\Actividad;
+use App\Models\Valoracion;
 use Illuminate\Http\Request;
 
 class IndexController extends Controller
@@ -9,6 +10,11 @@ class IndexController extends Controller
     public function home()
     {
         $actividades = Actividad::all();
-        return view('welcome', ['actividades' => $actividades]);
+        $ultimasValoraciones = Valoracion::with('user')
+        ->latest()
+        ->take(3)
+        ->get();
+
+        return view('welcome', ['actividades' => $actividades, 'ultimasValoraciones' => $ultimasValoraciones]);
     }
 }

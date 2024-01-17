@@ -26,7 +26,11 @@ document.addEventListener("DOMContentLoaded", function() {
             {
                 inputId: 'password',
                 errorMessage: 'La contraseña debe tener al menos 8 caracteres, una letra mayúscula, una letra minúscula y un número.'
-            }
+            },
+            {
+                inputId: 'fecha_nacimiento',
+                errorMessage: 'Fecha de nacimiento no válida. Debes ser mayor de 18 años.'
+            },
         ];
 
         let errors = false; // Inicialización de la variable de error
@@ -75,14 +79,18 @@ document.addEventListener("DOMContentLoaded", function() {
             (input.id === 'apellido2' && input.value.trim().length > 0 && (input.value.length < 5 || !
                 validarInput(input.value))) ||
             (input.id === 'email' && (input.value.length < 10 || !isValidEmail(input.value))) ||
-            (input.id === 'password' && !validarContraseña(input.value))
-        ) {
+            (input.id === 'password' && !validarContraseña(input.value)) ||
+            (input.id === 'fecha_nacimiento' && !validarFechaNacimiento(input.value)) ||
+            (input.id === 'telefono' && !validarTelefono(input.value))
+        )
+         {
             showError(input, errorMessage);
             return false;
         } else {
             hideError(input);
             return true;
         }
+
     }
 
 // Función para mostrar un mensaje de error asociado a un campo específico
@@ -130,4 +138,22 @@ function hideError(input) {
         const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
         return regex.test(password);
     }
+
+    function validarFechaNacimiento(fecha) {
+        const hoy = new Date();
+        const fechaNacimiento = new Date(fecha);
+        let edad = hoy.getFullYear() - fechaNacimiento.getFullYear(); // Cambiado a 'let'
+        const m = hoy.getMonth() - fechaNacimiento.getMonth();
+        if (m < 0 || (m === 0 && hoy.getDate() < fechaNacimiento.getDate())) {
+            edad--;
+        }
+        return edad >= 18;
+    }
+
+
+    function validarTelefono(telefono) {
+        const regexTelefono = /^[+]?[0-9\s\-\(\)]{10,}$/; // Ajusta esta expresión regular según tus necesidades
+        return regexTelefono.test(telefono);
+    }
+
 });

@@ -39,8 +39,7 @@ Route::get('/dashboard', function () {
         return app(UsuarioController::class)->showDashboard();
     }
 })
-    ->middleware(['auth', 'verified'])
-    ->name('dashboard');
+    ->middleware(['auth', 'verified', 'validarUsuario'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -64,6 +63,7 @@ Route::middleware(['admin'])->group(function () {
     // Usuarios
     Route::get('/usuarios/index', [UsuarioController::class, 'index'])->name('admin.usuarios.index');
     Route::put('/usuarios/{usuario}/validar', [UsuarioController::class, 'validar'])->name('admin.usuarios.validar');
+    Route::get('/admin/usuarios/export', [UsuarioController::class, 'exportCsv'])->name('admin.usuarios.exportCsv');
 
     //Horarios
     Route::get('/horarios/index', [HorarioController::class, 'index'])->name('admin.horarios.index');
@@ -120,6 +120,18 @@ Route::get('/catalogo/filter', [CatalogoController::class, 'filter'])->name('cat
 // Detalle de la actividad
 Route::get('/actividades/{id}', [ActividadController::class, 'detalleActividad'])->name('pages.detalleActividad');
 
+//Politica de cancelacion
+
+Route::get('/politica-cancelacion', function () {
+    return view('pages.politica-cancelacion');
+});
+
+//Aviso legal
+
+Route::get('/aviso-legal', function () {
+    return view('pages.aviso-legal');
+});
+
 // Mostrar la página de reserva (requiere autenticación)
 Route::get('/reservar/{horarioId}', [ReservaController::class, 'show'])
     ->middleware('auth')
@@ -137,6 +149,8 @@ Route::post('/reservar/store', [ReservaController::class, 'store'])->name('reser
 //Cancelar reserva
 Route::post('/reservas/{reserva}/cancelar', [ReservaController::class, 'cancelar'])->name('reservas.cancelar');
 
+Route::post('/reservas/cancelar-en-lote', [ReservaController::class, 'cancelarEnLote'])->name('reservas.cancelarEnLote');
+
 //Página de contacto
 Route::post('/contact', [FormContactController::class, 'submit'])->name('contact.submit');
 
@@ -149,6 +163,9 @@ Route::get('/paypal/cancel/{horarioId}', [PaypalController::class, 'cancel'])->n
 Route::get('/valorar/{id}', [ValoracionController::class, 'create'])->name('pages.valorar');
 // Ruta para almacenar la valoración enviada desde el formulario
 Route::post('/valoraciones', [ValoracionController::class, 'store'])->name('valoraciones.store');
+
+Route::get('/valoraciones/editar/{id}', [ValoracionController::class, 'edit'])->name('valoraciones.editar');
+Route::put('/valoraciones/actualizar/{id}', [ValoracionController::class, 'update'])->name('valoraciones.actualizar');
 
 Route::delete('/valoraciones/{id}', [ValoracionController::class, 'destroy'])->name('valoraciones.destroy');
 

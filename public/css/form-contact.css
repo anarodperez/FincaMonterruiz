@@ -3,7 +3,6 @@
 * {
     margin: 0;
     box-sizing: border-box;
-    font-size: 18px;
   }
 
   #contact {
@@ -98,7 +97,6 @@
   }
 
   img {
-    width: 45px;
     height: 45px;
     transition: 0.2s;
     user-select: none;

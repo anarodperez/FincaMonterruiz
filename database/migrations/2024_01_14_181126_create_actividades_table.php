@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('nombre');
             $table->text('descripcion');
             $table->integer('duracion');
-            $table->decimal('precio_adulto', 8, 2)->nullable(); // Modificado para aceptar NULL
+            $table->decimal('precio_adulto', 8, 2);
             $table->decimal('precio_nino', 8, 2)->nullable();   // Modificado para aceptar NULL
             $table->integer('aforo');
             $table->string('imagen');

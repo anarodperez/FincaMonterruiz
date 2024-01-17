@@ -16,13 +16,13 @@ animation-name: fade-in;
 animation-duration: 1.5s;
 animation-fill-mode: forwards;
 }
-  .logo{
-    height: 7vh;
-    margin-right: 10px;
-    animation-name: fade-in;
-    animation-duration: 1.5s;
-    animation-fill-mode: forwards;
-  }
+.logo{
+height: 7vh;
+margin-right: 10px;
+animation-name: fade-in;
+animation-duration: 1.5s;
+animation-fill-mode: forwards;
+}
 
 nav,footer {
 background: linear-gradient(90deg, #5c7c64 0%, #6fa78a 100%);
@@ -31,14 +31,6 @@ font-family: 'Kurale', serif;
 
 .navbar-nav .nav-link {
 margin-right: 10px;
-}
-
-.nav-item a {
-font-size: 24px;
-color: white;
-}
-.nav-item a:hover {
-color: #3e0a0b;
 }
 
 .navbar-brand h1 {
@@ -58,13 +50,14 @@ text-shadow: 0 0 10px rgba(255, 255, 255, 1), 0 0 20px rgba(255, 255, 255, 1),
 -o-transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
 transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
 }
-  .nav-item a{
-    font-size: 1.5rem;
-    color: white;
-  }
-  .nav-item a:hover {
-    color:  #3e0a0b;
-  }
+
+.nav-item a{
+font-size: 1.5rem;
+color: white;
+}
+.nav-item a:hover {
+color: #3e0a0b;
+}
 
 .navbar h1:hover {
 text-shadow: 0 0 10px rgba(255, 255, 255, 1), 0 0 20px rgba(255, 255, 255, 1),
@@ -94,7 +87,7 @@ color: #3e0a0b;
 .dropdown-menu{
 display: none;
 position: absolute;
-background: #e6fbe3;
+background: #e6fbe3 !important;
 box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
 z-index: 100;
 border-radius: 5px;
@@ -115,17 +108,86 @@ padding-left: 20px;
 font-size: 20px;
 box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.5);
 }
-  .dropdown-menu a:hover{
-    background: #83b099;
-    transform: scale(1.2);
-    padding-left: 20px;
-    font-size: 20px;
-    box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.5);
+.dropdown-menu a:hover{
+background: #83b099;
+transform: scale(1.2);
+padding-left: 20px;
+font-size: 20px;
+box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.5);
+}
+
+/* Estilo base para los enlaces de la navegación */
+.navbar-nav .nav-link {
+position: relative;
+transition: color 0.3s ease; /* Transición suave del color */
+
+}
+
+/* Subrayado para el enlace activo */
+.navbar-nav .nav-link.active::after {
+content: '';
+position: absolute;
+bottom: 3px;
+left: 0;
+right: 0;
+height: 2px;
+background-color: #3e0a0b;
+transition: background-color 0.3s ease;
+}
+
+/* Cambio en el color del enlace al pasar el mouse */
+.navbar-nav .nav-link:hover {
+color: #3e0a0b; /* Color al pasar el mouse */
+transition: color 0.3s ease;
+}
+
+.navbar-nav .nav-link.active {
+    color: #3e0a0b !important;
+}
+
+
+.navbar-nav .dropdown-menu .dropdown-item.active,  .navbar-nav .experiencia-activa {
+    color: #3e0a0b; /* Color para el enlace activo */
+}
+
+.dropdown-item.active, .dropdown-item:active {
+    color: var(--bs-dropdown-link-active-color);
+    text-decoration: none;
+    background-color: #83b099;
   }
 
 
-  /* footer */
+/* FOOTER*/
 
-  footer a {
-    font-size: 16px;
-  }
+/* Estilo base para los botones */
+footer .btn {
+    transition: background-color 0.3s ease;
+}
+
+/* Estilo de hover para los botones sociales */
+footer .btn-floating:hover {
+    opacity: 0.9;
+}
+
+/* Estilo de hover para los botones de texto */
+footer .btn:hover {
+    background-color: #536b59;
+    color: #fff;
+}
+
+footer a.btn-floating.m-1:hover {
+    background-color: #4d4d4d; /* Ejemplo de color de fondo al hacer hover */
+}
+
+footer a.btn-floating.m-1:hover {
+    transform: scale(1.1); /* Aumenta el tamaño del botón */
+}
+
+/* Estilo específico para el hover en los botones de Aviso Legal y Política de Cancelación */
+footer #btnAviso-legal:hover, footer #btnCancelacion:hover {
+    background-color: #536b59;
+    color: #fff;
+}
+
+
+

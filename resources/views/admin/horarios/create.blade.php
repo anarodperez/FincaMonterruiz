@@ -2,6 +2,24 @@
     form{
         margin-bottom: 6vh;
     }
+
+
+body {
+    display: flex;
+    flex-direction: column;
+}
+
+.container {
+    flex: 1; /* Esto hace que el contenedor crezca para ocupar el espacio disponible */
+    padding: 20px; /* Ajusta esto según tu diseño */
+}
+
+.error-list {
+    list-style-type: none; /* Esto quita los puntos de la lista */
+    padding-left: 0; /* Opcional: quita el relleno izquierdo si es necesario */
+}
+
+
 </style>
 
 @extends('layouts.admin')
@@ -11,13 +29,13 @@
         <h2 class="my-4 text-center">Crear Nuevo Horario</h2>
         <!-- Mensajes de error -->
         @if ($errors->any())
-            <div class="alert alert-danger">
-                <ul>
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            </div>
+        <div class="alert alert-danger">
+            <ul class="error-list">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
         @endif
 
         <!-- Formulario de creación de horarios -->
@@ -36,24 +54,20 @@
                 <label for="fecha" class="form-label">Fecha:</label>
                 <input type="date" name="fecha" id="fecha"
                     class="form-control @error('fecha') is-invalid @enderror" value="{{ old('fecha') }}">
-                @error('fecha')
-                    <div class="invalid-feedback">{{ $message }}</div>
-                @enderror
+
             </div>
             <div class="mb-3">
                 <label for="hora" class="form-label">Hora:</label>
                 <input type="time" name="hora" id="hora" class="form-control @error('hora') is-invalid @enderror"
                     value="{{ old('hora') }}">
-                @error('hora')
-                    <div class="invalid-feedback">{{ $message }}</div>
-                @enderror
+
             </div>
             <div class="mb-3">
                 <label for="idioma" class="form-label">Idioma:</label>
                 <select name="idioma" id="idioma" class="form-select">
                     <option value="Español">Español</option>
                     <option value="Inglés">Inglés</option>
-                    <option value="Frances">Francés</option>
+                    <option value="Francés">Francés</option>
                     <!-- Agrega otras opciones de idioma según tus necesidades -->
                 </select>
             </div>

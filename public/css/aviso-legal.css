@@ -1,0 +1,61 @@
+.container-2 {
+    max-width: 80%;
+    margin: auto;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.container-2 h1 {
+    color: #fff;
+    background-color: #536b59;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+h2 {
+    color: #536b59;
+    margin-top: 20px;
+}
+
+ .parrafo {
+    color: #666;
+    line-height: 1.6; /* Espaciado de línea para mejorar la legibilidad */
+    margin-bottom: 3vh;
+    margin-top: 3vh;
+}
+
+/* Estilos específicos para el enlace de contacto */
+
+a.btn-enlace-contact {
+    color: #6c7a69;
+    text-decoration: underline;
+    background-color: transparent;
+    padding: 0;
+    border-radius: 0;
+    transition: color 0.3s ease;
+}
+
+a.btn-enlace-contact:hover {
+    color: #6c7a69;
+    text-decoration: none;
+}
+
+/* Estilo para el botón de scroll (icono flecha) */
+
+#myBtn {
+    display: none; /* Botón oculto por defecto */
+    position: fixed; /* Fijado en la pantalla */
+    bottom: 20px; /* Distancia desde el fondo */
+    right: 30px; /* Distancia desde la derecha */
+    z-index: 99; /* Asegúrate de que esté sobre otros elementos */
+    font-size: 18px; /* Tamaño del icono */
+    border: none; /* Sin borde */
+    outline: none; /* Sin contorno */
+    background-color: #536b59;
+    color: white;
+    cursor: pointer;
+    padding: 15px;
+    border-radius: 4px;
+}

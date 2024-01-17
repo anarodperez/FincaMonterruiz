@@ -1,5 +1,5 @@
 <footer class="bg-light text-center text-white">
-    <!-- Grid container -->
+
     <div class="container p-4 pb-0">
         <!-- Section: Social media -->
         <section class="mb-4">
@@ -18,13 +18,10 @@
         </section>
         <!-- Section: Social media -->
         <section class="mb-4">
-            <a href="#!" class="btn text-white">Políticas y términos</a>
-            <a href="#!" class="btn text-white">Política de cancelación</a>
-
+            <a id="btnAviso-legal" class="btn text-white">Aviso legal</a>
+            <a id="btnCancelacion" class="btn text-white">Política de Cancelación</a>
         </section>
     </div>
-    <!-- Grid container -->
-
 
     <!-- Copyright -->
     <div class="text-center p-3" style="background-color: #6fa78a; width: 100%">
@@ -32,3 +29,15 @@
     </div>
     <!-- Copyright -->
 </footer>
+
+<script defer>
+    document.addEventListener('DOMContentLoaded', (event) => {
+        document.getElementById('btnCancelacion').addEventListener('click', function() {
+            window.open('/politica-cancelacion', '_blank');
+        });
+
+        document.getElementById('btnAviso-legal').addEventListener('click', function() {
+            window.open('/aviso-legal', '_blank');
+        });
+    });
+</script>
