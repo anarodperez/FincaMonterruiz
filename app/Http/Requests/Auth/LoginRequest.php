@@ -42,23 +42,25 @@ class LoginRequest extends FormRequest
         $this->ensureIsNotRateLimited();
 
         // Encuentra el usuario por email
-    $user = \App\Models\User::where('email', $this->input('email'))->first();
+        $user = \App\Models\User::where('email', $this->input('email'))->first();
 
-     // Verifica si el usuario existe y si está validado
-     if (!$user) {
-        throw ValidationException::withMessages([
-            'email' => trans('auth.user_not_found'),
-        ]);
-    }
-dd(!$user->validado);
-    if (!$user->validado) {
-        throw ValidationException::withMessages([
-            'email' => trans('auth.not_validated'),
-        ]);
-    }
+        // Verifica si el usuario existe
+        if (!$user) {
+            throw ValidationException::withMessages([
+                'email' => trans('auth.user_not_found'),
+            ]);
+        }
+
+        // Verifica si el usuario está validado
+        if (!$user->validado) {
+            throw ValidationException::withMessages([
+                'email' => trans('auth.not_validated'),
+            ]);
+        }
+
+        // Si el usuario existe y está validado, intenta autenticar
         if (!Auth::attempt($this->only('email', 'password'), $this->boolean('remember'))) {
             RateLimiter::hit($this->throttleKey());
-
             throw ValidationException::withMessages([
                 'email' => trans('auth.failed'),
             ]);
@@ -66,6 +68,9 @@ dd(!$user->validado);
 
         RateLimiter::clear($this->throttleKey());
     }
+
+
+
 
     /**
      * Ensure the login request is not rate limited.

@@ -64,11 +64,11 @@
 
                                         @if ($usuario->validado)
                                             <button type="submit" class="btn btn-success">
-                                                <i class="fas fa-check"></i> Validar
+                                                <i class="fas fa-check"></i> Invalidar
                                             </button>
                                         @else
                                             <button type="submit" class="btn btn-danger">
-                                                <i class="fas fa-times"></i> Invalidar
+                                                <i class="fas fa-times"></i> Validar
                                             </button>
                                         @endif
                                     </form>

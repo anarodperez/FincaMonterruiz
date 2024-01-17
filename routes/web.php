@@ -39,8 +39,7 @@ Route::get('/dashboard', function () {
         return app(UsuarioController::class)->showDashboard();
     }
 })
-    ->middleware(['auth', 'verified'])
-    ->name('dashboard');
+    ->middleware(['auth', 'verified', 'validarUsuario'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -133,7 +132,6 @@ Route::get('/aviso-legal', function () {
     return view('pages.aviso-legal');
 });
 
-
 // Mostrar la página de reserva (requiere autenticación)
 Route::get('/reservar/{horarioId}', [ReservaController::class, 'show'])
     ->middleware('auth')
@@ -153,7 +151,6 @@ Route::post('/reservas/{reserva}/cancelar', [ReservaController::class, 'cancelar
 
 Route::post('/reservas/cancelar-en-lote', [ReservaController::class, 'cancelarEnLote'])->name('reservas.cancelarEnLote');
 
-
 //Página de contacto
 Route::post('/contact', [FormContactController::class, 'submit'])->name('contact.submit');
 
@@ -170,12 +167,9 @@ Route::post('/valoraciones', [ValoracionController::class, 'store'])->name('valo
 Route::get('/valoraciones/editar/{id}', [ValoracionController::class, 'edit'])->name('valoraciones.editar');
 Route::put('/valoraciones/actualizar/{id}', [ValoracionController::class, 'update'])->name('valoraciones.actualizar');
 
-
 Route::delete('/valoraciones/{id}', [ValoracionController::class, 'destroy'])->name('valoraciones.destroy');
 
 //Descarga pdf reserva
 Route::get('/descargar-entrada/{reserva_id}', [ReservaController::class, 'descargarEntrada']);
-
-
 
 require __DIR__ . '/auth.php';

@@ -68,6 +68,13 @@
 @section('content')
     <x-auth-session-status class="mb-4" :status="session('status')" />
 
+    @if (session('error'))
+    <div class="alert alert-danger">
+        {{ session('error') }}
+    </div>
+@endif
+
+
     <div class="wrapper">
         <div class="container-formulario">
             <div class="signup"><strong>Iniciar sesión</strong></div>
