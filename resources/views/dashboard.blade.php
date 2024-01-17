@@ -43,7 +43,7 @@
             <div class="tab-content" id="myTabContent">
                 {{-- Sección Reservas --}}
                 <div id="reservas" class="tab-pane fade show active" role="tabpanel" aria-labelledby="home-tab">
-                    <h2 class="tab-section-header">Tus Reservas</h2>
+                    <h2 class="tab-section-header display-4 font-weight-bold text-center">Tus Reservas</h2>
                     <!-- Mensaje de alerta personalizado -->
                     <div class="alert alert-info-custom">
                         <i class="fas fa-info-circle alert-icon"></i>

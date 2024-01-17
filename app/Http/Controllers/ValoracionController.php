@@ -12,9 +12,10 @@ class ValoracionController extends Controller
 {
     public function index()
     {
-
         // Resetear el contador de nuevas valoraciones
+
         $notification = AdminNotification::first();
+
         if ($notification && $notification->nuevos_valoraciones_count > 0) {
             $notification->update(['nuevos_valoraciones_count' => 0]);
         }
@@ -29,7 +30,8 @@ class ValoracionController extends Controller
     // Método para mostrar el formulario de valoración
     public function create($idActividad)
     {
-        return view('pages.valorar');
+        $actividad = Actividad::findOrFail($idActividad);
+        return view('pages.valorar', compact('actividad'));
     }
 
     // Método para almacenar la valoración
@@ -69,7 +71,6 @@ class ValoracionController extends Controller
      }
 
 
-
      // Método para actualizar la valoración
      public function update(Request $request, $id)
      {
@@ -94,7 +95,6 @@ class ValoracionController extends Controller
     public function destroy($id)
     {
         $valoracion = Valoracion::findOrFail($id);
-
         $valoracion->delete();
 
         return redirect()

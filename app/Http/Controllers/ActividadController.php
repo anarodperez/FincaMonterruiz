@@ -12,22 +12,21 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
 
-
 class ActividadController extends Controller
 {
     public function index()
     {
         $actividades = Actividad::paginate(4);
 
-         // Obtener datos de reservas
-         $datosReservas = Reserva::select(DB::raw("to_char(created_at, 'YYYY-MM-DD') as fecha"), DB::raw('count(*) as total'))
-         ->groupBy('fecha')
-         ->orderBy('fecha', 'asc')
-         ->get();
+        // Obtener datos de reservas
+        $datosReservas = Reserva::select(DB::raw("to_char(created_at, 'YYYY-MM-DD') as fecha"), DB::raw('count(*) as total'))
+            ->groupBy('fecha')
+            ->orderBy('fecha', 'asc')
+            ->get();
 
         return view('admin.actividades.index', [
             'actividades' => $actividades,
-            'datosReservas' => $datosReservas
+            'datosReservas' => $datosReservas,
         ]);
     }
 
@@ -62,14 +61,6 @@ class ActividadController extends Controller
             'precio_adulto' => 'required|numeric',
             'precio_nino' => 'nullable|numeric',
         ]);
-
-        // Validación personalizada para asegurarse de que al menos uno de los precios sea proporcionado
-        if (empty($request->precio_adulto) && empty($request->precio_nino)) {
-            return redirect()
-                ->back()
-                ->withErrors(['precios' => 'Debe ingresar al menos un precio para crear la actividad.'])
-                ->withInput();
-        }
 
         // Procesar la carga de la imagen, si se ha proporcionado
         if ($request->hasFile('imagen')) {
@@ -125,6 +116,9 @@ class ActividadController extends Controller
         // Buscar la actividad
         $actividad = Actividad::find($realId);
 
+        // Comprueba si la actividad tiene reservas
+        $tieneReservas = $actividad->reservas()->exists();
+
         // Verificar si se encontró la actividad
         if (!$actividad) {
             return redirect()
@@ -133,7 +127,7 @@ class ActividadController extends Controller
         }
 
         // Mostrar el formulario de edición con los datos de la actividad
-        return view('admin.actividades.edit', compact('actividad'));
+        return view('admin.actividades.edit', compact('actividad', 'tieneReservas'));
     }
     /**
      *Este metodo actualiza los datos en la bd
@@ -155,7 +149,7 @@ class ActividadController extends Controller
             'nombre' => 'sometimes|required',
             'descripcion' => 'sometimes|required',
             'duracion' => 'sometimes|required|integer',
-            'precio_adulto' => 'nullable',
+            'precio_adulto' => 'sometimes|required',
             'precio_nino' => 'nullable',
             'aforo' => 'sometimes|required|integer',
             'activa' => 'sometimes|required|in:0,1',

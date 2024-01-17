@@ -12,6 +12,16 @@
                 {{ $errors->first('precios') }}
             </div>
         @endif
+        @if ($errors->any())
+            <div class="alert alert-danger">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+
         <div class="card">
             <div class="card-body">
                 <p class="card-text">
@@ -34,16 +44,25 @@
 
                         <div class="form-group mb-3">
                             <label for="nombre" class="mb-2">Nombre</label>
-                            <input type="text" name="nombre" class="form-control" value="{{ old('nombre') }}" required>
+                            <input type="text" name="nombre" class="form-control" value="{{ old('nombre') }}">
+                            @error('nombre')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
                         </div>
                         <div class="form-group mb-3">
                             <label for="descripcion" class="mb-2">Descripción</label>
                             <textarea name="descripcion" class="form-control" required>{{ old('descripcion') }}</textarea>
+                            @error('descripcion')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
                         </div>
                         <div class="form-group mb-3">
                             <label for="duracion" class="mb-2">Duración</label>
                             <input type="number" name="duracion" class="form-control" value="{{ old('duracion') }}"
                                 required>
+                            @error('duracion')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
                         </div>
                         <fieldset>
                             <legend>Precios</legend>
@@ -51,13 +70,20 @@
                                 <div class="form-group col-md-6">
                                     <label for="precio_adulto" class="mb-2">Precio adultos</label>
                                     <input type="number" name="precio_adulto" value="{{ old('precio_adulto') }}"
-                                        class="form-control" required>
+                                        class="form-control" min="0" required>
+                                    @error('precio_adulto')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
                                 </div>
 
                                 <div class="form-group col-md-6">
                                     <label for="precio_nino" class="mb-2">Precio niños</label>
                                     <input type="number" name="precio_nino" value="{{ old('precio_nino') }}"
-                                        class="form-control" placeholder="Dejar en blanco si es solo para adultos">
+                                        class="form-control" placeholder="Dejar en blanco si es solo para adultos"
+                                        min="0">
+                                    @error('precio_nino')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
                                 </div>
                             </div>
                         </fieldset>
@@ -67,15 +93,22 @@
                                 <div class="form-group col-md-6">
                                     <label for="aforo" class="mb-2">Aforo</label>
                                     <input type="number" name="aforo" class="form-control" value="{{ old('aforo') }}"
-                                        required>
+                                        min="0" required>
+                                    @error('aforo')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
                                 </div>
                                 <div class="form-group col-md-6">
                                     <label for="activa" class="mb-2">Estado</label>
                                     <select name="activa" class="form-control" required>
-                                        <option value="1" {{ old('activa') == '1' ? 'selected' : '' }}>Activar</option>
+                                        <option value="1" {{ old('activa') == '1' ? 'selected' : '' }}>Activar
+                                        </option>
                                         <option value="0" {{ old('activa') == '0' ? 'selected' : '' }}>Inactivar
                                         </option>
                                     </select>
+                                    @error('activa')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
                                 </div>
                             </div>
                         </fieldset>

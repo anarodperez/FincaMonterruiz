@@ -137,28 +137,47 @@
                     </div>
                 </div>
             </div>
-
-
-            <section class="bg-light">
+            <section class="bg-light valoraciones-section">
                 <div class="container py-5">
                     <div class="row mb-4">
                         <div class="col-md-12 text-center">
-                            <div class="lc-block text-center text-md-end mb-5">
-                                <div editable="rich">
-                                    <h1 class="display-5 fw-bold">Lo que Nuestros Visitantes Opinan</h1>
-                                </div>
-                            </div>
+                            <h1 class="display-5 fw-bold">Lo que Nuestros Visitantes Opinan</h1>
                         </div>
                     </div>
-                    <div class="row justify-content-center">
-                        <div class="col-md-8 col-lg-4 mb-4">
-                            <div class="card border-0 shadow">
 
-
-                            </div>
+                    <div id="valoracionesCarousel" class="carousel slide" data-bs-ride="carousel">
+                        <div class="carousel-inner">
+                            @foreach ($ultimasValoraciones as $index => $valoracion)
+                                <div class="carousel-item {{ $index == 0 ? 'active' : '' }}">
+                                    <div class="d-flex justify-content-center">
+                                        <div class="card valoracion-card" style="width: 18rem;">
+                                            <div class="card-body">
+                                                <h5 class="card-title">{{ $valoracion->actividad->nombre }}</h5>
+                                                <p class="card-text">{{ $valoracion->comentario }}</p>
+                                                <div class="rating">
+                                                    @for ($i = 0; $i < $valoracion->puntuacion; $i++)
+                                                        <i class="bi bi-star-fill"></i>
+                                                    @endfor
+                                                </div>
+                                                <p class="card-text"><small class="text-muted">{{ $valoracion->created_at->format('d M Y') }}</small></p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endforeach
                         </div>
+                        <a class="carousel-control-prev" href="#valoracionesCarousel" role="button" data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Previous</span>
+                        </a>
+                        <a class="carousel-control-next" href="#valoracionesCarousel" role="button" data-bs-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Next</span>
+                        </a>
                     </div>
                 </div>
+            </section>
+
         </div>
         </section>
         <div class="newsletter">

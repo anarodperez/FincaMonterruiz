@@ -37,6 +37,8 @@ class RegisteredUserController extends Controller
             'apellido2' => 'nullable|string|min:5',
             'email' => 'required|string|email|unique:users,email',
             'password' => ['required', 'confirmed'],
+            'fecha_nacimiento' => 'required|date|before:-18 years',
+            'telefono' => 'regex:/^([0-9\s\-\+\(\)]*)$/|min:10',
         ]);
 
         $user = User::create([
@@ -45,6 +47,8 @@ class RegisteredUserController extends Controller
             'apellido2' => $request->apellido2,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'fecha_nacimiento' => $request->fecha_nacimiento,
+            'telefono' => $request->telefono,
         ]);
 
         // Actualizar contador de nuevos usuarios

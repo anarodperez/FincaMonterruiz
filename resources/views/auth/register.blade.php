@@ -100,6 +100,24 @@
                     {{-- <x-input-error :messages="$errors->get('password_confirmation')" class=" badge text-danger errors-password_confirmation" /> --}}
                 </div>
 
+                <!-- Fecha de Nacimiento -->
+                <div class="col-md-3">
+                    <x-input-label for="fecha_nacimiento" :value="__('Fecha de Nacimiento')" class="form-label" />
+                    <x-text-input id="fecha_nacimiento" class="form-control" type="date" name="fecha_nacimiento"
+                        :value="old('fecha_nacimiento')" autofocus />
+                    {{-- <x-input-error :messages="$errors->get('fecha_nacimiento')" class=" badge text-danger errors-fecha_nacimiento" /> --}}
+                </div>
+
+                <!-- Teléfono -->
+                <div class="col-md-3">
+                    <x-input-label for="telefono" :value="__('Teléfono')" class="form-label" />
+                    <x-text-input id="telefono" class="form-control" type="tel" name="telefono" :value="old('telefono')"
+                        autofocus />
+                    {{-- <x-input-error :messages="$errors->get('telefono')" class=" badge text-danger errors-telefono" /> --}}
+                </div>
+
+
+
                 <div class="col-12" style="text-align: center;">
                     <button type="submit" id="btn-enviar" class="btn-2" style="width: 200px;">REGISTRARSE</button>
                 </div>

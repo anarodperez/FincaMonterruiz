@@ -133,6 +133,7 @@ return [
         'attribute-name' => [
             'rule-name' => 'mensaje-personalizado',
         ],
+
     ],
 
     /*
