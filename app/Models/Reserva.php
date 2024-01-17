@@ -11,8 +11,9 @@ class Reserva extends Model
         'num_personas',
         'horario_id',
         'user_id',
-        'actividad_id'
-        // otros campos según sea necesario
+        'actividad_id',
+        'paypal_sale_id',
+        'total_pagado'
     ];
 
     // Aquí puedes agregar relaciones, por ejemplo, con el modelo Horario

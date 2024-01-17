@@ -130,7 +130,7 @@
                             x-show="(!search || normalizeStr(`{{ $reserva->usuario->nombre }} {{ $reserva->usuario->apellido1 }} {{ $reserva->usuario->apellido2 }} {{ $reserva->actividad->nombre }}`).toLowerCase().includes(normalizeStr(search).toLowerCase())) && inDateRange('{{ $reserva->horario->fecha }}') && (!estadoSeleccionado || estadoSeleccionado === '{{ $reserva->estado }}')">
                             <td><input type="checkbox" class="reserva-checkbox" value="{{ $reserva->id }}"></td>
                             <td>{{ $reserva->id }}</td>
-                            <td>{{ $reserva->nombre }} {{ $reserva->usuario->apellido1 }}
+                            <td>{{ $reserva->usuario->nombre }} {{ $reserva->usuario->apellido1 }}
                                 {{ $reserva->usuario->apellido2 }}</td>
                             <td>{{ $reserva->actividad->nombre }}</td>
                             <td>{{ $reserva->horario->fecha }}</td>

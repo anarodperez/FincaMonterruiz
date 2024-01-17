@@ -17,6 +17,10 @@ use PayPal\Api\Payment;
 use PayPal\Api\PaymentExecution;
 use PayPal\Api\RedirectUrls;
 use PayPal\Api\Transaction;
+use PayPal\Api\Sale;
+use PayPal\Api\Refund;
+
+
 
 class PaypalController extends Controller
 {
@@ -28,66 +32,59 @@ class PaypalController extends Controller
     {
         $this->middleware('auth');
 
-        $this->apiContext = new ApiContext(
-            new OAuthTokenCredential(
-                $this->clientId,
-                $this->clientSecret
-            )
-        );
-        $this->apiContext->setConfig(
-            array(
-                'mode' => 'sandbox',
-                'log.LogEnabled' => true,
-                'log.FileName' => storage_path('logs/paypal.log'),
-                'log.LogLevel' => 'DEBUG',
-                'cache.enabled' => true,
-            )
-        );
+        $this->apiContext = new ApiContext(new OAuthTokenCredential($this->clientId, $this->clientSecret));
+        $this->apiContext->setConfig([
+            'mode' => 'sandbox',
+            'log.LogEnabled' => true,
+            'log.FileName' => storage_path('logs/paypal.log'),
+            'log.LogLevel' => 'DEBUG',
+            'cache.enabled' => true,
+        ]);
     }
 
-    public function checkout(Request $request,  $horarioId)
+    public function checkout(Request $request, $horarioId)
     {
         $amount = new Amount();
         $redirectUrls = new RedirectUrls();
-        $amount->setCurrency('EUR')
-            ->setTotal($request->input('amount'));
+        $amount->setCurrency('EUR')->setTotal($request->input('amount'));
 
-            $payer = new Payer();
-            $payer->setPaymentMethod('paypal');
+        $payer = new Payer();
+        $payer->setPaymentMethod('paypal');
 
-            $amount = new Amount();
-            $amount->setCurrency('EUR')
-                ->setTotal($request->input('amount'));
+        $amount = new Amount();
+        $amount->setCurrency('EUR')->setTotal($request->input('amount'));
 
-            $transaction = new Transaction();
-            $transaction->setAmount($amount)
-                ->setDescription('Descripción de tu producto o servicio');
+        $transaction = new Transaction();
+        $transaction->setAmount($amount)->setDescription('Descripción de tu producto o servicio');
 
-                session(['datosReserva' => [
-                    'num_adultos' => $request->input('num_adultos'),
-                    'num_ninos' => $request->input('num_ninos'),
-                    'observaciones' => $request->input('observaciones'),
-                    'horario_id' => $horarioId,
-                ]]);
+        session([
+            'datosReserva' => [
+                'num_adultos' => $request->input('num_adultos'),
+                'num_ninos' => $request->input('num_ninos'),
+                'observaciones' => $request->input('observaciones'),
+                'horario_id' => $horarioId,
+            ],
+        ]);
 
-                $redirectUrls->setReturnUrl(route('paypal.success', ['horarioId' => $horarioId]))
-                ->setCancelUrl(route('paypal.cancel', ['horarioId' => $horarioId]));
+        $redirectUrls->setReturnUrl(route('paypal.success', ['horarioId' => $horarioId]))->setCancelUrl(route('paypal.cancel', ['horarioId' => $horarioId]));
 
+        $payment = new Payment();
+        $payment
+            ->setIntent('sale')
+            ->setPayer($payer)
+            ->setTransactions([$transaction])
+            ->setRedirectUrls($redirectUrls);
 
-            $payment = new Payment();
-            $payment->setIntent('sale')
-                ->setPayer($payer)
-                ->setTransactions(array($transaction))
-                ->setRedirectUrls($redirectUrls);
-
-            try {
-                $payment->create($this->apiContext);
-                return redirect()->away($payment->getApprovalLink());
-            } catch (PayPalConnectionException $ex) {
-                // Manejo de excepciones
-                Log::error($ex);
-                return redirect()->route('reservar.show')->with('error', 'Error en el proceso de pago.');
-            }
+        try {
+            $payment->create($this->apiContext);
+            return redirect()->away($payment->getApprovalLink());
+        } catch (PayPalConnectionException $ex) {
+            // Manejo de excepciones
+            Log::error($ex);
+            return redirect()
+                ->route('reservar.show')
+                ->with('error', 'Error en el proceso de pago.');
+        }
     }
 
     public function success(Request $request, $horarioId)
@@ -96,8 +93,9 @@ class PaypalController extends Controller
         $payerId = $request->input('PayerID');
 
         if (!$paymentId || !$payerId) {
-            return redirect()->route('reservar.show', ['horarioId' => $horarioId])
-                             ->with('error', 'El pago no se completó.');
+            return redirect()
+                ->route('reservar.show', ['horarioId' => $horarioId])
+                ->with('error', 'El pago no se completó.');
         }
 
         $payment = Payment::get($paymentId, $this->apiContext);
@@ -108,6 +106,16 @@ class PaypalController extends Controller
             $result = $payment->execute($execution, $this->apiContext);
 
             if ($result->getState() === 'approved') {
+                // Captura el ID del pago y el total del pago
+                $paypalPaymentId = $result->getTransactions()[0]->getRelatedResources()[0]->getSale()->getId();
+                $paypalTotal = $payment
+                    ->getTransactions()[0]
+                    ->getAmount()
+                    ->getTotal();
+
+                // Almacena el ID de PayPal y el total en la sesión
+        session(['paypal_payment_id' => $paypalPaymentId, 'paypal_total' => $paypalTotal]);
+
                 $datosReserva = session('datosReserva');
 
                 // Crear un nuevo request con los datos de la reserva
@@ -119,23 +127,50 @@ class PaypalController extends Controller
             }
 
             // ... manejo de casos donde el pago no es aprobado
-        }  catch (Exception $ex) {
+        } catch (Exception $ex) {
             Log::error($ex);
-            return redirect()->route('reservar.show', ['horarioId' => $horarioId])
-                             ->with('error', 'Error al procesar el pago.');
+            return redirect()
+                ->route('reservar.show', ['horarioId' => $horarioId])
+                ->with('error', 'Error al procesar el pago.');
         }
     }
-
 
     public function cancel($horarioId)
     {
         return redirect()->route('reservar.show', ['horarioId' => $horarioId]);
     }
 
-
     public function error()
     {
         return redirect()->route('reservar.show');
     }
-}
 
+    //Devolución
+
+    public function refundPayment($saleId)
+    {
+        try {
+            $sale = Sale::get($saleId, $this->apiContext);
+
+            // Crear un nuevo objeto Amount con los valores necesarios
+            $amount = new \PayPal\Api\Amount();
+            $amount->setTotal($sale->getAmount()->getTotal());
+            $amount->setCurrency($sale->getAmount()->getCurrency());
+
+            $refund = new Refund();
+            $refund->setAmount($amount);
+
+            $refundedSale = $sale->refund($refund, $this->apiContext);
+
+            return $refundedSale;
+
+        } catch (PayPalConnectionException $ex) {
+            // Log y manejo de error
+            $errorData = json_decode($ex->getData());
+            Log::error('PayPal API Error: ' . json_encode($errorData));
+            return null;
+        }
+    }
+
+
+}
