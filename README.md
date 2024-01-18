@@ -1,4 +1,4 @@
-<p align="center"><img src="img/logo.png" width="400" alt="Finca Monterruiz Logo"></p>
+<p align="center"><img src="/public/storage/img/logo.png" width="400" alt="Finca Monterruiz Logo"></p>
 
 <h1 align="center"> Finca Monterruiz </h1>
 
