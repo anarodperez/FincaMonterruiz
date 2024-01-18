@@ -35,7 +35,7 @@
         }
     </script>
     <style>
-        .carousel-item {
+        .first .carousel-item  {
             height: 600px;
         }
 
@@ -53,7 +53,7 @@
         <div class="container-fluid">
             <section>
                 <div id="carouselExample" class="carousel slide" data-bs-ride="carousel">
-                    <div class="carousel-inner">
+                    <div class="carousel-inner first ">
                         <div class="carousel-item active"
                             style="background:url({{ asset('storage/img/img6.jpg') }}) center / cover no-repeat;"></div>
                         <div class="carousel-item"
