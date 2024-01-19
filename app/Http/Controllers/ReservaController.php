@@ -203,7 +203,7 @@ class ReservaController extends Controller
             ->cc($adminEmail)
             ->send(new ReservationCancellationMail($reserva));
 
-        return back()->with('success', 'Reserva cancelada correctamente.');
+        return back()->with('success', 'Reserva cancelada correctamente y reembolso procesado correctamente.');
     }
 
 

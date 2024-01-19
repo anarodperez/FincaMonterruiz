@@ -89,6 +89,11 @@ align-items: center;
 margin-top: 2vh;
 }
 
+
+.alert-warning{
+    margin-top: 1vh;
+}
+
 /* Ícono para el mensaje de alerta */
 .alert-icon {
 font-size: 20px;
