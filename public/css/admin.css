@@ -45,7 +45,6 @@ transition: all 0.3s ease-in-out;
 
 .tabla {
 margin: 60px auto;
-max-width: 90%;
 border: 1px solid #ccc;
 border-collapse: collapse;
 table-layout: fixed;
@@ -98,6 +97,11 @@ min-height: 600px;
     text-decoration: underline;
 }
 
+.margenes-laterales {
+    margin-left: 20px;
+    margin-right: 20px;
+}
+
 
 
 @media (max-width:900px){
@@ -135,6 +139,9 @@ text-transform: uppercase;
 float: left;
 }
 }
+
+
+
 
 
 /* Estilo para botón azul */

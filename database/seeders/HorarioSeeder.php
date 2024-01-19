@@ -19,9 +19,6 @@ class HorarioSeeder extends Seeder
         'actividad_id' => 1, // Asegúrate de que este ID exista
     ]);
     $horario->save();
-
-    // Guardar horarios recurrentes en la base de datos
-    $horario->guardarFechasRecurrentesEnDB();
 }
 
 }

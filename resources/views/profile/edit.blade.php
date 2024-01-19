@@ -19,9 +19,9 @@
             @include('profile.partials.update-password-form')
         </div>
 
-        <div class="form-section">
+        {{-- <div class="form-section">
             @include('profile.partials.delete-user-form')
-        </div>
+        </div> --}}
     </div>
 
 @endsection
