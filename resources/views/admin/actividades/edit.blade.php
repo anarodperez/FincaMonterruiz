@@ -26,27 +26,27 @@
                         enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
-                        <div class="form-group mb-3">
+                        <div class="form-group mb-3  margenes-laterales">
                             <label for="imagen" class="mb-2">Imagen</label> <br>
                             <img src="{{ asset($actividad->imagen) }}" alt="{{ $actividad->nombre }}" style="width: 20%">
                             <br><br>
                             <input type="file" name="imagen" class="form-control-file"><br>
                         </div>
-                        <div class="form-group mb-3">
+                        <div class="form-group mb-3  margenes-laterales">
                             <label for="nombre" class="mb-2">Nombre</label>
                             <input type="text" name="nombre" class="form-control" value="{{ $actividad->nombre }}" {{ $tieneReservas ? 'disabled
                             ' : '' }}>
                         </div>
-                        <div class="form-group mb-3">
+                        <div class="form-group mb-3  margenes-laterales">
                             <label for="descripcion" class="mb-2">Descripción</label>
                             <textarea name="descripcion" class="form-control">{{ $actividad->descripcion }}</textarea>
                         </div>
-                        <div class="form-group mb-3">
+                        <div class="form-group mb-3  margenes-laterales">
                             <label for="duracion" class="mb-2">Duración</label>
                             <input type="number" name="duracion" class="form-control" value="{{ $actividad->duracion }}" {{ $tieneReservas ? 'disabled
                             ' : '' }}>
                         </div>
-                        <div class="row mb-3">
+                        <div class="row mb-3  margenes-laterales">
                             <div class="col-md-6">
                                 <label for="precio_adulto" class="form-label">Precio Adultos</label>
                                 <input type="number" name="precio_adulto" class="form-control" value="{{ $actividad->precio_adulto }}"  min="0" {{ $tieneReservas ? 'disabled
@@ -58,7 +58,7 @@
                                 ' : '' }}>
                             </div>
                         </div>
-                        <div class="row mb-3">
+                        <div class="row mb-3  margenes-laterales">
                             <div class="col-md-6">
                                 <label for="aforo" class="form-label">Aforo Máximo</label>
                                 <input type="number" name="aforo" class="form-control" value="{{ $actividad->aforo }}"  min="0" {{ $tieneReservas ? 'disabled
@@ -77,7 +77,7 @@
                         {{-- <label for="categoria">Categoria</label>
                         <input type="text" name="categoria" class="form-control"> --}}
                         <br>
-                        <a href="{{ route('admin.actividades.index') }}" class="btn btn-info">
+                        <a href="{{ route('admin.actividades.index') }}" class="btn btn-info" style="margin-left: 20px">
                             <i class="fas fa-arrow-left"></i> Regresar
                         </a>
                         <button class="btn btn-warning">

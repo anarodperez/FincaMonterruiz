@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('apellido2');
             $table->string('telefono')->unique()->nullable();
             $table->boolean('es_admin')->default(false);
-            $table->boolean('validado')->default(false);
+            $table->boolean('validado')->default(true);
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');

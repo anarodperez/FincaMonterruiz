@@ -36,10 +36,10 @@ class ReservaController extends Controller
         }
 
         $reservas = Reserva::with(['usuario', 'actividad', 'horario'])
-        ->join('horarios', 'reservas.horario_id', '=', 'horarios.id')
-        ->orderBy('horarios.fecha', 'desc') // Ordena por la fecha del horario
-        ->select('reservas.*')
-        ->paginate(10);
+            ->join('horarios', 'reservas.horario_id', '=', 'horarios.id')
+            ->orderBy('horarios.fecha', 'desc') // Ordena por la fecha del horario
+            ->select('reservas.*')
+            ->paginate(10);
 
         // Obtener la lista de actividades disponibles
         $actividadesDisponibles = Actividad::all();
@@ -47,11 +47,11 @@ class ReservaController extends Controller
         // Obtener la lista de horarios disponibles
         $horariosDisponibles = Horario::all();
 
-         // Obtener datos de reservas
-         $datosReservas = Reserva::select(DB::raw("to_char(created_at, 'YYYY-MM-DD') as fecha"), DB::raw('count(*) as total'))
-         ->groupBy('fecha')
-         ->orderBy('fecha', 'asc')
-         ->get();
+        // Obtener datos de reservas
+        $datosReservas = Reserva::select(DB::raw("to_char(created_at, 'YYYY-MM-DD') as fecha"), DB::raw('count(*) as total'))
+            ->groupBy('fecha')
+            ->orderBy('fecha', 'asc')
+            ->get();
 
         return view('admin.reservas.index', compact('reservas', 'actividadesDisponibles', 'horariosDisponibles', 'datosReservas'));
     }
@@ -89,6 +89,10 @@ class ReservaController extends Controller
             return back()->withErrors(['aforo_error' => 'No hay suficiente aforo disponible para esta reserva.']);
         }
 
+        // Obtener el ID de PayPal y el total del pago de la sesión
+        $paypalPaymentId = session('paypal_payment_id', null);
+        $paypalTotal = session('paypal_total', null);
+
         // Crear la reserva
         $reserva = new Reserva();
         $reserva->num_adultos = $validated['num_adultos'];
@@ -97,17 +101,19 @@ class ReservaController extends Controller
         $reserva->user_id = Auth::id();
         $reserva->actividad_id = $actividad->id;
         $reserva->observaciones = $validated['observaciones'] ?? null;
+        $reserva->paypal_sale_id = $paypalPaymentId;
+        $reserva->total_pagado = $paypalTotal;
 
         // Guardar la reserva
         $reserva->save();
 
-         // Actualizar contador de nuevas reservas
-         $notification = AdminNotification::first();
-         if ($notification) {
-             $notification->increment('nuevos_reservas_count');
-         } else {
-             AdminNotification::create(['nuevos_reservas_count' => 1]);
-         }
+        // Actualizar contador de nuevas reservas
+        $notification = AdminNotification::first();
+        if ($notification) {
+            $notification->increment('nuevos_reservas_count');
+        } else {
+            AdminNotification::create(['nuevos_reservas_count' => 1]);
+        }
 
         //Intenta procesar el pago
         // Enviar correo electrónico de confirmación
@@ -116,7 +122,6 @@ class ReservaController extends Controller
             $precioPorNino = $reserva->actividad->precio_nino;
 
             $totalPagado = $reserva->num_adultos * $precioPorAdulto + $reserva->num_ninos * $precioPorNino;
-            $reserva->total_pagado = $totalPagado;
 
             // Definir la dirección de email del administrador
             $adminEmail = 'anarodpe8@gmail.com';
@@ -170,25 +175,37 @@ class ReservaController extends Controller
         $reserva = Reserva::with('actividad')->findOrFail($id);
 
         // Verificar si la reserva ya está cancelada
-        if ($reserva->estado !== 'cancelada') {
-            // Cambiar el estado de la reserva a 'cancelada'
-            $reserva->estado = 'cancelada';
-            $reserva->save();
-
-            // Definir la dirección de email del administrador
-            $adminEmail = 'anarodpe8@gmail.com';
-
-            // Enviar correo de cancelación
-            Mail::to($reserva->usuario->email)
-                ->cc($adminEmail)
-                ->send(new ReservationCancellationMail($reserva));
-
-            return back()->with('success', 'Reserva cancelada correctamente.');
+        if ($reserva->estado === 'cancelada') {
+            return back()->with('error', 'La reserva ya estaba cancelada.');
         }
 
-        // Manejar el caso en que la reserva ya esté cancelada
-        return back()->with('error', 'La reserva ya estaba cancelada.');
+        $paypalSaleId = $reserva->paypal_sale_id;
+
+        if ($paypalSaleId) {
+            try {
+                $paypalController = new PaypalController();
+                $refund = $paypalController->refundPayment($paypalSaleId);
+            } catch (Exception $e) {
+                Log::error('Error al procesar la devolución en PayPal: ' . $e->getMessage());
+                // Decide si quieres cancelar la reserva aun si la devolución falla
+            }
+        }
+
+        // Cambiar el estado de la reserva a 'cancelada'
+        $reserva->estado = 'cancelada';
+        $reserva->save();
+
+        // Definir la dirección de email del administrador
+        $adminEmail = 'anarodpe8@gmail.com';
+
+        // Enviar correo de cancelación
+        Mail::to($reserva->usuario->email)
+            ->cc($adminEmail)
+            ->send(new ReservationCancellationMail($reserva));
+
+        return back()->with('success', 'Reserva cancelada correctamente y reembolso procesado correctamente.');
     }
+
 
     public function edit(Reserva $reserva)
     {
@@ -236,35 +253,45 @@ class ReservaController extends Controller
         return $pdf->download('entrada-reserva.pdf');
     }
 
-
     public function cancelarEnLote(Request $request)
-{
-    $reservaIds = json_decode($request->input('reservas'));
+    {
+        $reservaIds = json_decode($request->input('reservas'));
 
-    // Validar que los IDs de reserva existen
-    $reservas = Reserva::whereIn('id', $reservaIds)->get();
+        // Validar que los IDs de reserva existen
+        $reservas = Reserva::whereIn('id', $reservaIds)->get();
 
-    foreach ($reservas as $reserva) {
-        if ($reserva->estado !== 'cancelada') {
-            $reserva->estado = 'cancelada';
-            $reserva->save();
+        $paypalController = new PaypalController();
 
-            // Definir la dirección de email del administrador
-            $adminEmail = 'anarodpe8@gmail.com';
+        foreach ($reservas as $reserva) {
+            if ($reserva->estado !== 'cancelada') {
+                $paypalSaleId = $reserva->paypal_sale_id;
 
-            // Enviar correo de cancelación
-            try {
-                Mail::to($reserva->usuario->email)
-                    ->cc($adminEmail)
-                    ->send(new ReservationCancellationMail($reserva));
-            } catch (Exception $e) {
-                // Manejo de excepciones si algo va mal con el envío del correo
-                // Log::error('Error al enviar correo de cancelación: ' . $e->getMessage());
+                if ($paypalSaleId) {
+                    $refund = $paypalController->refundPayment($paypalSaleId);
+
+                    if (!$refund) {
+                        // Decidir cómo manejar los reembolsos fallidos (continuar, detener, registrar, etc.)
+                    }
+                }
+
+                $reserva->estado = 'cancelada';
+                $reserva->save();
+
+                // Definir la dirección de email del administrador
+                $adminEmail = 'anarodpe8@gmail.com';
+
+                // Enviar correo de cancelación
+                try {
+                    Mail::to($reserva->usuario->email)
+                        ->cc($adminEmail)
+                        ->send(new ReservationCancellationMail($reserva));
+                } catch (Exception $e) {
+                    // Manejo de excepciones si algo va mal con el envío del correo
+                    // Log::error('Error al enviar correo de cancelación: ' . $e->getMessage());
+                }
             }
         }
+
+        return back()->with('success', 'Reservas canceladas correctamente.');
     }
-
-    return back()->with('success', 'Reservas canceladas correctamente.');
-}
-
 }

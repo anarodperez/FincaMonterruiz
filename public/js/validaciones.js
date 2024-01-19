@@ -31,6 +31,10 @@ document.addEventListener("DOMContentLoaded", function() {
                 inputId: 'fecha_nacimiento',
                 errorMessage: 'Fecha de nacimiento no válida. Debes ser mayor de 18 años.'
             },
+            {
+                inputId: 'telefono',
+                errorMessage: 'Número de teléfono no válido. Debe tener entre 9 y 15 dígitos y puede incluir un prefijo internacional.'
+            },
         ];
 
         let errors = false; // Inicialización de la variable de error
@@ -70,7 +74,7 @@ document.addEventListener("DOMContentLoaded", function() {
         }
 
         // Verificación de cada campo según su validación específica
-        if ((!input.value || input.value.trim().length < 1) && input.id !== 'apellido2') {
+        if ((!input.value || input.value.trim().length < 1) && input.id !== 'apellido2' && input.id !== 'telefono') {
             showError(input, 'Este campo es requerido');
             return false;
         } else if (
@@ -81,7 +85,7 @@ document.addEventListener("DOMContentLoaded", function() {
             (input.id === 'email' && (input.value.length < 10 || !isValidEmail(input.value))) ||
             (input.id === 'password' && !validarContraseña(input.value)) ||
             (input.id === 'fecha_nacimiento' && !validarFechaNacimiento(input.value)) ||
-            (input.id === 'telefono' && !validarTelefono(input.value))
+            (input.id === 'telefono' && input.value.trim().length > 0  && !validarTelefono(input.value))
         )
          {
             showError(input, errorMessage);
@@ -152,7 +156,7 @@ function hideError(input) {
 
 
     function validarTelefono(telefono) {
-        const regexTelefono = /^[+]?[0-9\s\-\(\)]{10,}$/; // Ajusta esta expresión regular según tus necesidades
+        const regexTelefono = /^(?:\+\d{1,3})?\d{6,12}$/;
         return regexTelefono.test(telefono);
     }
 

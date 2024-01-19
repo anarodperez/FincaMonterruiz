@@ -6,8 +6,6 @@ body {
 }
 
 
-
-
 .card:hover .card__image {
     filter: contrast(100%);
   }

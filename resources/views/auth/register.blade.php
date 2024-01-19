@@ -114,9 +114,10 @@
                     <x-text-input id="telefono" class="form-control" type="tel" name="telefono" :value="old('telefono')"
                         autofocus />
                     {{-- <x-input-error :messages="$errors->get('telefono')" class=" badge text-danger errors-telefono" /> --}}
+                    <small class="text-muted">
+                        Formato: +34 123456789 o 123456789.
+                    </small>
                 </div>
-
-
 
                 <div class="col-12" style="text-align: center;">
                     <button type="submit" id="btn-enviar" class="btn-2" style="width: 200px;">REGISTRARSE</button>

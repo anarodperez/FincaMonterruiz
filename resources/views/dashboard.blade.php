@@ -58,7 +58,8 @@
                                 <div class="card">
                                     <div class="card-body">
                                         <!-- Detalles de la reserva -->
-                                        <p class="card-text">Actividad: <strong>{{ $reserva->actividad->nombre}}</strong> </p>
+                                        <p class="card-text">Actividad: <strong>{{ $reserva->actividad->nombre }}</strong>
+                                        </p>
                                         <p class="card-text">Fecha: {{ $reserva->horario->fecha }}</p>
                                         <p class="card-text">Hora: {{ $reserva->horario->hora }}</p>
                                         <p class="card-text">Estado: {{ $reserva->estado }}</p>
@@ -70,14 +71,19 @@
                                                 $ahora = \Carbon\Carbon::now();
                                                 $diferenciaHoras = $ahora->diffInHours($fechaReserva, false);
                                             @endphp
-                                            <form action="{{ route('reservas.cancelar', $reserva->id) }}" method="POST">
-                                                @csrf
-                                                <!-- Agrega un campo oculto para el ID de la actividad -->
-                                                <input type="hidden" name="actividad_id"
-                                                    value="{{ $reserva->actividad->id }}">
-                                                <button type="submit" class="btn btn-danger">Cancelar Reserva</button>
-                                            </form>
+                                            @if ($reserva->estado != 'cancelada' && $diferenciaHoras >= 48)
+                                                <button type="button" class="btn btn-danger" data-bs-toggle="modal"
+                                                    data-bs-target="#cancelModal" data-id="{{ $reserva->id }}">
+                                                    Cancelar Reserva
+                                                </button>
+                                            @endif
                                         </div>
+
+                                        @if ($reserva->estado == 'cancelada')
+                                            <div class="alert alert-warning" role="alert">
+                                                Esta reserva ha sido cancelada. El reembolso ha sido procesado.
+                                            </div>
+                                        @endif
                                     </div>
                                 </div>
                             @endforeach
@@ -94,7 +100,7 @@
                                 <div class="card card-reserva">
                                     <div class="card-body">
                                         <!-- Detalles de la reserva -->
-                                        <p class="card-text">Actividad: {{ $reserva->actividad->nombre}}</p>
+                                        <p class="card-text">Actividad: {{ $reserva->actividad->nombre }}</p>
                                         <p class="card-text">Fecha: {{ $reserva->horario->fecha }}</p>
                                         <p class="card-text">Hora: {{ $reserva->horario->hora }}</p>
                                         <p class="card-text">Estado: {{ $reserva->estado }}</p>
@@ -223,12 +229,14 @@
                 </div>
             </div>
             <!-- Add Cancel Modal -->
-            <div class="modal fade" id="cancelModal" tabindex="-1" aria-labelledby="cancelModalLabel" aria-hidden="true">
+            <div class="modal fade" id="cancelModal" tabindex="-1" aria-labelledby="cancelModalLabel"
+                aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
                             <h5 class="modal-title" id="cancelModalLabel">Cancelar Reserva</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
                             ¿Estás seguro de que quieres cancelar esta reserva?
@@ -281,13 +289,13 @@
         //Para el modal de cancelar actividad
 
         document.addEventListener("DOMContentLoaded", function() {
-        var cancelModal = document.getElementById('cancelModal');
-        cancelModal.addEventListener('show.bs.modal', function(event) {
-            var button = event.relatedTarget;
-            var reservaId = button.getAttribute('data-id');
-            var cancelForm = document.getElementById('cancelForm');
-            cancelForm.action = '/reservas/' + reservaId + '/cancelar';
+            var cancelModal = document.getElementById('cancelModal');
+            cancelModal.addEventListener('show.bs.modal', function(event) {
+                var button = event.relatedTarget;
+                var reservaId = button.getAttribute('data-id');
+                var cancelForm = document.getElementById('cancelForm');
+                cancelForm.action = '/reservas/' + reservaId + '/cancelar';
+            });
         });
-    });
     </script>
 @endsection

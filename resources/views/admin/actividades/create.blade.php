@@ -27,10 +27,10 @@
                 <p class="card-text">
                 <form action="{{ route('admin.actividades.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
-                    <fieldset>
+                    <fieldset class=" margenes-laterales">
                         <legend>Información Básica</legend>
-                        <div class="form-group mb-3">
-                            <label for="imagen">Imagen</label>
+                        <div class="form-group mb-3 ">
+                            <label for="imagen" class="mb-2">Imagen</label>
                             <div class="input-group">
                                 <div class="custom-file">
                                     <input type="file" id="imagen" name="imagen" class="custom-file-input"
@@ -64,7 +64,7 @@
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
-                        <fieldset>
+                        <fieldset  margenes-laterales>
                             <legend>Precios</legend>
                             <div class="row mb-3">
                                 <div class="form-group col-md-6">
@@ -87,7 +87,7 @@
                                 </div>
                             </div>
                         </fieldset>
-                        <fieldset>
+                        <fieldset  margenes-laterales>
                             <legend>Configuraciones Adicionales</legend>
                             <div class="row mb-3">
                                 <div class="form-group col-md-6">

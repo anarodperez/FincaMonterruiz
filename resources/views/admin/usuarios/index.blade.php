@@ -51,8 +51,8 @@
                         @foreach ($usuarios as $usuario)
                             <tr>
                                 <td>{{ $usuario->nombre }}</td>
-                                <td>{{ $usuario->apellidos }}</td>
-                                <td>{{ $usuario->email }}</td>
+                                <td>{{ $usuario->apellido1 }} {{ $usuario->apellido2 }}</td>
+                                <td style="width: 30%">{{ $usuario->email }}</td>
                                 <td>{{ $usuario->telefono }}</td>
                                 <td>{{ $usuario->fecha_nacimiento }}</td>
                                 <td>
