@@ -86,7 +86,7 @@
         }
 
         .ii a[href] {
-            color: white;
+            color: white !important;
         }
     </style>
 </head>

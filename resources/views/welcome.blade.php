@@ -198,7 +198,6 @@
             <div id="error-container" class="alert alert-danger alert-dismissible fade show" style="display: none;"></div>
 
             @if (session('success'))
-                <span class="closebtn">&times;</span>
                 <div class="alert alert-success alert-dismissible fade show" role="alert">
                     {{ session('success') }}
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>

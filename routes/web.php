@@ -17,6 +17,7 @@ use App\Http\Controllers\FormContactController;
 use App\Http\Controllers\PaypalController;
 use App\Http\Controllers\ValoracionController;
 use App\Http\Controllers\SuscriptorController;
+use App\Http\Controllers\NewsletterController;
 
 /*
 |--------------------------------------------------------------------------
@@ -176,6 +177,8 @@ Route::get('/descargar-entrada/{reserva_id}', [ReservaController::class, 'descar
 
 //Newsletter
 Route::post('/suscribirse', [SuscriptorController::class, 'store'])->name('suscribirse');
+Route::post('/enviar-newsletter', [NewsletterController::class, 'enviarNewsletter'])->name('enviar.newsletter');
+Route::get('/cancelar-suscripcion', [SuscriptorController::class, 'cancelarSuscripcion'])->name('cancelar.suscripcion');
 
 
 
