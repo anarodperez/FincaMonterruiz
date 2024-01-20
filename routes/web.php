@@ -16,6 +16,7 @@ use App\Http\Controllers\ReservaController;
 use App\Http\Controllers\FormContactController;
 use App\Http\Controllers\PaypalController;
 use App\Http\Controllers\ValoracionController;
+use App\Http\Controllers\SuscriptorController;
 
 /*
 |--------------------------------------------------------------------------
@@ -171,5 +172,11 @@ Route::delete('/valoraciones/{id}', [ValoracionController::class, 'destroy'])->n
 
 //Descarga pdf reserva
 Route::get('/descargar-entrada/{reserva_id}', [ReservaController::class, 'descargarEntrada']);
+
+
+//Newsletter
+Route::post('/suscribirse', [SuscriptorController::class, 'store'])->name('suscribirse');
+
+
 
 require __DIR__ . '/auth.php';

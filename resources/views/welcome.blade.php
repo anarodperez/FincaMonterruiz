@@ -35,7 +35,7 @@
         }
     </script>
     <style>
-        .first .carousel-item  {
+        .first .carousel-item {
             height: 600px;
         }
 
@@ -159,7 +159,9 @@
                                                         <i class="bi bi-star-fill"></i>
                                                     @endfor
                                                 </div>
-                                                <p class="card-text"><small class="text-muted">{{ $valoracion->created_at->format('d M Y') }}</small></p>
+                                                <p class="card-text"><small
+                                                        class="text-muted">{{ $valoracion->created_at->format('d M Y') }}</small>
+                                                </p>
                                             </div>
                                         </div>
                                     </div>
@@ -170,7 +172,8 @@
                             <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                             <span class="visually-hidden">Previous</span>
                         </a>
-                        <a class="carousel-control-next" href="#valoracionesCarousel" role="button" data-bs-slide="next">
+                        <a class="carousel-control-next" href="#valoracionesCarousel" role="button"
+                            data-bs-slide="next">
                             <span class="carousel-control-next-icon" aria-hidden="true"></span>
                             <span class="visually-hidden">Next</span>
                         </a>
@@ -183,25 +186,55 @@
         <div class="newsletter">
             <h2>Suscríbete a nuestro boletín informativo</h2>
             @if ($errors->any())
-                <div class="alert alert-danger">
-                    <ul>
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <span class="closebtn" onclick="closeAlert(this)">&times;</span>
+                    <ul style="list-style-type: none; padding: 0; margin: 0;">
                         @foreach ($errors->all() as $error)
                             <li>{{ $error }}</li>
                         @endforeach
                     </ul>
                 </div>
             @endif
+            <div id="error-container" class="alert alert-danger alert-dismissible fade show" style="display: none;"></div>
+
             @if (session('success'))
-                <div class="alert alert-success">
+                <span class="closebtn">&times;</span>
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
                     {{ session('success') }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
             @endif
             <p>Recibe las últimas noticias y ofertas especiales en tu bandeja de entrada.</p>
-            <form action="#" method="post">
+            <form id="subscription-form" action="{{ route('suscribirse') }}" method="post">
                 @csrf
-                <input type="email" name="email" placeholder="Ingresa tu correo electrónico" required>
+               <input type="email" id="email" name="email" placeholder="Ingresa tu correo electrónico" required class="text-center">
+
                 <button class="custom-btn boton" type="submit">Suscribirse</button>
             </form>
         </div>
     </main>
+
+    <script>
+        function closeAlert(element) {
+            element.parentElement.style.display = 'none';
+        }
+
+        document.getElementById('subscription-form').onsubmit = function(event) {
+            var email = document.getElementById('email').value;
+            var errorContainer = document.getElementById('error-container');
+
+            if (!validateEmail(email)) {
+                event.preventDefault();
+                errorContainer.textContent = 'Por favor ingresa un correo electrónico válido.';
+                errorContainer.style.display = 'block';
+            } else {
+                errorContainer.style.display = 'none';
+            }
+        };
+
+        function validateEmail(email) {
+            var re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return re.test(email);
+        }
+    </script>
 @endsection
