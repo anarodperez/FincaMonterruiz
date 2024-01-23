@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Models\Suscriptor;
 use App\Mail\NewsletterMail;
+use App\Models\Newsletter;
 
 use Illuminate\Support\Facades\Mail;
 
@@ -17,13 +18,18 @@ class SuscriptorController extends Controller
             'email' => 'required|email|unique:suscriptores,email',
         ]);
 
+        // Crear el nuevo suscriptor
         Suscriptor::create($validatedData);
 
-        // Enviar el correo de bienvenida
-        Mail::to($validatedData['email'])->send(new NewsletterMail($validatedData['email']));
+        // Enviar la newsletter de bienvenida
+        $newsletterBienvenida = Newsletter::find(1); // Asumiendo que la ID 1 es siempre la de bienvenida
+        if ($newsletterBienvenida) {
+            Mail::to($validatedData['email'])->send(new NewsletterMail($newsletterBienvenida, $validatedData['email']));
+        }
 
         return back()->with('success', '¡Gracias por suscribirte!');
     }
+
 
     public function cancelarSuscripcion(Request $request)
     {

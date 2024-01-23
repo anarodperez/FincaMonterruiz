@@ -23,6 +23,7 @@ class DatabaseSeeder extends Seeder
             AdminUserSeeder::class,
             ActividadSeeder::class,
             HorarioSeeder::class,
+            NewsletterSeeder::class,
         ]);
     }
 }

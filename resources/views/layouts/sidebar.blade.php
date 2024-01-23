@@ -50,6 +50,11 @@
                 </a>
             </li>
             <li class="nav-item my-2 mx-3">
+                <a class="nav-link" href="{{ route('admin.newsletters.index') }}">
+                    <i class="bi bi-envelope-fill"></i> Newsletter
+                </a>
+            </li>
+            <li class="nav-item my-2 mx-3">
                 <a class="nav-link" href="{{ route('admin.horarios.index') }}">
                     <i class="bi bi-clock"></i> Horarios
                 </a>

@@ -13,22 +13,29 @@ class NewsletterMail extends Mailable
 {
     use Queueable, SerializesModels;
 
+    public $newsletter;
     public $email;
+
 
     /**
      * Create a new message instance.
      */
-    public function __construct( $email)
+    public function __construct($newsletter, $email)
     {
+        $this->newsletter = $newsletter;
         $this->email = $email;
     }
 
 
     public function build()
-{
-    return $this->subject('Bienvenido a Nuestra Newsletter')->view('emails.newsletter');
-}
-
+    {
+        return $this->view('emails.newsletter')
+                    ->with([
+                        'titulo' => $this->newsletter->titulo,
+                        'contenido' => $this->newsletter->contenido,
+                        'email' => $this->email
+                    ]);
+    }
 
     /**
      * Get the message envelope.

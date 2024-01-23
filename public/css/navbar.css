@@ -142,52 +142,59 @@ transition: color 0.3s ease;
 }
 
 .navbar-nav .nav-link.active {
-    color: #3e0a0b !important;
+color: #3e0a0b !important;
 }
 
 
-.navbar-nav .dropdown-menu .dropdown-item.active,  .navbar-nav .experiencia-activa {
-    color: #3e0a0b; /* Color para el enlace activo */
+.navbar-nav .dropdown-menu .dropdown-item.active, .navbar-nav .experiencia-activa {
+color: #3e0a0b; /* Color para el enlace activo */
 }
 
 .dropdown-item.active, .dropdown-item:active {
-    color: var(--bs-dropdown-link-active-color);
-    text-decoration: none;
-    background-color: #83b099;
-  }
+color: var(--bs-dropdown-link-active-color);
+text-decoration: none;
+background-color: #83b099;
+}
+
+@media (max-width: 991px) {
+
+    .dropdown-menu-end[data-bs-popper] {
+        right: auto !important;
+        left: 0 !important;
+      }
+}
+
+
 
 
 /* FOOTER*/
 
 /* Estilo base para los botones */
 footer .btn {
-    transition: background-color 0.3s ease;
+transition: background-color 0.3s ease;
 }
 
 /* Estilo de hover para los botones sociales */
 footer .btn-floating:hover {
-    opacity: 0.9;
+opacity: 0.9;
 }
 
 /* Estilo de hover para los botones de texto */
 footer .btn:hover {
-    background-color: #536b59;
-    color: #fff;
+background-color: #536b59;
+color: #fff;
 }
 
 footer a.btn-floating.m-1:hover {
-    background-color: #4d4d4d; /* Ejemplo de color de fondo al hacer hover */
+background-color: #4d4d4d; /* Ejemplo de color de fondo al hacer hover */
 }
 
 footer a.btn-floating.m-1:hover {
-    transform: scale(1.1); /* Aumenta el tamaño del botón */
+transform: scale(1.1); /* Aumenta el tamaño del botón */
 }
 
 /* Estilo específico para el hover en los botones de Aviso Legal y Política de Cancelación */
 footer #btnAviso-legal:hover, footer #btnCancelacion:hover {
-    background-color: #536b59;
-    color: #fff;
+background-color: #536b59;
+color: #fff;
 }
-
-
-

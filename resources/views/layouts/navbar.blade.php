@@ -41,12 +41,12 @@
                             aria-expanded="false">
                             {{ auth()->user()->nombre }}
                         </a>
-                        <ul class="dropdown-menu dropdown-menu-end header">
+                        <ul class="dropdown-menu dropdown-menu-end header border-0">
                             <?php
                             if (Auth::user()->es_admin) { ?>
-                            <li><a class="dropdown-item" href={{ route('admin.index') }}>Portal Administrador</a></li>
+                            <li><a class="dropdown-item" href={{ route('admin.index') }}>Panel Admin</a></li>
                             <?php } ?>
-                            <li><a class="dropdown-item" href="{{ route('profile.edit') }}">Perfil</a></li>
+                            <li><a class="dropdown-item" href="{{ route('profile.edit') }}">Mi Perfil</a></li>
                             <?php
                             if (!(Auth::user()->es_admin)) { ?>
                                 <li><a class="dropdown-item" href={{ route('dashboard') }}>Dashboard</a></li>
