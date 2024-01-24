@@ -89,10 +89,11 @@ Route::middleware(['admin'])->group(function () {
     Route::get('/admin/newsletters/{id}/edit', [NewsletterController::class, 'edit'])->name('admin.newsletters.edit');
     Route::put('/admin/newsletters/{id}', [NewsletterController::class, 'update'])->name('admin.newsletters.update');
     Route::delete('/admin/newsletters/{id}', [NewsletterController::class, 'destroy'])->name('admin.newsletters.destroy');
-    Route::post('/admin/newsletters/{id}/select', [NewsletterController::class, 'selectForSending'])->name('admin.newsletters.select');
+    Route::post('/admin/newsletters/{id}/select', [NewsletterController::class, 'selectForSending'])->name('admin.newsletters.selectForSending');
+
+
     Route::get('/admin/newsletters/preview/{id}', [NewsletterController::class, 'preview'])->name('admin.newsletters.preview');
     Route::post('/admin/newsletters/updateConfig', [NewsletterController::class, 'updateConfig'])->name('admin.newsletters.updateConfig');
-
 
 });
 

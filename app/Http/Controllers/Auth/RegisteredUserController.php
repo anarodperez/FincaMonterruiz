@@ -38,7 +38,7 @@ class RegisteredUserController extends Controller
             'email' => 'required|string|email|unique:users,email',
             'password' => ['required', 'confirmed'],
             'fecha_nacimiento' => 'required|date|before:-18 years',
-            'telefono' => 'regex:/^([0-9\s\-\+\(\)]*)$/|min:9',
+            'telefono' => 'nullable|regex:/^([0-9\s\-\+\(\)]*)$/|min:9',
         ]);
 
         $user = User::create([

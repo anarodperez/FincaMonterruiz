@@ -26,9 +26,14 @@ class ProfileController extends Controller
      */
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
-        // Agrega esta línea al principio del método 'update'
+        $request->validate([
+            'nombre' => 'required|string|min:3|max:255',
+            'apellido1' => 'required|string|min:3|max:255',
+            'email' => 'required|email',
+        ]);
 
         $user = $request->user();
+
 
         // Actualiza los campos del usuario con los datos validados del formulario
         $user->update([
@@ -39,16 +44,17 @@ class ProfileController extends Controller
             'email' => $request->input('email'),
         ]);
 
-        // Verifica si el campo 'email' cambió y, en ese caso, restablece la verificación de email
+        // Verifica si el campo 'email' c`ambió y, en ese caso, restablece la verificación de email
         if ($user->wasChanged('email')) {
             $user->email_verified_at = null;
             $user->save();
         }
 
         // Redirige de vuelta a la página de edición de perfil con un mensaje de éxito
-        return redirect()->route('profile.edit')->with('status', 'profile-updated');
+        return redirect()
+            ->route('profile.edit')
+            ->with('status', 'profile-updated');
     }
-
 
     /**
      * Delete the user's account.

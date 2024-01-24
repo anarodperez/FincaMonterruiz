@@ -14,7 +14,7 @@ class NewsletterController extends Controller
     {
         $orden = $request->input('orden', 'asc');
         $columna = $request->input('columna', 'created_at');
-        $claseOrdenActual = ($orden == 'asc') ? 'orden-asc' : 'orden-desc';
+        $claseOrdenActual = $orden == 'asc' ? 'orden-asc' : 'orden-desc';
 
         // Iniciar la consulta
         $query = Newsletter::query();
@@ -26,9 +26,14 @@ class NewsletterController extends Controller
             $query->whereDate('created_at', '>=', $fechaInicio)->whereDate('created_at', '<=', $fechaFin);
         }
 
+        // Encuentra la newsletter seleccionada
+        $selectedNewsletter = Newsletter::where('selected', true)->first();
+
         // Aplicar ordenación
         $newsletters = Newsletter::orderBy($columna, $orden)->get();
-        return view('admin.newsletters.index', compact('newsletters', 'claseOrdenActual'));
+        return view('admin.newsletters.index', compact('newsletters', 'claseOrdenActual','selectedNewsletter'));
+
+
     }
 
     public function create()
@@ -86,6 +91,14 @@ class NewsletterController extends Controller
         }
 
         $newsletter = Newsletter::findOrFail($id);
+
+        if ($newsletter->selected) {
+            return redirect()
+                ->back()
+                ->with('error', 'No puedes eliminar una newsletter que está marcada para enviar.');
+        }
+
+        $newsletter = Newsletter::findOrFail($id);
         $newsletter->delete();
 
         return back()->with('success', 'Newsletter eliminada con éxito.');
@@ -138,13 +151,12 @@ class NewsletterController extends Controller
         $config = NewsletterSchedule::firstOrNew([]);
 
         // Actualizar la configuración
-        $config->day_of_week = $request->input('day_of_week');
-        $config->execution_time = $request->input('execution_time');
-
+        $config->day_of_week = $request->day_of_week;
+        $config->execution_time = $request->execution_time;
         $config->save();
 
-        return redirect()->back()->with('success', 'Configuración de envío actualizada con éxito.');
+        return redirect()
+            ->back()
+            ->with('success', 'Configuración de envío actualizada con éxito.');
     }
-
-
 }

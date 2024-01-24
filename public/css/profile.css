@@ -39,3 +39,11 @@ body {
     border-radius: 5px;
     cursor: pointer;
 }
+
+span, li{
+    color:red;
+}
+
+li{
+    list-style: none;
+}
