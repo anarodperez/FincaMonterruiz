@@ -90,6 +90,8 @@ Route::middleware(['admin'])->group(function () {
     Route::put('/admin/newsletters/{id}', [NewsletterController::class, 'update'])->name('admin.newsletters.update');
     Route::delete('/admin/newsletters/{id}', [NewsletterController::class, 'destroy'])->name('admin.newsletters.destroy');
     Route::post('/admin/newsletters/{id}/select', [NewsletterController::class, 'selectForSending'])->name('admin.newsletters.selectForSending');
+    Route::get('/admin/newsletters/deselect/{id}', [NewsletterController::class, 'deselect'])->name('admin.newsletters.deselect');
+
 
 
     Route::get('/admin/newsletters/preview/{id}', [NewsletterController::class, 'preview'])->name('admin.newsletters.preview');

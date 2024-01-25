@@ -29,11 +29,15 @@ class NewsletterController extends Controller
         // Encuentra la newsletter seleccionada
         $selectedNewsletter = Newsletter::where('selected', true)->first();
 
+        // Obtener la información de newsletter_schedule si existe
+        $schedule = null;
+        if ($selectedNewsletter) {
+            $schedule = NewsletterSchedule::first();
+        }
+
         // Aplicar ordenación
         $newsletters = Newsletter::orderBy($columna, $orden)->get();
-        return view('admin.newsletters.index', compact('newsletters', 'claseOrdenActual','selectedNewsletter'));
-
-
+        return view('admin.newsletters.index', compact('newsletters', 'claseOrdenActual', 'selectedNewsletter', 'schedule'));
     }
 
     public function create()
@@ -120,18 +124,18 @@ class NewsletterController extends Controller
         return back()->with('success', 'Newsletter enviado con éxito a todos los suscriptores.');
     }
 
-    public function selectForSending($id)
-    {
-        // Desmarcar cualquier newsletter actualmente seleccionada
-        Newsletter::where('selected', true)->update(['selected' => false]);
+    // public function selectForSending($id)
+    // {
+    //     // Desmarcar cualquier newsletter actualmente seleccionada
+    //     Newsletter::where('selected', true)->update(['selected' => false]);
 
-        // Marcar la newsletter seleccionada
-        $newsletter = Newsletter::findOrFail($id);
-        $newsletter->selected = true;
-        $newsletter->save();
+    //     // Marcar la newsletter seleccionada
+    //     $newsletter = Newsletter::findOrFail($id);
+    //     $newsletter->selected = true;
+    //     $newsletter->save();
 
-        return back()->with('success', 'Newsletter seleccionada para el próximo envío.');
-    }
+    //     return back()->with('success', 'Newsletter seleccionada para el próximo envío.');
+    // }
 
     public function preview($id)
     {
@@ -142,21 +146,40 @@ class NewsletterController extends Controller
 
     public function updateConfig(Request $request)
     {
+        // dd($request);
         $request->validate([
             'day_of_week' => 'required|in:Monday,Tuesday,Wednesday,Thursday,Friday', // Validar el día de la semana
             'execution_time' => 'required|date_format:H:i', // Validar el formato de la hora
+            'newsletter_id' => 'required|exists:newsletters,id', // Asegurarse de que se proporcione un ID válido de newsletter
         ]);
 
-        // Obtener la configuración existente o crear una nueva si no existe
+        // Actualizar la configuración de programación general
         $config = NewsletterSchedule::firstOrNew([]);
-
-        // Actualizar la configuración
         $config->day_of_week = $request->day_of_week;
         $config->execution_time = $request->execution_time;
         $config->save();
 
+        // Desmarcar cualquier newsletter previamente seleccionada
+        Newsletter::where('selected', true)->update(['selected' => false]);
+
+        // Marcar la newsletter específica como seleccionada
+        $newsletter = Newsletter::findOrFail($request->newsletter_id);
+        $newsletter->selected = true;
+        $newsletter->save();
+
         return redirect()
             ->back()
-            ->with('success', 'Configuración de envío actualizada con éxito.');
+            ->with('success', 'Configuración de envío actualizada y newsletter seleccionada para el próximo envío.');
+    }
+
+    public function deselect($id)
+    {
+        $newsletter = Newsletter::findOrFail($id);
+        $newsletter->selected = false;
+        $newsletter->save();
+
+        return redirect()
+            ->route('admin.newsletters.index')
+            ->with('success', 'Newsletter desmarcada con éxito.');
     }
 }

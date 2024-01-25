@@ -1,5 +1,13 @@
 @extends('layouts.admin')
 
+@section('title')
+    Newsletters
+@endsection
+
+@section('css')
+    <link rel="stylesheet" href="{{ asset('css/newsletter.css') }}">
+@endsection
+
 @section('content')
     <div class="container">
         <h2 class="my-4 text-center display-4 font-weight-bold titulo">Listado de Newsletters</h2>
@@ -23,27 +31,12 @@
         </div>
         <div class="card mb-4">
             <div class="card-body">
-                <!-- Opciones de Búsqueda y Ordenación -->
                 <div class="row mb-3">
                     <!-- Búsqueda -->
                     <div class="col-md-6">
                         <label for="searchBox" class="form-label">Buscar Newsletter</label>
                         <input type="text" id="searchBox" class="form-control" placeholder="Buscar Newsletter...">
                     </div>
-
-                    {{-- <!-- Ordenación -->
-                    <form id="miFormulario" action="{{ route('admin.newsletters.index') }}" method="get">
-                        <div class="col-md-6">
-                            <label for="ordenarPor" class="form-label">Ordenar por fecha:</label>
-                            <select name="orden" id="ordenarPor" class="form-select" onchange="this.form.submit()">
-                                <option value="asc" {{ request('orden') == 'asc' ? 'selected' : '' }}>Más antiguo primero
-                                </option>
-                                <option value="desc" {{ request('orden') == 'desc' ? 'selected' : '' }}>Más reciente
-                                    primero
-                                </option>
-                            </select>
-                        </div>
-                    </form> --}}
                 </div>
             </div>
         </div>
@@ -76,17 +69,50 @@
 
         @if ($selectedNewsletter)
             <div class="selected-newsletter">
-                <h3>Newsletter Seleccionada para Envío</h3>
-                <p><strong>Título:</strong> {{ $selectedNewsletter->titulo }}</p>
-                <p><strong>Fecha de Creación:</strong> {{ $selectedNewsletter->created_at->format('Y-m-d H:i') }}</p>
+                <h3 class="mb-3">Newsletter Seleccionada para Envío</h3>
+                <div class="mb-3">
+                    <p class="mb-1"><strong>Título:</strong></p>
+                    <p class="lead">{{ $selectedNewsletter->titulo }}</p>
+                </div>
+                @if ($schedule)
+                @php
+                $dayOfWeek = $schedule->day_of_week;
+                $translatedDay = '';
+                switch ($dayOfWeek) {
+                    case 'Monday':
+                        $translatedDay = 'Lunes';
+                        break;
+                    case 'Tuesday':
+                        $translatedDay = 'Martes';
+                        break;
+                    case 'Wednesday':
+                        $translatedDay = 'Miércoles';
+                        break;
+                    case 'Thursday':
+                        $translatedDay = 'Jueves';
+                        break;
+                    case 'Friday':
+                        $translatedDay = 'Viernes';
+                        break;
+                    // Agrega más casos según sea necesario
+                }
+                @endphp
+                <p><strong>Día de envío:</strong> {{ $translatedDay }}</p>
+                <p><strong>Hora de envío:</strong>  {{ substr($schedule->execution_time, 0, -3) }}</p>
+            @else
+            <div class="mb-3">
+                <p><strong>Día de envío:</strong> No disponible</p>
+                <p><strong>Hora de envío:</strong> No disponible</p>
+            </div>
+                @endif
+            <div class="text-center">
                 <!-- Botón para desmarcar -->
-                <a href="" class="btn btn-secondary">Desmarcar</a>
-                <!-- Información de programación si está disponible -->
+                <a href="{{ route('admin.newsletters.deselect', $selectedNewsletter->id) }}"
+                    class="btn btn-secondary">Desmarcar</a>
             </div>
         @else
-            <p>No hay ninguna newsletter seleccionada para el envío.</p>
+            <p class="text-center">No hay ninguna newsletter seleccionada para el envío.</p>
         @endif
-
 
         <table class="tabla table ">
             <thead>
@@ -115,33 +141,25 @@
                                     onclick="previewNewsletter({{ $newsletter->id }})" title="Vista previa">
                                     <i class="bi bi-eye-fill"></i>
                                 </button>
-
-                                <!-- Botón para Programar Envío -->
-                                @if ($newsletter->id != 1)
-                                    <!-- No mostrar para la newsletter de bienvenida -->
-                                    <button type="button" class="btn btn-warning rounded me-2" data-bs-toggle="modal"
-                                        data-bs-target="#scheduleModal">
-                                        Programar Envío
-                                    </button>
-
-                                @endif
-                                <!-- Enlace a la vista de edición -->
+                                <!-- Botón editar -->
                                 <a href="{{ route('admin.newsletters.edit', $newsletter->id) }}"
                                     class="btn btn-secondary rounded me-2" title="Editar esta newsletter">
                                     <i class="bi bi-pencil-fill"></i>
                                 </a>
-
-                                <!-- Botón para Borrar -->
-                                <button type="button" class="btn btn-danger rounded" data-bs-toggle="modal"
-                                    data-bs-target="#deleteModal" data-id="{{ $newsletter->id }}"
-                                    title="Borrar esta newsletter">
-                                    <i class="bi bi-trash-fill"></i>
-                                </button>
-                            </div>
-                            <form id="deleteForm" action="" method="POST" style="display: none;">
-                                @csrf
-                                @method('DELETE')
-                            </form>
+                                <!-- Botón para Programar Envío -->
+                                @if ($newsletter->id != 1)
+                                    @if (!$selectedNewsletter || $selectedNewsletter->id == $newsletter->id)
+                                        <button type="button" class="btn btn-warning rounded me-2 scheduleButton"
+                                            data-bs-toggle="modal" data-bs-target="#scheduleModal"
+                                            data-newsletter-id="{{ $newsletter->id }}">
+                                            <i class="bi bi-clock-fill"></i> Programar Envío
+                                        </button>
+                                    @else
+                                        <button type="button" class="btn btn-warning rounded me-2" disabled>
+                                            <i class="bi bi-clock-fill"></i> Programar Envío
+                                        </button>
+                                    @endif
+                                @endif
                         </td>
                     </tr>
                 @endforeach
@@ -151,7 +169,7 @@
 
     <!-- Modal de Vista Previa -->
     <div class="modal fade" id="previewModal" tabindex="-1" aria-labelledby="previewModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
+        <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="previewModalLabel">Vista Previa de Newsletter</h5>
@@ -179,10 +197,11 @@
                 <div class="modal-body">
                     <form id="scheduleForm" action="{{ route('admin.newsletters.updateConfig') }}" method="POST">
                         @csrf
+                        <input type="hidden" name="newsletter_id" id="modal_newsletter_id">
                         <div class="row g-3 align-items-end">
                             <!-- Día de Envío Programado -->
                             <div class="col-md-6">
-                                <label for="modal_day_of_week" class="form-label">Día de envío programado:</label>
+                                <label for="modal_day_of_week" class="form-label">Día de envío:</label>
                                 <select id="modal_day_of_week" name="day_of_week" class="form-select">
                                     <option value="Monday">Lunes</option>
                                     <option value="Tuesday">Martes</option>
@@ -194,7 +213,7 @@
 
                             <!-- Hora de Envío Programado -->
                             <div class="col-md-6">
-                                <label for="modal_execution_time" class="form-label">Hora de envío programado:</label>
+                                <label for="modal_execution_time" class="form-label">Hora de envío:</label>
                                 <input type="time" id="modal_execution_time" name="execution_time"
                                     class="form-control">
                             </div>
@@ -210,8 +229,6 @@
         </div>
     </div>
 
-
-
     @include('admin.partials.deleteModal', [
         'modalTitle' => 'Confirmar Borrado',
         'modalBody' => '¿Estás seguro de querer borrar esta newsletter?',
@@ -220,9 +237,4 @@
 
 @push('scripts')
     <script defer src="{{ asset('js/admin-newsletter.js') }}"></script>
-    <script defer>
-        function submitScheduleForm() {
-            document.getElementById('scheduleForm').submit();
-        }
-    </script>
 @endpush
