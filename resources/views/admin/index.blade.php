@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('title', 'Portal de administración')
+@section('title', 'Panel Admin')
 
 @section('css')
     <link rel="stylesheet" href="{{ asset('css/admin.css') }}">

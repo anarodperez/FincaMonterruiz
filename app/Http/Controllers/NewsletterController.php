@@ -9,19 +9,16 @@ use App\Models\Newsletter;
 use App\Models\NewsletterSchedule;
 
 class NewsletterController extends Controller
-{
-    public function index(Request $request)
+{public function index(Request $request)
     {
         $orden = $request->input('orden', 'asc');
         $columna = $request->input('columna', 'created_at');
         $claseOrdenActual = $orden == 'asc' ? 'orden-asc' : 'orden-desc';
 
-        // Iniciar la consulta
-        $query = Newsletter::query();
-
         // Filtrar por rango de fechas
         $fechaInicio = request('fecha_inicio');
         $fechaFin = request('fecha_fin');
+        $query = Newsletter::query();
         if ($fechaInicio && $fechaFin) {
             $query->whereDate('created_at', '>=', $fechaInicio)->whereDate('created_at', '<=', $fechaFin);
         }
@@ -29,16 +26,33 @@ class NewsletterController extends Controller
         // Encuentra la newsletter seleccionada
         $selectedNewsletter = Newsletter::where('selected', true)->first();
 
-        // Obtener la información de newsletter_schedule si existe
-        $schedule = null;
-        if ($selectedNewsletter) {
-            $schedule = NewsletterSchedule::first();
+        // Obtener la información de newsletter_schedule (genérica)
+        $schedule = NewsletterSchedule::first(); // Obtiene el horario sin asociarlo a una newsletter específica
+
+        // Traducir el día de la semana al español
+        $translatedDay = '';
+        $executionTime = '';
+        if ($schedule) {
+            $translatedDays = [
+                'Monday' => 'Lunes',
+                'Tuesday' => 'Martes',
+                'Wednesday' => 'Miércoles',
+                'Thursday' => 'Jueves',
+                'Friday' => 'Viernes',
+            ];
+
+            $translatedDay = $translatedDays[$schedule->day_of_week] ?? '';
+            $executionTime = substr($schedule->execution_time, 0, -3); // Preparar la hora de envío para evitar mostrar segundos
         }
 
         // Aplicar ordenación
-        $newsletters = Newsletter::orderBy($columna, $orden)->get();
-        return view('admin.newsletters.index', compact('newsletters', 'claseOrdenActual', 'selectedNewsletter', 'schedule'));
+        $newsletters = $query->orderBy($columna, $orden)->paginate(5);
+
+        // Pasar datos a la vista
+        return view('admin.newsletters.index', compact('newsletters', 'claseOrdenActual', 'selectedNewsletter', 'schedule', 'translatedDay', 'executionTime'));
     }
+
+
 
     public function create()
     {
@@ -123,19 +137,6 @@ class NewsletterController extends Controller
 
         return back()->with('success', 'Newsletter enviado con éxito a todos los suscriptores.');
     }
-
-    // public function selectForSending($id)
-    // {
-    //     // Desmarcar cualquier newsletter actualmente seleccionada
-    //     Newsletter::where('selected', true)->update(['selected' => false]);
-
-    //     // Marcar la newsletter seleccionada
-    //     $newsletter = Newsletter::findOrFail($id);
-    //     $newsletter->selected = true;
-    //     $newsletter->save();
-
-    //     return back()->with('success', 'Newsletter seleccionada para el próximo envío.');
-    // }
 
     public function preview($id)
     {

@@ -1,5 +1,9 @@
 @extends('layouts.admin')
 
+@section('title')
+    Admin | Valoraciones
+@endsection
+
 @section('content')
 
     <div class="container">

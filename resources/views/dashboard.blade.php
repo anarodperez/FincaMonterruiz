@@ -10,6 +10,12 @@
 
 @section('content')
     <main>
+         <div class="container py-5">
+
+            <div id="welcomeMessage" class="alert alert-info"></div>
+
+        </div>
+
         <div class="container py-5">
 
             @if (session('success'))
@@ -299,3 +305,6 @@
         });
     </script>
 @endsection
+@push('scripts')
+<script src="{{ asset('js/ultima_visita-cookie.js') }}"></script>
+@endpush

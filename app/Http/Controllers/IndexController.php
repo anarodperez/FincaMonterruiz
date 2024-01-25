@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 
 class IndexController extends Controller
 {
-    public function home()
+    public function home(Request $request)
     {
         $actividades = Actividad::all();
         $ultimasValoraciones = Valoracion::with('user')

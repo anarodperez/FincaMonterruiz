@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 
 @section('title')
-    Newsletters
+    Admin | Newsletters
 @endsection
 
 @section('css')
@@ -41,7 +41,6 @@
             </div>
         </div>
 
-
         <div class="card mb-4">
             <div class="card-body">
                 <form action="{{ route('admin.newsletters.index') }}" method="get" class="row align-items-end g-3">
@@ -68,103 +67,99 @@
         </div>
 
         @if ($selectedNewsletter)
-            <div class="selected-newsletter">
-                <h3 class="mb-3">Newsletter Seleccionada para Envío</h3>
-                <div class="mb-3">
-                    <p class="mb-1"><strong>Título:</strong></p>
-                    <p class="lead">{{ $selectedNewsletter->titulo }}</p>
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h3 class="card-title">Newsletter Seleccionada para Envío</h3>
+                    <h5 class="text-secondary mb-4 mt-4"><strong>Título:</strong> {{ $selectedNewsletter->titulo }}</h5>
+                    @if ($translatedDay)
+                        <div class="d-flex align-items-center mb-3">
+                            <i class="far fa-calendar-alt me-3 text-info" style="font-size: 1.5rem;"></i>
+                            <p class="mb-0"><strong>Día de envío:</strong> {{ $translatedDay }}</p>
+                        </div>
+                        <div class="d-flex align-items-center mb-4">
+                            <i class="far fa-clock me-3 text-success" style="font-size: 1.5rem;"></i>
+                            <p class="mb-0"><strong>Hora de envío:</strong> {{ $executionTime }}</p>
+                        </div>
+                    @else
+                        <p class="text-muted mb-4"><strong>Día de envío:</strong> No disponible</p>
+                        <p class="text-muted mb-4"><strong>Hora de envío:</strong> No disponible</p>
+                    @endif
+                    <div>
+                        <a href="{{ route('admin.newsletters.deselect', $selectedNewsletter->id) }}"
+                            class="btn btn-outline-secondary">Desmarcar</a>
+                    </div>
                 </div>
-                @if ($schedule)
-                @php
-                $dayOfWeek = $schedule->day_of_week;
-                $translatedDay = '';
-                switch ($dayOfWeek) {
-                    case 'Monday':
-                        $translatedDay = 'Lunes';
-                        break;
-                    case 'Tuesday':
-                        $translatedDay = 'Martes';
-                        break;
-                    case 'Wednesday':
-                        $translatedDay = 'Miércoles';
-                        break;
-                    case 'Thursday':
-                        $translatedDay = 'Jueves';
-                        break;
-                    case 'Friday':
-                        $translatedDay = 'Viernes';
-                        break;
-                    // Agrega más casos según sea necesario
-                }
-                @endphp
-                <p><strong>Día de envío:</strong> {{ $translatedDay }}</p>
-                <p><strong>Hora de envío:</strong>  {{ substr($schedule->execution_time, 0, -3) }}</p>
-            @else
-            <div class="mb-3">
-                <p><strong>Día de envío:</strong> No disponible</p>
-                <p><strong>Hora de envío:</strong> No disponible</p>
-            </div>
-                @endif
-            <div class="text-center">
-                <!-- Botón para desmarcar -->
-                <a href="{{ route('admin.newsletters.deselect', $selectedNewsletter->id) }}"
-                    class="btn btn-secondary">Desmarcar</a>
             </div>
         @else
-            <p class="text-center">No hay ninguna newsletter seleccionada para el envío.</p>
+            <p class="text-center text-muted mt-5">No hay ninguna newsletter seleccionada para el envío.</p>
         @endif
 
-        <table class="tabla table ">
-            <thead>
-                <tr>
-                    <th scope="col">Título</th>
-                    <th scope="col">Fecha creación
-                        <!-- enlaces para la ordenación -->
-                        <a href="{{ route('admin.newsletters.index', ['orden' => 'asc', 'columna' => 'titulo']) }}"
-                            class="orden-link {{ $claseOrdenActual == 'orden-asc' ? 'active' : '' }}">↑</a>
-                        <a href="{{ route('admin.newsletters.index', ['orden' => 'desc', 'columna' => 'titulo']) }}"
-                            class="orden-link {{ $claseOrdenActual == 'orden-desc' ? 'active' : '' }}">↓</a>
-                    </th>
-                    <th scope="col">Acciones</th>
-                </tr>
-            </thead>
-            <tbody id="newsletterTableBody">
-
-                @foreach ($newsletters as $newsletter)
+        <div class="table-responsive">
+            <table class="tabla table ">
+                <thead>
                     <tr>
-                        <td>{{ $newsletter->titulo }}</td>
-                        <td>{{ $newsletter->created_at->format('Y-m-d H:i') }}</td>
-                        <td>
-                            <div class="btn-group" role="group" aria-label="Acciones de Newsletter">
-                                <!-- Botón de Vista Previa -->
-                                <button class="btn btn-info rounded-pill me-2"
-                                    onclick="previewNewsletter({{ $newsletter->id }})" title="Vista previa">
-                                    <i class="bi bi-eye-fill"></i>
-                                </button>
-                                <!-- Botón editar -->
-                                <a href="{{ route('admin.newsletters.edit', $newsletter->id) }}"
-                                    class="btn btn-secondary rounded me-2" title="Editar esta newsletter">
-                                    <i class="bi bi-pencil-fill"></i>
-                                </a>
-                                <!-- Botón para Programar Envío -->
-                                @if ($newsletter->id != 1)
-                                    @if (!$selectedNewsletter || $selectedNewsletter->id == $newsletter->id)
-                                        <button type="button" class="btn btn-warning rounded me-2 scheduleButton"
-                                            data-bs-toggle="modal" data-bs-target="#scheduleModal"
-                                            data-newsletter-id="{{ $newsletter->id }}">
-                                            <i class="bi bi-clock-fill"></i> Programar Envío
-                                        </button>
-                                    @else
-                                        <button type="button" class="btn btn-warning rounded me-2" disabled>
-                                            <i class="bi bi-clock-fill"></i> Programar Envío
-                                        </button>
-                                    @endif
-                                @endif
-                        </td>
+                        <th scope="col" class="columna-estrecha">Título</th>
+                        <th scope="col"  class="columna-estrecha">Fecha creación
+                            <!-- enlaces para la ordenación -->
+                            <a href="{{ route('admin.newsletters.index', ['orden' => 'asc', 'columna' => 'titulo']) }}"
+                                class="orden-link {{ $claseOrdenActual == 'orden-asc' ? 'active' : '' }}">↑</a>
+                            <a href="{{ route('admin.newsletters.index', ['orden' => 'desc', 'columna' => 'titulo']) }}"
+                                class="orden-link {{ $claseOrdenActual == 'orden-desc' ? 'active' : '' }}">↓</a>
+                        </th>
+                        <th scope="col"  class="columna-acciones">Acciones</th>
                     </tr>
-                @endforeach
-            </tbody>
-        </table>
+                </thead>
+                <tbody id="newsletterTableBody">
+
+                    @foreach ($newsletters as $newsletter)
+                        <tr>
+                            <td>{{ $newsletter->titulo }}</td>
+                            <td>{{ $newsletter->created_at->format('Y-m-d H:i') }}</td>
+                            <td>
+                                <div class="btn-group" role="group" aria-label="Acciones de Newsletter">
+                                    <!-- Botón de Vista Previa -->
+                                    <button class="btn btn-info rounded-pill me-2"
+                                        onclick="previewNewsletter({{ $newsletter->id }})" title="Vista previa">
+                                        <i class="bi bi-eye-fill"></i>
+                                    </button>
+                                    <!-- Botón editar -->
+                                    <a href="{{ route('admin.newsletters.edit', $newsletter->id) }}"
+                                        class="btn btn-secondary rounded me-2" title="Editar esta newsletter">
+                                        <i class="bi bi-pencil-fill"></i>
+                                    </a>
+                                    <!-- Botón para Programar Envío -->
+                                    @if ($newsletter->id != 1)
+                                        <!-- Suponiendo que no quieres permitir borrar la newsletter con ID 1 -->
+                                        <!-- Botón para Programar Envío -->
+                                        <button type="button"
+                                            class="btn btn-warning btn-sm rounded me-2 scheduleButton"
+                                            data-bs-toggle="modal" data-bs-target="#scheduleModal"
+                                            data-newsletter-id="{{ $newsletter->id }}"
+                                            {{ $selectedNewsletter && $selectedNewsletter->id == $newsletter->id ? 'disabled' : '' }}>
+                                            <i class="bi bi-clock-fill"></i> Programar Envío
+                                        </button>
+                                        <!-- Botón para Borrar -->
+                                        <!-- Este botón está deshabilitado si la newsletter está seleccionada para el envío -->
+                                        <button type="button" class="btn btn-danger rounded" data-bs-toggle="modal"
+                                            data-bs-target="#deleteModal" data-id="{{ $newsletter->id }}"
+                                            title="Borrar esta newsletter"
+                                            {{ $selectedNewsletter && $selectedNewsletter->id == $newsletter->id ? 'disabled' : '' }}>
+                                            <i class="bi bi-trash-fill"></i>
+                                        </button>
+                                        <form id="deleteForm" action="" method="POST" style="display: none;">
+                                            @csrf
+                                            @method('DELETE')
+                                        </form>
+                                    @endif
+                                </div>
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+            <!-- Enlaces de Paginación -->
+            {{ $newsletters->links() }}
+        </div>
     </div>
 
     <!-- Modal de Vista Previa -->
@@ -203,11 +198,15 @@
                             <div class="col-md-6">
                                 <label for="modal_day_of_week" class="form-label">Día de envío:</label>
                                 <select id="modal_day_of_week" name="day_of_week" class="form-select">
-                                    <option value="Monday">Lunes</option>
-                                    <option value="Tuesday">Martes</option>
-                                    <option value="Wednesday">Miércoles</option>
-                                    <option value="Thursday">Jueves</option>
-                                    <option value="Friday">Viernes</option>
+                                    <option value="Monday" @if (optional($schedule)->day_of_week == 'Monday') selected @endif>Lunes</option>
+                                    <option value="Tuesday" @if (optional($schedule)->day_of_week == 'Tuesday') selected @endif>Martes
+                                    </option>
+                                    <option value="Wednesday" @if (optional($schedule)->day_of_week == 'Wednesday') selected @endif>Miércoles
+                                    </option>
+                                    <option value="Thursday" @if (optional($schedule)->day_of_week == 'Thursday') selected @endif>Jueves
+                                    </option>
+                                    <option value="Friday" @if (optional($schedule)->day_of_week == 'Friday') selected @endif>Viernes
+                                    </option>
                                 </select>
                             </div>
 
@@ -215,7 +214,7 @@
                             <div class="col-md-6">
                                 <label for="modal_execution_time" class="form-label">Hora de envío:</label>
                                 <input type="time" id="modal_execution_time" name="execution_time"
-                                    class="form-control">
+                                    class="form-control" value="{{ substr(optional($schedule)->execution_time, 0, 5) }}">
                             </div>
                         </div>
                     </form>

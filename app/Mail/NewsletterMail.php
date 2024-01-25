@@ -43,7 +43,7 @@ class NewsletterMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Newsletter Mail',
+            subject: 'Finca Monterruiz Newsletter',
         );
     }
 
