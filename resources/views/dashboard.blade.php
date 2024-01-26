@@ -140,7 +140,7 @@
                     aria-labelledby="valoraciones-tab">
                     <h2 class="tab-section-header">Tus Valoraciones</h2>
                     @if ($valoracionesUsuario->count() > 0)
-                        <div class="row">
+                        <div class="row valoraciones">
                             @foreach ($valoracionesUsuario as $valoracion)
                                 <div class="col-md-4 mb-4">
                                     <div class="card card-detail">

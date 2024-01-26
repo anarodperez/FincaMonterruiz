@@ -99,14 +99,14 @@
                 <thead>
                     <tr>
                         <th scope="col" class="columna-estrecha">Título</th>
-                        <th scope="col"  class="columna-estrecha">Fecha creación
+                        <th scope="col" class="columna-estrecha">Fecha creación
                             <!-- enlaces para la ordenación -->
                             <a href="{{ route('admin.newsletters.index', ['orden' => 'asc', 'columna' => 'titulo']) }}"
                                 class="orden-link {{ $claseOrdenActual == 'orden-asc' ? 'active' : '' }}">↑</a>
                             <a href="{{ route('admin.newsletters.index', ['orden' => 'desc', 'columna' => 'titulo']) }}"
                                 class="orden-link {{ $claseOrdenActual == 'orden-desc' ? 'active' : '' }}">↓</a>
                         </th>
-                        <th scope="col"  class="columna-acciones">Acciones</th>
+                        <th scope="col" class="columna-acciones">Acciones</th>
                     </tr>
                 </thead>
                 <tbody id="newsletterTableBody">
@@ -129,29 +129,40 @@
                                     </a>
                                     <!-- Botón para Programar Envío -->
                                     @if ($newsletter->id != 1)
-                                        <!-- Suponiendo que no quieres permitir borrar la newsletter con ID 1 -->
-                                        <!-- Botón para Programar Envío -->
-                                        <button type="button"
-                                            class="btn btn-warning btn-sm rounded me-2 scheduleButton"
-                                            data-bs-toggle="modal" data-bs-target="#scheduleModal"
-                                            data-newsletter-id="{{ $newsletter->id }}"
-                                            {{ $selectedNewsletter && $selectedNewsletter->id == $newsletter->id ? 'disabled' : '' }}>
-                                            <i class="bi bi-clock-fill"></i> Programar Envío
-                                        </button>
-                                        <!-- Botón para Borrar -->
-                                        <!-- Este botón está deshabilitado si la newsletter está seleccionada para el envío -->
-                                        <button type="button" class="btn btn-danger rounded" data-bs-toggle="modal"
-                                            data-bs-target="#deleteModal" data-id="{{ $newsletter->id }}"
-                                            title="Borrar esta newsletter"
-                                            {{ $selectedNewsletter && $selectedNewsletter->id == $newsletter->id ? 'disabled' : '' }}>
-                                            <i class="bi bi-trash-fill"></i>
-                                        </button>
-                                        <form id="deleteForm" action="" method="POST" style="display: none;">
+                                        @if (!$selectedNewsletter || $selectedNewsletter->id == $newsletter->id)
+                                            <button type="button" class="btn btn-warning rounded me-2 scheduleButton"
+                                                data-bs-toggle="modal" data-bs-target="#scheduleModal"
+                                                data-newsletter-id="{{ $newsletter->id }}">
+                                                <i class="bi bi-clock-fill"></i> Programar Envío
+                                            </button>
+                                        @else
+                                            <button type="button" class="btn btn-warning rounded me-2" disabled>
+                                                <i class="bi bi-clock-fill"></i> Programar Envío
+                                            </button>
+                                        @endif
+                                    @endif
+                                    <!-- Botón para Borrar -->
+                                    @if ($newsletter->id != 1)
+                                        @if (!$selectedNewsletter || $selectedNewsletter->id != $newsletter->id)
+                                            <button type="button" class="btn btn-danger rounded" data-bs-toggle="modal"
+                                                data-bs-target="#deleteModal" data-id="{{ $newsletter->id }}"
+                                                title="Borrar esta newsletter">
+                                                <i class="bi bi-trash-fill"></i>
+                                            </button>
+                                        @else
+                                            <button type="button" class="btn btn-danger rounded" data-bs-toggle="modal"
+                                                data-bs-target="#deleteModal" data-id="{{ $newsletter->id }}"
+                                                title="Borrar esta newsletter" disabled>
+                                                <i class="bi bi-trash-fill"></i>
+                                            </button>
+                                        @endif
+                                        <form id="deleteForm-{{ $newsletter->id }}" action="" method="POST"
+                                            style="display: none;">
                                             @csrf
                                             @method('DELETE')
                                         </form>
                                     @endif
-                                </div>
+
                             </td>
                         </tr>
                     @endforeach

@@ -10,6 +10,10 @@
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/css/bootstrap.min.css" rel="stylesheet">
     <link rel="preload" href="https://unpkg.com/swiper@8/swiper-bundle.min.css" as="style"
         onload="this.onload=null;this.rel='stylesheet'">
+        <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
+      />
     <script defer="defer" src="https://unpkg.com/swiper@8/swiper-bundle.min.js" onload="initializeSwiperRANDOMID();">
     </script>
     <script>
@@ -56,7 +60,7 @@
                 </div>
             </section>
 
-            <section class="bg-light">
+            <section class="bg-light animate__animated animate__backInLeft ">
                 <div class="container text-center py-5 mb-4 ">
                     <div class="p-5 mb-4 lc-block">
                         <div class="lc-block mb-4">
@@ -80,7 +84,7 @@
             </section>
 
              <!-- Sección de Bienvenida -->
-             <section class="bg-light">
+             <section class="bg-light animate__animated animate__backInRight  ">
                 <div class="container text-center py-5 mb-4">
                     <div class="row">
                         <div class="col-md-6">
@@ -158,7 +162,7 @@
                                     <div class="carousel-item {{ $loop->first ? 'active' : '' }}">
                                         <div class="d-flex justify-content-center">
                                             @foreach ($valoracionChunk as $valoracion)
-                                                <div class="card valoracion-card mx-5" style="max-width: 30rem;">
+                                                <div class="card valoracion-card mx-5" style="max-width:24rem;">
                                                     <div class="card-body">
                                                         <h5 class="card-title">
                                                             {{ $valoracion->actividad->nombre ?? 'Actividad Desconocida' }}
