@@ -1,162 +1,197 @@
-
-
 body {
-    color: #888;
-    font-family: 'IBM Plex Sans', sans-serif;
+color: #888;
+font-family: 'IBM Plex Sans', sans-serif;
+}
+
+.first .carousel-item {
+height: 600px;
+}
+
+.mySwiper-RANDOMID .card {
+max-width: 21rem
+}
+
+.custom-pagination .swiper-pagination-bullet {
+background: #5c7c64;
+}
+
+.valoraciones-section .carousel-control-prev-icon,
+.valoraciones-section .carousel-control-next-icon {
+filter: invert(35%) sepia(85%) saturate(1200%) hue-rotate(100deg) brightness(70%) contrast(100%);
+}
+
+/* Aumentar el ancho del carrusel */
+.valoraciones-section #valoracionesCarousel {
+    max-width: 100%; /* Esto permitirá que el carrusel ocupe todo el ancho disponible */
+    margin: 0 auto; /* Esto centra el carrusel en el contenedor */
+}
+
+
+/* Estilo sección actividades */
+
+.swiper-slide .card {
+transition: transform 0.3s ease-in-out;
+}
+
+.swiper-slide .card:hover {
+transform: scale(1.05);
+cursor: pointer;
+}
+
+.swiper a {
+text-decoration: none;
 }
 
 
 .card:hover .card__image {
-    filter: contrast(100%);
-  }
+filter: contrast(100%);
+}
 
-  .card__image {
-    border-top-left-radius: 0.25rem;
-    border-top-right-radius: 0.25rem;
-    overflow: hidden;
-    position: relative;
+.card__image {
+border-top-left-radius: 0.25rem;
+border-top-right-radius: 0.25rem;
+overflow: hidden;
+position: relative;
 
-  }
-  .card__image::before {
-    content: "";
-    display: block;
-    padding-top: 56.25%;
-  }
+}
+.card__image::before {
+content: "";
+display: block;
+padding-top: 56.25%;
+}
 
-  @media (min-width: 40rem) {
-    .card__image::before {
-      padding-top: 66.6%; /* 3:2 aspect ratio */
-    }
-  }
+@media (min-width: 40rem) {
+.card__image::before {
+padding-top: 66.6%; /* 3:2 aspect ratio */
+}
+}
 
-  .card__content {
-    display: flex;
-    flex: 1 1 auto;
-    flex-direction: column;
-    padding: 1rem;
-  }
+.card__content {
+display: flex;
+flex: 1 1 auto;
+flex-direction: column;
+padding: 1rem;
+}
 
-  .card__title {
-    color:   #696969;
-    font-size: 1.25rem;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    margin-bottom: 5px;
-    font-weight: bold;
-  }
+.card__title {
+color: #696969;
+font-size: 1.25rem;
+letter-spacing: 2px;
+text-transform: uppercase;
+margin-bottom: 5px;
+font-weight: bold;
+}
 
-  .card__text {
-    flex: 1 1 auto;
-    font-size: 0.975rem;
-    line-height: 1.5;
-    margin-bottom: 1.25rem;
-  }
+.card__text {
+flex: 1 1 auto;
+font-size: 0.975rem;
+line-height: 1.5;
+margin-bottom: 1.25rem;
+}
 
-.card-body .boton,  .newsletter .boton, .row .boton  {
-    background-color: #5c7c64;
-    border: none;
-    z-index: 1;
-    color: #fff;
-  }
-  .boton:after {
-    position: absolute;
-    content: "";
-    width: 0;
-    height: 100%;
-    top: 0;
-    right: 0;
-    z-index: -1;
-    background-color: #bfe2c3;
-    border-radius: 5px;
-     box-shadow:inset 2px 2px 2px 0px rgba(255,255,255,.5),
-     7px 7px 20px 0px rgba(0,0,0,.1),
-     4px 4px 5px 0px rgba(0,0,0,.1);
-    transition: all 0.8s ease;
+/* BOTÓN */
+.card-body .boton, .newsletter .boton, .row .boton {
+background-color: #5c7c64;
+border: none;
+z-index: 1;
+color: #fff;
+}
+.boton:after {
+position: absolute;
+content: "";
+width: 0;
+height: 100%;
+top: 0;
+right: 0;
+z-index: -1;
+background-color: #bfe2c3;
+border-radius: 5px;
+box-shadow:inset 2px 2px 2px 0px rgba(255,255,255,.5),
+7px 7px 20px 0px rgba(0,0,0,.1),
+4px 4px 5px 0px rgba(0,0,0,.1);
+transition: all 0.8s ease;
 
-  }
-  .boton:hover {
-    color: #696969;
-  }
-  .boton:hover:after {
-    left: 0;
-    width: 100%;
-  }
-  .boton:active {
-    top: 2px;
-  }
+}
+.boton:hover {
+color: #696969;
+}
+.boton:hover:after {
+left: 0;
+width: 100%;
+}
+.boton:active {
+top: 2px;
+}
 
-  button {
-    margin: 10px;
-  }
-  .custom-btn {
-    width: 130px;
-    height: 40px;
-    color: #fff;
-    border-radius: 5px;
-    padding: 10px 25px;
-    font-family: 'Lato', sans-serif;
-    font-weight: 500;
-    background: transparent;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    position: relative;
-    display: inline-block;
-     box-shadow:inset 2px 2px 2px 0px rgba(255,255,255,.5),
-     7px 7px 20px 0px rgba(0,0,0,.1),
-     4px 4px 5px 0px rgba(0,0,0,.1);
-    outline: none;
-  }
+button {
+margin: 10px;
+}
+.custom-btn {
+width: 130px;
+height: 40px;
+color: #fff;
+border-radius: 5px;
+padding: 10px 25px;
+font-family: 'Lato', sans-serif;
+font-weight: 500;
+background: transparent;
+cursor: pointer;
+transition: all 0.3s ease;
+position: relative;
+display: inline-block;
+box-shadow:inset 2px 2px 2px 0px rgba(255,255,255,.5),
+7px 7px 20px 0px rgba(0,0,0,.1),
+4px 4px 5px 0px rgba(0,0,0,.1);
+outline: none;
+}
 
 
-/* Newsletter */
+/* NEWSLETTER */
 
 .newsletter {
-    background-color: #f1f1f1;
-    text-align: center;
-    padding: 20px 0; /* Espaciado superior e inferior */
-    margin-top: 20px; /* Espacio entre la sección de tarjetas y la sección de newsletter */
+background-color: #f1f1f1;
+text-align: center;
+padding: 20px 0;
+margin-top: 20px;
 }
 
 .newsletter h2 {
-    font-size: 24px;
-    margin-bottom: 10px; /* Espacio entre el título y el párrafo */
+font-size: 24px;
+margin-bottom: 10px;
 }
 
 .newsletter p {
-    font-size: 16px;
-    margin-bottom: 20px; /* Espacio entre el párrafo y el formulario */
+font-size: 16px;
+margin-bottom: 20px;
 }
 
 .newsletter form {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+display: flex;
+flex-direction: column;
+align-items: center;
 }
 
 .newsletter input[type="email"] {
-    width: 100%;
-    max-width: 300px;
-    padding: 10px;
-    margin-bottom: 10px;
+width: 100%;
+max-width: 300px;
+padding: 10px;
+margin-bottom: 10px;
 }
-
-
-
 
 
 /* Estilo para el ícono de cierre */
 .closebtn {
-    margin-left: 15px;
-    font-weight: bold;
-    float: right;
-    font-size: 22px;
-    line-height: 20px;
-    cursor: pointer;
-    transition: 0.3s;
+margin-left: 15px;
+font-weight: bold;
+float: right;
+font-size: 22px;
+line-height: 20px;
+cursor: pointer;
+transition: 0.3s;
 }
 
 .alert {
-    width: 50%;
-    margin: 0 auto;
+width: 50%;
+margin: 0 auto;
 
 }

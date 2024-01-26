@@ -18,11 +18,6 @@
                 slidesPerView: 1,
                 grabCursor: true,
                 spaceBetween: 30,
-
-                pagination: {
-                    el: ".swiper-pagination",
-                    dynamicBullets: true,
-                },
                 breakpoints: {
                     768: {
                         slidesPerView: 2,
@@ -34,19 +29,6 @@
             });
         }
     </script>
-    <style>
-        .first .carousel-item {
-            height: 600px;
-        }
-
-        .mySwiper-RANDOMID .card {
-            max-width: 21rem
-        }
-
-        .custom-pagination .swiper-pagination-bullet {
-            background: #5c7c64;
-        }
-    </style>
 @endsection
 @section('content')
     <main>
@@ -96,120 +78,154 @@
                     </div>
                 </div>
             </section>
-            <div class="container py-6"><!-- Slider main container -->
-                <div class="swiper mySwiper-RANDOMID">
-                    <div class="swiper-wrapper"><!-- Slides -->
-                        @foreach ($actividades as $actividad)
-                            <div class="swiper-slide h-100">
-                                <div class="card shadow mx-auto">
-                                    <div class="card-body">
-                                        <div class="lc-block">
-                                            <img class="img-fluid" src="{{ asset($actividad->imagen) }}" srcset=""
-                                                sizes="" alt="" loading="lazy" width="" height="">
-                                        </div>
-                                        <div class="card-body">
-                                            <div class="lc-block mb-3">
-                                                <div editable="rich">
 
-                                                    <h2 class="h5">{{ $actividad->nombre }}</h2>
-
-                                                    <p>{{ $actividad->descripcion }}</p>
-                                                </div>
-                                            </div>
-                                            <div class="lc-block">
-                                                <button class="custom-btn boton">RESERVAR</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        @endforeach
-                    </div>
-
-                    <div class="swiper-pagination position-relative pt-5 bottom-0 boton custom-pagination"></div><br>
-
+             <!-- Sección de Bienvenida -->
+             <section class="bg-light">
+                <div class="container text-center py-5 mb-4">
                     <div class="row">
-                        <div class="col-md-12">
-                            <div class="lc-block text-center">
-                                <a href="#" class="btn btn-primary">MÁS ACTIVIDADES</a>
+                        <div class="col-md-6">
+                            <h3 class="display-4 mb-4">Explora Nuestros Viñedos</h3>
+                            <p class="lead">Descubre la belleza de nuestros viñedos y la serenidad que ofrecen. Nuestra pasión por el cultivo sostenible de la vid nos permite apreciar la naturaleza en su forma más pura.</p>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <img src="{{ asset('/img/img2.jpeg') }}" alt="Viñedos" class="img-fluid rounded">
+                                </div>
+                                <div class="col-md-6">
+                                    <img src="{{ asset('/img/img3.jpeg') }}" alt="Viñedos" class="img-fluid rounded">
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <section class="bg-light valoraciones-section">
-                <div class="container py-5">
+            </section>
+
+
+
+            {{-- SECCIÓN DE ACTIVIDADES --}}
+            <section>
+                <div class="container py-6">
                     <div class="row mb-4">
                         <div class="col-md-12 text-center">
-                            <h1 class="display-5 fw-bold">Lo que Nuestros Visitantes Opinan</h1>
+                            <h1 class="display-5 fw-bold mb-4">Descubre Nuestras Experiencias</h1>
                         </div>
                     </div>
-
-                    <div id="valoracionesCarousel" class="carousel slide" data-bs-ride="carousel">
-                        <div class="carousel-inner">
-                            @foreach ($ultimasValoraciones as $index => $valoracion)
-                                <div class="carousel-item {{ $index == 0 ? 'active' : '' }}">
-                                    <div class="d-flex justify-content-center">
-                                        <div class="card valoracion-card" style="width: 18rem;">
+                    <div class="swiper mySwiper-RANDOMID">
+                        <div class="swiper-wrapper">
+                            @foreach ($actividades as $actividad)
+                                <div class="swiper-slide h-100">
+                                    <div class="card shadow mx-auto" style="border-radius: 20px;">
+                                        <div class="card-body">
+                                            <div class="lc-block">
+                                                <img class="card-img-top img-fluid" src="{{ asset($actividad->imagen) }}"
+                                                    srcset="" sizes="" alt="" loading="lazy"
+                                                    width="" height="">
+                                            </div>
                                             <div class="card-body">
-                                                <h5 class="card-title">{{ $valoracion->actividad->nombre }}</h5>
-                                                <p class="card-text">{{ $valoracion->comentario }}</p>
-                                                <div class="rating">
-                                                    @for ($i = 0; $i < $valoracion->puntuacion; $i++)
-                                                        <i class="bi bi-star-fill"></i>
-                                                    @endfor
-                                                </div>
-                                                <p class="card-text"><small
-                                                        class="text-muted">{{ $valoracion->created_at->format('d M Y') }}</small>
-                                                </p>
+                                                <h2 class="card-title h5">{{ $actividad->nombre }}</h2>
+                                                <p class="card-text">{{ $actividad->descripcion }}</p>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             @endforeach
                         </div>
-                        <a class="carousel-control-prev" href="#valoracionesCarousel" role="button" data-bs-slide="prev">
-                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                            <span class="visually-hidden">Previous</span>
-                        </a>
-                        <a class="carousel-control-next" href="#valoracionesCarousel" role="button"
-                            data-bs-slide="next">
-                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                            <span class="visually-hidden">Next</span>
-                        </a>
+                        <br>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="lc-block text-center">
+                                    <a href="/catalogo" class="custom-btn boton">RESERVAR</a>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </section>
 
-        </div>
-        </section>
-        <div class="newsletter">
-            <h2>Suscríbete a nuestro boletín informativo</h2>
-            @if ($errors->any())
-                <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                    <span class="closebtn" onclick="closeAlert(this)">&times;</span>
-                    <ul style="list-style-type: none; padding: 0; margin: 0;">
-                        @foreach ($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
+            {{-- SECCIÓN VALORACIONES --}}
+            <section class="bg-light valoraciones-section">
+                <div class="container-fluid py-6" style=" max-width: 90vw; margin: 0 auto; ">
+                    <div class="row mb-4">
+                        <div class="col-md-12 text-center">
+                            <h1 class="display-5 fw-bold mb-4">Lo que Nuestros Visitantes Opinan</h1>
+                        </div>
+                    </div>
+                    <div id="valoracionesCarousel" class="carousel slide" data-bs-ride="carousel">
+                        @if ($ultimasValoraciones->count() > 0)
+                            <div class="carousel-inner">
+                                @foreach ($ultimasValoraciones->chunk(3) as $valoracionChunk)
+                                    <div class="carousel-item {{ $loop->first ? 'active' : '' }}">
+                                        <div class="d-flex justify-content-center">
+                                            @foreach ($valoracionChunk as $valoracion)
+                                                <div class="card valoracion-card mx-5" style="max-width: 30rem;">
+                                                    <div class="card-body">
+                                                        <h5 class="card-title">
+                                                            {{ $valoracion->actividad->nombre ?? 'Actividad Desconocida' }}
+                                                        </h5>
+                                                        <p class="card-text">{{ $valoracion->comentario }}</p>
+                                                        <div class="rating">
+                                                            @for ($i = 0; $i < $valoracion->puntuacion; $i++)
+                                                                <i class="bi bi-star-fill"></i>
+                                                            @endfor
+                                                        </div>
+                                                        <p class="card-text"><small
+                                                                class="text-muted">{{ $valoracion->created_at->format('d M Y') }}</small>
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            @endforeach
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
+                            <a class="carousel-control-prev" href="#valoracionesCarousel" role="button"
+                                data-bs-slide="prev">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Previous</span>
+                            </a>
+                            <a class="carousel-control-next" href="#valoracionesCarousel" role="button"
+                                data-bs-slide="next">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Next</span>
+                            </a>
+                        @else
+                            <p class="text-center">Aún no hay valoraciones.</p>
+                        @endif
+                    </div>
                 </div>
-            @endif
-            <div id="error-container" class="alert alert-danger alert-dismissible fade show" style="display: none;"></div>
+            </section>
 
-            @if (session('success'))
-                <div class="alert alert-success alert-dismissible fade show" role="alert">
-                    {{ session('success') }}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            <div class="newsletter">
+                <h2>Suscríbete a nuestro boletín informativo</h2>
+                @if ($errors->any())
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <span class="closebtn" onclick="closeAlert(this)">&times;</span>
+                        <ul style="list-style-type: none; padding: 0; margin: 0;">
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
+                <div id="error-container" class="alert alert-danger alert-dismissible fade show" style="display: none;">
                 </div>
-            @endif
-            <p>Recibe las últimas noticias y ofertas especiales en tu bandeja de entrada.</p>
-            <form id="subscription-form" action="{{ route('suscribirse') }}" method="post">
-                @csrf
-               <input type="email" id="email" name="email" placeholder="Ingresa tu correo electrónico" required class="text-center">
 
-                <button class="custom-btn boton" type="submit">Suscribirse</button>
-            </form>
+                @if (session('success'))
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        {{ session('success') }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                @endif
+                <p>Recibe las últimas noticias y ofertas especiales en tu bandeja de entrada.</p>
+                <form id="subscription-form" action="{{ route('suscribirse') }}" method="post">
+                    @csrf
+                    <input type="email" id="email" name="email" placeholder="Ingresa tu correo electrónico"
+                        required class="text-center">
+
+                    <button class="custom-btn boton" type="submit">Suscribirse</button>
+                </form>
+            </div>
         </div>
     </main>
 

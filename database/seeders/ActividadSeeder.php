@@ -46,7 +46,6 @@ class ActividadSeeder extends Seeder
                 'imagen' => 'storage/img/img8.jpg',
                 'activa' => true,
             ]
-            // Puedes agregar más actividades aquí
         ];
 
         // Insertar datos en la tabla de actividades
