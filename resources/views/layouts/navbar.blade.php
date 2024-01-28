@@ -1,7 +1,7 @@
 <nav class="navbar navbar-expand-lg navbar-dark header">
     <div class="container-fluid">
         <a class="navbar-brand d-flex align-items-center" href="#">
-            <picture><img src="storage/img/logo.png" alt="Logo" class="logo" /></picture>
+            <picture><img src="/img/logo.png" alt="Logo" class="logo" /></picture>
             <h1 class="nombre-empresa m-0 pl-3">Finca Monterruiz</h1>
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"

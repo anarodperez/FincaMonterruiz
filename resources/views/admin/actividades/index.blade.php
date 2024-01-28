@@ -49,7 +49,7 @@
                     <tbody>
                         @foreach ($actividades as $actividad)
                             <tr>
-                                <td><img src="{{ asset($actividad->imagen) }}" alt="{{ $actividad->nombre }}"></td>
+                                <td><img src="{{ asset($actividad->imagen) }}" alt="{{ $actividad->nombre }}" ></td>
                                 <td>{{ $actividad->nombre }}</td>
                                 <td>{{ $actividad->descripcion }}</td>
                                 <td>{{ $actividad->duracion }}</td>

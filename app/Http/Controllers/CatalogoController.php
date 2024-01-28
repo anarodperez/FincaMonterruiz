@@ -16,8 +16,11 @@ class CatalogoController extends Controller
 
     public function __construct()
     {
+
+
+        $HASHID_SALT="Albariza_9698_fincaM";
         // Inicializa Hashids con una sal secreta y una longitud mínima
-        $this->hashids = new Hashids(env('HASHID_SALT'), 10);
+        $this->hashids = new Hashids(($HASHID_SALT), 10);
     }
 
     public function index()
