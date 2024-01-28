@@ -94,10 +94,10 @@
                         <div class="col-md-6">
                             <div class="row">
                                 <div class="col-md-6">
-                                    <img src="{{ asset('/img/img2.jpeg') }}" alt="Viñedos" class="img-fluid rounded">
+                                    <img src="{{ asset('storage/img/img2.jpeg') }}" alt="Viñedos" class="img-fluid rounded">
                                 </div>
                                 <div class="col-md-6">
-                                    <img src="{{ asset('/img/img3.jpeg') }}" alt="Viñedos" class="img-fluid rounded">
+                                    <img src="{{ asset('storage/img/img3.jpeg') }}" alt="Viñedos" class="img-fluid rounded">
                                 </div>
                             </div>
                         </div>
@@ -108,7 +108,7 @@
 
 
             {{-- SECCIÓN DE ACTIVIDADES --}}
-            <section>
+            <section class="bg-light animate__animated animate__backInLeft ">
                 <div class="container py-6">
                     <div class="row mb-4">
                         <div class="col-md-12 text-center">
@@ -148,7 +148,7 @@
             </section>
 
             {{-- SECCIÓN VALORACIONES --}}
-            <section class="bg-light valoraciones-section">
+            <section class="bg-light valoraciones-section  animate__animated animate__backInRight">
                 <div class="container-fluid py-6" style=" max-width: 90vw; margin: 0 auto; ">
                     <div class="row mb-4">
                         <div class="col-md-12 text-center">
