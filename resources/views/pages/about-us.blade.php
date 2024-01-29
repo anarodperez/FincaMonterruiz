@@ -27,7 +27,7 @@
                 <div class="col-xs-12 col-sm-4 col-md-6">
                     <div class="col-xs-12">
                         <figure class="contenido">
-                            <a href="#"><img src="storage/img/img5.jpg" alt="Niña vendimiando" /></a>
+                            <a href="#"><img src="/img/img5.jpg" alt="Niña vendimiando" /></a>
                         </figure>
                     </div>
                 </div>
@@ -54,7 +54,7 @@
                     <div class="col-xs-12 col-sm-4 col-sm-pull-8 col-md-6 col-md-pull-6">
                         <div class="col-xs-12 col-sm-12">
                             <figure class="contenido">
-                                <a href="#"><img src="storage/img/img4.jpg" alt="Perro en la viña" /></a>
+                                <a href="#"><img src="/img/img4.jpg" alt="Perro en la viña" /></a>
                             </figure>
                         </div>
                     </div>
