@@ -49,7 +49,7 @@
                     <tbody>
                         @foreach ($actividades as $actividad)
                             <tr>
-                                <td><img src="{{ asset($actividad->imagen) }}" alt="{{ $actividad->nombre }}" ></td>
+                                <td><img src="{{ asset($actividad->imagen) }}" alt="{{ $actividad->nombre }}"></td>
                                 <td>{{ $actividad->nombre }}</td>
                                 <td>{{ $actividad->descripcion }}</td>
                                 <td>{{ $actividad->duracion }}</td>
@@ -57,13 +57,6 @@
                                 <td>{{ $actividad->precio_nino }}</td>
                                 <td>{{ $actividad->aforo }}</td>
                                 <td>{{ $actividad->activa == 1 ? 'Activa' : 'Inactiva' }}</td>
-                                {{-- <td>
-                                @if ($actividad->categoria)
-                                    {{ $actividad->categoria->nombre }}
-                                @else
-                                    Sin categoría
-                                @endif
-                            </td> --}}
                                 <td>
                                     <form action="{{ route('admin.actividades.edit', encrypt($actividad->id)) }}"
                                         method="GET">
