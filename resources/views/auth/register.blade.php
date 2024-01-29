@@ -7,37 +7,11 @@
     <link rel="stylesheet" href="{{ asset('css/navbar.css') }}">
     <link rel="stylesheet" href="{{ asset('css/footer.css') }}">
     <script src="{{ asset('js/validaciones.js') }}" defer></script>
-    <style>
-        .container-formulario {
-            width: 50%;
-            text-align: center;
-        }
-
-        label[for="nombre"]:after,
-        label[for="apellido1"]:after,
-        label[for="email"]:after,
-        label[for="password"]:after,
-        label[for="password_confirmation"]:after {
-            content: "*";
-            color: red;
-        }
-
-        .col-md-3 {
-            padding-bottom: 3vh;
-        }
-
-        .error-list {
-            list-style-type: none;
-            /* Esto quita los puntos de la lista */
-            padding-left: 0;
-            /* Opcional: quita el relleno izquierdo si es necesario */
-        }
-    </style>
 @endsection
 
 @section('content')
     <x-auth-session-status class="mb-4" :status="session('status')" />
-    <div class="wrapper">
+    <div class="wrapper registro">
         <div class="container-formulario">
             <div class="signup"><strong>Registrarse</strong></div>
             <div class="login"><strong><a class="enlace" href="{{ route('login') }}">Iniciar sesión</a></strong></div>

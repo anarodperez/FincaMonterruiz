@@ -16,6 +16,8 @@ use App\Http\Controllers\ReservaController;
 use App\Http\Controllers\FormContactController;
 use App\Http\Controllers\PaypalController;
 use App\Http\Controllers\ValoracionController;
+use App\Http\Controllers\SuscriptorController;
+use App\Http\Controllers\NewsletterController;
 
 /*
 |--------------------------------------------------------------------------
@@ -39,7 +41,8 @@ Route::get('/dashboard', function () {
         return app(UsuarioController::class)->showDashboard();
     }
 })
-    ->middleware(['auth', 'verified', 'validarUsuario'])->name('dashboard');
+    ->middleware(['auth', 'verified', 'validarUsuario'])
+    ->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -78,35 +81,23 @@ Route::middleware(['admin'])->group(function () {
 
     //Valoraciones
     Route::get('/valoraciones/index', [ValoracionController::class, 'index'])->name('admin.valoraciones.index');
+
+    //Newsletter
+    Route::get('/admin/newsletters', [NewsletterController::class, 'index'])->name('admin.newsletters.index');
+    Route::get('/admin/newsletters/create', [NewsletterController::class, 'create'])->name('admin.newsletters.create');
+    Route::post('/admin/newsletters', [NewsletterController::class, 'store'])->name('admin.newsletters.store');
+    Route::get('/admin/newsletters/{id}/edit', [NewsletterController::class, 'edit'])->name('admin.newsletters.edit');
+    Route::put('/admin/newsletters/{id}', [NewsletterController::class, 'update'])->name('admin.newsletters.update');
+    Route::delete('/admin/newsletters/{id}', [NewsletterController::class, 'destroy'])->name('admin.newsletters.destroy');
+    Route::post('/admin/newsletters/{id}/select', [NewsletterController::class, 'selectForSending'])->name('admin.newsletters.selectForSending');
+    Route::get('/admin/newsletters/deselect/{id}', [NewsletterController::class, 'deselect'])->name('admin.newsletters.deselect');
+
+
+
+    Route::get('/admin/newsletters/preview/{id}', [NewsletterController::class, 'preview'])->name('admin.newsletters.preview');
+    Route::post('/admin/newsletters/updateConfig', [NewsletterController::class, 'updateConfig'])->name('admin.newsletters.updateConfig');
+
 });
-
-Route::get('/login/google', function () {
-    return Socialite::driver('google')->redirect();
-});
-
-Route::get('/login/google/callback', function () {
-    $user = Socialite::driver('google')->user();
-
-    // Verifica si el usuario existe en la base de datos
-    $existingUser = User::where('email', $user->getEmail())->first();
-
-    if ($existingUser) {
-        // Si el usuario existe, inicia sesión
-        Auth::login($existingUser);
-    } else {
-        // Si el usuario no existe, crea un nuevo usuario y luego inicia sesión
-        $newUser = new User();
-        $newUser->name = $user->getName();
-        $newUser->email = $user->getEmail();
-        $newUser->save();
-
-        Auth::login($newUser);
-    }
-
-    return redirect()->route('index'); // Redirige al usuario a la vista de bienvenida
-});
-
-Route::get('admin/usuarios/autocomplete', [UsuarioController::class, 'autocomplete'])->name('admin.usuarios.autocomplete');
 
 Route::get('/gallery', [GalleryController::class, 'index'])->name('pages.gallery');
 Route::get('/about-us', [AboutUsController::class, 'index'])->name('pages.about-us');
@@ -171,5 +162,10 @@ Route::delete('/valoraciones/{id}', [ValoracionController::class, 'destroy'])->n
 
 //Descarga pdf reserva
 Route::get('/descargar-entrada/{reserva_id}', [ReservaController::class, 'descargarEntrada']);
+
+//Newsletter
+Route::post('/suscribirse', [SuscriptorController::class, 'store'])->name('suscribirse');
+Route::post('/enviar-newsletter', [NewsletterController::class, 'enviarNewsletter'])->name('enviar.newsletter');
+Route::get('/cancelar-suscripcion', [SuscriptorController::class, 'cancelarSuscripcion'])->name('cancelar.suscripcion');
 
 require __DIR__ . '/auth.php';

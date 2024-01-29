@@ -363,9 +363,24 @@
                             <div class="card">
                                 <img src="${actividad.imagen}" class="card-img-top" alt="${actividad.nombre}">
                                 <div class="card-body">
-                                    <h5 class="card-title">${actividad.nombre}</h5>
+                                    <h2 class="card-title">${actividad.nombre}</h2>
                                     <p class="card-text">${actividad.descripcion}</p>
-                                    <!-- Otros detalles de la actividad -->
+                                    <ul class="list-group">
+                                        <li class="list-group-item"><strong>Duración:</strong>
+                                                    {{ $actividad->duracion }} min
+                                        </li>
+                                        <li class="list-group-item"><strong>Precio adulto:</strong>
+                                                    {{ $actividad->precio_adulto }} €
+                                        </li>
+                                            @if (!is_null($actividad->precio_nino) && $actividad->precio_nino != '')
+                                                <li class="list-group-item"><strong>Precio niño:</strong>
+                                                    {{ $actividad->precio_nino }} €
+                                                </li>
+                                            @endif
+                                        <li class="list-group-item"><strong>Aforo:</strong>
+                                                    {{ $actividad->aforo }}
+                                        </li>
+                                    </ul>
                                 </div>
                             </div>
                         </div>

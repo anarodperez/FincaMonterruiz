@@ -13,10 +13,10 @@ class HorarioSeeder extends Seeder
 {
     // Crear un horario inicial
     $horario = new Horario([
-        'fecha' => Carbon::now()->format('Y-m-d'), // Fecha actual
+        'fecha' => Carbon::now()->format('Y-m-d'),
         'hora' => '10:00:00',
         'idioma' => 'Español',
-        'actividad_id' => 1, // Asegúrate de que este ID exista
+        'actividad_id' => 1,
     ]);
     $horario->save();
 }

@@ -1,0 +1,64 @@
+.card-title{
+    color: #fff;
+background-color: #536b59;
+padding: 10px;
+border-radius: 5px;
+}
+
+
+/* Botones y acciones */
+.btn-group .btn {
+    margin-right: 5px;
+}
+
+.btn-info, .btn-warning, .btn-secondary, .btn-danger {
+    transition: all 0.3s ease;
+}
+
+.btn-info:hover, .btn-warning:hover, .btn-secondary:hover, .btn-danger:hover {
+    transform: scale(1.05);
+}
+
+
+/* Mejoras en los inputs y select */
+.form-control, .form-select {
+    border-radius: 20px;
+}
+
+/* Estilos para el modal */
+.modal-content {
+    border-radius: 20px;
+}
+
+.modal-header {
+    border-bottom: none;
+}
+
+.modal-footer {
+    border-top: none;
+}
+
+.modal-title {
+    font-weight: bold;
+}
+
+.modal-dialog {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: calc(100% - 60px);
+}
+
+.modal-content {
+    margin: auto;
+}
+
+
+
+
+    .columna-estrecha {
+        width: 30%; /* Ajusta este valor según tus necesidades */
+    }
+    .columna-acciones {
+        width: auto; /* Esto hará que la columna del título ocupe el espacio restante */
+    }

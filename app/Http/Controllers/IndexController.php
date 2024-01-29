@@ -7,13 +7,14 @@ use Illuminate\Http\Request;
 
 class IndexController extends Controller
 {
-    public function home()
+    public function home(Request $request)
     {
-        $actividades = Actividad::all();
+        // Filtra las actividades para obtener solo aquellas que están activas
+        $actividades = Actividad::where('activa', true)->get();
         $ultimasValoraciones = Valoracion::with('user')
-        ->latest()
-        ->take(3)
-        ->get();
+            ->latest()
+            ->take(6)
+            ->get();
 
         return view('welcome', ['actividades' => $actividades, 'ultimasValoraciones' => $ultimasValoraciones]);
     }

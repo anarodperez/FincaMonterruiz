@@ -33,7 +33,7 @@
                         <!-- Campo Nombre -->
                         <div class="form-item">
                             <input type="text" name="nombre" id="nombre" required />
-                            <label for="nombre">Nombre:</label>
+                            <label for="nombre">Nombre y apellidos:</label>
                             <span class="error-message" id="errorNombre"></span>
                         </div>
 

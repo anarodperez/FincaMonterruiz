@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Actividad; // Importa el modelo Actividad
+use App\Models\Actividad;
 use Validator;
-// use App\Models\Categoria;
 use App\Models\Reserva;
 
 use Illuminate\Http\Request;
 
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class ActividadController extends Controller
 {
@@ -57,18 +57,31 @@ class ActividadController extends Controller
             'duracion' => 'required|integer',
             'aforo' => 'required|integer',
             'activa' => 'required|in:0,1',
-            'imagen' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
+            'imagen' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
             'precio_adulto' => 'required|numeric',
             'precio_nino' => 'nullable|numeric',
         ]);
-
-        // Procesar la carga de la imagen, si se ha proporcionado
         if ($request->hasFile('imagen')) {
             $imagen = $request->file('imagen');
-            $nombreImagen = time() . '_' . $imagen->getClientOriginalName();
-            $rutaImagen = $imagen->storeAs('public/img', $nombreImagen); // Almacenar en el disco
-            $rutaRelativa = 'storage/img/' . $nombreImagen; // Ruta relativa para guardar en la BD
-            $validatedData['imagen'] = $rutaRelativa;
+            // Preparar el nombre del archivo, reemplazando espacios con guiones bajos para evitar problemas en S3
+            $nombreImagen = time() . '_' . str_replace(' ', '_', $imagen->getClientOriginalName());
+
+            // Especificar la ruta completa incluyendo la carpeta /public/images dentro de tu bucket de S3
+            $rutaCompleta = 'public/images/' . $nombreImagen;
+
+            try {
+                // Usar Storage::disk('s3') para subir el archivo, incluyendo el ACL public-read.
+                Storage::disk('s3')->put($rutaCompleta, file_get_contents($imagen), ['visibility' => 'public']);
+
+                // Obtener la URL pública del archivo almacenado en S3
+                $urlImagen = Storage::disk('s3')->url($rutaCompleta);
+
+                // Guardar la URL de la imagen en la base de datos
+                $validatedData['imagen'] = $urlImagen;
+            } catch (\Exception $e) {
+                \Log::error('Error al subir el archivo a S3: ' . $e->getMessage());
+                // Manejar el error según sea necesario, como enviar un mensaje de error al usuario
+            }
         }
 
         // Asignar valores nulos para precios si los campos están vacíos
@@ -139,18 +152,16 @@ class ActividadController extends Controller
     {
         $actividad = Actividad::find($id);
         if (!$actividad) {
-            return redirect()
-                ->route('admin.actividades.index')
-                ->with('error', '¡Actividad no encontrada!');
+            return redirect()->route('admin.actividades.index')->with('error', '¡Actividad no encontrada!');
         }
 
-        // Validar solo los campos que se han proporcionado
+        // Validar los campos proporcionados en la solicitud
         $data = $request->validate([
             'nombre' => 'sometimes|required',
             'descripcion' => 'sometimes|required',
             'duracion' => 'sometimes|required|integer',
-            'precio_adulto' => 'sometimes|required',
-            'precio_nino' => 'nullable',
+            'precio_adulto' => 'sometimes|required|numeric',
+            'precio_nino' => 'nullable|numeric',
             'aforo' => 'sometimes|required|integer',
             'activa' => 'sometimes|required|in:0,1',
             'imagen' => 'sometimes|image|mimes:jpeg,png,jpg,gif|max:2048',
@@ -159,20 +170,36 @@ class ActividadController extends Controller
         // Actualizar la imagen si se ha proporcionado una nueva
         if ($request->hasFile('imagen')) {
             $imagen = $request->file('imagen');
-            $nombreImagen = time() . '_' . $imagen->getClientOriginalName();
-            $rutaImagen = $imagen->storeAs('public/img', $nombreImagen);
-            $rutaRelativa = 'storage/img/' . $nombreImagen;
-            $actividad->imagen = $rutaRelativa;
+            $nombreImagen = time() . '_' . str_replace(' ', '_', $imagen->getClientOriginalName());
+            $rutaCompleta = 'public/images/' . $nombreImagen;
+
+            // Eliminar la imagen antigua de S3 si existe
+            if ($actividad->imagen) {
+                $rutaImagenAntigua = parse_url($actividad->imagen, PHP_URL_PATH);
+                $rutaImagenAntigua = ltrim($rutaImagenAntigua, '/');
+                Storage::disk('s3')->delete($rutaImagenAntigua);
+            }
+
+            try {
+                // Subir la nueva imagen a S3 y establecerla como pública
+                Storage::disk('s3')->put($rutaCompleta, file_get_contents($imagen), 'public');
+                $urlImagen = Storage::disk('s3')->url($rutaCompleta);
+
+                // Actualizar la URL de la imagen en el array de datos
+                $data['imagen'] = $urlImagen;
+            } catch (\Exception $e) {
+                \Log::error('Error al subir el archivo a S3: ' . $e->getMessage());
+                // Considera manejar el error de manera que informes al usuario
+            }
         }
 
-        // Actualizar solo los campos proporcionados
+        // Actualizar la actividad con los datos proporcionados (incluyendo la nueva imagen si se subió)
         $actividad->fill($data);
         $actividad->save();
 
-        return redirect()
-            ->route('admin.actividades.index')
-            ->with('success', 'Actividad modificada con éxito.');
+        return redirect()->route('admin.actividades.index')->with('success', 'Actividad modificada con éxito.');
     }
+
 
     /**
      * Remove the specified resource from storage.
@@ -196,6 +223,12 @@ class ActividadController extends Controller
                     ->route('admin.actividades.index')
                     ->with('error', 'No se puede eliminar la actividad porque ya tiene reservas.');
             }
+
+            $rutaImagen = parse_url($actividad->imagen, PHP_URL_PATH);
+            $rutaImagen = ltrim($rutaImagen, '/');
+
+            // Elimina el archivo de imagen de S3
+            Storage::disk('s3')->delete($rutaImagen);
 
             // Si no hay reservas, eliminar la actividad
             $actividad->delete();

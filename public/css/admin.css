@@ -103,6 +103,23 @@ min-height: 600px;
 }
 
 
+.orden-link {
+    margin-left: 5px;
+    color: #007bff;
+    text-decoration: none;
+}
+
+.orden-link:hover {
+    color: #0056b3; /* Un azul más oscuro para el hover */
+    text-decoration: underline;
+}
+
+.orden-link.active {
+    font-weight: bold;
+    color: #d63384; /* Por ejemplo, un color diferente para resaltar */
+}
+
+
 
 @media (max-width:900px){
 
@@ -163,7 +180,7 @@ margin-left: 4vw;
 /* Paginación */
 
 
-.contenedor-tabla nav, .table-responsive nav {
+.contenedor-tabla nav, .table-responsive nav,  .valoraciones nav {
 background: transparent;
 }
 .pagination {
@@ -215,3 +232,4 @@ min-height: 80vh;
  .card-grafico {
         margin-bottom: 8vh;
     }
+

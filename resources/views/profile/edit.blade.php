@@ -10,6 +10,7 @@
 
 @section('content')
 
+
     <div class="container my-5">
         <div class="form-section">
             @include('profile.partials.update-profile-information-form')

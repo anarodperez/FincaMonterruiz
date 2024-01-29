@@ -10,6 +10,12 @@
 
 @section('content')
     <main>
+         <div class="container py-5">
+
+            <div id="welcomeMessage" class="alert alert-info"></div>
+
+        </div>
+
         <div class="container py-5">
 
             @if (session('success'))
@@ -134,7 +140,7 @@
                     aria-labelledby="valoraciones-tab">
                     <h2 class="tab-section-header">Tus Valoraciones</h2>
                     @if ($valoracionesUsuario->count() > 0)
-                        <div class="row">
+                        <div class="row valoraciones">
                             @foreach ($valoracionesUsuario as $valoracion)
                                 <div class="col-md-4 mb-4">
                                     <div class="card card-detail">
@@ -299,3 +305,6 @@
         });
     </script>
 @endsection
+@push('scripts')
+<script src="{{ asset('js/ultima_visita-cookie.js') }}"></script>
+@endpush

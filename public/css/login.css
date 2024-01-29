@@ -1,3 +1,30 @@
+/* REGISTRO */
+
+.registro .container-formulario {
+    width: 50%;
+    text-align: center;
+}
+
+.registro label[for="nombre"]:after,
+.registro label[for="apellido1"]:after,
+.registro label[for="email"]:after,
+.registro label[for="password"]:after,
+.registro label[for="password_confirmation"]:after,
+.registro label[for="fecha_nacimiento"]:after {
+    content: "*";
+    color: red;
+}
+
+.registro .col-md-3 {
+    padding-bottom: 3vh;
+}
+
+.registro .error-list {
+    list-style-type: none;
+    padding-left: 0;
+}
+
+
 body {
 background-color: #b4c8b1;
 font-family: 'Kurale', serif;
@@ -175,7 +202,6 @@ width: 100%; /* Ajustar al ancho del padre */
 margin: 0;
 padding: 0;
 }
-
 
 
 /* Estilo para aumentar el tamaño del checkbox */
