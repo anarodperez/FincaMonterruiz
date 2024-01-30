@@ -22,7 +22,7 @@
             <div class="card-body">
                 <p class="card-text">
 
-                <form action="{{ route('admin.newsletters.store') }}" method="POST">
+                <form action="{{ route('admin.newsletters.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
 
                     <!-- Título de la Newsletter -->
@@ -39,26 +39,16 @@
                     </div>
 
                     <div class="mb-3">
-                        <label for="imagen_url">URL de la Imagen</label>
-                        <input type="text" class="form-control" id="imagen_url" name="imagen_url">
+                        <label for="imagen" class="form-label">Imagen</label>
+                        <input type="file" class="form-control" id="imagen" name="imagen">
                     </div>
-
-                    <div class="mb-3">
-                        <label for="estado_envio">Estado de Envío</label>
-                        <select class="form-control" id="estado_envio" name="estado_envio">
-                            <option value="pendiente">Pendiente</option>
-                            <option value="enviado">Enviado</option>
-                            <option value="programado">Programado</option>
-                        </select>
-                    </div>
-
 
                     <a href="{{ route('admin.newsletters.index') }}" class="btn btn-info">
                         <i class="fas fa-arrow-left"></i> Regresar
                     </a>
 
                     <!-- Botón para guardar la Newsletter -->
-                    <button type="submit" class="btn btn-primary">   <i class="bi bi-save"> </i> Guardar</button>
+                    <button type="submit" class="btn btn-primary"> <i class="bi bi-save"> </i> Guardar</button>
                 </form>
             </div>
             </p>
@@ -66,7 +56,7 @@
     </div>
 
     <script>
-         window.onload = function() {
+        window.onload = function() {
             // Cierra la alerta después de 5 segundos (5000 milisegundos)
             $(".alert").delay(5000).slideUp(200, function() {
                 $(this).alert('close');

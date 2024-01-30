@@ -66,7 +66,7 @@
             Nota: Solo se puede seleccionar y enviar una newsletter a la vez.
         </div>
 
-        @if ($selectedNewsletter)
+        @if ($selectedNewsletter && $selectedNewsletter->id != 1)
             <div class="card shadow-sm">
                 <div class="card-body">
                     <h3 class="card-title">Newsletter Seleccionada para Envío</h3>
@@ -128,31 +128,27 @@
                                         <i class="bi bi-pencil-fill"></i>
                                     </a>
                                     <!-- Botón para Programar Envío -->
+                                    <!-- Botón para Programar Envío -->
                                     @if ($newsletter->id != 1)
-                                        @if (!$selectedNewsletter || $selectedNewsletter->id == $newsletter->id)
-                                            <button type="button" class="btn btn-warning rounded me-2 scheduleButton"
-                                                data-bs-toggle="modal" data-bs-target="#scheduleModal"
-                                                data-newsletter-id="{{ $newsletter->id }}">
-                                                <i class="bi bi-clock-fill"></i> Programar Envío
-                                            </button>
-                                        @else
-                                            <button type="button" class="btn btn-warning rounded me-2" disabled>
-                                                <i class="bi bi-clock-fill"></i> Programar Envío
-                                            </button>
-                                        @endif
+                                        <!-- Excluye la newsletter de bienvenida por su ID -->
+                                        <!-- Muestra el botón de programar para las demás newsletters sin restricciones -->
+                                        <button type="button" class="btn btn-warning rounded me-2 scheduleButton"
+                                            data-bs-toggle="modal" data-bs-target="#scheduleModal"
+                                            data-newsletter-id="{{ $newsletter->id }}">
+                                            <i class="bi bi-clock-fill"></i> Programar Envío
+                                        </button>
                                     @endif
+
                                     <!-- Botón para Borrar -->
                                     @if ($newsletter->id != 1)
                                         @if (!$selectedNewsletter || $selectedNewsletter->id != $newsletter->id)
                                             <button type="button" class="btn btn-danger rounded" data-bs-toggle="modal"
-                                                data-bs-target="#deleteModal" data-id="{{ $newsletter->id }}"
-                                                title="Borrar esta newsletter">
+                                                data-bs-target="#deleteModal" data-id="{{ $newsletter->id }}">
                                                 <i class="bi bi-trash-fill"></i>
                                             </button>
                                         @else
                                             <button type="button" class="btn btn-danger rounded" data-bs-toggle="modal"
-                                                data-bs-target="#deleteModal" data-id="{{ $newsletter->id }}"
-                                                title="Borrar esta newsletter" disabled>
+                                                data-bs-target="#deleteModal" data-id="{{ $newsletter->id }}" disabled>
                                                 <i class="bi bi-trash-fill"></i>
                                             </button>
                                         @endif
@@ -162,7 +158,6 @@
                                             @method('DELETE')
                                         </form>
                                     @endif
-
                             </td>
                         </tr>
                     @endforeach

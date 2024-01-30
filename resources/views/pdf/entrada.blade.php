@@ -9,7 +9,7 @@
 <body>
     <div class="header">
         <div class="d-flex align-items-center">
-            <img src="data:image/png;base64,{{ base64_encode(file_get_contents(public_path('/storage/img/logo.png'))) }}" alt="Logo Empresa" style="height: 70px; width: auto; margin-bottom: 1vh">
+            <img src="data:image/png;base64,{{ base64_encode(file_get_contents(public_path('/img/logo.png'))) }}" alt="Logo Empresa" style="height: 70px; width: auto; margin-bottom: 1vh">
         </div><br>
         <h1>Entrada para {{ $reserva->actividad->nombre }}</h1>
     </div>

@@ -12,5 +12,11 @@
         <div class="newsletter-content">
             {!! $newsletter->contenido !!}
         </div>
+
+                <!-- Contenido del Newsletter -->
+                <div >
+                    <img src="{{ asset($newsletter->imagen_url ) }}">
+
+                </div>
     </div>
 @endsection

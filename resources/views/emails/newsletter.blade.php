@@ -83,7 +83,8 @@
         <div class="content">
             <div class="card">
                 <h2>Saludos amantes del vino,</h2>
-                <p style="font-size: 16px; color: #666; line-height: 1.5;">Descubre lo último en experiencias de enoturismo con nuestra selección mensual de aventuras en
+                <p style="font-size: 16px; color: #666; line-height: 1.5;">Descubre lo último en experiencias de
+                    enoturismo con nuestra selección mensual de aventuras en
                     viñedos.</p>
             </div>
 
@@ -93,13 +94,21 @@
                 <div style="font-size: 16px; color: #666; line-height: 1.5;">
                     {!! html_entity_decode($newsletter->contenido) !!}
                 </div>
+                <!-- Imagen de la Newsletter -->
+                @if ($newsletter->imagen_url)
+                    <div>
+                        <img src="{{ $newsletter->imagen_url }}" alt="Imagen de la Newsletter" style="max-width: 100%;">
+                    </div>
+                @endif
+
 
             </div>
         </div>
 
         <div class="footer">
             <p>Gracias por leernos. Para cancelar la suscripción, haz clic <a
-                    href="{{ url('http://127.0.0.1:8000/cancelar-suscripcion?email=' . urlencode($email)) }}">aquí</a>.</p>
+                    href="{{ url('http://127.0.0.1:8000/cancelar-suscripcion?email=' . urlencode($email)) }}">aquí</a>.
+            </p>
         </div>
     </div>
 </body>

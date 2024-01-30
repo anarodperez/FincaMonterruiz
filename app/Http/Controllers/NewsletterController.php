@@ -7,9 +7,11 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use App\Models\Newsletter;
 use App\Models\NewsletterSchedule;
+use Illuminate\Support\Facades\Storage;
 
 class NewsletterController extends Controller
-{public function index(Request $request)
+{
+    public function index(Request $request)
     {
         $orden = $request->input('orden', 'asc');
         $columna = $request->input('columna', 'created_at');
@@ -52,8 +54,6 @@ class NewsletterController extends Controller
         return view('admin.newsletters.index', compact('newsletters', 'claseOrdenActual', 'selectedNewsletter', 'schedule', 'translatedDay', 'executionTime'));
     }
 
-
-
     public function create()
     {
         return view('admin.newsletters.create');
@@ -61,13 +61,31 @@ class NewsletterController extends Controller
 
     public function store(Request $request)
     {
+        // Validar los datos del formulario, excepto el archivo de imagen
         $data = $request->validate([
             'titulo' => 'required',
             'contenido' => 'required',
-            'imagen_url' => 'nullable|url',
-            'estado_envio' => 'required|in:pendiente,enviado,programado',
+
+            // No incluyas 'imagen_url' aquí ya que es para la URL, no para el archivo
         ]);
 
+        // Procesar el archivo de imagen si se proporciona
+        if ($request->hasFile('imagen')) { // Asumiendo que el campo del archivo en tu formulario se llama 'imagen'
+            $imagen = $request->file('imagen');
+            $nombreImagen = time() . '_' . str_replace(' ', '_', $imagen->getClientOriginalName());
+            $rutaCompleta = 'public/images/' . $nombreImagen;
+
+            // Subir el archivo a S3 y obtener la URL pública
+            Storage::disk('s3')->put($rutaCompleta, file_get_contents($imagen), 'public');
+            $urlImagen = Storage::disk('s3')->url($rutaCompleta);
+
+            // Asignar la URL de la imagen al campo correcto para la base de datos
+            $data['imagen_url'] = $urlImagen; // Asegúrate de que esta clave coincida con el nombre del campo en la base de datos
+        } else {
+            $data['imagen_url'] = null; // Manejar el caso sin imagen
+        }
+
+        // Crear el registro en la base de datos con la URL de la imagen
         Newsletter::create($data);
 
         return redirect()

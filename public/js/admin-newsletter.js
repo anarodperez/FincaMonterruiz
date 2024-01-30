@@ -9,17 +9,14 @@ function previewNewsletter(id) {
 document.addEventListener('DOMContentLoaded', function() {
     var deleteModal = document.getElementById('deleteModal');
     var deleteForm = document.getElementById('deleteForm');
-    var confirmDeleteBtn = document.getElementById('confirmDelete');
 
     deleteModal.addEventListener('show.bs.modal', function(event) {
-        var button = event.relatedTarget;
-        var newsletterId = button.getAttribute('data-id');
-        deleteForm.action = '/admin/newsletters/' + newsletterId;
+        var button = event.relatedTarget; // Botón que activó el modal
+        var newsletterId = button.getAttribute('data-id'); // ID de la newsletter
+        deleteForm.action = '/admin/newsletters/' + newsletterId; // Actualiza la acción del formulario
     });
 
-    confirmDeleteBtn.addEventListener('click', function() {
-        deleteForm.submit();
-    });
+
 
     // Script para Búsqueda en Tiempo Real
     document.getElementById('searchBox').addEventListener('keyup', function(event) {
