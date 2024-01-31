@@ -16,11 +16,9 @@ class CatalogoController extends Controller
 
     public function __construct()
     {
-
-
-        $HASHID_SALT="Albariza_9698_fincaM";
+        $HASHID_SALT = 'Albariza_9698_fincaM';
         // Inicializa Hashids con una sal secreta y una longitud mínima
-        $this->hashids = new Hashids(($HASHID_SALT), 10);
+        $this->hashids = new Hashids($HASHID_SALT, 10);
     }
 
     public function index()
@@ -58,8 +56,8 @@ class CatalogoController extends Controller
                 ];
             });
 
-            // En el index, no se han aplicado filtros todavía
-    $filtrosAplicados = false;
+        // En el index, no se han aplicado filtros todavía
+        $filtrosAplicados = false;
         return view('pages.catalogo', compact('events', 'actividades', 'filtrosAplicados'));
     }
 
@@ -106,7 +104,8 @@ class CatalogoController extends Controller
         // Validaciones
         $validatedData = $request->validate([
             'precio_min' => 'nullable|numeric|min:0',
-            'precio_max' => 'nullable|numeric|min:0|gte:precio_min',
+            'precio_max' => 'nullable|numeric|min:0',
+            'precio_min' => 'nullable|numeric|min:0',
             'publico' => 'nullable|in:todos,adultos,ninos',
             'duracion' => 'nullable|in:corta,media,larga',
         ]);
@@ -114,19 +113,15 @@ class CatalogoController extends Controller
         // Iniciar la consulta con la condición base
         $query = Actividad::where('activa', true);
 
-        // Filtrar por precio mínimo
-        if ($request->filled('precio_min')) {
-            $query->where(function ($q) use ($request) {
-                $q->where('precio_adulto', '>=', $request->precio_min)->orWhere('precio_nino', '>=', $request->precio_min);
-            });
-        }
+       // Filtrar por precio mínimo solo para adultos
+    if ($request->filled('precio_min')) {
+        $query->where('precio_adulto', '>=', $request->precio_min);
+    }
 
-        // Filtrar por precio máximo
-        if ($request->filled('precio_max')) {
-            $query->where(function ($q) use ($request) {
-                $q->where('precio_adulto', '<=', $request->precio_max)->orWhere('precio_nino', '<=', $request->precio_max);
-            });
-        }
+    // Filtrar por precio máximo solo para adultos
+    if ($request->filled('precio_max')) {
+        $query->where('precio_adulto', '<=', $request->precio_max);
+    }
 
         // Filtro por público objetivo
         if ($request->filled('publico')) {
@@ -185,7 +180,7 @@ class CatalogoController extends Controller
             'events' => $events,
             'filtros' => $request->all(),
             'hayResultados' => $hayResultados,
-            'filtrosAplicados' => $filtrosAplicados
+            'filtrosAplicados' => $filtrosAplicados,
         ]);
     }
 }

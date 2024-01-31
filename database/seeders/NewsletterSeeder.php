@@ -18,7 +18,6 @@ class NewsletterSeeder extends Seeder
             'id' => 1,
             'titulo' => '¡Bienvenido a nuestro boletín!',
             'contenido' => 'Gracias por suscribirte a nuestro boletín. Esperamos que disfrutes de nuestras actualizaciones y ofertas especiales.',
-            'estado_envio' => 'pendiente',
             'selected' => 'true'
         ]);
     }

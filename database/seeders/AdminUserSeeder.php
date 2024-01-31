@@ -15,6 +15,7 @@ class AdminUserSeeder extends Seeder
     public function run(): void
     {
         DB::table('users')->insert([
+            'id' => 1,
             'nombre' => 'adminAna',
             'apellido1' => 'Rodríguez',
             'apellido2' => 'Pérez',
@@ -25,6 +26,7 @@ class AdminUserSeeder extends Seeder
         ]);
 
         DB::table('users')->insert([
+            'id' => 2,
             'nombre' => 'Pepe',
             'apellido1' => 'López',
             'apellido2' => 'García',

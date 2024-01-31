@@ -164,7 +164,7 @@ class NewsletterController extends Controller
     public function enviarNewsletter()
     {
         $suscriptores = Suscriptor::all();
-        $newsletter = Newsletter::where('selected', true)->first();
+        $newsletter = Newsletter::where('selected', true)->where('id', '!=', 1)->first();
 
         if ($newsletter) {
             foreach ($suscriptores as $suscriptor) {

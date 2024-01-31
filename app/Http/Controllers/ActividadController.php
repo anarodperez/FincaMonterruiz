@@ -130,7 +130,7 @@ class ActividadController extends Controller
         $actividad = Actividad::find($realId);
 
         // Comprueba si la actividad tiene reservas
-        $tieneReservas = $actividad->reservas()->exists();
+        $tieneReservas =   $actividad->reservas()->where('estado', '!=', 'cancelada')->exists();
 
         // Verificar si se encontró la actividad
         if (!$actividad) {

@@ -32,11 +32,9 @@ class ReservasSeeder extends Seeder
                 'num_adultos' => rand(1, 5),
                 'num_ninos' => rand(0, 5),
                 'observaciones' => 'Reserva de prueba ' . ($i + 1),
-                'estado' => $estados[array_rand($estados)],
                 'horario_id' => $horario->id,
                 'actividad_id' => $actividad->id,
-                'user_id' => $user->id, // Usar el ID del usuario existente
-                // Asegúrate de manejar 'paypal_sale_id' y 'total_pagado' según tus necesidades
+                'user_id' => $user->id,
             ]);
         }
     }

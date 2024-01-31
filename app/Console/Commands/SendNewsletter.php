@@ -33,7 +33,7 @@ class SendNewsletter extends Command
 
      public function handle()
      {
-         $newsletterActiva = Newsletter::where('selected', true)->first();
+        $newsletterActiva = Newsletter::where('selected', true)->where('id', '!=', 1)->first();
 
          if ($newsletterActiva) {
              $suscriptores = Suscriptor::all();
