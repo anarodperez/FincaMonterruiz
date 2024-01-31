@@ -24,8 +24,8 @@ class DatabaseSeeder extends Seeder
             ActividadSeeder::class,
             HorarioSeeder::class,
             NewsletterSeeder::class,
-            ReservasSeeder::class,
-            ValoracionesSeeder::class,
+            // ReservasSeeder::class,
+            // ValoracionesSeeder::class,
         ]);
     }
 }

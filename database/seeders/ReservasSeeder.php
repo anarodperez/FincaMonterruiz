@@ -27,13 +27,16 @@ class ReservasSeeder extends Seeder
              return;
          }
 
+         // Definir estados de reserva
+         $estados = ['pendiente', 'confirmada', 'cancelada']; // Agrega los estados deseados
+
          // Crear 3 reservas y asignarlas al usuario con ID 2
          for ($i = 0; $i < 3; $i++) {
             Reserva::create([
                 'num_adultos' => rand(1, 5), // Número aleatorio de adultos
                 'num_ninos' => rand(0, 5), // Número aleatorio de niños
                 'observaciones' => 'Reserva de prueba ' . ($i + 1),
-                'estado' => 'pendiente', // O el estado por defecto que desees
+                'estado' => $estados[array_rand($estados)], // Estado aleatorio
                 'horario_id' => $horario->id, // Asume que todas las reservas son para el mismo horario
                 'actividad_id' => $actividad->id, // Asume que todas las reservas son para la misma actividad
                 'user_id' => 2, // Asigna las reservas al usuario con ID 2
