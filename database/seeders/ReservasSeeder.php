@@ -2,45 +2,41 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use App\Models\Reserva;
 use App\Models\Actividad;
 use App\Models\Horario;
+use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 
 class ReservasSeeder extends Seeder
-
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
-         // Asegúrate de tener al menos una actividad y un horario creados
-         $actividad = Actividad::first(); // Obtiene la primera actividad
-         $horario = Horario::first(); // Obtiene el primer horario
+        // Verificar si existe al menos una actividad y un horario
+        $actividad = Actividad::first();
+        $horario = Horario::first();
+        $user = User::find(2); // Asegúrate de que el usuario con ID 2 existe
 
-         if (!$actividad || !$horario) {
-             echo "Por favor, asegúrate de tener al menos una actividad y un horario en la base de datos.\n";
-             return;
-         }
+        if (!$actividad || !$horario || !$user) {
+            // Considera usar Log::warning() o alguna otra forma de logging en lugar de echo si es un entorno de producción
+            echo "Necesitas al menos una actividad, un horario y un usuario con ID 2 en la base de datos.\n";
+            return;
+        }
 
-         // Definir estados de reserva
-         $estados = ['pendiente', 'confirmada', 'cancelada']; // Agrega los estados deseados
+        $estados = ['pendiente', 'confirmada', 'cancelada'];
 
-         // Crear 3 reservas y asignarlas al usuario con ID 2
-         for ($i = 0; $i < 3; $i++) {
+        for ($i = 0; $i < 3; $i++) {
             Reserva::create([
-                'num_adultos' => rand(1, 5), // Número aleatorio de adultos
-                'num_ninos' => rand(0, 5), // Número aleatorio de niños
+                'num_adultos' => rand(1, 5),
+                'num_ninos' => rand(0, 5),
                 'observaciones' => 'Reserva de prueba ' . ($i + 1),
-                'estado' => $estados[array_rand($estados)], // Estado aleatorio
-                'horario_id' => $horario->id, // Asume que todas las reservas son para el mismo horario
-                'actividad_id' => $actividad->id, // Asume que todas las reservas son para la misma actividad
-                'user_id' => 2, // Asigna las reservas al usuario con ID 2
-                // Omitimos 'paypal_sale_id' y 'total_pagado' asumiendo que pueden ser nulos o no requeridos inicialmente
+                'estado' => $estados[array_rand($estados)],
+                'horario_id' => $horario->id,
+                'actividad_id' => $actividad->id,
+                'user_id' => $user->id, // Usar el ID del usuario existente
+                // Asegúrate de manejar 'paypal_sale_id' y 'total_pagado' según tus necesidades
             ]);
         }
     }

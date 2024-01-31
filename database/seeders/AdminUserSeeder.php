@@ -22,6 +22,16 @@ class AdminUserSeeder extends Seeder
             'es_admin' => true,
             'validado' => true,
             'password' => Hash::make('Administradora.1'),
-    ]);
+        ]);
+
+        DB::table('users')->insert([
+            'nombre' => 'Pepe',
+            'apellido1' => 'López',
+            'apellido2' => 'García',
+            'email' => 'pepe_pepe@gmail.com',
+            'es_admin' => false,
+            'validado' => true,
+            'password' => Hash::make('Pepito.123'),
+        ]);
     }
 }
