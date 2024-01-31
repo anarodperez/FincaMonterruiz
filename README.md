@@ -35,5 +35,36 @@ La funcionalidad principal de la aplicación es permitir a los usuarios explorar
 ## 4. Elementos de Innovación
 
 - Uso del framework Laravel para el desarrollo de la aplicación.
-- Implementación de un sistema de newsletter (opcional).
+- Implementación de un sistema de newsletter.
 - Integración con API de mapas para visualización geográfica.
+
+
+# Instrucciones de Despliegue de Mi Proyecto
+
+## Configuración del Entorno
+
+1. Instalar PHP, Composer y PostgreSQL.
+   - Instalación php:  `sudo apt install php8.2 php8.2-amqp php8.2-cgi php8.2-cli php8.2-common php8.2-curl php8.2-fpm php8.2-gd php8.2-igbinary php8.2-intl php8.2-mbstring php8.2-opcache php8.2-pgsql php8.2-readline php8.2-redis php8.2-sqlite3 php8.2-xml php8.2-zip`.
+   - Instalación composer:`sudo apt install composer`.
+   - Instalación postgresql: `sudo apt install postgresql postgresql-client postgresql-contrib`.
+     Antes de ejecutar las migraciones, asegúrate de tener configurada la base de datos PostgreSQL creando un nuevo usuario y una base de datos.
+
+* Abrir la terminal.
+
+ -Ejecuta el siguiente comando para crear un nuevo usuario (serás solicitado a ingresar una contraseña para el nuevo usuario):
+   `sudo -u postgres createuser -P fincamonterruiz`
+- Crea una nueva base de datos asignada a este usuario ejecutando: `sudo -u postgres createdb -O fincamonterruiz fincamonterruiz`
+     
+2. Clonar el repositorio de mi proyecto.
+
+## Configuración del Proyecto
+
+1. Navegar al directorio del proyecto.
+2. Ejecutar `./setup.sh` (Unix/Linux) o `setup.bat` (Windows) para configurar el proyecto.
+3. Configurar el archivo `.env` con los detalles de tu entorno.
+
+## Ejecución de la Aplicación
+
+1. Ejecutar `php artisan serve` para iniciar el servidor de desarrollo.
+2. Acceder a la aplicación en `http://localhost:8000`.
+
