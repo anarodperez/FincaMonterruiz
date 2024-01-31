@@ -8,12 +8,6 @@
         media="all">
     <link href='https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css' rel='stylesheet'>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="preload" href="https://unpkg.com/swiper@8/swiper-bundle.min.css" as="style"
-        onload="this.onload=null;this.rel='stylesheet'">
-        <link
-        rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
-      />
     <script defer="defer" src="https://unpkg.com/swiper@8/swiper-bundle.min.js" onload="initializeSwiperRANDOMID();">
     </script>
     <script>
