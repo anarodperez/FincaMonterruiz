@@ -35,5 +35,25 @@ La funcionalidad principal de la aplicación es permitir a los usuarios explorar
 ## 4. Elementos de Innovación
 
 - Uso del framework Laravel para el desarrollo de la aplicación.
-- Implementación de un sistema de newsletter (opcional).
+- Implementación de un sistema de newsletter.
 - Integración con API de mapas para visualización geográfica.
+
+
+# Instrucciones de Despliegue de Mi Proyecto
+
+## Configuración del Entorno
+
+1. Instalar PHP, Composer y PostgreSQL.
+2. Clonar el repositorio de mi proyecto.
+
+## Configuración del Proyecto
+
+1. Navegar al directorio del proyecto.
+2. Ejecutar `./setup.sh` (Unix/Linux) o `setup.bat` (Windows) para configurar el proyecto.
+3. Configurar el archivo `.env` con los detalles de tu entorno.
+
+## Ejecución de la Aplicación
+
+1. Ejecutar `php artisan serve` para iniciar el servidor de desarrollo.
+2. Acceder a la aplicación en `http://localhost:8000`.
+
