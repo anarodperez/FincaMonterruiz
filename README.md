@@ -52,9 +52,8 @@ La funcionalidad principal de la aplicación es permitir a los usuarios explorar
 * Abrir la terminal.
 
  -Ejecuta el siguiente comando para crear un nuevo usuario (serás solicitado a ingresar una contraseña para el nuevo usuario):
-   ```bash
-   sudo -u postgres createuser -P fincamonterruiz
-- Crea una nueva base de datos asignada a este usuario ejecutando: sudo -u postgres createdb -O fincamonterruiz fincamonterruiz
+   `sudo -u postgres createuser -P fincamonterruiz`
+- Crea una nueva base de datos asignada a este usuario ejecutando: `sudo -u postgres createdb -O fincamonterruiz fincamonterruiz`
      
 2. Clonar el repositorio de mi proyecto.
 
