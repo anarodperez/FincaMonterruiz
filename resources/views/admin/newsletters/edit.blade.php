@@ -22,7 +22,7 @@
             <div class="card-body">
                 <p class="card-text">
 
-                <form action="{{ route('admin.newsletters.update', $newsletter->id) }}" method="POST">
+                <form action="{{ route('admin.newsletters.update', $newsletter->id) }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
 
@@ -36,24 +36,19 @@
                         <label for="contenido" class="form-label">Contenido</label>
                         <textarea id="contenido" name="contenido">{!! html_entity_decode($newsletter->contenido) !!}</textarea>
                     </div>
-
                     <div class="mb-3">
-                        <label for="imagen_url">URL de la Imagen</label>
-                        <input type="text" class="form-control" id="imagen_url" name="imagen_url"
-                            value="{{ $newsletter->imagen_url }}">
+                        <label for="imagen" class="form-label">Imagen</label>
+                        <!-- Mostrar la imagen actual -->
+                        @if ($newsletter->imagen_url)
+                            <div>
+                                <img src="{{ asset($newsletter->imagen_url) }}" alt="Imagen actual" style="max-width: 100px; height: auto;">
+                                <p>Imagen actual</p>
+                            </div>
+                        @endif
+                        <!-- Campo para subir una nueva imagen -->
+                        <input type="file" class="form-control" id="imagen" name="imagen">
                     </div>
 
-                    <div class="mb-3">
-                        <label for="estado_envio">Estado de Envío</label>
-                        <select class="form-control" id="estado_envio" name="estado_envio">
-                            <option value="pendiente" {{ $newsletter->estado_envio === 'pendiente' ? 'selected' : '' }}>
-                                Pendiente</option>
-                            <option value="enviado" {{ $newsletter->estado_envio === 'enviado' ? 'selected' : '' }}>Enviado
-                            </option>
-                            <option value="programado" {{ $newsletter->estado_envio === 'programado' ? 'selected' : '' }}>
-                                Programado</option>
-                        </select>
-                    </div>
 
                     <button type="submit" class="btn btn-primary">Guardar Cambios</button>
                     <a href="{{ route('admin.newsletters.index') }}" class="btn btn-secondary">Cancelar</a>

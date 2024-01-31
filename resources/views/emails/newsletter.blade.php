@@ -18,32 +18,33 @@
             max-width: 1000px;
             border: 1px solid #ddd;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
         }
 
         .header {
             background-color: #5c7c64;
             color: white;
-            padding: 10px;
-            text-align: center;
-            justify-content: center;
-            display: flex;
-            flex-direction: column;
+            padding: 20px;
+            text-align: center; /* Centra el texto */
+        justify-content: center; /* Centra los elementos flexibles horizontalmente */
+        display: flex; /* Habilita Flexbox */
+        flex-direction: column; /* Alinea los elementos en una columna */
+        align-items: center;
         }
 
         .card {
             background-color: #fff;
-            margin: 10px 0;
-            padding: 15px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            border-radius: 8px;
-            /* Bordes redondeados */
+            margin: 20px 0;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            border-radius: 10px;
+            border-left: 5px solid #4e8975;
         }
 
         .card img {
             max-width: 100%;
-            height: auto;
-            border-radius: 5px;
-            /* Bordes redondeados para las imágenes */
+            border-radius: 10px;
+            border-radius: 10px;
         }
 
         .content {
@@ -52,24 +53,29 @@
 
         .content h2,
         .content h3 {
-            color: #4a235a;
+            color: #333;
+            margin-bottom: 10px;
 
         }
 
+        .content p {
+            font-size: 16px;
+            color: #666;
+            line-height: 1.6;
+        }
+
         .footer {
-            margin-top: 20px;
-            font-size: 1.1em;
-            color: #666666;
+            margin-top: 30px;
+            font-size: 14px; /* Tamaño más pequeño para el texto del pie de página */
+            color: #888; /* Color más suave para el pie de página */
+            text-align: center;
         }
 
         .footer a {
             color: #5c7c64;
-            text-decoration: none;
-        }
-
-        .footer a:hover {
             text-decoration: underline;
         }
+
     </style>
 </head>
 
@@ -89,19 +95,11 @@
             </div>
 
             <div class="card">
-                <h3 style="font-size: 24px; color: #333; margin-bottom: 10px;">{{ $newsletter->titulo }}</h3>
-
-                <div style="font-size: 16px; color: #666; line-height: 1.5;">
-                    {!! html_entity_decode($newsletter->contenido) !!}
-                </div>
-                <!-- Imagen de la Newsletter -->
+                <h2>{{ $newsletter->titulo }}</h2>
+                <p>{!! html_entity_decode($newsletter->contenido) !!}</p>
                 @if ($newsletter->imagen_url)
-                    <div>
-                        <img src="{{ $newsletter->imagen_url }}" alt="Imagen de la Newsletter" style="max-width: 100%;">
-                    </div>
+                    <img src="{{ $newsletter->imagen_url }}" alt="Imagen de la Newsletter">
                 @endif
-
-
             </div>
         </div>
 

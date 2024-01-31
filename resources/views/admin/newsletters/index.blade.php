@@ -128,13 +128,12 @@
                                         <i class="bi bi-pencil-fill"></i>
                                     </a>
                                     <!-- Botón para Programar Envío -->
-                                    <!-- Botón para Programar Envío -->
                                     @if ($newsletter->id != 1)
-                                        <!-- Excluye la newsletter de bienvenida por su ID -->
-                                        <!-- Muestra el botón de programar para las demás newsletters sin restricciones -->
+                                        <!-- Omitir la lógica del botón para la newsletter de id = 1 -->
                                         <button type="button" class="btn btn-warning rounded me-2 scheduleButton"
                                             data-bs-toggle="modal" data-bs-target="#scheduleModal"
-                                            data-newsletter-id="{{ $newsletter->id }}">
+                                            data-newsletter-id="{{ $newsletter->id }}"
+                                            @if ($selectedNewsletter && $selectedNewsletter->id != $newsletter->id) disabled @endif>
                                             <i class="bi bi-clock-fill"></i> Programar Envío
                                         </button>
                                     @endif
