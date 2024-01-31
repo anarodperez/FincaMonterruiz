@@ -41,11 +41,11 @@
                 <div id="carouselExample" class="carousel slide" data-bs-ride="carousel">
                     <div class="carousel-inner first ">
                         <div class="carousel-item active"
-                            style="background:url({{ asset('storage/img/img6.jpg') }}) center / cover no-repeat;"></div>
+                            style="background:url({{ asset('/img/img6.jpg') }}) center / cover no-repeat;"></div>
                         <div class="carousel-item"
-                            style="background:url('{{ asset('storage/img/viña.jpeg') }}') center / cover no-repeat;"></div>
+                            style="background:url('{{ asset('/img/viña.jpeg') }}') center / cover no-repeat;"></div>
                         <div class="carousel-item"
-                            style="background:url('{{ asset('storage/img/viña2.jpeg') }}') center / cover no-repeat;"></div>
+                            style="background:url('{{ asset('/img/viña2.jpeg') }}') center / cover no-repeat;"></div>
                     </div>
                     <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample"
                         data-bs-slide="prev">
@@ -94,10 +94,10 @@
                         <div class="col-md-6">
                             <div class="row">
                                 <div class="col-md-6">
-                                    <img src="{{ asset('storage/img/img2.jpeg') }}" alt="Viñedos" class="img-fluid rounded">
+                                    <img src="{{ asset('/img/img2.jpeg') }}" alt="Viñedos" class="img-fluid rounded">
                                 </div>
                                 <div class="col-md-6">
-                                    <img src="{{ asset('storage/img/img3.jpeg') }}" alt="Viñedos" class="img-fluid rounded">
+                                    <img src="{{ asset('/img/img3.jpeg') }}" alt="Viñedos" class="img-fluid rounded">
                                 </div>
                             </div>
                         </div>

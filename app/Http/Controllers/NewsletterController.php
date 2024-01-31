@@ -7,9 +7,11 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use App\Models\Newsletter;
 use App\Models\NewsletterSchedule;
+use Illuminate\Support\Facades\Storage;
 
 class NewsletterController extends Controller
-{public function index(Request $request)
+{
+    public function index(Request $request)
     {
         $orden = $request->input('orden', 'asc');
         $columna = $request->input('columna', 'created_at');
@@ -24,7 +26,8 @@ class NewsletterController extends Controller
         }
 
         // Encuentra la newsletter seleccionada
-        $selectedNewsletter = Newsletter::where('selected', true)->first();
+        $selectedNewsletter = Newsletter::where('selected', true)->where('id', '!=', 1)->first();
+        $otraNewsletterSeleccionada = Newsletter::where('id', '!=', 1)->where('selected', true)->exists();
 
         // Obtener la información de newsletter_schedule (genérica)
         $schedule = NewsletterSchedule::first(); // Obtiene el horario sin asociarlo a una newsletter específica
@@ -49,10 +52,8 @@ class NewsletterController extends Controller
         $newsletters = $query->orderBy($columna, $orden)->paginate(5);
 
         // Pasar datos a la vista
-        return view('admin.newsletters.index', compact('newsletters', 'claseOrdenActual', 'selectedNewsletter', 'schedule', 'translatedDay', 'executionTime'));
+        return view('admin.newsletters.index', compact('newsletters', 'claseOrdenActual', 'selectedNewsletter', 'otraNewsletterSeleccionada', 'schedule', 'translatedDay', 'executionTime'));
     }
-
-
 
     public function create()
     {
@@ -61,13 +62,32 @@ class NewsletterController extends Controller
 
     public function store(Request $request)
     {
+        // Validar los datos del formulario, excepto el archivo de imagen
         $data = $request->validate([
             'titulo' => 'required',
             'contenido' => 'required',
-            'imagen_url' => 'nullable|url',
-            'estado_envio' => 'required|in:pendiente,enviado,programado',
+
+            // No incluyas 'imagen_url' aquí ya que es para la URL, no para el archivo
         ]);
 
+        // Procesar el archivo de imagen si se proporciona
+        if ($request->hasFile('imagen')) {
+            // Asumiendo que el campo del archivo en tu formulario se llama 'imagen'
+            $imagen = $request->file('imagen');
+            $nombreImagen = time() . '_' . str_replace(' ', '_', $imagen->getClientOriginalName());
+            $rutaCompleta = 'public/images/' . $nombreImagen;
+
+            // Subir el archivo a S3 y obtener la URL pública
+            Storage::disk('s3')->put($rutaCompleta, file_get_contents($imagen), 'public');
+            $urlImagen = Storage::disk('s3')->url($rutaCompleta);
+
+            // Asignar la URL de la imagen al campo correcto para la base de datos
+            $data['imagen_url'] = $urlImagen; // Asegúrate de que esta clave coincida con el nombre del campo en la base de datos
+        } else {
+            $data['imagen_url'] = null; // Manejar el caso sin imagen
+        }
+
+        // Crear el registro en la base de datos con la URL de la imagen
         Newsletter::create($data);
 
         return redirect()
@@ -83,40 +103,59 @@ class NewsletterController extends Controller
 
     public function update(Request $request, $id)
     {
+        $newsletter = Newsletter::find($id);
+        if (!$newsletter) {
+            return redirect()->route('admin.newsletters.index')->with('error', '¡Newsletter no encontrada!');
+        }
+
         $data = $request->validate([
             'titulo' => 'sometimes|required',
             'contenido' => 'sometimes|required',
-            'imagen_url' => 'nullable|url',
-            'estado_envio' => 'sometimes|required|in:pendiente,enviado,programado',
+             'imagen' => 'sometimes|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
-        $newsletter = Newsletter::findOrFail($id);
-        $newsletter->update($data);
+        // Actualizar la imagen si se ha proporcionado una nueva
+        if ($request->hasFile('imagen')) {
+            $imagen = $request->file('imagen');
+            $nombreImagen = time() . '_' . str_replace(' ', '_', $imagen->getClientOriginalName());
+            $rutaCompleta = 'public/images/' . $nombreImagen;
 
-        return redirect()
-            ->route('admin.newsletters.index')
-            ->with('success', 'Newsletter actualizada con éxito.');
+            // Eliminar la imagen antigua de S3 si existe
+            if ($newsletter->imagen_url) {
+                $rutaImagenAntigua = parse_url($newsletter->imagen_url, PHP_URL_PATH);
+                $rutaImagenAntigua = ltrim($rutaImagenAntigua, '/');
+                Storage::disk('s3')->delete($rutaImagenAntigua);
+            }
+
+            try {
+                // Subir la nueva imagen a S3 y establecerla como pública
+                Storage::disk('s3')->put($rutaCompleta, file_get_contents($imagen), 'public');
+                $urlImagen = Storage::disk('s3')->url($rutaCompleta);
+
+                $data['imagen_url'] = $urlImagen;
+            } catch (\Exception $e) {
+                \Log::error('Error al subir el archivo a S3: ' . $e->getMessage());
+            }
+        }
+
+        $newsletter->fill($data);
+        $newsletter->save();
+
+        return redirect()->route('admin.newsletters.index')->with('success', 'Newsletter actualizada con éxito.');
     }
+
 
     public function destroy($id)
     {
-        //No puedo borrar la newsletter de bienvenida
-
-        if ($id == 1) {
-            return redirect()
-                ->back()
-                ->with('error', 'No puedes eliminar la newsletter de bienvenida.');
-        }
-
         $newsletter = Newsletter::findOrFail($id);
 
-        if ($newsletter->selected) {
-            return redirect()
-                ->back()
-                ->with('error', 'No puedes eliminar una newsletter que está marcada para enviar.');
-        }
 
-        $newsletter = Newsletter::findOrFail($id);
+        $rutaImagen = parse_url($newsletter->imagen_url, PHP_URL_PATH);
+        $rutaImagen = ltrim($rutaImagen, '/');
+
+        // Elimina el archivo de imagen de S3
+        Storage::disk('s3')->delete($rutaImagen);
+
         $newsletter->delete();
 
         return back()->with('success', 'Newsletter eliminada con éxito.');
@@ -160,8 +199,10 @@ class NewsletterController extends Controller
         $config->execution_time = $request->execution_time;
         $config->save();
 
-        // Desmarcar cualquier newsletter previamente seleccionada
-        Newsletter::where('selected', true)->update(['selected' => false]);
+        // Desmarcar cualquier newsletter previamente seleccionada, excepto la newsletter con id = 1
+        Newsletter::where('selected', true)
+            ->where('id', '!=', 1)
+            ->update(['selected' => false]);
 
         // Marcar la newsletter específica como seleccionada
         $newsletter = Newsletter::findOrFail($request->newsletter_id);
