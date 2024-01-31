@@ -27,6 +27,14 @@
 
     <!-- Estilos personalizados y de la barra de navegación -->
     <link rel="stylesheet" href="{{ asset('css/navbar.css') }}">
+
+    {{-- Animaciones --}}
+    <link rel="preload" href="https://unpkg.com/swiper@8/swiper-bundle.min.css" as="style"
+    onload="this.onload=null;this.rel='stylesheet'">
+    <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
+  />
     @yield('css')
 
     <!-- Font Awesome Icons -->

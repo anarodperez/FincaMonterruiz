@@ -14,7 +14,7 @@
                 </div>
                 <div class="col-xs-12 col-sm-8 col-md-6">
                     <div class="info-text">
-                        <p>
+                        <p class="animate__animated animate__backInLeft">
                             Finca Monterruiz es una empresa que nace del deseo de enseñar y
                             promulgar la viticultura que se ha ido desarrollando durante
                             muchos años en el marco de Jerez. <br /><br />
@@ -25,9 +25,9 @@
                     </div>
                 </div>
                 <div class="col-xs-12 col-sm-4 col-md-6">
-                    <div class="col-xs-12">
-                        <figure class="contenido">
-                            <a href="#"><img src="/img/img5.jpg" alt="Niña vendimiando" /></a>
+                    <div class="col-xs-12 animate__animated animate__backInRight">
+                        <figure class="contenido" >
+                            <a href="#"><img src="/img/img5.jpg" alt="Niña vendimiando"  /></a>
                         </figure>
                     </div>
                 </div>
@@ -39,7 +39,7 @@
                 <div class="row">
                     <div class="col-xs-12 col-sm-8 col-sm-push-4 col-md-6 col-md-push-6">
                         <div class="info-text right">
-                            <p>
+                            <p class="animate__animated animate__backInLeft">
                                 Buscamos crear experiencias únicas en torno al viñedo, más
                                 allá de la típica visita a bodega y cata de vino. Nuestro
                                 objetivo es emocionar a los visitantes y hacerlos partícipes
@@ -52,7 +52,7 @@
                         </div>
                     </div>
                     <div class="col-xs-12 col-sm-4 col-sm-pull-8 col-md-6 col-md-pull-6">
-                        <div class="col-xs-12 col-sm-12">
+                        <div class="col-xs-12 col-sm-12 animate__animated animate__backInRight">
                             <figure class="contenido">
                                 <a href="#"><img src="/img/img4.jpg" alt="Perro en la viña" /></a>
                             </figure>
