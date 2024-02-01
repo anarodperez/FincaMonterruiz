@@ -55,15 +55,24 @@ margin-top: 2vh;
 background-color: #ffffff;
 border: none;
 border-radius: 10px;
-box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
 transition: all 0.3s ease-in-out;
 margin-top: 4vh;
 }
 
 .card:hover {
-box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
 transform: scale(1.05);
 }
+
+.estado-confirmado {
+    color: green;
+}
+
+.estado-cancelada {
+    color: red;
+}
+
 
 /* Estilos para botones y enlaces */
 .btn-custom {

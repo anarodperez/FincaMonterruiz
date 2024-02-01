@@ -103,9 +103,8 @@ class CatalogoController extends Controller
     {
         // Validaciones
         $validatedData = $request->validate([
-            'precio_min' => 'nullable|numeric|min:0',
-            'precio_max' => 'nullable|numeric|min:0',
-            'precio_min' => 'nullable|numeric|min:0',
+            'precio_max' => 'nullable|numeric|min:0|sometimes',
+            'precio_min' => 'nullable|numeric|min:0|sometimes',
             'publico' => 'nullable|in:todos,adultos,ninos',
             'duracion' => 'nullable|in:corta,media,larga',
         ]);
@@ -117,6 +116,7 @@ class CatalogoController extends Controller
     if ($request->filled('precio_min')) {
         $query->where('precio_adulto', '>=', $request->precio_min);
     }
+
 
     // Filtrar por precio máximo solo para adultos
     if ($request->filled('precio_max')) {
@@ -153,7 +153,9 @@ class CatalogoController extends Controller
             }
         }
 
-        $actividades = $query->get();
+        $actividades = $query->paginate(3); //paginación
+
+
         $horarios = Horario::with('actividad')->get();
         $events = $horarios->map(function ($horario) {
             return [
@@ -167,7 +169,6 @@ class CatalogoController extends Controller
             ];
         });
 
-        $actividades = $query->paginate(3); //paginación
 
         /// Determina si hay actividades después de aplicar filtros
         $hayResultados = $actividades->isNotEmpty();

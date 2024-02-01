@@ -123,6 +123,21 @@
                                             <div class="card-body">
                                                 <h2 class="card-title h5">{{ $actividad->nombre }}</h2>
                                                 <p class="card-text">{{ $actividad->descripcion }}</p>
+                                                <ul class="list-group">
+                                                    <li class="list-group-item"><strong>Duración:</strong>
+                                                        {{ $actividad->duracion }} min
+                                                    </li>
+                                                    <li class="list-group-item"><strong>Precio adulto:</strong>
+                                                        {{ $actividad->precio_adulto }} €
+                                                    </li>
+                                                    @if ($actividad->precio_nino !== null)
+                                                        <li class="list-group-item"><strong>Precio niño:</strong>
+                                                            {{ $actividad->precio_nino }} €
+                                                        </li>
+                                                    @endif
+                                                    <li class="list-group-item"><strong>Aforo:</strong> {{ $actividad->aforo }}
+                                                    </li>
+                                                </ul>
                                             </div>
                                         </div>
                                     </div>
@@ -142,10 +157,10 @@
             </section>
 
             {{-- SECCIÓN VALORACIONES --}}
-            <section class="bg-light valoraciones-section  animate__animated animate__backInRight">
-                <div class="container-fluid py-6" style=" max-width: 90vw; margin: 0 auto; ">
+            <section class="bg-light valoraciones-section animate__animated animate__backInRight">
+                <div class="container-fluid py-6 "  style=" max-width: 80vw; margin: 0 auto; ">
                     <div class="row mb-4">
-                        <div class="col-md-12 text-center">
+                        <div class="col-12 text-center">
                             <h1 class="display-5 fw-bold mb-4">Lo que Nuestros Visitantes Opinan</h1>
                         </div>
                     </div>
@@ -154,22 +169,23 @@
                             <div class="carousel-inner">
                                 @foreach ($ultimasValoraciones->chunk(3) as $valoracionChunk)
                                     <div class="carousel-item {{ $loop->first ? 'active' : '' }}">
-                                        <div class="d-flex justify-content-center">
+                                        <div class="row justify-content-center">
                                             @foreach ($valoracionChunk as $valoracion)
-                                                <div class="card valoracion-card mx-5" style="max-width:24rem;">
-                                                    <div class="card-body">
-                                                        <h5 class="card-title">
-                                                            {{ $valoracion->actividad->nombre ?? 'Actividad Desconocida' }}
-                                                        </h5>
-                                                        <p class="card-text">{{ $valoracion->comentario }}</p>
-                                                        <div class="rating">
-                                                            @for ($i = 0; $i < $valoracion->puntuacion; $i++)
-                                                                <i class="bi bi-star-fill"></i>
-                                                            @endfor
+                                                <!-- Bootstrap utiliza un sistema de 12 columnas, así que usa col-sm-6 para dos tarjetas por fila y col-md-4 para tres tarjetas por fila en pantallas medianas -->
+                                                <div class="col-12 col-sm-6 col-md-4 d-flex align-items-stretch">
+                                                    <div class="card valoracion-card mx-2 my-2">
+                                                        <div class="card-body">
+                                                            <h5 class="card-title">
+                                                                {{ $valoracion->actividad->nombre ?? 'Actividad Desconocida' }}
+                                                            </h5>
+                                                            <p class="card-text">{{ $valoracion->comentario }}</p>
+                                                            <div class="rating">
+                                                                @for ($i = 0; $i < $valoracion->puntuacion; $i++)
+                                                                    <i class="bi bi-star-fill"></i>
+                                                                @endfor
+                                                            </div>
+                                                            <p class="card-text"><small class="text-muted">{{ $valoracion->created_at->format('d M Y') }}</small></p>
                                                         </div>
-                                                        <p class="card-text"><small
-                                                                class="text-muted">{{ $valoracion->created_at->format('d M Y') }}</small>
-                                                        </p>
                                                     </div>
                                                 </div>
                                             @endforeach
@@ -177,16 +193,15 @@
                                     </div>
                                 @endforeach
                             </div>
-                            <a class="carousel-control-prev" href="#valoracionesCarousel" role="button"
-                                data-bs-slide="prev">
+                            <a class="carousel-control-prev " href="#valoracionesCarousel" role="button" data-bs-slide="prev" style="left: -10vw">
                                 <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                                 <span class="visually-hidden">Previous</span>
                             </a>
-                            <a class="carousel-control-next" href="#valoracionesCarousel" role="button"
-                                data-bs-slide="next">
+                            <a class="carousel-control-next " href="#valoracionesCarousel" role="button" data-bs-slide="next" style="right: -10vw">
                                 <span class="carousel-control-next-icon" aria-hidden="true"></span>
                                 <span class="visually-hidden">Next</span>
                             </a>
+
                         @else
                             <p class="text-center">Aún no hay valoraciones.</p>
                         @endif
@@ -194,6 +209,8 @@
                 </div>
             </section>
 
+
+            {{-- NEWSLETTER --}}
             <div class="newsletter">
                 <h2>Suscríbete a nuestro boletín informativo</h2>
                 @if ($errors->any())

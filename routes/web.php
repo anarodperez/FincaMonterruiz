@@ -38,11 +38,13 @@ Route::get('/dashboard', function () {
         // Redirige al usuario administrador a la ruta 'admin.index'
         return redirect()->route('admin.index');
     } else {
-        return app(UsuarioController::class)->showDashboard();
+        // Usa el enrutador para llamar al controlador
+        return app()->call('App\Http\Controllers\UsuarioController@showDashboard');
     }
 })
-    ->middleware(['auth', 'verified', 'validarUsuario'])
-    ->name('dashboard');
+->middleware(['auth', 'verified', 'validarUsuario'])
+->name('dashboard');
+
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

@@ -56,14 +56,14 @@ class UsuarioController extends Controller
 
         // Obtener datos de reservas
         $datosReservas = Reserva::select(DB::raw("to_char(created_at, 'YYYY-MM-DD') as fecha"), DB::raw('count(*) as total'))
-        ->groupBy('fecha')
-        ->orderBy('fecha', 'asc')
-        ->get();
+            ->groupBy('fecha')
+            ->orderBy('fecha', 'asc')
+            ->get();
 
         // Retorna la vista con los usuarios
         return view('admin.usuarios.index', [
             'usuarios' => $usuarios,
-            'datosReservas' => $datosReservas
+            'datosReservas' => $datosReservas,
         ]);
     }
 
@@ -89,12 +89,15 @@ class UsuarioController extends Controller
         return response()->json($results);
     }
 
-    public function showDashboard()
+    public function showDashboard(Request $request)
     {
         $user = Auth::user();
         $now = Carbon::now('UTC')->setTimezone('Europe/Madrid');
 
-        // Obtener reservas activas (fechas y horas futuras)
+        $activePage = $request->query('activePage', 1);
+        $pastPage = $request->query('pastPage', 1);
+
+        // Obtener reservas activas
         $reservasActivas = $user
             ->reservas()
             ->join('horarios', 'reservas.horario_id', '=', 'horarios.id')
@@ -105,7 +108,8 @@ class UsuarioController extends Controller
                 });
             })
             ->select('reservas.*', 'actividades.nombre as nombre_actividad', 'horarios.fecha as fecha_actividad', 'horarios.hora as hora_actividad')
-            ->paginate(5);
+            ->paginate(3, ['*'], 'activePage', $activePage) // Especifica la página actual para activas
+            ->appends(['pastPage' => $pastPage]); // Asegúrate de que los enlaces de paginación para activas incluyan el estado de la paginación para pasadas
 
         // Para reservas pasadas
         $reservasPasadas = $user
@@ -118,7 +122,8 @@ class UsuarioController extends Controller
                 });
             })
             ->where('reservas.user_id', '=', $user->id)
-            ->paginate(5);
+            ->paginate(3, ['*'], 'pastPage', $pastPage) // Especifica la página actual para pasadas
+            ->appends(['activePage' => $activePage]); // Asegúrate de que los enlaces de paginación para pasadas incluyan el estado de la paginación para activas
 
         // Obtener las valoraciones del usuario
         $valoracionesUsuario = $user

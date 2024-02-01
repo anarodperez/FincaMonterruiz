@@ -10,11 +10,4 @@ class Newsletter extends Model
     use HasFactory;
 
     protected $fillable = ['titulo', 'contenido', 'enviado', 'selected', 'imagen_url'];
-    protected $dates = ['fecha_envio'];
-
-
-    public function isEnviado()
-    {
-        return $this->enviado;
-    }
 }

@@ -24,6 +24,11 @@
     padding-left: 0;
 }
 
+.form-control{
+    font-size: 1.3rem;
+}
+
+/*  */
 
 body {
 background-color: #b4c8b1;

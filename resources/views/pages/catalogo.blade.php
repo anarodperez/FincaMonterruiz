@@ -24,34 +24,39 @@
                 </div>
 
                 <!-- Filtros en el aside -->
-                <aside class="col-md-3">
+                <aside class="col-md-3 mr-md-2">
                     <div class="mb-4">
-                        <h3>Filtrar Actividades</h3>
+                        <h3 class="mb-3">Filtrar Actividades</h3>
                         <form action="{{ route('catalogo.filter') }}" method="GET" name="form">
                             <!-- Público objetivo -->
-                            <div class="form-group mb-3">
-                                <label for="publico">Público objetivo:</label>
-                                <select name="publico" id="publico" class="form-control">
+                            <div class="form-group mb-3 custom-select">
+                                <label for="publico"  class="mb-1"><strong>Público objetivo:</strong></label>
+                                <select name="publico" id="publico" class="form-control"  onfocus="this.size=3;" onblur="this.size=0;" onchange="this.size=1; this.blur()">
                                     <option value="">Selecciona una opción</option>
-                                    <option value="todos">Para todos los públicos</option>
-                                    <option value="adultos">Solo para adultos</option>
+                                    <option value="todos" @if (isset($filtros['publico']) && $filtros['publico'] == 'todos') selected @endif>Para todos los
+                                        públicos</option>
+                                    <option value="adultos" @if (isset($filtros['publico']) && $filtros['publico'] == 'adultos') selected @endif>Solo para
+                                        adultos</option>
                                 </select>
                             </div>
 
                             <!-- Duración -->
-                            <div class="form-group mb-3">
-                                <label for="duracion">Duración:</label>
-                                <select name="duracion" id="duracion" class="form-control">
+                            <div class="form-group mb-3 custom-select">
+                                <label for="duracion" class="mb-1"><strong>Duración:</strong></label>
+                                <select name="duracion" id="duracion" class="form-control" onfocus="this.size=4;" onblur="this.size=0;" onchange="this.size=1; this.blur()">
                                     <option value="">Cualquier Duración</option>
-                                    <option value="corta">Corta (menos de 1 hora)</option>
-                                    <option value="media">Media (1-2 horas)</option>
-                                    <option value="larga">Larga (más de 2 horas)</option>
+                                    <option value="corta" @if (isset($filtros['duracion']) && $filtros['duracion'] == 'corta') selected @endif>Corta (menos de
+                                        1 hora)</option>
+                                    <option value="media" @if (isset($filtros['duracion']) && $filtros['duracion'] == 'media') selected @endif>Media (1-2
+                                        horas)</option>
+                                    <option value="larga" @if (isset($filtros['duracion']) && $filtros['duracion'] == 'larga') selected @endif>Larga (más de 2
+                                        horas)</option>
                                 </select>
                             </div>
 
                             <!-- Grupo de Precios -->
                             <div class="form-group mb-3">
-                                <label>Precios:</label>
+                                <label for="precio" class="mb-1"><strong>Precios:</strong></label>
                                 <div class="input-group">
                                     <!-- Precio Mínimo -->
                                     <input type="number" name="precio_min" id="precio_min" class="form-control"
@@ -65,7 +70,7 @@
                                 </div>
                             </div>
                             <!-- Botones -->
-                            <div class="botones">
+                            <div class="botones text-center">
                                 <button type="submit" class="btn btn-primary">Filtrar</button>
                                 <button type="button" class="btn btn-danger" onclick="borrarFiltros()">Borrar
                                     Filtros</button>
@@ -75,17 +80,16 @@
                 </aside>
 
                 <!-- Contenido principal -->
-                <div class="col-md-9">
-
+                <div class="col-md-8 mx-auto">
                     <!-- Catálogo de Actividades -->
                     <section class="my-5">
                         <div id="search-results" class="row">
-                            <!-- Actividades se mostrarán aquí -->
+                            <!-- Itera sobre la colección de actividades. Si está vacía, muestra un mensaje. -->
                             @forelse ($actividades as $actividad)
                                 <div class="col-md-4 mb-4">
                                     <div class="card">
-                                        <img src="{{ asset($actividad->imagen) }}" alt="{{ $actividad->nombre }}"
-                                            class="card-img-top" alt="{{ $actividad->nombre }}">
+                                        <img src="{{ asset($actividad->imagen) }}" class="card-img-top"
+                                            alt="{{ $actividad->nombre }}">
                                         <div class="card-body">
                                             <h2 class="card-title">{{ $actividad->nombre }}</h2>
                                             <p class="card-text">{{ $actividad->descripcion }}</p>
@@ -96,38 +100,34 @@
                                                 <li class="list-group-item"><strong>Precio adulto:</strong>
                                                     {{ $actividad->precio_adulto }} €
                                                 </li>
-                                                @if (!is_null($actividad->precio_nino) && $actividad->precio_nino != '')
+                                                @if ($actividad->precio_nino !== null)
                                                     <li class="list-group-item"><strong>Precio niño:</strong>
                                                         {{ $actividad->precio_nino }} €
                                                     </li>
                                                 @endif
-                                                <li class="list-group-item"><strong>Aforo:</strong>
-                                                    {{ $actividad->aforo }}
+                                                <li class="list-group-item"><strong>Aforo:</strong> {{ $actividad->aforo }}
                                                 </li>
                                             </ul>
-                                            {{-- <div class="lc-block">
-                                                <button class="custom-btn boton"
-                                                    onclick="verDetalleActividad({{ $actividad->id }})">Ver más</button>
-                                            </div> --}}
                                         </div>
                                     </div>
                                 </div>
                             @empty
-                                @if ($filtrosAplicados)
-                                    <div class="col-12">
-                                        <div class="alert-info text-center">
-                                            No hay resultados de búsqueda.
-                                        </div>
+                                <!-- Este bloque se ejecuta si no hay actividades -->
+                                <div class="col-12">
+                                    <div class="alert alert-info text-center">
+                                        No se encontraron resultados para los filtros aplicados.
                                     </div>
-                                @endif
+                                </div>
                             @endforelse
+
                         </div>
 
-                        <!-- Enlaces de paginación -->
-                        {{ $actividades->links('pagination::bootstrap-4', ['class' => 'mi-paginacion-personalizada']) }}
-
-
+                        <!-- Aquí podrías incluir la paginación si es necesaria -->
+                        @if ($actividades->isNotEmpty())
+                            {{ $actividades->links() }}
+                        @endif
                     </section>
+
                 </div>
             </div>
         </div>
@@ -343,55 +343,56 @@
 
     <script>
         function buscarActividades() {
-            var searchQuery = document.getElementById('search').value;
-            var normalizedQuery = normalizeString(searchQuery);
+    var searchQuery = document.getElementById('search').value;
+    var normalizedQuery = normalizeString(searchQuery);
 
-            fetch('/buscar-actividades?q=' + encodeURIComponent(normalizedQuery))
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Error en la respuesta del servidor');
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    console.log("Datos recibidos:", data);
+    fetch('/buscar-actividades?q=' + encodeURIComponent(normalizedQuery))
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Error en la respuesta del servidor');
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log("Datos recibidos:", data);
 
-                    var html = '';
-                    data.forEach(actividad => {
-                        html += `
-                        <div class="col-md-4 mb-4">
-                            <div class="card">
-                                <img src="${actividad.imagen}" class="card-img-top" alt="${actividad.nombre}">
-                                <div class="card-body">
-                                    <h2 class="card-title">${actividad.nombre}</h2>
-                                    <p class="card-text">${actividad.descripcion}</p>
-                                    <ul class="list-group">
-                                        <li class="list-group-item"><strong>Duración:</strong>
-                                                    {{ $actividad->duracion }} min
-                                        </li>
-                                        <li class="list-group-item"><strong>Precio adulto:</strong>
-                                                    {{ $actividad->precio_adulto }} €
-                                        </li>
-                                            @if (!is_null($actividad->precio_nino) && $actividad->precio_nino != '')
-                                                <li class="list-group-item"><strong>Precio niño:</strong>
-                                                    {{ $actividad->precio_nino }} €
-                                                </li>
-                                            @endif
-                                        <li class="list-group-item"><strong>Aforo:</strong>
-                                                    {{ $actividad->aforo }}
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
+            var html = '';
+            data.forEach(actividad => {
+                html += `
+                <div class="col-md-4 mb-4">
+                    <div class="card">
+                        <img src="${actividad.imagen}" class="card-img-top" alt="${actividad.nombre}">
+                        <div class="card-body">
+                            <h2 class="card-title">${actividad.nombre}</h2>
+                            <p class="card-text">${actividad.descripcion}</p>
+                            <ul class="list-group">
+                                <li class="list-group-item"><strong>Duración:</strong>
+                                    ${actividad.duracion} min
+                                </li>
+                                <li class="list-group-item"><strong>Precio adulto:</strong>
+                                    ${actividad.precio_adulto} €
+                                </li>
+                                ${actividad.precio_nino !== null ? `
+                                    <li class="list-group-item"><strong>Precio niño:</strong>
+                                        ${actividad.precio_nino} €
+                                    </li>
+                                ` : ''}
+                                <li class="list-group-item"><strong>Aforo:</strong>
+                                    ${actividad.aforo}
+                                </li>
+                            </ul>
                         </div>
-                    `;
-                    });
-                    document.getElementById('search-results').innerHTML = html;
-                })
-                .catch(error => {
-                    console.error('Error al realizar la búsqueda:', error);
-                });
-        }
+                    </div>
+                </div>
+                `;
+            });
+            document.getElementById('search-results').innerHTML = html;
+        })
+        .catch(error => {
+            console.error('Error al realizar la búsqueda:', error);
+        });
+}
+
 
         function normalizeString(string) {
             string = string.toLowerCase();

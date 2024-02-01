@@ -6,6 +6,29 @@
 
 @section('css')
     <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}">
+    <style>
+        .paginacion nav{
+            background: transparent;
+        }
+
+        .pagination {
+justify-content: center; /
+}
+
+.active>.page-link,
+.page-link.active {
+
+background-color: #5c7c64;
+;
+border-color: #5c7c64;
+;
+color: white
+}
+
+.page-link {
+color: #5c7c64;
+}
+    </style>
 @endsection
 
 @section('content')
@@ -57,6 +80,7 @@
                             Recuerda que solo puedes cancelar hasta 48 horas antes del evento.
                         </div>
                     </div>
+                    <!-- Sección Reservas Activas -->
                     <h3>Reservas Activas</h3>
                     @if ($reservasActivas->count() > 0)
                         <div class="row">
@@ -66,9 +90,14 @@
                                         <!-- Detalles de la reserva -->
                                         <p class="card-text">Actividad: <strong>{{ $reserva->actividad->nombre }}</strong>
                                         </p>
-                                        <p class="card-text">Fecha: {{ $reserva->horario->fecha }}</p>
-                                        <p class="card-text">Hora: {{ $reserva->horario->hora }}</p>
-                                        <p class="card-text">Estado: {{ $reserva->estado }}</p>
+                                        <p class="card-text">Fecha: <strong>{{ $reserva->horario->fecha }} </strong> </p>
+                                        <p class="card-text">Hora: <strong>{{ $reserva->horario->hora }} </strong> </p>
+                                        <p class="card-text">
+                                            Estado: <span class="{{ $reserva->estado == 'confirmado' ? 'text-success' : ($reserva->estado == 'cancelada' ? 'text-danger' : '') }}">
+                                                <strong>{{ $reserva->estado }}</strong>
+                                            </span>
+                                        </p>
+
                                         <div class="d-flex align-items-center mt-2">
                                             <a href="{{ url('/descargar-entrada/' . $reserva->id) }}"
                                                 class="btn btn-success" style="margin-right: 1vw">Descargar Entrada</a>
@@ -94,6 +123,9 @@
                                 </div>
                             @endforeach
                         </div>
+                        <div class="paginacion mt-3">
+                            {{ $reservasActivas->links() }}
+                        </div>
                     @else
                         <p>No tienes reservas activas aún.</p>
                     @endif
@@ -106,9 +138,9 @@
                                 <div class="card card-reserva">
                                     <div class="card-body">
                                         <!-- Detalles de la reserva -->
-                                        <p class="card-text">Actividad: {{ $reserva->actividad->nombre }}</p>
-                                        <p class="card-text">Fecha: {{ $reserva->horario->fecha }}</p>
-                                        <p class="card-text">Hora: {{ $reserva->horario->hora }}</p>
+                                        <p class="card-text">Actividad: <strong> {{ $reserva->actividad->nombre }} </strong></p>
+                                        <p class="card-text">Fecha: <strong>{{ $reserva->horario->fecha }}</strong> </p>
+                                        <p class="card-text">Hora: <strong>{{ $reserva->horario->hora }}</strong> </p>
                                         <p class="card-text">Estado: {{ $reserva->estado }}</p>
                                         <div class="d-flex align-items-center">
                                             <a href="{{ url('/descargar-entrada/' . $reserva->id) }}"
@@ -132,6 +164,9 @@
                         @else
                             <p>No tienes reservas pasadas aún.</p>
                         @endif
+                    </div>
+                    <div class="paginacion mt-3">
+                        {!! $reservasPasadas->links() !!}
                     </div>
                 </div>
 

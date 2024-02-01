@@ -8,7 +8,7 @@ height: 600px;
 }
 
 .mySwiper-RANDOMID .card {
-max-width: 21rem
+max-width: 25rem;
 }
 
 .custom-pagination .swiper-pagination-bullet {
@@ -22,8 +22,17 @@ filter: invert(35%) sepia(85%) saturate(1200%) hue-rotate(100deg) brightness(70%
 
 /* Aumentar el ancho del carrusel */
 .valoraciones-section #valoracionesCarousel {
-    max-width: 100%; /* Esto permitirá que el carrusel ocupe todo el ancho disponible */
-    margin: 0 auto; /* Esto centra el carrusel en el contenedor */
+    max-width: 100%;
+    margin: 0 auto;
+}
+
+
+.carousel-control-prev {
+    left: -10vw !important;
+  }
+
+.carousel-control-next {
+    right: -10vw;
 }
 
 
