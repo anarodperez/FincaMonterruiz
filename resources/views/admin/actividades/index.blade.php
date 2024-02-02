@@ -41,7 +41,6 @@
                             <th>Precio Adulto</th>
                             <th>Precio niños</th>
                             <th>Aforo</th>
-                            {{-- <th>Categoría</th>  Nueva columna para la categoría --> --}}
                             <th>Estado</th>
                             <th>Acciones</th>
                         </tr>
@@ -64,13 +63,13 @@
                                             <span class="fas fa-edit"></span>
                                         </button>
                                     </form>
-                                    <form
+                                    {{-- <form
                                         action="{{ route('admin.actividades.show', ['actividad' => encrypt($actividad->id)]) }}"
                                         method="GET">
                                         <button class="btn btn-danger btn-sm">
                                             <span class="fas fa-times"></span>
                                         </button>
-                                    </form>
+                                    </form> --}}
 
                                 </td>
                             </tr>

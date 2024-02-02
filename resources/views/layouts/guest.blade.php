@@ -81,7 +81,6 @@
 
         #acceptCookieConsent:hover {
             background-color: darken(#5c7c64, 10%);
-            /* Oscurece el color al pasar el mouse */
         }
 
         /* Valoraciones */

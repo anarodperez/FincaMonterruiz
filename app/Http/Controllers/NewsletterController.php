@@ -30,7 +30,7 @@ class NewsletterController extends Controller
         $otraNewsletterSeleccionada = Newsletter::where('id', '!=', 1)->where('selected', true)->exists();
 
         // Obtener la información de newsletter_schedule (genérica)
-        $schedule = NewsletterSchedule::first(); // Obtiene el horario sin asociarlo a una newsletter específica
+        $schedule = NewsletterSchedule::first();
 
         // Traducir el día de la semana al español
         $translatedDay = '';
@@ -62,17 +62,13 @@ class NewsletterController extends Controller
 
     public function store(Request $request)
     {
-        // Validar los datos del formulario, excepto el archivo de imagen
         $data = $request->validate([
             'titulo' => 'required',
             'contenido' => 'required',
-
-            // No incluyas 'imagen_url' aquí ya que es para la URL, no para el archivo
         ]);
 
         // Procesar el archivo de imagen si se proporciona
         if ($request->hasFile('imagen')) {
-            // Asumiendo que el campo del archivo en tu formulario se llama 'imagen'
             $imagen = $request->file('imagen');
             $nombreImagen = time() . '_' . str_replace(' ', '_', $imagen->getClientOriginalName());
             $rutaCompleta = 'public/images/' . $nombreImagen;
@@ -82,9 +78,9 @@ class NewsletterController extends Controller
             $urlImagen = Storage::disk('s3')->url($rutaCompleta);
 
             // Asignar la URL de la imagen al campo correcto para la base de datos
-            $data['imagen_url'] = $urlImagen; // Asegúrate de que esta clave coincida con el nombre del campo en la base de datos
+            $data['imagen_url'] = $urlImagen;
         } else {
-            $data['imagen_url'] = null; // Manejar el caso sin imagen
+            $data['imagen_url'] = null;
         }
 
         // Crear el registro en la base de datos con la URL de la imagen

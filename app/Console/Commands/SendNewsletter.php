@@ -39,7 +39,6 @@ class SendNewsletter extends Command
              $suscriptores = Suscriptor::all();
 
              foreach ($suscriptores as $suscriptor) {
-                 // Asegúrate de pasar ambos argumentos requeridos aquí
                  Mail::to($suscriptor->email)->queue(new NewsletterMail($newsletterActiva, $suscriptor->email));
              }
 

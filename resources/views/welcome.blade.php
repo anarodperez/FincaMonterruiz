@@ -173,7 +173,7 @@
                                             @foreach ($valoracionChunk as $valoracion)
                                                 <!-- Bootstrap utiliza un sistema de 12 columnas, así que usa col-sm-6 para dos tarjetas por fila y col-md-4 para tres tarjetas por fila en pantallas medianas -->
                                                 <div class="col-12 col-sm-6 col-md-4 d-flex align-items-stretch">
-                                                    <div class="card valoracion-card mx-2 my-2">
+                                                    <div class="card valoracion-card mx-2 my-2" style="">
                                                         <div class="card-body">
                                                             <h5 class="card-title">
                                                                 {{ $valoracion->actividad->nombre ?? 'Actividad Desconocida' }}

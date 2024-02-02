@@ -22,7 +22,7 @@ class SuscriptorController extends Controller
         Suscriptor::create($validatedData);
 
         // Enviar la newsletter de bienvenida
-        $newsletterBienvenida = Newsletter::find(1); // Asumiendo que la ID 1 es siempre la de bienvenida
+        $newsletterBienvenida = Newsletter::find(1); // la ID 1 es siempre la de bienvenida
         if ($newsletterBienvenida) {
             Mail::to($validatedData['email'])->send(new NewsletterMail($newsletterBienvenida, $validatedData['email']));
         }
@@ -36,15 +36,14 @@ class SuscriptorController extends Controller
         $email = $request->query('email');
 
         if (!$email || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            // Redirecciona o muestra un mensaje si el email no es válido
             return redirect('/')->with('error', 'Dirección de correo electrónico no válida.');
         }
 
         $suscriptor = Suscriptor::where('email', $email)->first();
 
         if ($suscriptor) {
-            // Aquí puedes marcar al suscriptor como 'cancelado' o eliminarlo
-            $suscriptor->delete(); // O cualquier lógica para 'cancelar' la suscripción
+            // eliminamos el suscriptor
+            $suscriptor->delete();
 
             return view('emails.cancelada', ['email' => $email]);
 

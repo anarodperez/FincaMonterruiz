@@ -17,7 +17,7 @@
             border: 1px solid #ddd;
         }
         h1 {
-            color: #d9534f; /* Color rojo */
+            color: #d9534f;
         }
         p {
             font-size: 16px;

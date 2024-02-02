@@ -6,37 +6,12 @@
 
 @section('css')
     <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}">
-    <style>
-        .paginacion nav{
-            background: transparent;
-        }
-
-        .pagination {
-justify-content: center; /
-}
-
-.active>.page-link,
-.page-link.active {
-
-background-color: #5c7c64;
-;
-border-color: #5c7c64;
-;
-color: white
-}
-
-.page-link {
-color: #5c7c64;
-}
-    </style>
 @endsection
 
 @section('content')
     <main>
          <div class="container py-5">
-
             <div id="welcomeMessage" class="alert alert-info"></div>
-
         </div>
 
         <div class="container py-5">
@@ -321,14 +296,13 @@ color: #5c7c64;
                     editForm.querySelector('input[name="_method"]').value = 'PUT';
                 } else {
                     // Si se está creando una nueva valoración
-                    editForm.action = '/valoraciones'; // Asegúrate de que esta ruta sea correcta
+                    editForm.action = '/valoraciones';
                     editForm.querySelector('input[name="_method"]').value = 'POST';
                 }
             });
         });
 
         //Para el modal de cancelar actividad
-
         document.addEventListener("DOMContentLoaded", function() {
             var cancelModal = document.getElementById('cancelModal');
             cancelModal.addEventListener('show.bs.modal', function(event) {

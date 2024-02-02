@@ -135,3 +135,27 @@ height: 250px;
 object-fit: cover;
 
 }
+
+/* Paginación */
+
+.paginacion nav{
+    background: transparent;
+}
+
+.pagination {
+justify-content: center; /
+}
+
+.active>.page-link,
+.page-link.active {
+
+background-color: #5c7c64;
+;
+border-color: #5c7c64;
+;
+color: white
+}
+
+.page-link {
+color: #5c7c64;
+}

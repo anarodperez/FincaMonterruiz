@@ -115,23 +115,6 @@
                         </div>
                     @endif
 
-                    <!-- Desplegable para seleccionar el país -->
-                    {{-- <div class="mb-3">
-                        <label for="pais">País:</label>
-                        <select class="form-control" id="pais" name="pais" required>
-                            <option value="">-- Seleccionar un país --</option>
-                            <option value="espana">España</option>
-                            <option value="francia">Francia</option>
-                            <option value="alemania">Alemania</option>
-                        </select>
-                    </div> --}}
-
-                    <!-- Campo para el código postal -->
-                    {{-- <div class="mb-3">
-                        <label for="codigoPostal">Código Postal:</label>
-                        <input type="text" class="form-control" id="codigoPostal" name="codigo_postal" required>
-                    </div> --}}
-
                     <div class="mb-3">
                         <label for="observaciones">Observaciones:</label>
                         <textarea class="form-control" id="observaciones" name="observaciones" rows="3"></textarea>
@@ -194,7 +177,7 @@
                     return false; // Esto evitará que el formulario se envíe
                 }
 
-                return true; // El formulario se puede enviar
+                return true;
             }
 
             // Asegúrate de llamar a calcularTotal al cargar la página si es necesario
