@@ -113,17 +113,19 @@ class UsuarioController extends Controller
 
         // Para reservas pasadas
         $reservasPasadas = $user
-            ->reservas()
-            ->join('horarios', 'reservas.horario_id', '=', 'horarios.id')
-            ->join('users', 'reservas.user_id', '=', 'users.id')
-            ->where(function ($query) use ($now) {
-                $query->where('horarios.fecha', '<', $now->toDateString())->orWhere(function ($query) use ($now) {
-                    $query->where('horarios.fecha', '=', $now->toDateString())->where('horarios.hora', '<', $now->toTimeString());
-                });
-            })
-            ->where('reservas.user_id', '=', $user->id)
-            ->paginate(3, ['*'], 'pastPage', $pastPage) // Especifica la página actual para pasadas
-            ->appends(['activePage' => $activePage]); // Asegúrate de que los enlaces de paginación para pasadas incluyan el estado de la paginación para activas
+        ->reservas()
+        ->join('horarios', 'reservas.horario_id', '=', 'horarios.id')
+        ->join('actividades', 'horarios.actividad_id', '=', 'actividades.id')
+        ->where(function ($query) use ($now) {
+            $query->where('horarios.fecha', '<', $now->toDateString())->orWhere(function ($query) use ($now) {
+                $query->where('horarios.fecha', '=', $now->toDateString())->where('horarios.hora', '<', $now->toTimeString());
+            });
+        })
+        ->where('reservas.user_id', '=', $user->id)
+        ->select('reservas.id as reserva_id', 'reservas.*', 'actividades.nombre as nombre_actividad', 'horarios.fecha as fecha_actividad', 'horarios.hora as hora_actividad') // Añadir esta línea
+        ->paginate(3, ['*'], 'pastPage', $pastPage) // Especifica la página actual para pasadas
+        ->appends(['activePage' => $activePage]); // Asegúrate de que los enlaces de paginación para pasadas incluyan el estado de la paginación para activas
+
 
         // Obtener las valoraciones del usuario
         $valoracionesUsuario = $user

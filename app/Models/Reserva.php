@@ -32,6 +32,12 @@ class Reserva extends Model
         return $this->belongsTo(Actividad::class, 'actividad_id');
     }
 
+    public function factura()
+{
+    return $this->hasOne(Factura::class, 'reserva_id');
+}
+
+
     // protected static function boot()
     // {
     //     parent::boot();

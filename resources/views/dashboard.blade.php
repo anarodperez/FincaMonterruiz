@@ -107,6 +107,7 @@
 
                     <!-- Sección Reservas Pasadas -->
                     <h3>Reservas Pasadas</h3>
+
                     <div class="row">
                         @if ($reservasPasadas->count() > 0)
                             @foreach ($reservasPasadas as $reserva)

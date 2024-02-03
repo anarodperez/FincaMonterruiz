@@ -130,7 +130,15 @@ class ActividadController extends Controller
         $actividad = Actividad::find($realId);
 
         // Comprueba si la actividad tiene reservas
-        $tieneReservas =   $actividad->reservas()->where('estado', '!=', 'cancelada')->exists();
+        $tieneReservas = $actividad->reservas()
+        ->where('estado', '!=', 'cancelada')
+        ->whereExists(function ($query) {
+            $query->select(DB::raw(1))
+                  ->from('horarios')
+                  ->whereRaw('horarios.id = reservas.horario_id')
+                  ->whereRaw("TO_TIMESTAMP(horarios.fecha || ' ' || horarios.hora, 'YYYY-MM-DD HH24:MI:SS') AT TIME ZONE 'Europe/Madrid' > NOW()");
+        })->exists();
+
 
         // Verificar si se encontró la actividad
         if (!$actividad) {

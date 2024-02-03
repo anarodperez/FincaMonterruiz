@@ -6,6 +6,7 @@ use App\Models\Reserva;
 use Illuminate\Http\Request;
 use App\Models\Actividad;
 use App\Models\Horario;
+use App\Models\Factura;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use PDF;
@@ -136,6 +137,23 @@ class ReservaController extends Controller
             // Opcionalmente, puedes redirigir al usuario con un mensaje de error
         }
 
+        // Calcular el total pagado
+        $precioPorAdulto = $actividad->precio_adulto;
+        $precioPorNino = $actividad->precio_nino;
+        $totalPagado = $validated['num_adultos'] * $precioPorAdulto + ($validated['num_ninos'] ?? 0) * $precioPorNino;
+
+        // Crear la factura asociada a la reserva
+        $factura = new Factura([
+            'reserva_id' => $reserva->id,
+            'monto' => $totalPagado,
+            'estado' => 'emitida', // O cualquier estado inicial que desees
+            'fecha_emision' => now(), // Fecha actual
+            // Puedes agregar más campos si es necesario, como detalles de la factura
+        ]);
+
+        // Guardar la factura
+        $factura->save();
+
         return redirect()
             ->route('dashboard')
             ->with('success', 'Reserva realizada con éxito');
@@ -187,7 +205,6 @@ class ReservaController extends Controller
                 $refund = $paypalController->refundPayment($paypalSaleId);
             } catch (Exception $e) {
                 Log::error('Error al procesar la devolución en PayPal: ' . $e->getMessage());
-                // Decide si quieres cancelar la reserva aun si la devolución falla
             }
         }
 
@@ -205,7 +222,6 @@ class ReservaController extends Controller
 
         return back()->with('success', 'Reserva cancelada correctamente y reembolso procesado correctamente.');
     }
-
 
     public function edit(Reserva $reserva)
     {
@@ -227,6 +243,7 @@ class ReservaController extends Controller
     public function descargarEntrada($reserva_id)
     {
         $reserva = Reserva::with(['usuario', 'actividad', 'horario'])->findOrFail($reserva_id);
+
 
         $precioPorAdulto = $reserva->actividad->precio_adulto; // Asegúrate de que estos campos existan en tu modelo 'Actividad'
         $precioPorNino = $reserva->actividad->precio_nino;
