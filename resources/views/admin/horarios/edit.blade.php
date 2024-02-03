@@ -4,21 +4,22 @@
 <div class="container editar-horario">
     <h2 class="mb-4">Editar Horario</h2>
     @if (session('error'))
-    <div class="alert alert-danger alert-dismissible fade show">
-        {{ session('error') }}
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-@endif
+        <div class="alert alert-danger alert-dismissible fade show">
+            {{ session('error') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
 
-@if ($errors->any())
-    <div class="alert alert-danger">
-        <ul>
-            @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
-        </ul>
-    </div>
-@endif
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+
     <form action="{{ route('admin.horarios.update', $horario->id) }}" method="POST" class="border p-4 rounded">
         @csrf
         @method('PUT')
@@ -34,7 +35,7 @@
         <div class="row mb-3">
             <div class="col-md-6">
                 <label for="fecha" class="form-label">Fecha:</label>
-                <input type="date" id="fecha" name="fecha" class="form-control" value="{{ $horario->fecha }}" required>
+                <input type="date" id="fecha" name="fecha" class="form-control" value="{{ $horario->fecha }}" @if($esRecurrente) disabled @endif required>
             </div>
             <div class="col-md-6">
                 <label for="hora" class="form-label">Hora:</label>

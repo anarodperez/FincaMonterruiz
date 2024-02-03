@@ -208,21 +208,40 @@ class ReservaController extends Controller
             }
         }
 
-        // Cambiar el estado de la reserva a 'cancelada'
-        $reserva->estado = 'cancelada';
-        $reserva->save();
+        // Iniciar transacción de base de datos para asegurar la atomicidad de la operación
+        DB::beginTransaction();
+        try {
+            // Cambiar el estado de la reserva a 'cancelada'
+            $reserva->estado = 'cancelada';
+            $reserva->save();
 
-        // Definir la dirección de email del administrador
-        $adminEmail = 'anarodpe8@gmail.com';
+            // Actualizar el estado de la factura correspondiente y registrar la fecha de cancelación
+            $factura = Factura::where('reserva_id', $id)->first();
+            if ($factura) {
+                $factura->estado = 'cancelada';
+                $factura->fecha_cancelacion = now(); // Usar Carbon para obtener la fecha y hora actual
+                $factura->save();
+            }
 
-        // Enviar correo de cancelación
-        Mail::to($reserva->usuario->email)
-            ->cc($adminEmail)
-            ->send(new ReservationCancellationMail($reserva));
+            // Definir la dirección de email del administrador
+            $adminEmail = 'anarodpe8@gmail.com';
 
-        return back()->with('success', 'Reserva cancelada correctamente y reembolso procesado correctamente.');
+            // Enviar correo de cancelación
+            Mail::to($reserva->usuario->email)
+                ->cc($adminEmail)
+                ->send(new ReservationCancellationMail($reserva));
+
+            // Confirmar las operaciones de la base de datos
+            DB::commit();
+
+            return back()->with('success', 'Reserva cancelada correctamente y reembolso procesado correctamente.');
+        } catch (\Exception $e) {
+            // En caso de error, revertir todas las operaciones de base de datos
+            DB::rollback();
+            Log::error('Error al cancelar la reserva: ' . $e->getMessage());
+            return back()->with('error', 'Hubo un problema al cancelar la reserva.');
+        }
     }
-
     public function edit(Reserva $reserva)
     {
         // Método para mostrar el formulario de edición de una reserva
@@ -242,13 +261,8 @@ class ReservaController extends Controller
 
     public function descargarEntrada($reserva_id)
     {
-        $reserva = Reserva::with(['usuario', 'actividad', 'horario'])->findOrFail($reserva_id);
-
-
-        $precioPorAdulto = $reserva->actividad->precio_adulto; // Asegúrate de que estos campos existan en tu modelo 'Actividad'
-        $precioPorNino = $reserva->actividad->precio_nino;
-
-        $totalPagado = $reserva->num_adultos * $precioPorAdulto + $reserva->num_ninos * $precioPorNino;
+        // Obtiene la reserva con usuario, actividad, horario y factura asociados
+        $reserva = Reserva::with(['usuario', 'actividad', 'horario', 'factura'])->findOrFail($reserva_id);
 
         if (!$reserva) {
             // Manejar el error, por ejemplo, redirigir con un mensaje
@@ -257,8 +271,10 @@ class ReservaController extends Controller
                 ->with('error', 'Reserva no encontrada.');
         }
 
+        // Asume que la relación en Reserva se llama 'factura' y obtiene el monto
+        $totalPagado = $reserva->factura->monto;
+
         // Usa el token de la reserva en lugar del ID en el contenido del QR
-        // $contenidoQR = 'https://tu-sitio-web.com/validar-reserva/' . $reserva->token;
         $contenidoQR = 'https://tu-sitio-web.com/validar-reserva/';
         $qrCode = base64_encode(
             QrCode::format('png')

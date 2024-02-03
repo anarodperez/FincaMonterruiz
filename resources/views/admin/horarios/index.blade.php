@@ -57,25 +57,25 @@
             display: flex;
             justify-content: center;
         }
-
-        .alert-success {
+/*
+        .alert-success, .alert{
                 {
                 margin-top: 13px;
             }
-        }
+        } */
     </style>
 
 
     <div class="container">
         @if (session('success'))
-            <div class="alert alert-success alert-dismissible fade show" style="margin-top: 13px">
+            <div class="alert alert-success alert-dismissible fade show" style="margin-top: 13px;">
                 {{ session('success') }}
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
         @endif
 
         @if (session('error'))
-            <div class="alert alert-danger alert-dismissible fade show">
+            <div class="alert alert-danger alert-dismissible fade show" style="margin-top: 13px;">
                 {{ session('error') }}
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>

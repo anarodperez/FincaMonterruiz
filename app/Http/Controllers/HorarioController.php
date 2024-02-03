@@ -48,7 +48,6 @@ class HorarioController extends Controller
         return view('admin.horarios.index', compact('events'));
     }
 
-
     public function create()
     {
         // Obtener solo actividades activas
@@ -202,6 +201,20 @@ class HorarioController extends Controller
             ]);
 
             $horario = Horario::findOrFail($id);
+
+            // Verificar si hay reservas activas asociadas con este horario
+            if (
+                $horario
+                    ->reservas()
+                    ->where('estado', '!=', 'cancelada')
+                    ->count() > 0
+            ) {
+                // Enviar un mensaje de error si hay reservas activas
+                return redirect()
+                    ->back()
+                    ->with('error', 'No se puede modificar un horario que tiene reservas activas.')
+                    ->withInput();
+            }
             $tipoEdicion = $request->input('tipo_edicion', 'instancia');
 
             if ($tipoEdicion == 'instancia') {
