@@ -19,7 +19,8 @@ use PayPal\Api\RedirectUrls;
 use PayPal\Api\Transaction;
 use PayPal\Api\Sale;
 use PayPal\Api\Refund;
-
+use App\Http\Controllers\ReservaController;
+use Hashids\Hashids;
 
 
 class PaypalController extends Controller
@@ -137,8 +138,15 @@ class PaypalController extends Controller
 
     public function cancel($horarioId)
     {
-        return redirect()->route('reservar.show', ['horarioId' => $horarioId]);
+                // Inicializa Hashids con una sal secreta y una longitud mínima
+                $this->hashids = new Hashids(env('HASHID_SALT'), 10);
+        // Codifica el $horarioId que se recibe como parámetro
+        $horarioIdCodificado = $this->hashids->encode($horarioId);
+
+        // Redirige a la ruta 'reservar.show' con el $horarioId codificado
+        return redirect()->route('reservar.show', ['horarioId' => $horarioIdCodificado]);
     }
+
 
     public function error()
     {

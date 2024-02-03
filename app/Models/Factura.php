@@ -13,14 +13,8 @@ class Factura extends Model
     protected $table = 'facturas';
 
     // Definir los campos que se pueden asignar de manera masiva
-    protected $fillable = [
-        'reserva_id',
-        'monto',
-        'estado',
-        'detalles',
-        'fecha_emision',
-        'fecha_cancelacion',
-    ];
+    protected $fillable = ['reserva_id', 'monto', 'iva', 'monto_total', 'estado', 'fecha_emision', 'fecha_cancelacion', 'precio_adulto_final', 'precio_nino_final'];
+
 
     // Indica que los campos de fecha deben ser tratados como instancias de Carbon
     protected $dates = ['fecha_emision', 'fecha_cancelacion'];
@@ -35,6 +29,9 @@ class Factura extends Model
         return $this->belongsTo(Reserva::class);
     }
 
-    // Aquí puedes añadir más métodos que necesites para la lógica de tu aplicación,
-    // como métodos para calcular impuestos, descuentos, etc.
+    public function actividad()
+{
+    return $this->belongsTo(Actividad::class, 'actividad_id');
+}
+
 }

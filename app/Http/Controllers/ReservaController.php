@@ -17,6 +17,7 @@ use App\Mail\ReservationCancellationMail;
 use Illuminate\Support\Facades\DB;
 use Hashids\Hashids;
 use App\Models\AdminNotification;
+use Illuminate\Support\Facades\Log;
 
 class ReservaController extends Controller
 {
@@ -137,22 +138,36 @@ class ReservaController extends Controller
             // Opcionalmente, puedes redirigir al usuario con un mensaje de error
         }
 
-        // Calcular el total pagado
-        $precioPorAdulto = $actividad->precio_adulto;
-        $precioPorNino = $actividad->precio_nino;
-        $totalPagado = $validated['num_adultos'] * $precioPorAdulto + ($validated['num_ninos'] ?? 0) * $precioPorNino;
+        // Calcular el total pagado sin IVA
+        $totalSinIVA = $validated['num_adultos'] * $precioPorAdulto + ($validated['num_ninos'] ?? 0) * $precioPorNino;
+
+        // Calcular el IVA (21% del total sin IVA)
+        $iva = $totalSinIVA * 0.21;
+
+        // Calcular el monto total incluyendo IVA
+        $totalConIVA = $totalSinIVA + $iva;
 
         // Crear la factura asociada a la reserva
         $factura = new Factura([
             'reserva_id' => $reserva->id,
-            'monto' => $totalPagado,
-            'estado' => 'emitida', // O cualquier estado inicial que desees
-            'fecha_emision' => now(), // Fecha actual
-            // Puedes agregar más campos si es necesario, como detalles de la factura
+            'monto' => $totalSinIVA,
+            'iva' => $iva,
+            'monto_total' => $totalConIVA,
+            'estado' => 'pagada',
+            'fecha_emision' => now(),
+            'precio_adulto_final' => $reserva->actividad->precio_adulto,
+            'precio_nino_final' => $reserva->actividad->precio_nino ?? 0
         ]);
 
-        // Guardar la factura
-        $factura->save();
+        try {
+            $factura->save();
+        } catch (\Exception $e) {
+            Log::error('Error al guardar factura: ' . $e->getMessage());
+            Log::info('Precio adulto: ' . $reserva->actividad->precio_adulto);
+Log::info('Precio niño: ' . $reserva->actividad->precio_nino);
+
+            return back()->with('error', 'Error al crear la factura.');
+        }
 
         return redirect()
             ->route('dashboard')
@@ -271,9 +286,6 @@ class ReservaController extends Controller
                 ->with('error', 'Reserva no encontrada.');
         }
 
-        // Asume que la relación en Reserva se llama 'factura' y obtiene el monto
-        $totalPagado = $reserva->factura->monto;
-
         // Usa el token de la reserva en lugar del ID en el contenido del QR
         $contenidoQR = 'https://tu-sitio-web.com/validar-reserva/';
         $qrCode = base64_encode(
@@ -282,7 +294,7 @@ class ReservaController extends Controller
                 ->generate($contenidoQR),
         );
 
-        $pdf = PDF::loadView('pdf.entrada', compact('reserva', 'qrCode', 'totalPagado'));
+        $pdf = PDF::loadView('pdf.entrada', compact('reserva', 'qrCode'));
         return $pdf->download('entrada-reserva.pdf');
     }
 

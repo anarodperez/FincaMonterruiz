@@ -15,6 +15,8 @@ class Horario extends Model
     // Define las propiedades que se pueden asignar masivamente
     protected $fillable = ['actividad_id', 'fecha', 'hora', 'idioma', 'frecuencia', 'repeticiones'];
 
+    protected $dates = ['fecha'];
+
     // Define la relación con la actividad
     public function actividad()
     {

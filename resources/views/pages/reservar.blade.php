@@ -58,11 +58,24 @@
                         </div>
                     @endif
 
-
+                    <!-- Precio Total Sin IVA -->
                     <div class="mb-3">
-                        <span class="etiqueta">TOTAL:</span>
-                        <span id="total" class="valor"></span>
+                        <span class="etiqueta">Subtotal (Sin IVA):</span>
+                        <span id="subtotal" class="valor"></span>
                     </div>
+
+                    <!-- Monto del IVA -->
+                    <div class="mb-3">
+                        <span class="etiqueta">IVA (21%):</span>
+                        <span id="iva" class="valor"></span>
+                    </div>
+
+                    <!-- Precio Total Con IVA -->
+                    <div class="mb-3">
+                        <span class="etiqueta">TOTAL (Con IVA):</span>
+                        <span id="totalConIVA" class="valor"></span>
+                    </div>
+
                     <div class="mb-3 d-flex align-items-baseline">
                         <span class="etiqueta">Idioma de la actividad:</span>
                         <span id="idioma" class="valor">{{ $horario->idioma }}</span>
@@ -130,61 +143,46 @@
             document.getElementById('formularioReserva').addEventListener('submit', function(event) {
                 event.preventDefault();
                 if (validarFormulario()) {
-                    let total = document.getElementById('total').textContent.replace(' €', '');
-                    document.getElementById('paypalAmount').value = total;
+                    let totalConIVA = document.getElementById('totalConIVA').textContent.replace(' €', '');
+                    document.getElementById('paypalAmount').value = totalConIVA;
                     this.submit();
                 }
             });
 
-            let precioAdultoRaw = "{{ $horario->actividad->precio_adulto ?? '0' }}";
-            let precioNinoRaw = "{{ $horario->actividad->precio_nino ?? '0' }}";
-
-            let precioAdulto = parseFloat(precioAdultoRaw);
-            let precioNino = parseFloat(precioNinoRaw);
+            let precioAdulto = parseFloat("{{ $horario->actividad->precio_adulto ?? '0' }}");
+            let precioNino = parseFloat("{{ $horario->actividad->precio_nino ?? '0' }}");
 
             function calcularTotal() {
-                let numAdultos = document.getElementById('numAdultos').value;
-                let numNinos = 0; // Valor predeterminado para niños
+                let numAdultos = parseInt(document.getElementById('numAdultos').value) || 0;
+                let numNinos = parseInt(document.getElementById('numNinos') ? document.getElementById('numNinos').value : 0) || 0;
 
-                // Verifica si el campo "Número de Niños" está presente en la página
-                let numNinosInput = document.getElementById('numNinos');
-                if (numNinosInput) {
-                    numNinos = numNinosInput.value;
-                }
+                let subtotal = (numAdultos * precioAdulto) + (numNinos * precioNino);
+                let iva = subtotal * 0.21; // Asume un IVA del 21%
+                let totalConIVA = subtotal + iva;
 
-                numAdultos = numAdultos ? parseInt(numAdultos) : 0;
-                numNinos = numNinos ? parseInt(numNinos) : 0;
-
-                let total = (numAdultos * precioAdulto) + (numNinos * precioNino);
-                document.getElementById('total').textContent = total.toFixed(2) + ' €';
+                document.getElementById('subtotal').textContent = subtotal.toFixed(2) + ' €';
+                document.getElementById('iva').textContent = iva.toFixed(2) + ' €';
+                document.getElementById('totalConIVA').textContent = totalConIVA.toFixed(2) + ' €';
             }
 
             function validarFormulario() {
-                let numAdultos = document.getElementById('numAdultos').value;
-                let numNinos = 0; // Valor predeterminado para niños
-
-                // Verifica si el campo "Número de Niños" está presente en la página
-                let numNinosInput = document.getElementById('numNinos');
-                if (numNinosInput) {
-                    numNinos = numNinosInput.value;
-                }
-
-                numAdultos = numAdultos ? parseInt(numAdultos) : 0;
-                numNinos = numNinos ? parseInt(numNinos) : 0;
+                let numAdultos = parseInt(document.getElementById('numAdultos').value) || 0;
+                let numNinos = parseInt(document.getElementById('numNinos') ? document.getElementById('numNinos').value : 0) || 0;
 
                 if (numAdultos === 0 && numNinos === 0) {
                     alert('Debes ingresar al menos un adulto o un niño.');
-                    return false; // Esto evitará que el formulario se envíe
+                    return false;
                 }
 
                 return true;
             }
 
-            // Asegúrate de llamar a calcularTotal al cargar la página si es necesario
             window.onload = function() {
                 calcularTotal();
             };
         </script>
+
+
 
 
     </div>

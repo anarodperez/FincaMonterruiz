@@ -16,6 +16,7 @@ class Reserva extends Model
         'total_pagado'
     ];
 
+
     // Aquí puedes agregar relaciones, por ejemplo, con el modelo Horario
     public function horario()
     {

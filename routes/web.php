@@ -18,7 +18,7 @@ use App\Http\Controllers\PaypalController;
 use App\Http\Controllers\ValoracionController;
 use App\Http\Controllers\SuscriptorController;
 use App\Http\Controllers\NewsletterController;
-
+use App\Http\Controllers\FacturaController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -42,9 +42,8 @@ Route::get('/dashboard', function () {
         return app()->call('App\Http\Controllers\UsuarioController@showDashboard');
     }
 })
-->middleware(['auth', 'verified', 'validarUsuario'])
-->name('dashboard');
-
+    ->middleware(['auth', 'verified', 'validarUsuario'])
+    ->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -81,6 +80,11 @@ Route::middleware(['admin'])->group(function () {
     //Reservas
     Route::get('/reservas/index', [ReservaController::class, 'index'])->name('admin.reservas.index');
 
+    //Facturas
+    Route::get('/admin/facturas', [FacturaController::class, 'facturas'])->name('admin.facturas.index');
+    Route::get('/admin/facturas/{factura}/pdf', [FacturaController::class, 'generatePdf'])->name('facturas.pdf');
+
+
     //Valoraciones
     Route::get('/valoraciones/index', [ValoracionController::class, 'index'])->name('admin.valoraciones.index');
 
@@ -93,12 +97,8 @@ Route::middleware(['admin'])->group(function () {
     Route::delete('/admin/newsletters/{id}', [NewsletterController::class, 'destroy'])->name('admin.newsletters.destroy');
     Route::post('/admin/newsletters/{id}/select', [NewsletterController::class, 'selectForSending'])->name('admin.newsletters.selectForSending');
     Route::get('/admin/newsletters/deselect/{id}', [NewsletterController::class, 'deselect'])->name('admin.newsletters.deselect');
-
-
-
     Route::get('/admin/newsletters/preview/{id}', [NewsletterController::class, 'preview'])->name('admin.newsletters.preview');
     Route::post('/admin/newsletters/updateConfig', [NewsletterController::class, 'updateConfig'])->name('admin.newsletters.updateConfig');
-
 });
 
 Route::get('/gallery', [GalleryController::class, 'index'])->name('pages.gallery');

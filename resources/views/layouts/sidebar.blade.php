@@ -5,7 +5,6 @@
     <i class="fas fa-bars"></i>
 </button>
 
-
 <nav class="col-12 col-md-4 col-lg-2 d-md-block bg-light sidebar collapse" id="sidebarMenu">
     <div class="sidebar-sticky">
         <ul class="nav flex-column">
@@ -19,11 +18,6 @@
                     <i class="bi bi-calendar3"></i> Actividades
                 </a>
             </li>
-            {{-- <li class="nav-item my-2 mx-3">
-                            <a class="nav-link" href="#">
-                                <i class="fas fa-list-alt"></i> Categorías
-                            </a>
-                        </li> --}}
             <li class="nav-item my-2 mx-3">
                 <a class="nav-link" href="{{ route('admin.usuarios.index') }}">
                     <i class="bi bi-people"></i> Usuarios
@@ -39,6 +33,11 @@
                     @if (isset($notifications) && $notifications->nuevos_reservas_count > 0)
                         <span class="badge badge-warning">{{ $notifications->nuevos_reservas_count }}</span>
                     @endif
+                </a>
+            </li>
+            <li class="nav-item my-2 mx-3">
+                <a class="nav-link" href="{{ route('admin.facturas.index') }}">
+                    <i class="bi bi-file-earmark-text"></i>  Facturas
                 </a>
             </li>
             <li class="nav-item my-2 mx-3">
