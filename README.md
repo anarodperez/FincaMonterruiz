@@ -139,6 +139,8 @@ VITE_PUSHER_PORT="${PUSHER_PORT}"
 VITE_PUSHER_SCHEME="${PUSHER_SCHEME}"
 VITE_PUSHER_APP_CLUSTER="${PUSHER_APP_CLUSTER}"
 
+```
+
 ** Para obtener la configuración necesaria para integrar PayPal en tu proyecto, como las credenciales API (Client ID y Secret), debes seguir estos pasos:
 
 1. Crear una Cuenta PayPal
