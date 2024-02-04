@@ -39,35 +39,42 @@ La funcionalidad principal de la aplicación es permitir a los usuarios explorar
 - Integración con API de mapas para visualización geográfica.
 
 
-# Instrucciones de Despliegue de MFinca Monterruiz
+# Instrucciones de Despliegue para Finca Monterruiz
+
+Bienvenido al proyecto Finca Monterruiz. Sigue estas instrucciones para configurar y desplegar el proyecto en tu entorno local.
 
 ## Configuración del Entorno
+### Requisitos Previos
 
-1. Instalar PHP, Composer y PostgreSQL.
-   - Instalación php:  `sudo apt install php8.2 php8.2-amqp php8.2-cgi php8.2-cli php8.2-common php8.2-curl php8.2-fpm php8.2-gd php8.2-igbinary php8.2-intl php8.2-mbstring php8.2-opcache php8.2-pgsql php8.2-readline php8.2-redis php8.2-sqlite3 php8.2-xml php8.2-zip`.
-   - Instalación composer:`sudo apt install composer`.
-   - Instalación postgresql: `sudo apt install postgresql postgresql-client postgresql-contrib`.
-     Antes de ejecutar las migraciones, asegúrate de tener configurada la base de datos PostgreSQL creando un nuevo usuario y una base de datos.
+Asegúrate de tener instalados PHP, Composer y PostgreSQL en tu sistema. Aquí tienes los comandos para instalarlos en un sistema basado en Debian como Ubuntu:
 
-     Ejecuta el siguiente comando para crear un nuevo usuario (serás solicitado a ingresar una contraseña para el nuevo usuario):
-   `sudo -u postgres createuser -P fincamonterruiz`
-    Crea una nueva base de datos asignada a este usuario ejecutando: `sudo -u postgres createdb -O fincamonterruiz fincamonterruiz`
-     
-2. Clonar el repositorio de mi proyecto.
+```bash
+# Instalar PHP y extensiones necesarias
+sudo apt install php8.2 php8.2-amqp php8.2-cgi php8.2-cli php8.2-common php8.2-curl php8.2-fpm php8.2-gd php8.2-igbinary php8.2-intl php8.2-mbstring php8.2-opcache php8.2-pgsql php8.2-readline php8.2-redis php8.2-sqlite3 php8.2-xml php8.2-zip
+
+# Instalar Composer
+sudo apt install composer
+
+# Instalar PostgreSQL
+sudo apt install postgresql postgresql-client postgresql-contrib
+
+Antes de ejecutar las migraciones, asegúrate de tener configurada la base de datos PostgreSQL creando un nuevo usuario y una base de datos.
+
+Ejecuta el siguiente comando para crear un nuevo usuario (serás solicitado a ingresar una contraseña para el nuevo usuario): `sudo -u postgres createuser -P fincamonterruiz`
+Crea una nueva base de datos asignada a este usuario ejecutando: `sudo -u postgres createdb -O fincamonterruiz fincamonterruiz`
 
 ## Configuración del Proyecto
 
-1. Navegar al directorio del proyecto. 
-2. Ejecutar `composer install`.
-3. Copiar el archivo .env.example a .env `cp .env.example .env`
-4. Generar la clave de la aplicación `php artisan key:generate`
+1. Clona el repositorio y navega al directorio del proyecto. Instala las dependencias de PHP con Composer. `composer install`
+2. Copia el archivo .env.example a .env y genera la clave de la aplicación:  .env.example a .env
+`cp .env.example .env`
+`php artisan key:generate`
 5. Configurar el archivo `.env` con los detalles de tu entorno. (EXPLICADO A CONTINUACIÓN)
 6. Ejecutar migraciones de la base de datos `php artisan migrate`
 7. Ejecutar seeders de la base de datos `php artisan db:seed`
 
-
 ## Configurar el archivo `.env` con los detalles de tu entorno.
-
+```plaintext
 APP_NAME=FincaMonterruiz
 APP_ENV=local
 APP_KEY=
@@ -131,8 +138,8 @@ VITE_PUSHER_PORT="${PUSHER_PORT}"
 VITE_PUSHER_SCHEME="${PUSHER_SCHEME}"
 VITE_PUSHER_APP_CLUSTER="${PUSHER_APP_CLUSTER}"
 
-
 ** Para obtener la configuración necesaria para integrar PayPal en tu proyecto, como las credenciales API (Client ID y Secret), debes seguir estos pasos:
+
 1. Crear una Cuenta PayPal
 2. Acceder al Panel de Desarrollador de PayPal. Aquí es donde puedes gestionar tus aplicaciones y obtener tus credenciales API.
    Para obtener tus credenciales API, necesitas crear una aplicación en el Dashboard de Desarrolladores:
