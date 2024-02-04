@@ -5,48 +5,51 @@
     <meta charset="UTF-8">
     <title>Factura {{ $factura->id }}</title>
     <style>
-        body {
+        body .factura-pdf {
             font-family: 'Helvetica', 'Arial', sans-serif;
         }
 
-        header,
+        .factura-pdf header,
         section,
         footer {
             margin-bottom: 20px;
         }
 
-        table {
+        .factura-pdf table {
             width: 100%;
             border-collapse: collapse;
         }
 
-        table,
+        .factura-pdf table,
         th,
         td {
             border: 1px solid black;
         }
 
-        th,
+        .factura-pdf th,
         td {
             padding: 10px;
             text-align: left;
         }
 
-        th {
+        .factura-pdf th {
             background-color: #f2f2f2;
         }
 
-        .text-right {
+        .factura-pdf .text-right {
             text-align: right;
         }
     </style>
 </head>
 
-<body>
+<body class="factura-pdf">
     <!-- Encabezado de la factura -->
     <header>
-        <h1>Factura #{{ $factura->id }}</h1>
-        <div><!-- Logo de la empresa --></div>
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <h1>Factura #{{ $factura->id }}</h1>
+            <img src="data:image/png;base64,{{ base64_encode(file_get_contents(public_path('/img/logo.png'))) }}"
+                alt="Logo Empresa" style="height: 70px; width: auto;"><br>
+        </div><br>
         <div>
             <strong>Finca Monterruiz</strong><br>
             Barriada la Polila, 123<br>

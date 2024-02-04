@@ -73,9 +73,6 @@
                                 </select>
                             </div>
                         </div>
-
-                        {{-- <label for="categoria">Categoria</label>
-                        <input type="text" name="categoria" class="form-control"> --}}
                         <br>
                         <a href="{{ route('admin.actividades.index') }}" class="btn btn-info" style="margin-left: 20px">
                             <i class="fas fa-arrow-left"></i> Regresar

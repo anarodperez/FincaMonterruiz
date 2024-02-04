@@ -3,9 +3,8 @@ padding: 4vh;
 }
 
 .badge-warning {
-    background-color: #ffcc00; /* Color de fondo */
-    color: #000000; /* Color del texto */
-    /* Otros estilos como bordes redondeados, etc. */
+    background-color: #ffcc00;
+    color: #000000;
 }
 
 h2{
@@ -232,4 +231,35 @@ min-height: 80vh;
  .card-grafico {
         margin-bottom: 8vh;
     }
+
+/* Facturas */
+.facturas form {
+    margin: 20px 0;
+    background: #f4f4f4;
+    padding: 20px;
+    border-radius: 8px;
+}
+
+.facturas  input[type="text"] {
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    width: calc(100% - 24px);
+}
+
+.facturas  button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 10px;
+    background-color: #6fa78a;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.facturas  button:hover {
+    background-color: #406854;
+}
+
 
