@@ -57,6 +57,7 @@ sudo apt install composer
 
 # Instalar PostgreSQL
 sudo apt install postgresql postgresql-client postgresql-contrib
+```
 
 Antes de ejecutar las migraciones, asegúrate de tener configurada la base de datos PostgreSQL creando un nuevo usuario y una base de datos.
 
