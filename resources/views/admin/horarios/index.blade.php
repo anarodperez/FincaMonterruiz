@@ -149,7 +149,14 @@
 
 
     <script>
-        function getColorForActivity(activityId) {
+         function getColorForActivity(activityId) {
+            // Convertir el ID en un número (si no lo es ya)
+            var idNumber = parseInt(activityId);
+            if (isNaN(idNumber)) {
+                // Si el ID no es numérico, usa un hash simple para convertirlo en un número
+                idNumber = activityId.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+            }
+
             // Generar color
             var hue = idNumber * 137.508; // Ángulo dorado aproximado
             var saturation = 70; // Aumentar la saturación para colores más intensos
@@ -157,6 +164,7 @@
 
             return `hsl(${hue % 360}, ${saturation}%, ${lightness}%)`;
         }
+
 
         var calendar;
 

@@ -3,60 +3,43 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
-use Exception;
 use Illuminate\Support\Facades\Log;
-use PayPal\Rest\ApiContext;
-use PayPal\Auth\OAuthTokenCredential;
-use PayPal\Api\Amount;
-use PayPal\Api\Details;
-use PayPal\Api\Item;
-use PayPal\Api\ItemList;
-use PayPal\Api\Payer;
-use PayPal\Api\Payment;
-use PayPal\Api\PaymentExecution;
-use PayPal\Api\RedirectUrls;
-use PayPal\Api\Transaction;
-use PayPal\Api\Sale;
+use PayPalCheckoutSdk\Core\SandboxEnvironment;
+use PayPal\Core\ProductionEnvironment;
+use PayPalCheckoutSdk\Core\PayPalHttpClient;
+use PayPalCheckoutSdk\Orders\OrdersCreateRequest;
+use PayPalCheckoutSdk\Orders\OrdersCaptureRequest;
+use PayPal\Exceptions\HttpException;
+use PayPalCheckoutSdk\Payments\CapturesRefundRequest;
 use PayPal\Api\Refund;
-use App\Http\Controllers\ReservaController;
+use PayPal\Api\Sale;
+use PayPal\Exception\PayPalConnectionException;
 use Hashids\Hashids;
-
+use App\Models\Reserva;
 
 class PaypalController extends Controller
 {
-    private $apiContext;
-    private $clientId = 'AYoKresmgirjy-Btw9k5gB14TTnDd_GsM_08Loq8OB98Iidrsr946yAkL9qbR0E5WRiULl3atKM3f7Ri';
-    private $clientSecret = 'ELBT4WCJmT83LWprK2sKxvvXrSVEqg-mAqpuSAAWejTb-Orei9Bed4HSKgJ6jAMD0SQ3bIt5SIZ77SWq';
+    private $client;
 
     public function __construct()
     {
-        $this->middleware('auth');
+        $paypalEnvironment = 'sandbox'; // Debes definir esto en tu archivo de configuración
+        $clientId = 'AYoKresmgirjy-Btw9k5gB14TTnDd_GsM_08Loq8OB98Iidrsr946yAkL9qbR0E5WRiULl3atKM3f7Ri'; // Debes definir esto en tu archivo de configuración
+        $clientSecret = 'ELBT4WCJmT83LWprK2sKxvvXrSVEqg-mAqpuSAAWejTb-Orei9Bed4HSKgJ6jAMD0SQ3bIt5SIZ77SWq'; // Debes definir esto en tu archivo de configuración
 
-        $this->apiContext = new ApiContext(new OAuthTokenCredential($this->clientId, $this->clientSecret));
-        $this->apiContext->setConfig([
-            'mode' => 'sandbox',
-            'log.LogEnabled' => true,
-            'log.FileName' => storage_path('logs/paypal.log'),
-            'log.LogLevel' => 'DEBUG',
-            'cache.enabled' => true,
-        ]);
+        if ($paypalEnvironment === 'sandbox') {
+            $environment = new SandboxEnvironment($clientId, $clientSecret);
+        } else {
+            $environment = new ProductionEnvironment($clientId, $clientSecret);
+        }
+
+        $this->client = new PayPalHttpClient($environment);
     }
 
     public function checkout(Request $request, $horarioId)
     {
-        $amount = new Amount();
-        $redirectUrls = new RedirectUrls();
-        $amount->setCurrency('EUR')->setTotal($request->input('amount'));
-
-        $payer = new Payer();
-        $payer->setPaymentMethod('paypal');
-
-        $amount = new Amount();
-        $amount->setCurrency('EUR')->setTotal($request->input('amount'));
-
-        $transaction = new Transaction();
-        $transaction->setAmount($amount)->setDescription('Descripción de tu producto o servicio');
+        $requestPaypal = new OrdersCreateRequest();
+        $requestPaypal->prefer('return=representation');
 
         session([
             'datosReserva' => [
@@ -67,19 +50,29 @@ class PaypalController extends Controller
             ],
         ]);
 
-        $redirectUrls->setReturnUrl(route('paypal.success', ['horarioId' => $horarioId]))->setCancelUrl(route('paypal.cancel', ['horarioId' => $horarioId]));
-
-        $payment = new Payment();
-        $payment
-            ->setIntent('sale')
-            ->setPayer($payer)
-            ->setTransactions([$transaction])
-            ->setRedirectUrls($redirectUrls);
+        $requestPaypal->body = [
+            'intent' => 'CAPTURE',
+            'purchase_units' => [
+                [
+                    'amount' => [
+                        'currency_code' => 'EUR',
+                        'value' => $request->input('amount'),
+                    ],
+                ],
+            ],
+            'application_context' => [
+                'cancel_url' => route('paypal.cancel', ['horarioId' => $horarioId]),
+                'return_url' => route('paypal.success', ['horarioId' => $horarioId]),
+            ],
+        ];
 
         try {
-            $payment->create($this->apiContext);
-            return redirect()->away($payment->getApprovalLink());
-        } catch (PayPalConnectionException $ex) {
+            $response = $this->client->execute($requestPaypal);
+            $orderId = $response->result->id;
+
+            // Redirigir al usuario a la página de aprobación de PayPal
+            return redirect()->away($response->result->links[1]->href);
+        } catch (\HttpException $ex) {
             // Manejo de excepciones
             Log::error($ex);
             return redirect()
@@ -90,45 +83,36 @@ class PaypalController extends Controller
 
     public function success(Request $request, $horarioId)
     {
-        $paymentId = $request->input('paymentId');
-        $payerId = $request->input('PayerID');
-
-        if (!$paymentId || !$payerId) {
-            return redirect()
-                ->route('reservar.show', ['horarioId' => $horarioId])
-                ->with('error', 'El pago no se completó.');
-        }
-
-        $payment = Payment::get($paymentId, $this->apiContext);
-        $execution = new PaymentExecution();
-        $execution->setPayerId($payerId);
+        $orderId = $request->input('token'); // Asegúrate de que 'token' es el nombre correcto del campo en tu respuesta de PayPal
 
         try {
-            $result = $payment->execute($execution, $this->apiContext);
+            $requestPaypal = new OrdersCaptureRequest($orderId);
+            $response = $this->client->execute($requestPaypal);
 
-            if ($result->getState() === 'approved') {
-                // Captura el ID del pago y el total del pago
-                $paypalPaymentId = $result->getTransactions()[0]->getRelatedResources()[0]->getSale()->getId();
-                $paypalTotal = $payment
-                    ->getTransactions()[0]
-                    ->getAmount()
-                    ->getTotal();
+            if ($response->statusCode == 201 || $response->statusCode == 200) {
+                // Suponiendo que la respuesta tiene la propiedad 'result' que contiene los detalles del pago
+                $captureId = $response->result->purchase_units[0]->payments->captures[0]->id;
+                // Asegúrate de que 'id' es la propiedad correcta para el ID de pago
 
-                // Almacena el ID de PayPal y el total en la sesión
-        session(['paypal_payment_id' => $paypalPaymentId, 'paypal_total' => $paypalTotal]);
+                // Suponiendo que 'purchase_units' es un array y que el total se encuentra en la primera unidad de compra
+                $paypalTotal = $response->result->purchase_units[0]->payments->captures[0]->amount->value;
 
+                // Almacenar el ID de PayPal y el total en la sesión
+                session(['paypal_capture_id' => $captureId, 'paypal_total' => $paypalTotal]);
+
+                // Continuar con el proceso de reserva...
                 $datosReserva = session('datosReserva');
-
-                // Crear un nuevo request con los datos de la reserva
                 $reservaRequest = new Request($datosReserva);
-
-                // Instanciar ReservaController y llamar al método store
                 $reservaController = new ReservaController();
                 return $reservaController->store($reservaRequest);
+            } else {
+                // Manejo de casos donde el pago no fue aprobado
+                return redirect()
+                    ->route('reservar.show', ['horarioId' => $horarioId])
+                    ->with('error', 'El pago no se completó correctamente.');
             }
-
-            // ... manejo de casos donde el pago no es aprobado
-        } catch (Exception $ex) {
+        } catch (\HttpException $ex) {
+            // Manejo de excepciones
             Log::error($ex);
             return redirect()
                 ->route('reservar.show', ['horarioId' => $horarioId])
@@ -138,8 +122,8 @@ class PaypalController extends Controller
 
     public function cancel($horarioId)
     {
-                // Inicializa Hashids con una sal secreta y una longitud mínima
-                $this->hashids = new Hashids(env('HASHID_SALT'), 10);
+        // Inicializa Hashids con una sal secreta y una longitud mínima
+        $this->hashids = new Hashids(env('HASHID_SALT'), 10);
         // Codifica el $horarioId que se recibe como parámetro
         $horarioIdCodificado = $this->hashids->encode($horarioId);
 
@@ -147,38 +131,60 @@ class PaypalController extends Controller
         return redirect()->route('reservar.show', ['horarioId' => $horarioIdCodificado]);
     }
 
-
     public function error()
     {
-        return redirect()->route('reservar.show');
+        return redirect()
+            ->route('reservar.show')
+            ->with('error', 'Error en el proceso de pago.');
     }
 
-    //Devolución
-
-    public function refundPayment($saleId)
+    public function refundPayment($captureId)
     {
         try {
-            $sale = Sale::get($saleId, $this->apiContext);
+            // Configura la solicitud de reembolso
+            $request = new CapturesRefundRequest($captureId);
 
-            // Crear un nuevo objeto Amount con los valores necesarios
-            $amount = new \PayPal\Api\Amount();
-            $amount->setTotal($sale->getAmount()->getTotal());
-            $amount->setCurrency($sale->getAmount()->getCurrency());
+            // Obtén el valor del reembolso desde la base de datos
+            $reserva = Reserva::where('paypal_sale_id', $captureId)->first();
+            if (!$reserva) {
+                return redirect()
+                    ->back()
+                    ->with('error', 'No se encontró la reserva correspondiente.');
+            }
 
-            $refund = new Refund();
-            $refund->setAmount($amount);
+            $refundAmount = $reserva->total_pagado; // Aquí asumo que el campo en tu base de datos se llama 'total_pagado'
 
-            $refundedSale = $sale->refund($refund, $this->apiContext);
+            // Define el cuerpo de la solicitud como un arreglo
+            $request->body = [
+                'amount' => [
+                    'currency_code' => 'EUR', // La moneda en la que deseas reembolsar
+                    'value' => $refundAmount, // El valor del reembolso
+                ],
+            ];
 
-            return $refundedSale;
 
-        } catch (PayPalConnectionException $ex) {
-            // Log y manejo de error
-            $errorData = json_decode($ex->getData());
-            Log::error('PayPal API Error: ' . json_encode($errorData));
-            return null;
+            // Realiza la solicitud de reembolso
+            $response = $this->client->execute($request);
+
+            // Verifica la respuesta de PayPal
+            if ($response->statusCode === 201 || $response->statusCode === 200) {
+                // El reembolso se ha realizado correctamente
+                // Puedes realizar cualquier acción adicional aquí
+                return redirect()
+                    ->back()
+                    ->with('success', 'Reembolso exitoso.');
+            } else {
+                // Manejo de casos donde el reembolso no fue exitoso
+                return redirect()
+                    ->back()
+                    ->with('error', 'Error al procesar el reembolso.');
+            }
+        } catch (HttpException $ex) {
+            // Manejo de excepciones
+            Log::error($ex);
+            return redirect()
+                ->back()
+                ->with('error', 'Error al procesar el reembolso.');
         }
     }
-
-
 }
