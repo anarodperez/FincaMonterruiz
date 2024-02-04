@@ -168,7 +168,7 @@
                         mensaje.style.display = 'flex';
                         mensaje.style.justifyContent = 'center'; // Centra verticalmente
                         mensaje.style.alignItems = 'center';
-                        // Reemplaza 'nombre_del_div_donde_mostrar_mensaje' con el ID o clase del elemento HTML donde deseas mostrar el mensaje.
+
                         document.getElementById('card').appendChild(mensaje);
                     }
                 </script>

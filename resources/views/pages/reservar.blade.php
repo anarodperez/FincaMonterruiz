@@ -157,7 +157,7 @@
                 let numNinos = parseInt(document.getElementById('numNinos') ? document.getElementById('numNinos').value : 0) || 0;
 
                 let subtotal = (numAdultos * precioAdulto) + (numNinos * precioNino);
-                let iva = subtotal * 0.21; // Asume un IVA del 21%
+                let iva = subtotal * 0.21;
                 let totalConIVA = subtotal + iva;
 
                 document.getElementById('subtotal').textContent = subtotal.toFixed(2) + ' €';

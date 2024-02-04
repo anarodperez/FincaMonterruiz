@@ -98,7 +98,7 @@ class ReservaController extends Controller
         // Crear la reserva
         $reserva = new Reserva();
         $reserva->num_adultos = $validated['num_adultos'];
-        $reserva->num_ninos = $validated['num_ninos'] ?? 0; // Usar ?? para establecer un valor predeterminado de 0 si num_ninos está vacío
+        $reserva->num_ninos = $validated['num_ninos'] ?? 0;
         $reserva->horario_id = $validated['horario_id'];
         $reserva->user_id = Auth::id();
         $reserva->actividad_id = $actividad->id;
@@ -156,15 +156,13 @@ class ReservaController extends Controller
             'estado' => 'pagada',
             'fecha_emision' => now(),
             'precio_adulto_final' => $reserva->actividad->precio_adulto,
-            'precio_nino_final' => $reserva->actividad->precio_nino ?? 0
+            'precio_nino_final' => $reserva->actividad->precio_nino ?? 0,
         ]);
 
         try {
             $factura->save();
         } catch (\Exception $e) {
             Log::error('Error al guardar factura: ' . $e->getMessage());
-            Log::info('Precio adulto: ' . $reserva->actividad->precio_adulto);
-Log::info('Precio niño: ' . $reserva->actividad->precio_nino);
 
             return back()->with('error', 'Error al crear la factura.');
         }

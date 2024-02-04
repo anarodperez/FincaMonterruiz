@@ -3,38 +3,8 @@
 @section('title')
     Admin | Facturas
 @endsection
-<style>
-    form {
-        margin: 20px 0;
-        background: #f4f4f4;
-        padding: 20px;
-        border-radius: 8px;
-    }
-
-    input[type="text"] {
-        padding: 10px;
-        margin: 10px 0;
-        border: 1px solid #ddd;
-        border-radius: 4px;
-        width: calc(100% - 24px);
-    }
-
-    button {
-        padding: 10px 20px;
-        border: none;
-        border-radius: 10px;
-        background-color: #6fa78a;
-        color: white;
-        cursor: pointer;
-        transition: background-color 0.3s ease;
-    }
-
-    button:hover {
-        background-color: #406854;
-    }
-</style>
 @section('content')
-    <div class="container">
+    <div class="container facturas">
         <div class="text-center my-4">
             <h2 class="display-4 font-weight-bold titulo">Listado de Facturas</h2>
         </div>
@@ -52,7 +22,7 @@
                             <th>ID</th>
                             <th>Reserva ID</th>
                             <th>Monto</th>
-                            <th>IVA</th>
+                            <th>IVA (21%)</th>
                             <th>Monto Total</th>
                             <th>Estado</th>
                             <th>Detalles</th>

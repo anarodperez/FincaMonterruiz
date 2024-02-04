@@ -82,7 +82,7 @@
                 </div>
 
                 <!-- Enlaces de paginación -->
-                {{ $valoraciones->links('pagination::bootstrap-4') }}
+                {{ $valoraciones->links() }}
             </div>
         </div>
     </div>
