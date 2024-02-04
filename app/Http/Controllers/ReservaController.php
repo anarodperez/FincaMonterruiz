@@ -65,6 +65,7 @@ class ReservaController extends Controller
 
     public function store(Request $request)
     {
+
         // Validar los datos del formulario
         $validated = $request->validate([
             'num_adultos' => 'required|integer|min:0',
@@ -92,7 +93,7 @@ class ReservaController extends Controller
         }
 
         // Obtener el ID de PayPal y el total del pago de la sesión
-        $paypalPaymentId = session('paypal_payment_id', null);
+        $paypalPaymentId = session('paypal_capture_id', null);
         $paypalTotal = session('paypal_total', null);
 
         // Crear la reserva

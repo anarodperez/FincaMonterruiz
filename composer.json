@@ -16,6 +16,7 @@
         "laravelcollective/html": "^6.4",
         "league/flysystem-aws-s3-v3": "^3.0",
         "nesbot/carbon": "^2.71",
+        "paypal/paypal-checkout-sdk": "^1.0",
         "paypal/rest-api-sdk-php": "^1.6",
         "simplesoftwareio/simple-qrcode": "^4.2"
     },
