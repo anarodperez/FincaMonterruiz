@@ -30,7 +30,7 @@ La funcionalidad principal de la aplicación es permitir a los usuarios explorar
     - Valorar actividad.
     - Modificar perfil.
   - **Administrador:**
-    - Gestionar usuarios y actividades.
+    - Gestionar usuarios,actividades, valoraciones, horarios, envio de newsletters y facturas.
 
 ## 4. Elementos de Innovación
 
