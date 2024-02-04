@@ -141,7 +141,7 @@ VITE_PUSHER_APP_CLUSTER="${PUSHER_APP_CLUSTER}"
 
 ```
 
-**Para obtener la configuración necesaria para integrar PayPal en tu proyecto, como las credenciales API (Client ID y Secret), debes seguir estos pasos:
+**Para obtener la configuración necesaria para integrar PayPal en tu proyecto, como las credenciales API (Client ID y Secret), debes seguir estos pasos:**
 
 1. Crear una Cuenta PayPal
 2. Acceder al Panel de Desarrollador de PayPal. Aquí es donde puedes gestionar tus aplicaciones y obtener tus credenciales API.
@@ -166,7 +166,7 @@ MAIL_PASSWORD=contraseñade16dígitos
 MAIL_ENCRYPTION=ssl
 MAIL_FROM_ADDRESS=tucorreo@gmail.com
 MAIL_FROM_NAME="${APP_NAME}"
-``
+```
 
 Para generar una contraseña de aplicación:
 
@@ -175,21 +175,21 @@ Para generar una contraseña de aplicación:
 -En "Seleccionar aplicación", elige "Otra (nombre personalizado)" y ponle un nombre que te permita recordar para qué es esta contraseña, como "Laravel".
 -Haz clic en "Generar" y Google te proporcionará una contraseña de 16 caracteres. Esta es la contraseña que usarás para MAIL_PASSWORD en tu archivo .env.
 
-**Configuración a Amazon S3: 
+**Configuración a Amazon S3:**
 
-PASO 1: Crear un Bucket de S3
+**PASO 1:** Crear un Bucket de S3
 
 Ingresa a la consola de administración de AWS.
 Busca el servicio S3 y crea un nuevo bucket.
 Configura las opciones del bucket según tus necesidades, asegurándote de establecer los permisos adecuados.
 
-PASO 2: Obtener Credenciales de AWS
+**PASO 2**: Obtener Credenciales de AWS
 
 Navega al servicio IAM en la consola de AWS.
 Crea un nuevo usuario con acceso programático y asigna la política AmazonS3FullAccess a este usuario o una política personalizada que se ajuste mejor a tus necesidades de seguridad.
 Anota el Access Key ID y el Secret Access Key proporcionados tras la creación del usuario.
 
-PASO 3: Configurar .env
+**PASO 3:** Configurar .env
 
 Añade o actualiza las siguientes claves en tu archivo .env con los valores obtenidos:
 ```bash
@@ -202,8 +202,8 @@ AWS_ACCESS_KEY_ID: Tu ID de clave de acceso de AWS.
 AWS_SECRET_ACCESS_KEY: Tu clave de acceso secreta de AWS.
 AWS_DEFAULT_REGION: La región en la que se encuentra tu bucket de S3 (por ejemplo, us-east-1).
 AWS_BUCKET: El nombre de tu bucket de S3.
-``
-PASO 4: Configurar el Sistema de Archivos
+```
+**PASO 4:** Configurar el Sistema de Archivos
 
 Asegúrate de que el sistema de archivos de tu aplicación Laravel esté configurado para usar S3 como disco predeterminado o según sea necesario. Esto se hace en el archivo config/filesystems.php bajo la clave disks, asegurándote de que el disco s3 esté configurado correctamente y utilizando las variables de entorno que definiste:
 ```bash
@@ -214,7 +214,7 @@ Asegúrate de que el sistema de archivos de tu aplicación Laravel esté configu
     'region' => env('AWS_DEFAULT_REGION'),
     'bucket' => env('AWS_BUCKET'),
 ],
-``
+```
 
 ## Ejecución de la Aplicación
 
