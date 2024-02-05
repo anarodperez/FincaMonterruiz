@@ -14,6 +14,9 @@ class AdminUserSeeder extends Seeder
      */
     public function run(): void
     {
+        // Vaciar la tabla primero si es necesario
+        DB::table('users')->delete();
+
         DB::table('users')->insert([
             'id' => 1,
             'nombre' => 'adminAna',

@@ -25,21 +25,25 @@ class ReservasSeeder extends Seeder
             $actividad = Actividad::findOrFail($actividadId);
 
             for ($i = 0; $i < 3; $i++) {
+                // Verificar si la actividad tiene precio para niños
+                $tienePrecioNino = isset($actividad->precio_nino) && $actividad->precio_nino > 0;
+                $numNinos = $tienePrecioNino ? rand(0, 5) : 0; // Asignar número de niños solo si hay precio para ellos
+
                 // Crear la reserva
                 $reserva = Reserva::create([
                     'num_adultos' => rand(1, 5),
-                    'num_ninos' => rand(0, 5),
+                    'num_ninos' => $numNinos, // Usar la variable condicional aquí
                     'observaciones' => 'Reserva de prueba ' . ($i + 1),
                     'horario_id' => $horarioId,
-                    'actividad_id' => $actividadId, // Aquí todavía usamos el ID para la creación
+                    'actividad_id' => $actividadId,
                     'user_id' => $userId,
                     'created_at' => Carbon::now(),
                     'updated_at' => Carbon::now(),
                 ]);
 
-                // Calcular los totales para la factura usando el objeto Actividad
+                // Calcular los totales para la factura
                 $precioPorAdulto = $actividad->precio_adulto;
-                $precioPorNino = $actividad->precio_nino;
+                $precioPorNino = $tienePrecioNino ? $actividad->precio_nino : 0;
 
                 $totalSinIVA = $reserva->num_adultos * $precioPorAdulto + $reserva->num_ninos * $precioPorNino;
                 $iva = $totalSinIVA * 0.21; // Suponiendo un 21% de IVA
@@ -54,11 +58,12 @@ class ReservasSeeder extends Seeder
                     'estado' => 'pagada',
                     'fecha_emision' => now(),
                     'precio_adulto_final' => $precioPorAdulto,
-                    'precio_nino_final' => $precioPorNino,
+                    'precio_nino_final' => $precioPorNino, // Aquí podría ser cero si no hay precio para niños
                 ]);
             }
         } else {
             echo "Necesitas al menos una actividad, un horario y un usuario con ID 2 en la base de datos.\n";
         }
     }
+
 }

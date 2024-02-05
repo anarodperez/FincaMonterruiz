@@ -29,10 +29,10 @@ class NewsletterController extends Controller
         $selectedNewsletter = Newsletter::where('selected', true)->where('id', '!=', 1)->first();
         $otraNewsletterSeleccionada = Newsletter::where('id', '!=', 1)->where('selected', true)->exists();
 
-        // Obtener la información de newsletter_schedule (genérica)
+        // Obtener la información de newsletter_schedule
         $schedule = NewsletterSchedule::first();
 
-        // Traducir el día de la semana al español
+        // Traducir el día de la semana
         $translatedDay = '';
         $executionTime = '';
         if ($schedule) {
@@ -51,7 +51,6 @@ class NewsletterController extends Controller
         // Aplicar ordenación
         $newsletters = $query->orderBy($columna, $orden)->paginate(5);
 
-        // Pasar datos a la vista
         return view('admin.newsletters.index', compact('newsletters', 'claseOrdenActual', 'selectedNewsletter', 'otraNewsletterSeleccionada', 'schedule', 'translatedDay', 'executionTime'));
     }
 

@@ -23,9 +23,10 @@ class PaypalController extends Controller
 
     public function __construct()
     {
-        $paypalEnvironment = 'sandbox'; // Debes definir esto en tu archivo de configuración
-        $clientId = 'AYoKresmgirjy-Btw9k5gB14TTnDd_GsM_08Loq8OB98Iidrsr946yAkL9qbR0E5WRiULl3atKM3f7Ri'; // Debes definir esto en tu archivo de configuración
-        $clientSecret = 'ELBT4WCJmT83LWprK2sKxvvXrSVEqg-mAqpuSAAWejTb-Orei9Bed4HSKgJ6jAMD0SQ3bIt5SIZ77SWq'; // Debes definir esto en tu archivo de configuración
+        $paypalEnvironment = env('PAYPAL_ENVIRONMENT', 'sandbox');
+        $clientId = env('PAYPAL_CLIENT_ID', '');
+        $clientSecret = env('PAYPAL_CLIENT_SECRET', '');
+
 
         if ($paypalEnvironment === 'sandbox') {
             $environment = new SandboxEnvironment($clientId, $clientSecret);
@@ -83,24 +84,19 @@ class PaypalController extends Controller
 
     public function success(Request $request, $horarioId)
     {
-        $orderId = $request->input('token'); // Asegúrate de que 'token' es el nombre correcto del campo en tu respuesta de PayPal
+        $orderId = $request->input('token');
 
         try {
             $requestPaypal = new OrdersCaptureRequest($orderId);
             $response = $this->client->execute($requestPaypal);
 
             if ($response->statusCode == 201 || $response->statusCode == 200) {
-                // Suponiendo que la respuesta tiene la propiedad 'result' que contiene los detalles del pago
                 $captureId = $response->result->purchase_units[0]->payments->captures[0]->id;
-                // Asegúrate de que 'id' es la propiedad correcta para el ID de pago
 
-                // Suponiendo que 'purchase_units' es un array y que el total se encuentra en la primera unidad de compra
                 $paypalTotal = $response->result->purchase_units[0]->payments->captures[0]->amount->value;
 
-                // Almacenar el ID de PayPal y el total en la sesión
                 session(['paypal_capture_id' => $captureId, 'paypal_total' => $paypalTotal]);
 
-                // Continuar con el proceso de reserva...
                 $datosReserva = session('datosReserva');
                 $reservaRequest = new Request($datosReserva);
                 $reservaController = new ReservaController();
@@ -127,7 +123,6 @@ class PaypalController extends Controller
         // Codifica el $horarioId que se recibe como parámetro
         $horarioIdCodificado = $this->hashids->encode($horarioId);
 
-        // Redirige a la ruta 'reservar.show' con el $horarioId codificado
         return redirect()->route('reservar.show', ['horarioId' => $horarioIdCodificado]);
     }
 
@@ -152,7 +147,7 @@ class PaypalController extends Controller
                     ->with('error', 'No se encontró la reserva correspondiente.');
             }
 
-            $refundAmount = $reserva->total_pagado; // Aquí asumo que el campo en tu base de datos se llama 'total_pagado'
+            $refundAmount = $reserva->total_pagado;
 
             // Define el cuerpo de la solicitud como un arreglo
             $request->body = [
@@ -168,8 +163,6 @@ class PaypalController extends Controller
 
             // Verifica la respuesta de PayPal
             if ($response->statusCode === 201 || $response->statusCode === 200) {
-                // El reembolso se ha realizado correctamente
-                // Puedes realizar cualquier acción adicional aquí
                 return redirect()
                     ->back()
                     ->with('success', 'Reembolso exitoso.');

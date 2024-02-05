@@ -2,65 +2,11 @@
 
 @section('title', 'Admin | Horarios')
 
+@section('css')
+    <link rel="stylesheet" href="{{ asset('css/admin.css') }}">
+@endsection
+
 @section('content')
-    <style>
-        #calendar {
-            margin: 0 auto;
-            padding: 15px;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-            background-color: #fff;
-            width: 100%;
-            max-width: 1400px;
-            margin: 0 auto;
-            background-color: #fff;
-        }
-
-        .fc-header-toolbar {
-            margin-bottom: 20px;
-            background-color: #F8F9FA;
-        }
-
-        .custom-event {
-            padding: 5px;
-            border-radius: 4px;
-            background-color: #f9f9f9;
-            border: 1px solid #ddd;
-            text-align: center;
-            color: blue;
-        }
-
-        .fc-h-event {
-            background-color: transparent;
-            border: none;
-        }
-
-        .event-title,
-        .event-time, .event-idioma {
-            font-weight: bold;
-            margin-bottom: 5px;
-            font-size: 14px;
-        }
-
-        .event-aforo {
-            font-size: 1.2em;
-            border-radius: 2px;
-        }
-
-        .event-idioma {
-            color: rgb(219, 155, 36);
-            text-transform: uppercase;
-        }
-
-
-        .fc-event {
-            display: flex;
-            justify-content: center;
-        }
-
-    </style>
-
-
     <div class="container">
         @if (session('success'))
             <div class="alert alert-success alert-dismissible fade show" style="margin-top: 13px;">

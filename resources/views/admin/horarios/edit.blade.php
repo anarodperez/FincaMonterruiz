@@ -24,6 +24,26 @@
         @csrf
         @method('PUT')
 
+        @if($esRecurrente)
+        <fieldset class="row mb-3">
+            <legend class="col-form-label col-sm-2 pt-0">Tipo de Edición:</legend>
+            <div class="col-sm-10">
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="tipo_edicion" id="editarEsta" value="instancia" checked>
+                    <label class="form-check-label" for="editarEsta">
+                        Editar solo esta instancia
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="tipo_edicion" id="editarSerie" value="serie">
+                    <label class="form-check-label" for="editarSerie">
+                        Editar toda la serie
+                    </label>
+                </div>
+            </div>
+        </fieldset>
+    @endif
+
         <div class="row mb-3">
             <div class="col-md-6">
                 <label for="actividad" class="form-label">Actividad:</label>
@@ -49,32 +69,32 @@
                 <select id="idioma" name="idioma" class="form-select">
                     <option value="Español" {{ $horario->idioma == 'Español' ? 'selected' : '' }}>Español</option>
                     <option value="Inglés" {{ $horario->idioma == 'Inglés' ? 'selected' : '' }}>Inglés</option>
-                    <!-- Añade más opciones de idioma según sea necesario -->
+                    <option value="Francés" {{ $horario->idioma == 'Francés' ? 'selected' : '' }}>Francés</option>
                 </select>
             </div>
         </div>
-
-        @if($esRecurrente)
-            <fieldset class="row mb-3">
-                <legend class="col-form-label col-sm-2 pt-0">Tipo de Edición:</legend>
-                <div class="col-sm-10">
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="tipo_edicion" id="editarEsta" value="instancia" checked>
-                        <label class="form-check-label" for="editarEsta">
-                            Editar solo esta instancia
-                        </label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="tipo_edicion" id="editarSerie" value="serie">
-                        <label class="form-check-label" for="editarSerie">
-                            Editar toda la serie
-                        </label>
-                    </div>
-                </div>
-            </fieldset>
-        @endif
-
         <button type="submit" class="btn btn-primary">Actualizar Horario</button>
     </form>
 </div>
+<script>
+    $(document).ready(function() {
+        // Verificar inicialmente cuál opción está seleccionada
+        toggleFechaField();
+
+        // Escuchar cambios en las opciones de tipo de edición
+        $('input[name="tipo_edicion"]').change(function() {
+            toggleFechaField();
+        });
+
+        function toggleFechaField() {
+            // Si "Editar solo esta instancia" está seleccionado, habilitar el campo fecha
+            if ($('#editarEsta').is(':checked')) {
+                $('#fecha').prop('disabled', false);
+            } else {
+                $('#fecha').prop('disabled', true);
+            }
+        }
+    });
+    </script>
+
 @endsection
