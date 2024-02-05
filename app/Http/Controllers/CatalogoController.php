@@ -160,7 +160,7 @@ class CatalogoController extends Controller
                 'start' => $horario->fecha . 'T' . $horario->hora,
                 'extendedProps' => [
                     'idioma' => $horario->idioma,
-                    'horario_id' => $horario->id,
+                    'horario_id' => $this->hashids->encode($horario->id),
                     'frecuencia' => $horario->frecuencia,
                 ],
             ];
