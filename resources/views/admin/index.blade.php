@@ -114,15 +114,6 @@
                         <canvas id="graficoReservas"></canvas>
                     </div>
                 </div>
-
-
-                {{-- Para el gráfico --}}
-                <!-- ... (código anterior) ... -->
-
-                <!-- ... (código anterior) ... -->
-
-                <!-- ... (código anterior) ... -->
-
                 <script>
                     var datosReservas = @json($datosReservas);
 
@@ -160,22 +151,16 @@
                             }
                         });
                     } else {
-                        // No hay datos en datosReservas, muestra un mensaje en el lugar donde deseas mostrarlo
                         var mensaje = document.createElement('p');
                         mensaje.innerText = 'No hay reservas disponibles para mostrar el gráfico.';
-                        mensaje.style.textAlign = 'center'; // Centra horizontalmente
-                        mensaje.style.fontSize = '24px'; // Aumenta el tamaño del texto
+                        mensaje.style.textAlign = 'center';
+                        mensaje.style.fontSize = '24px';
                         mensaje.style.display = 'flex';
-                        mensaje.style.justifyContent = 'center'; // Centra verticalmente
+                        mensaje.style.justifyContent = 'center';
                         mensaje.style.alignItems = 'center';
-
                         document.getElementById('card').appendChild(mensaje);
                     }
                 </script>
-
-
-
-
             </main>
         </div>
     </div>

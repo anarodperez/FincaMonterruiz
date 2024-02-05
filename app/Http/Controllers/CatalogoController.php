@@ -23,10 +23,7 @@ class CatalogoController extends Controller
 
     public function index()
     {
-        // Obtiene todos los horarios con su actividad relacionada
         $horarios = Horario::with('actividad')->get();
-
-        // Obtiene solo las actividades que están activas con paginación
         $actividades = Actividad::where('activa', true)->paginate(3);
 
         $events = $horarios

@@ -1,4 +1,7 @@
 @extends('layouts.admin')
+@section('title')
+    Admin | Horarios
+@endsection
 
 @section('title', 'Admin | Horarios')
 

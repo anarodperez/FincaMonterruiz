@@ -154,12 +154,8 @@ Route::get('/paypal/cancel/{horarioId}', [PaypalController::class, 'cancel'])->n
 
 //Valorar actividad
 Route::get('/valorar/{id}', [ValoracionController::class, 'create'])->name('pages.valorar');
-// Ruta para almacenar la valoración enviada desde el formulario
 Route::post('/valoraciones', [ValoracionController::class, 'store'])->name('valoraciones.store');
-
-Route::get('/valoraciones/editar/{id}', [ValoracionController::class, 'edit'])->name('valoraciones.editar');
 Route::put('/valoraciones/actualizar/{id}', [ValoracionController::class, 'update'])->name('valoraciones.actualizar');
-
 Route::delete('/valoraciones/{id}', [ValoracionController::class, 'destroy'])->name('valoraciones.destroy');
 
 //Descarga pdf reserva

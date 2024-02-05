@@ -52,7 +52,11 @@
                             <tr>
                                 <td>{{ $usuario->nombre }}</td>
                                 <td>{{ $usuario->apellido1 }} {{ $usuario->apellido2 }}</td>
-                                <td style="width: 30%">{{ $usuario->email }}</td>
+                                <td class="email-cell">
+                                    <span data-bs-toggle="tooltip" data-bs-placement="top" title="{{ $usuario->email }}">
+                                        {{ $usuario->email }}
+                                    </span>
+                                </td>
                                 <td>{{ $usuario->telefono }}</td>
                                 <td>{{ $usuario->fecha_nacimiento }}</td>
                                 <td>

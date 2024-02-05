@@ -82,8 +82,6 @@
         <div>Fecha de la actividad: {{ $fechaActividad->format('Y-m-d') }} a las {{ $horaActividad->format('H:i') }}
         </div>
     </section>
-
-    <!-- Tabla de items facturados -->
     <table>
         <thead>
             <tr>

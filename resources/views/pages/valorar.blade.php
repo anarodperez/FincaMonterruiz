@@ -32,7 +32,7 @@
 
                 <div class="comentario-section">
                     <label for="comentario" class="form-label">Comentario</label>
-                    <textarea class="form-control" id="comentario" name="comentario"></textarea>
+                    <textarea class="form-control" id="comentario" name="comentario" maxlength="500"></textarea>
                 </div>
 
                 <span id="mensajeAdvertencia" style="display:none; color: red; margin-top: 1vh;"></span>

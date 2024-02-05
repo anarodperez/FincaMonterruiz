@@ -18,7 +18,6 @@ class SuscriptorController extends Controller
             'email' => 'required|email|unique:suscriptores,email',
         ]);
 
-        // Crear el nuevo suscriptor
         Suscriptor::create($validatedData);
 
         // Enviar la newsletter de bienvenida
@@ -42,7 +41,6 @@ class SuscriptorController extends Controller
         $suscriptor = Suscriptor::where('email', $email)->first();
 
         if ($suscriptor) {
-            // eliminamos el suscriptor
             $suscriptor->delete();
 
             return view('emails.cancelada', ['email' => $email]);

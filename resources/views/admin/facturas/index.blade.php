@@ -25,7 +25,6 @@
                             <th>IVA (21%)</th>
                             <th>Monto Total</th>
                             <th>Estado</th>
-                            <th>Detalles</th>
                             <th>Fecha Emisión</th>
                             <th>Fecha Cancelación</th>
                             <th>Acciones</th>
@@ -40,7 +39,6 @@
                                 <td>{{ $factura->iva }}€</td>
                                 <td>{{ $factura->monto_total }}€</td>
                                 <td>{{ $factura->estado }}</td>
-                                <td>{{ $factura->detalles }}</td>
                                 <td>{{ $factura->fecha_emision }}</td>
                                 <td>{{ $factura->fecha_cancelacion }}</td>
                                 <td>

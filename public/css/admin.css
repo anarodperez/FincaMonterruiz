@@ -318,3 +318,10 @@ min-height: 80vh;
     display: flex;
     justify-content: center;
 }
+
+
+.email-cell {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}

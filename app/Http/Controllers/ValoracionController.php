@@ -7,7 +7,6 @@ use App\Models\Valoracion;
 use App\Models\Actividad;
 use App\Models\AdminNotification;
 
-
 class ValoracionController extends Controller
 {
     public function index()
@@ -40,7 +39,7 @@ class ValoracionController extends Controller
         $request->validate([
             'actividad_id' => 'required|exists:actividades,id',
             'puntuacion' => 'required|integer|min:1|max:5',
-            'comentario' => 'nullable|string',
+            'comentario' => 'nullable|string|max:500',
         ]);
 
         Valoracion::create([
@@ -62,35 +61,36 @@ class ValoracionController extends Controller
             ->with('success', 'Valoración enviada con éxito.');
     }
 
-     // Método para mostrar el formulario de edición de la valoración
-     public function edit($id)
-     {
+    // Método para mostrar el formulario de edición de la valoración
+    public function edit($id)
+    {}
+
+    // Método para actualizar la valoración
+    public function update(Request $request, $id)
+    {
         $valoracion = Valoracion::findOrFail($id);
 
-         return view('pages.editar_valoracion', compact('valoracion'));
-     }
+        $request->validate([
+            'puntuacion' => 'integer|min:1|max:5|nullable',
+            'comentario' => 'nullable|string|max:500',
+        ]);
 
+        $datosActualizados = [];
+        if ($request->filled('puntuacion')) {
+            $datosActualizados['puntuacion'] = $request->puntuacion;
+        }
+        if ($request->filled('comentario')) {
+            $datosActualizados['comentario'] = $request->comentario;
+        }
 
-     // Método para actualizar la valoración
-     public function update(Request $request, $id)
-     {
-         $valoracion = Valoracion::findOrFail($id);
+        if (!empty($datosActualizados)) {
+            $valoracion->update($datosActualizados);
+        }
 
-         $request->validate([
-             'puntuacion' => 'required|integer|min:1|max:5',
-             'comentario' => 'nullable|string',
-         ]);
-
-         $valoracion->update([
-             'puntuacion' => $request->puntuacion,
-             'comentario' => $request->comentario,
-         ]);
-
-         return redirect()
-             ->route('dashboard')
-             ->with('success', 'Valoración actualizada con éxito.');
-     }
-
+        return redirect()
+            ->route('dashboard')
+            ->with('success', 'Valoración actualizada con éxito.');
+    }
 
     public function destroy($id)
     {

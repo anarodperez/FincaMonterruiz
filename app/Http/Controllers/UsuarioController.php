@@ -108,8 +108,8 @@ class UsuarioController extends Controller
                 });
             })
             ->select('reservas.*', 'actividades.nombre as nombre_actividad', 'horarios.fecha as fecha_actividad', 'horarios.hora as hora_actividad')
-            ->paginate(3, ['*'], 'activePage', $activePage) // Especifica la página actual para activas
-            ->appends(['pastPage' => $pastPage]); // Asegúrate de que los enlaces de paginación para activas incluyan el estado de la paginación para pasadas
+            ->paginate(3, ['*'], 'activePage', $activePage)
+            ->appends(['pastPage' => $pastPage]);
 
         // Para reservas pasadas
         $reservasPasadas = $user
@@ -123,8 +123,8 @@ class UsuarioController extends Controller
         })
         ->where('reservas.user_id', '=', $user->id)
         ->select('reservas.id as reserva_id', 'reservas.*', 'actividades.nombre as nombre_actividad', 'horarios.fecha as fecha_actividad', 'horarios.hora as hora_actividad') // Añadir esta línea
-        ->paginate(3, ['*'], 'pastPage', $pastPage) // Especifica la página actual para pasadas
-        ->appends(['activePage' => $activePage]); // Asegúrate de que los enlaces de paginación para pasadas incluyan el estado de la paginación para activas
+        ->paginate(3, ['*'], 'pastPage', $pastPage)
+        ->appends(['activePage' => $activePage]);
 
 
         // Obtener las valoraciones del usuario

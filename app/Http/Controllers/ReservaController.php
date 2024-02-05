@@ -242,7 +242,7 @@ class ReservaController extends Controller
             $adminEmail = 'anarodpe8@gmail.com';
 
             // Enviar correo de cancelación
-            Mail::to($reserva->usuario->email)->cc($adminEmail)->send(new ReservationCancellationMail($reserva, $motivoCancelacion));
+            Mail::to($reserva->usuario->email)->cc($adminEmail)->queue(new ReservationCancellationMail($reserva, $motivoCancelacion));
 
             DB::commit();
 

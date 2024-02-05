@@ -44,7 +44,7 @@ class ProfileController extends Controller
             'email' => $request->input('email'),
         ]);
 
-        // Verifica si el campo 'email' c`ambió y, en ese caso, restablece la verificación de email
+        // Verifica si el campo 'email' cambió y, en ese caso, restablece la verificación de email
         if ($user->wasChanged('email')) {
             $user->email_verified_at = null;
             $user->save();

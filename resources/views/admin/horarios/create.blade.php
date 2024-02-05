@@ -1,41 +1,43 @@
+
+@extends('layouts.admin')
+@section('title')
+    Crear Horario
+@endsection
+
 <style>
-    form{
+    form {
         margin-bottom: 6vh;
     }
 
 
-body {
-    display: flex;
-    flex-direction: column;
-}
+    body {
+        display: flex;
+        flex-direction: column;
+    }
 
-.container {
-    flex: 1;
-    padding: 20px;
-}
+    .container {
+        flex: 1;
+        padding: 20px;
+    }
 
-.error-list {
-    list-style-type: none;
-    padding-left: 0;
-}
-
-
+    .error-list {
+        list-style-type: none;
+        padding-left: 0;
+    }
 </style>
-
-@extends('layouts.admin')
 
 @section('content')
     <div class="horario container">
         <h2 class="my-4 text-center">Crear Nuevo Horario</h2>
         <!-- Mensajes de error -->
         @if ($errors->any())
-        <div class="alert alert-danger">
-            <ul class="error-list">
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
+            <div class="alert alert-danger">
+                <ul class="error-list">
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
         @endif
 
         <!-- Formulario de creación de horarios -->
@@ -83,14 +85,14 @@ body {
             <div class="mb-3" id="divRepeticiones" style="display: none;">
                 <label for="repeticiones" class="form-label">Repeticiones:</label>
                 <input type="number" name="repeticiones" id="repeticiones" class="form-control"
-                       value="{{ old('repeticiones') }}" min="1">
+                    value="{{ old('repeticiones') }}" min="1">
             </div>
 
-            <!-- Agrega otros campos según sea necesario -->
-            <button type="submit" class="btn btn-primary">Guardar</button>
             <a href="{{ route('admin.horarios.index') }}" class="btn btn-info">
-                <span class="fas fa-undo-alt"></span> Regresar
+                <i class="fas fa-arrow-left"></i>Regresar
             </a>
+            <button type="submit" class="btn btn-primary">Guardar</button>
+
         </form>
     </div>
     <script>

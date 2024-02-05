@@ -25,7 +25,7 @@ class PaypalController extends Controller
     {
         $paypalEnvironment = env('PAYPAL_ENVIRONMENT', 'sandbox');
         $clientId = env('PAYPAL_CLIENT_ID', '');
-        $clientSecret = env('PAYPAL_CLIENT_SECRET', '');
+        $clientSecret = env('PAYPAL_SECRET', '');
 
 
         if ($paypalEnvironment === 'sandbox') {

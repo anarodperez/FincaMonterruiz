@@ -44,7 +44,7 @@
 
                         <div class="form-group mb-3">
                             <label for="nombre" class="mb-2">Nombre</label>
-                            <input type="text" name="nombre" class="form-control" value="{{ old('nombre') }}">
+                            <input type="text" name="nombre" class="form-control" value="{{ old('nombre') }}" required>
                             @error('nombre')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror

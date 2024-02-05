@@ -30,19 +30,20 @@
                                 <td>{{ $actividad->descripcion }}</td>
                                 <td>{{ $actividad->duracion }}</td>
                                 <td>{{ $actividad->precio_adulto }}</td>
-                                <td>{{ $actividad->precio_ninio}}</td>
+                                <td>{{ $actividad->precio_ninio }}</td>
                                 <td>{{ $actividad->aforo }}</td>
                             </tr>
                         </tbody>
                     </table>
-                    <form action="{{ route('admin.actividades.delete', ['actividad' => encrypt($actividad->id)]) }}" method="POST">
+                    <form action="{{ route('admin.actividades.delete', ['actividad' => encrypt($actividad->id)]) }}"
+                        method="POST">
 
                         @csrf
                         @method('DELETE')
                         <a href="{{ route('admin.actividades.index') }}" class="btn btn-info">
-                            <i class="fas fa-arrow-left"></i>  Regresar
+                            <i class="fas fa-arrow-left"></i> Regresar
                         </a>
-                        <button class="btn btn-danger" >
+                        <button class="btn btn-danger">
                             <span class="fas fa-times"></span> Eliminar
                         </button>
                     </form>
@@ -50,4 +51,5 @@
                 </p>
             </div>
         </div>
-    @endsection
+    </div>
+@endsection

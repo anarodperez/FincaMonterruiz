@@ -10,7 +10,7 @@
 
 @section('content')
     <main>
-         <div class="container py-5">
+        <div class="container py-5">
             <div id="welcomeMessage" class="alert alert-info"></div>
         </div>
 
@@ -68,7 +68,8 @@
                                         <p class="card-text">Fecha: <strong>{{ $reserva->horario->fecha }} </strong> </p>
                                         <p class="card-text">Hora: <strong>{{ $reserva->horario->hora }} </strong> </p>
                                         <p class="card-text">
-                                            Estado: <span class="{{ $reserva->estado == 'confirmado' ? 'text-success' : ($reserva->estado == 'cancelada' ? 'text-danger' : '') }}">
+                                            Estado: <span
+                                                class="{{ $reserva->estado == 'confirmado' ? 'text-success' : ($reserva->estado == 'cancelada' ? 'text-danger' : '') }}">
                                                 <strong>{{ $reserva->estado }}</strong>
                                             </span>
                                         </p>
@@ -114,7 +115,8 @@
                                 <div class="card card-reserva">
                                     <div class="card-body">
                                         <!-- Detalles de la reserva -->
-                                        <p class="card-text">Actividad: <strong> {{ $reserva->actividad->nombre }} </strong></p>
+                                        <p class="card-text">Actividad: <strong> {{ $reserva->actividad->nombre }}
+                                            </strong></p>
                                         <p class="card-text">Fecha: <strong>{{ $reserva->horario->fecha }}</strong> </p>
                                         <p class="card-text">Hora: <strong>{{ $reserva->horario->hora }}</strong> </p>
                                         <p class="card-text">Estado: {{ $reserva->estado }}</p>
@@ -184,6 +186,42 @@
                                         </div>
                                     </div>
                                 </div>
+                                <!-- Modal para Edición de Valoración -->
+                                <div class="modal fade" id="editValoracionModal" tabindex="-1"
+                                    aria-labelledby="editValoracionModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="editValoracionModalLabel">Editar Valoración
+                                                </h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                    aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <form id="editValoracionForm" action="" method="POST">
+                                                    @csrf
+                                                    @method('PUT')
+                                                    <div class="mb-3">
+                                                        <label for="puntuacion" class="form-label">Puntuación</label>
+                                                        <input type="number" class="form-control" id="puntuacion"
+                                                            name="puntuacion" min="1" max="5"
+                                                            step="1">
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label for="comentario" class="form-label">Comentario</label>
+                                                        <textarea class="form-control" id="comentario" name="comentario" rows="3" maxlength="500"></textarea>
+                                                    </div>
+                                                    <button data-bs-toggle="modal" class="btn btn-primary"
+                                                        data-bs-target="#editValoracionModal"
+                                                        data-id="{{ $valoracion->id }}"
+                                                        data-puntuacion="{{ $valoracion->puntuacion }}"
+                                                        data-comentario="{{ $valoracion->comentario }}">Editar</button>
+
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             @endforeach
                             {{ $valoracionesUsuario->links() }}
                         </div>
@@ -193,34 +231,6 @@
                 </div>
             </div>
 
-            <!-- Modal para Edición de Valoración -->
-            <div class="modal fade" id="editValoracionModal" tabindex="-1" aria-labelledby="editValoracionModalLabel"
-                aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="editValoracionModalLabel">Editar Valoración</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            <form action="" method="POST">
-                                @csrf
-                                @method('PUT')
-                                <div class="mb-3">
-                                    <label for="puntuacion" class="form-label">Puntuación</label>
-                                    <input type="number" class="form-control" id="puntuacion" name="puntuacion">
-                                </div>
-                                <div class="mb-3">
-                                    <label for="comentario" class="form-label">Comentario</label>
-                                    <textarea class="form-control" id="comentario" name="comentario" rows="3"></textarea>
-                                </div>
-                                <button type="submit" class="btn btn-primary">Guardar Cambios</button>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
             <!-- Modal de Confirmación de Borrado -->
             <div class="modal fade" id="deleteValoracionModal" tabindex="-1"
                 aria-labelledby="deleteValoracionModalLabel" aria-hidden="true">
@@ -270,51 +280,8 @@
             </div>
         </div>
     </main>
-
-    <script>
-        //Para el modal
-        document.addEventListener("DOMContentLoaded", function() {
-            var valoracionModal = document.getElementById('deleteValoracionModal');
-            valoracionModal.addEventListener('show.bs.modal', function(event) {
-                var button = event.relatedTarget;
-                var valoracionId = button.getAttribute('data-id');
-                var deleteForm = document.getElementById('deleteValoracionForm');
-                deleteForm.action = '/valoraciones/' + valoracionId;
-            });
-        });
-
-        // Para el modal de edición
-        document.addEventListener("DOMContentLoaded", function() {
-            var editValoracionModal = document.getElementById('editValoracionModal');
-            editValoracionModal.addEventListener('show.bs.modal', function(event) {
-                var button = event.relatedTarget;
-                var valoracionId = button.getAttribute('data-id');
-                var editForm = document.getElementById('editValoracionForm');
-
-                if (valoracionId) {
-                    // Si se está editando una valoración existente
-                    editForm.action = '/valoraciones/actualizar/' + valoracionId;
-                    editForm.querySelector('input[name="_method"]').value = 'PUT';
-                } else {
-                    // Si se está creando una nueva valoración
-                    editForm.action = '/valoraciones';
-                    editForm.querySelector('input[name="_method"]').value = 'POST';
-                }
-            });
-        });
-
-        //Para el modal de cancelar actividad
-        document.addEventListener("DOMContentLoaded", function() {
-            var cancelModal = document.getElementById('cancelModal');
-            cancelModal.addEventListener('show.bs.modal', function(event) {
-                var button = event.relatedTarget;
-                var reservaId = button.getAttribute('data-id');
-                var cancelForm = document.getElementById('cancelForm');
-                cancelForm.action = '/reservas/' + reservaId + '/cancelar';
-            });
-        });
-    </script>
 @endsection
 @push('scripts')
-<script src="{{ asset('js/ultima_visita-cookie.js') }}"></script>
+    <script src="{{ asset('js/ultima_visita-cookie.js') }}"></script>
+    <script src="{{ asset('js/dashboard.js') }}"></script>
 @endpush

@@ -37,8 +37,6 @@ class ActividadController extends Controller
      */
     public function create()
     {
-        // $categorias = Categoria::all(); // Obtén todas las categorías para el formulario
-        // return view('admin.actividades.create', compact('categorias'));
         return view('admin.actividades.create');
     }
 
@@ -52,21 +50,21 @@ class ActividadController extends Controller
     {
         // Validaciones básicas
         $validatedData = $request->validate([
-            'nombre' => 'required',
-            'descripcion' => 'required',
-            'duracion' => 'required|integer',
-            'aforo' => 'required|integer',
-            'activa' => 'required|in:0,1',
+            'nombre' => 'required|string|max:255',
+            'descripcion' => 'required|string|max:1000',
+            'duracion' => 'required|integer|min:1',
+            'aforo' => 'required|integer|min:1',
+            'activa' => 'required|boolean',
             'imagen' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'precio_adulto' => 'required|numeric',
-            'precio_nino' => 'nullable|numeric',
+            'precio_adulto' => 'required|numeric|min:0',
+            'precio_nino' => 'nullable|numeric|min:0',
         ]);
         if ($request->hasFile('imagen')) {
             $imagen = $request->file('imagen');
             // Preparar el nombre del archivo, reemplazando espacios con guiones bajos para evitar problemas en S3
             $nombreImagen = time() . '_' . str_replace(' ', '_', $imagen->getClientOriginalName());
 
-            // Especificar la ruta completa incluyendo la carpeta /public/images dentro de tu bucket de S3
+            // Especificar la ruta completa incluyendo la carpeta /public/images dentro del bucket de S3
             $rutaCompleta = 'public/images/' . $nombreImagen;
 
             try {
@@ -130,15 +128,17 @@ class ActividadController extends Controller
         $actividad = Actividad::find($realId);
 
         // Comprueba si la actividad tiene reservas
-        $tieneReservas = $actividad->reservas()
-        ->where('estado', '!=', 'cancelada')
-        ->whereExists(function ($query) {
-            $query->select(DB::raw(1))
-                  ->from('horarios')
-                  ->whereRaw('horarios.id = reservas.horario_id')
-                  ->whereRaw("TO_TIMESTAMP(horarios.fecha || ' ' || horarios.hora, 'YYYY-MM-DD HH24:MI:SS') AT TIME ZONE 'Europe/Madrid' > NOW()");
-        })->exists();
-
+        $tieneReservas = $actividad
+            ->reservas()
+            ->where('estado', '!=', 'cancelada')
+            ->whereExists(function ($query) {
+                $query
+                    ->select(DB::raw(1))
+                    ->from('horarios')
+                    ->whereRaw('horarios.id = reservas.horario_id')
+                    ->whereRaw("TO_TIMESTAMP(horarios.fecha || ' ' || horarios.hora, 'YYYY-MM-DD HH24:MI:SS') AT TIME ZONE 'Europe/Madrid' > NOW()");
+            })
+            ->exists();
 
         // Verificar si se encontró la actividad
         if (!$actividad) {
@@ -160,18 +160,20 @@ class ActividadController extends Controller
     {
         $actividad = Actividad::find($id);
         if (!$actividad) {
-            return redirect()->route('admin.actividades.index')->with('error', '¡Actividad no encontrada!');
+            return redirect()
+                ->route('admin.actividades.index')
+                ->with('error', '¡Actividad no encontrada!');
         }
 
         // Validar los campos proporcionados en la solicitud
         $data = $request->validate([
-            'nombre' => 'sometimes|required',
-            'descripcion' => 'sometimes|required',
-            'duracion' => 'sometimes|required|integer',
-            'precio_adulto' => 'sometimes|required|numeric',
-            'precio_nino' => 'nullable|numeric',
-            'aforo' => 'sometimes|required|integer',
-            'activa' => 'sometimes|required|in:0,1',
+            'nombre' => 'sometimes|required|string|max:255',
+            'descripcion' => 'sometimes|required|string|max:1000',
+            'duracion' => 'sometimes|required|integer|min:1',
+            'precio_adulto' => 'sometimes|required|numeric|min:0',
+            'precio_nino' => 'nullable|numeric|min:0',
+            'aforo' => 'sometimes|required|integer|min:1',
+            'activa' => 'sometimes|required|boolean',
             'imagen' => 'sometimes|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
@@ -205,9 +207,10 @@ class ActividadController extends Controller
         $actividad->fill($data);
         $actividad->save();
 
-        return redirect()->route('admin.actividades.index')->with('success', 'Actividad modificada con éxito.');
+        return redirect()
+            ->route('admin.actividades.index')
+            ->with('success', 'Actividad modificada con éxito.');
     }
-
 
     /**
      * Remove the specified resource from storage.
@@ -261,10 +264,7 @@ class ActividadController extends Controller
 
     public function detalleActividad($id)
     {
-        // Obtén los detalles de la actividad con el ID proporcionado.
         $actividad = Actividad::find($id);
-
-        // Muestra la vista de detalles de la actividad y pasa los detalles de la actividad.
         return view('pages.detalleActividad', ['actividad' => $actividad]);
     }
 }

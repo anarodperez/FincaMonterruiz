@@ -76,7 +76,7 @@ class NewsletterController extends Controller
             Storage::disk('s3')->put($rutaCompleta, file_get_contents($imagen), 'public');
             $urlImagen = Storage::disk('s3')->url($rutaCompleta);
 
-            // Asignar la URL de la imagen al campo correcto para la base de datos
+            // Asignar la URL de la imagen al campo para la base de datos
             $data['imagen_url'] = $urlImagen;
         } else {
             $data['imagen_url'] = null;
@@ -183,9 +183,9 @@ class NewsletterController extends Controller
     {
         // dd($request);
         $request->validate([
-            'day_of_week' => 'required|in:Monday,Tuesday,Wednesday,Thursday,Friday', // Validar el día de la semana
-            'execution_time' => 'required|date_format:H:i', // Validar el formato de la hora
-            'newsletter_id' => 'required|exists:newsletters,id', // Asegurarse de que se proporcione un ID válido de newsletter
+            'day_of_week' => 'required|in:Monday,Tuesday,Wednesday,Thursday,Friday',
+            'execution_time' => 'required|date_format:H:i',
+            'newsletter_id' => 'required|exists:newsletters,id',
         ]);
 
         // Actualizar la configuración de programación general
