@@ -176,7 +176,9 @@
                                 </button>
                             </div>
                             <div class="modal-body">
-                                <p id="cancelMessage"></p>
+                                <p id="cancelMessage">¿Estás seguro de que deseas cancelar esta reserva?</p>
+                                <!-- Campo para escribir el motivo de la cancelación -->
+                                <textarea id="cancelReason" class="form-control" placeholder="Escribe el motivo de la cancelación"></textarea>
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
@@ -212,8 +214,20 @@
         }
 
         document.getElementById('confirmCancel').addEventListener('click', function() {
-            document.getElementById(currentCancelFormId).submit();
+            var motivoCancelacion = document.getElementById('cancelReason').value;
+
+            var motivoInput = document.createElement('input');
+            motivoInput.setAttribute('type', 'hidden');
+            motivoInput.setAttribute('name', 'motivoCancelacion');
+            motivoInput.value = motivoCancelacion;
+
+            var form = document.getElementById(currentCancelFormId);
+            form.appendChild(motivoInput);
+
+            form.submit();
         });
+
+
 
         document.addEventListener('DOMContentLoaded', function() {
             document.getElementById('selectAll').addEventListener('change', function(e) {

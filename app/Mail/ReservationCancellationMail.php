@@ -15,14 +15,16 @@ class ReservationCancellationMail extends Mailable
     use Queueable, SerializesModels;
 
     public $reserva;
+    protected $motivoCancelacion;
 
     /**
      * Create a new message instance.
      */
-    public function __construct(Reserva $reserva)
-    {
-        $this->reserva = $reserva;
-    }
+    public function __construct($reserva, $motivoCancelacion)
+{
+    $this->reserva = $reserva;
+    $this->motivoCancelacion = $motivoCancelacion;
+}
 
     /**
      * Get the message envelope.
@@ -53,10 +55,14 @@ class ReservationCancellationMail extends Mailable
     {
         return [];
     }
-
     public function build()
     {
         return $this->view('emails.reservation_cancellation')
-                    ->subject('Su reserva ha sido cancelada');
+                    ->subject('Su reserva ha sido cancelada')
+                    ->with([
+                        'reserva' => $this->reserva,
+                        'motivoCancelacion' => $this->motivoCancelacion, // Asegúrate de pasar esta variable a la vista
+                    ]);
     }
+
 }
