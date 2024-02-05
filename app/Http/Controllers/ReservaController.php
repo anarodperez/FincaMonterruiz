@@ -202,8 +202,9 @@ class ReservaController extends Controller
         return view('pages.reservar', compact('actividad', 'horario', 'usuario', 'aforoDisponible'));
     }
 
-    public function cancelar($id)
+    public function cancelar($id, Request $request)
     {
+        $motivoCancelacion = $request->input('motivoCancelacion');
         $reserva = Reserva::with('actividad')->findOrFail($id);
 
         // Verificar si la reserva ya está cancelada
@@ -241,11 +242,8 @@ class ReservaController extends Controller
             $adminEmail = 'anarodpe8@gmail.com';
 
             // Enviar correo de cancelación
-            Mail::to($reserva->usuario->email)
-                ->cc($adminEmail)
-                ->send(new ReservationCancellationMail($reserva));
+            Mail::to($reserva->usuario->email)->cc($adminEmail)->send(new ReservationCancellationMail($reserva, $motivoCancelacion));
 
-            // Confirmar las operaciones de la base de datos
             DB::commit();
 
             return back()->with('success', 'Reserva cancelada correctamente y reembolso procesado correctamente.');
