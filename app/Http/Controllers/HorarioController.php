@@ -57,7 +57,6 @@ class HorarioController extends Controller
 
     public function store(Request $request)
     {
-        // dd($request->all());
         try {
             $request->validate([
                 'actividad' => 'required|exists:actividades,id',
@@ -187,7 +186,7 @@ class HorarioController extends Controller
         try {
             $request->validate([
                 'fecha' => [
-                    'required',
+                    'sometimes',
                     'date',
                     function ($attribute, $value, $fail) use ($request) {
                         $fechaHora = Carbon::parse($value . ' ' . $request->hora);
@@ -196,8 +195,8 @@ class HorarioController extends Controller
                         }
                     },
                 ],
-                'hora' => 'required',
-                'idioma' => 'required',
+                'hora' => 'sometimes',
+                'idioma' => 'sometimes',
             ]);
 
             $horario = Horario::findOrFail($id);
@@ -246,30 +245,23 @@ class HorarioController extends Controller
 
     private function updateSerieRecurrente($horarioOriginal, $request)
     {
-        // Iniciar una transacción para asegurar la integridad de los datos
         DB::beginTransaction();
 
         try {
-            $fechaNueva = $request->input('fecha');
             $horaNueva = $request->input('hora');
-            $fechaHoraNueva = Carbon::parse($fechaNueva . ' ' . $horaNueva);
-
-            if ($fechaHoraNueva->isPast()) {
-                throw new \Exception('La fecha y hora del horario no pueden estar en el pasado.');
-            }
-
-            // Encuentra todos los horarios recurrentes que están asociados con la misma serie
             $horariosRecurrentes = Horario::where('actividad_id', $horarioOriginal->actividad_id)
                 ->where('fecha', '>=', $horarioOriginal->fecha)
                 ->get();
 
             foreach ($horariosRecurrentes as $horarioRecurrente) {
+                $horaActual = Carbon::createFromFormat('H:i:s', now()->format('H:i:s'));
+                $horaHorario = Carbon::createFromFormat('H:i:s', $horarioRecurrente->hora);
+
                 // Asegúrate de no actualizar horarios pasados
-                if ($horarioRecurrente->fecha > today() || ($horarioRecurrente->fecha == today() && $horarioRecurrente->hora > now())) {
+                if ($horarioRecurrente->fecha > today() || ($horarioRecurrente->fecha == today() && $horaHorario > $horaActual)) {
                     $horarioRecurrente->update([
                         'hora' => $horaNueva,
                         'idioma' => $request->input('idioma'),
-                        'fecha' => $fechaNueva,
                     ]);
                 }
             }
@@ -277,12 +269,12 @@ class HorarioController extends Controller
             DB::commit();
             return true;
         } catch (\Exception $e) {
-            // En caso de error, revertir la transacción
             DB::rollback();
             \Log::error('Error al actualizar la serie recurrente: ' . $e->getMessage());
             return back()->with('error', $e->getMessage());
         }
     }
+
 
     public function destroy($horarioId)
     {

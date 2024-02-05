@@ -14,7 +14,7 @@
         </div>
 
         <!-- Imagen del Newsletter -->
-        <div style="text-align: center;"> <!-- Centrar la imagen -->
+        <div style="text-align: center;">
             <img src="{{ asset($newsletter->imagen_url) }}" style="max-width: 70%; height: auto; border-radius: 8px;">
         </div>
     </div>

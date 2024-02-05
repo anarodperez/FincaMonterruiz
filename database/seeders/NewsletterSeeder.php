@@ -14,12 +14,10 @@ class NewsletterSeeder extends Seeder
      */
     public function run(): void
     {
-        // // Vaciar la tabla primero si es necesario
-        // DB::table('newsletters')->delete();
+        DB::table('newsletters')->delete();
 
         // Crea la primera newsletter de bienvenida
         Newsletter::create([
-            'id' => 1,
             'titulo' => '¡Bienvenido a nuestro boletín!',
             'contenido' => 'Gracias por suscribirte a nuestro boletín. Esperamos que disfrutes de nuestras actualizaciones y ofertas especiales.',
             'selected' => 'true',

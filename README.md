@@ -34,8 +34,8 @@ La funcionalidad principal de la aplicación es permitir a los usuarios explorar
 
 ## 4. Elementos de Innovación
 
-- Uso del framework Laravel para el desarrollo de la aplicación.
-- Implementación de un sistema de newsletter.
+- Uso de la API de Paypal.
+- Implementación de un sistema de Newsletters.
 - Integración con API de mapas para visualización geográfica.
 
 

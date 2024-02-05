@@ -10,13 +10,13 @@ body {
 }
 
 .container {
-    flex: 1; /* Esto hace que el contenedor crezca para ocupar el espacio disponible */
-    padding: 20px; /* Ajusta esto según tu diseño */
+    flex: 1;
+    padding: 20px;
 }
 
 .error-list {
-    list-style-type: none; /* Esto quita los puntos de la lista */
-    padding-left: 0; /* Opcional: quita el relleno izquierdo si es necesario */
+    list-style-type: none;
+    padding-left: 0;
 }
 
 
@@ -25,7 +25,7 @@ body {
 @extends('layouts.admin')
 
 @section('content')
-    <div class="container">
+    <div class="horario container">
         <h2 class="my-4 text-center">Crear Nuevo Horario</h2>
         <!-- Mensajes de error -->
         @if ($errors->any())
