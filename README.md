@@ -37,7 +37,7 @@ La funcionalidad principal de la aplicación es permitir a los usuarios explorar
 
 - Uso de la API de Paypal.
 - Implementación de un sistema de Newsletters.
-- Integración con API de mapa para visualización geográfica.
+- Integración de mapa interactivo para visualización geográfica.
 - Uso de Amazon S3 para el almacenamiento de imagenes.
 
 # Instrucciones de Despliegue para Finca Monterruiz
