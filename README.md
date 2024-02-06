@@ -65,20 +65,36 @@ sudo apt install postgresql postgresql-client postgresql-contrib
 
 Antes de ejecutar las migraciones, asegúrate de tener configurada la base de datos PostgreSQL creando un nuevo usuario y una base de datos.
 
-Ejecuta el siguiente comando para crear un nuevo usuario (serás solicitado a ingresar una contraseña para el nuevo usuario): ```bash sudo -u postgres createuser -P fincamonterruiz ```
-Crea una nueva base de datos asignada a este usuario ejecutando: ```bash sudo -u postgres createdb -O fincamonterruiz fincamonterruiz```
+Ejecuta el siguiente comando para crear un nuevo usuario (serás solicitado a ingresar una contraseña para el nuevo usuario): 
+```bash 
+sudo -u postgres createuser -P fincamonterruiz
+```
+Crea una nueva base de datos asignada a este usuario ejecutando: 
+```bash 
+sudo -u postgres createdb -O fincamonterruiz fincamonterruiz
+```
 La contraseña que asignaremos será: finca
 
 ## Configuración del Proyecto
 
-1. Clona el repositorio y navega al directorio del proyecto. Instala las dependencias de PHP con Composer. ```bash composer install ```
+1. Clona el repositorio y navega al directorio del proyecto. Instala las dependencias de PHP con Composer.
+   ```bash
+ composer install 
+ ```
 2. Copia el archivo .env.example a .env y genera la clave de la aplicación:  
-```bash cp .env.example .env ```
+```bash
+cp .env.example .env
+```
 Antes de generar la clave copia el ejemplo del contenido del .env que muestro a continuación que ya viene con algunas configuraciones incluidas (excepto las relacionadas con Paypal, Gmail y Amazon S3).
-```bash php artisan key:generate ```
-5. Configurar el archivo `.env` con los detalles de tu entorno. (EXPLICADO A CONTINUACIÓN)
-6. Ejecutar migraciones de la base de datos ```bash php artisan migrate ```
-7. Ejecutar seeders de la base de datos:
+```bash
+php artisan key:generate
+ ```
+3. Configurar el archivo `.env` con los detalles de tu entorno. (EXPLICADO A CONTINUACIÓN)
+4. Ejecutar migraciones de la base de datos
+   ```bash
+ php artisan migrate
+  ```
+5. Ejecutar seeders de la base de datos:
     ```bash
    php artisan db:seed
     ```
@@ -220,7 +236,7 @@ AWS_DEFAULT_REGION: La región en la que se encuentra tu bucket de S3 (por ejemp
 AWS_BUCKET: El nombre de tu bucket de S3.
 ```
 
-## Ejecución de la Aplicación
+# Ejecución de la Aplicación
 
 1. Ejecutar `php artisan serve` para iniciar el servidor de desarrollo.
 2. Acceder a la aplicación en `http://localhost:8000`.
