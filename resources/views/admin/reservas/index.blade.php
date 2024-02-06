@@ -2,24 +2,6 @@
 
 @section('title', 'Admin | Reservas')
 
-<style>
-    .buscador {
-        max-width: 500px;
-        margin-bottom: 20px;
-        border-radius: 5px;
-        border: 1px solid #ced4da;
-    }
-
-    .form-control {
-        border-radius: 5px;
-        border: 1px solid #ced4da;
-    }
-
-    .pasada {
-        background-color: #e5e3e3 !important;
-    }
-</style>
-
 @section('content')
     <div class="container">
         <div class="text-center my-4">
@@ -88,8 +70,8 @@
                 <!-- Buscador -->
                 <div class="d-flex justify-content-center mb-3">
                     <input x-model="search" @input="updateHasResults()" type="text"
-                        placeholder="Buscar por usuario (nombre, apellidos) o actividad..." class="form-control buscador"
-                        style="text-align: center">
+                        placeholder="Buscar por usuario (nombre, apellidos) o actividad..."
+                        class="form-control buscador-reservas" style="text-align: center">
                 </div>
 
                 <div class="d-flex justify-content-center gap-2 mb-3">
@@ -174,7 +156,6 @@
                 {{-- Enlaces de paginación --}}
                 {{ $reservas->links() }}
 
-
                 <!-- Modal de Confirmación -->
                 <div class="modal fade" id="cancelModal" tabindex="-1" role="dialog" aria-labelledby="cancelModalLabel"
                     aria-hidden="true">
@@ -182,85 +163,29 @@
                         <div class="modal-content">
                             <div class="modal-header">
                                 <h5 class="modal-title" id="cancelModalLabel">Confirmar Cancelación</h5>
-                                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
                             </div>
                             <div class="modal-body">
                                 <p id="cancelMessage">¿Estás seguro de que deseas cancelar esta reserva?</p>
-                                <!-- Campo para escribir el motivo de la cancelación -->
                                 <textarea id="cancelReason" class="form-control" placeholder="Escribe el motivo de la cancelación"></textarea>
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
                                 <button type="button" class="btn btn-danger" id="confirmCancel">Confirmar
                                     Cancelación</button>
+                                <button type="button" class="btn btn-danger" id="confirmBatchCancel"
+                                    style="display:none;">Confirmar Cancelación en Lote</button>
                             </div>
                         </div>
                     </div>
                 </div>
+
             </div>
         </div>
     </div>
 
-    <script>
-        var currentCancelFormId = null;
-
-        function openCancelModal(reservaId, estado) {
-            currentCancelFormId = 'cancel-form-' + reservaId;
-            var modal = new bootstrap.Modal(document.getElementById('cancelModal'));
-            var messageElement = document.getElementById('cancelMessage');
-
-            if (estado === 'cancelada') {
-                // Si el estado es 'cancelada', mostrar el mensaje correspondiente
-                messageElement.textContent = 'Esta reserva ya está cancelada.';
-                document.getElementById('confirmCancel').disabled = true; // Deshabilitar el botón de confirmación
-            } else {
-                // Si el estado no es 'cancelada', mostrar el otro mensaje
-                messageElement.textContent = '¿Estás seguro de que deseas cancelar esta reserva?';
-                document.getElementById('confirmCancel').disabled = false; // Habilitar el botón de confirmación
-            }
-
-            modal.show();
-        }
-
-        document.getElementById('confirmCancel').addEventListener('click', function() {
-            var motivoCancelacion = document.getElementById('cancelReason').value;
-
-            var motivoInput = document.createElement('input');
-            motivoInput.setAttribute('type', 'hidden');
-            motivoInput.setAttribute('name', 'motivoCancelacion');
-            motivoInput.value = motivoCancelacion;
-
-            var form = document.getElementById(currentCancelFormId);
-            form.appendChild(motivoInput);
-
-            form.submit();
-        });
-
-
-
-        document.addEventListener('DOMContentLoaded', function() {
-            document.getElementById('selectAll').addEventListener('change', function(e) {
-                const checkboxes = document.querySelectorAll('.reserva-checkbox');
-                checkboxes.forEach(checkbox => {
-                    checkbox.checked = e.target.checked;
-                });
-            });
-        });
-
-        // Cancelar reservas en lote
-        document.getElementById('cancelarReservasEnLote').addEventListener('click', function() {
-            let selectedReservas = Array.from(document.querySelectorAll('.reserva-checkbox:checked')).map(cb => cb
-                .value);
-
-            if (selectedReservas.length === 0) {
-                alert('Por favor, selecciona al menos una reserva para cancelar.');
-                return;
-            }
-
-            document.getElementById('batchCancelInput').value = JSON.stringify(selectedReservas);
-            document.getElementById('batchCancelForm').submit();
-        });
-    </script>
+    @push('scripts')
+    <script src="{{ asset('js/admin-reservas.js') }}"></script>
+@endpush
 @endsection

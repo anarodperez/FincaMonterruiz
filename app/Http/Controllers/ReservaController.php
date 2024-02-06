@@ -298,6 +298,7 @@ class ReservaController extends Controller
     public function cancelarEnLote(Request $request)
     {
         $reservaIds = json_decode($request->input('reservas'));
+        $motivoCancelacion = $request->input('motivoCancelacion'); // Obtener el motivo de la cancelación
 
         // Validar que los IDs de reserva existen
         $reservas = Reserva::whereIn('id', $reservaIds)->get();
@@ -326,7 +327,7 @@ class ReservaController extends Controller
                 try {
                     Mail::to($reserva->usuario->email)
                         ->cc($adminEmail)
-                        ->send(new ReservationCancellationMail($reserva));
+                        ->send(new ReservationCancellationMail($reserva, $motivoCancelacion)); // Asegúrate de que tu Mailable acepte el motivo de cancelación
                 } catch (Exception $e) {
                     // Manejo de excepciones si algo va mal con el envío del correo
                     // Log::error('Error al enviar correo de cancelación: ' . $e->getMessage());
@@ -336,4 +337,5 @@ class ReservaController extends Controller
 
         return back()->with('success', 'Reservas canceladas correctamente.');
     }
+
 }
