@@ -63,11 +63,7 @@
                             <input type="hidden" name="horario_id" id="horario_id" value="">
                             <button type="button" class="btn btn-danger" onclick="confirmDelete()">Borrar</button>
                         </form>
-
-
-                        <!-- Dentro del modal -->
                         <a href="#" id="editHorarioLink" class="btn btn-primary">Editar</a>
-
                     </div>
                 </div>
             </div>
