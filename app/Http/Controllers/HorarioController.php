@@ -76,7 +76,6 @@ class HorarioController extends Controller
                 'hora' => 'required|date_format:H:i',
                 'idioma' => 'required|in:Español,Inglés,Francés',
                 'frecuencia' => 'required|in:unico,diario,semanal',
-                'repeticiones' => 'nullable|numeric|min:1|required_if:frecuencia,diario,semanal',
             ]);
 
             $actividadId = $request->input('actividad');
@@ -84,7 +83,6 @@ class HorarioController extends Controller
             $hora = $request->input('hora');
             $idioma = $request->input('idioma');
             $frecuencia = $request->input('frecuencia');
-            $repeticiones = $request->input('repeticiones', 1); // Valor por defecto en caso de ser único
 
             $resultado = true; // Asumir éxito inicialmente
             switch ($frecuencia) {
@@ -107,7 +105,6 @@ class HorarioController extends Controller
                     ->with('error', 'Uno o más de los horarios que intentas crear ya existen.');
             }
         } catch (\Illuminate\Validation\ValidationException $e) {
-            // Redirigir de vuelta con los errores de validación y los datos de entrada
             return redirect()
                 ->back()
                 ->withErrors($e->validator)
@@ -165,7 +162,7 @@ class HorarioController extends Controller
                 $horario->frecuencia = $frecuencia;
                 $horario->save();
             } else {
-                // Manejar el caso de horario duplicado, por ejemplo, lanzar una excepción o devolver un mensaje de error
+                // Manejar el caso de horario duplicado
             }
 
             $frecuencia === 'diario' ? $fecha->addDay() : $fecha->addWeek();
@@ -268,7 +265,7 @@ private function updateSerieRecurrente($horarioOriginal, $request)
             // Asegurarte de no actualizar horarios pasados
             if ($horarioRecurrente->fecha > today() || ($horarioRecurrente->fecha == today() && $horarioRecurrente->hora > now()->format('H:i'))) {
                 $horarioRecurrente->update([
-                    'fecha' => $request->input('fecha'), // Asegúrate de que esta lógica se ajusta a tu modelo de datos
+                    'fecha' => $request->input('fecha'),
                     'hora' => $request->input('hora'),
                     'idioma' => $request->input('idioma'),
                 ]);
@@ -280,7 +277,6 @@ private function updateSerieRecurrente($horarioOriginal, $request)
     } catch (\Exception $e) {
         DB::rollback();
         \Log::error('Error al actualizar la serie recurrente: ' . $e->getMessage());
-        // Considera devolver un mensaje de error más amigable o manejarlo de otra manera
         return false;
     }
 }
