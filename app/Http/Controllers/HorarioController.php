@@ -36,6 +36,7 @@ class HorarioController extends Controller
                         'horario_id' => $horario->id,
                         'frecuencia' => $horario->frecuencia,
                         'aforoDisponible' => $aforoDisponible,
+                        'estado' => $horario->oculto
                     ],
                 ];
             }
@@ -133,12 +134,10 @@ class HorarioController extends Controller
             $horario->frecuencia = 'unico';
             $horario->save();
 
-            // Redirigir con un mensaje de éxito
             return redirect()
                 ->route('admin.horarios.index')
                 ->with('success', 'Horario creado exitosamente.');
         } else {
-            // Redirigir con un mensaje de error
             return redirect()
                 ->back()
                 ->with('error', 'El horario que intenta crear ya existe.');
@@ -291,4 +290,17 @@ class HorarioController extends Controller
             ->route('admin.horarios.index')
             ->with('error', 'No se puede borrar el horario ya que tiene reservas asociadas.');
     }
+
+  public function ocultar(Request $request)
+{
+    $horarioId = $request->input('horario_id');
+
+    // Buscar el horario por su ID
+    $horario = Horario::findOrFail($horarioId);
+    $horario->oculto = !$horario->oculto;
+
+    $horario->save();
+    return redirect()->back()->with('success', 'Estado del horario cambiado con éxito.');
+}
+
 }

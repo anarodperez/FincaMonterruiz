@@ -64,6 +64,12 @@
                             <button type="button" class="btn btn-danger" onclick="confirmDelete()">Borrar</button>
                         </form>
                         <a href="#" id="editHorarioLink" class="btn btn-primary">Editar</a>
+                        <form method="POST" action="{{ route('admin.horarios.ocultar') }}">
+                            @csrf
+                            <input type="hidden" name="horario_id" id="hiddenHorarioId" value="">
+                            <button type="submit" class="btn btn-secondary" id="toggleButton" data-oculto="false">Ocultar/Mostrar Horario</button>
+
+                        </form>
                     </div>
                 </div>
             </div>
@@ -92,9 +98,8 @@
     <!-- Agregar FullCalendar y su script -->
     <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.9/index.global.min.js'></script>
 
-
     <script>
-         function getColorForActivity(activityId) {
+        function getColorForActivity(activityId) {
             // Convertir el ID en un número (si no lo es ya)
             var idNumber = parseInt(activityId);
             if (isNaN(idNumber)) {
@@ -103,9 +108,9 @@
             }
 
             // Generar color
-            var hue = idNumber * 137.508; // Ángulo dorado aproximado
-            var saturation = 70; // Aumentar la saturación para colores más intensos
-            var lightness = 50; // Luminosidad que permite colores vivos pero no demasiado claros u oscuros
+            var hue = idNumber * 137.508;
+            var saturation = 70;
+            var lightness = 50;
 
             return `hsl(${hue % 360}, ${saturation}%, ${lightness}%)`;
         }
@@ -143,6 +148,7 @@
                     var fechaHora = info.event.start.toLocaleString();
                     var idioma = info.event.extendedProps.idioma;
                     var frecuencia = info.event.extendedProps.frecuencia;
+                    var estado = info.event.extendedProps.estado == true ? "SI" : "NO";
                     var modalBody = document.getElementById('modal-body-content');
 
                     var aforoDisponible = info.event.extendedProps.aforoDisponible;
@@ -153,6 +159,7 @@
                         "<p><strong>Idioma:</strong> " + idioma + "</p>" +
                         "<p><strong>Id:</strong> " + horarioId + "</p>" +
                         "<p><strong>Frecuencia:</strong> " + frecuencia + "</p>" +
+                        "<p><strong>Oculto:</strong> " + estado + "</p>" +
                         "<p><strong>Aforo:</strong> " + estadoAforo + "</p>";
 
                     // Actualizar la acción del formulario para el borrado
@@ -161,6 +168,9 @@
 
                     // Establecer el valor del horario_id en el formulario oculto
                     document.getElementById('horario_id').value = horarioId;
+
+                    // Actualizar el valor del campo oculto con el ID del horario
+                    document.getElementById('hiddenHorarioId').value = horarioId;
 
                     // Actualiza el enlace del botón de edición
                     var editLink = document.getElementById('editHorarioLink');
@@ -248,8 +258,6 @@
                 }
             });
         }
-    </script>
-    <script>
         function confirmDelete() {
             if (confirm('¿Estás seguro de que deseas borrar este horario?')) {
                 document.getElementById('borrarHorarioForm').submit();
@@ -263,4 +271,6 @@
             }, 5000); // 5 segundos
         });
     </script>
+
+
 @endsection
