@@ -76,6 +76,8 @@ Route::middleware(['admin'])->group(function () {
     Route::delete('/admin/horarios/{horario}', [HorarioController::class, 'destroy'])->name('admin.horarios.destroy');
     Route::get('/admin/horarios/edit/{id}', [HorarioController::class, 'edit'])->name('admin.horarios.edit');
     Route::put('/admin/horarios/update/{id}', [HorarioController::class, 'update'])->name('admin.horarios.update');
+    Route::post('/admin/horarios/ocultar',[HorarioController::class, 'ocultar'])->name('admin.horarios.ocultar');
+
 
     //Reservas
     Route::get('/reservas/index', [ReservaController::class, 'index'])->name('admin.reservas.index');

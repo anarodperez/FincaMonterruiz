@@ -23,7 +23,11 @@ class CatalogoController extends Controller
 
     public function index()
     {
-        $horarios = Horario::with('actividad')->get();
+        $horarios = Horario::with('actividad')
+        ->whereDoesntHave('actividad', function ($query) {
+            $query->where('oculto', true);
+        })
+        ->get();
         $actividades = Actividad::where('activa', true)->paginate(3);
 
         $events = $horarios

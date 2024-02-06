@@ -418,14 +418,5 @@
         function borrarFiltroIdioma() {
             filtrarIdioma('Todos');
         }
-
-
-
-        // $(document).ready(function() {
-        //     // Ocultar los mensajes de alerta después de 5 segundos
-        //     setTimeout(function() {
-        //         $('.alert').fadeOut('slow');
-        //     }, 5000); // 5 segundos
-        // });
     </script>
 @endsection

@@ -36,6 +36,7 @@ class HorarioController extends Controller
                         'horario_id' => $horario->id,
                         'frecuencia' => $horario->frecuencia,
                         'aforoDisponible' => $aforoDisponible,
+                        'estado' => $horario->oculto
                     ],
                 ];
             }
@@ -133,12 +134,10 @@ class HorarioController extends Controller
             $horario->frecuencia = 'unico';
             $horario->save();
 
-            // Redirigir con un mensaje de éxito
             return redirect()
                 ->route('admin.horarios.index')
                 ->with('success', 'Horario creado exitosamente.');
         } else {
-            // Redirigir con un mensaje de error
             return redirect()
                 ->back()
                 ->with('error', 'El horario que intenta crear ya existe.');
@@ -201,17 +200,16 @@ class HorarioController extends Controller
 
             $horario = Horario::findOrFail($id);
 
-            // Verificar si hay reservas activas asociadas con este horario
+            // Verificar si hay reservas asociadas con este horario
             if (
                 $horario
                     ->reservas()
-                    ->where('estado', '!=', 'cancelada')
+                    // ->where('estado', '!=', 'cancelada')
                     ->count() > 0
             ) {
-                // Enviar un mensaje de error si hay reservas activas
                 return redirect()
                     ->back()
-                    ->with('error', 'No se puede modificar un horario que tiene reservas activas.')
+                    ->with('error', 'No se puede modificar un horario que tiene reservas asociadas.')
                     ->withInput();
             }
             $tipoEdicion = $request->input('tipo_edicion', 'instancia');
@@ -275,42 +273,34 @@ class HorarioController extends Controller
         }
     }
 
-
     public function destroy($horarioId)
     {
-        // Obtener todas las reservas asociadas a este horario
-        $reservas = Reserva::where('horario_id', $horarioId)->get();
+        // Obtener el horario
+        $horario = Horario::findOrFail($horarioId);
 
-        // Comprobar si todas las reservas están en estado "cancelada"
-        $todasCanceladas = $reservas->every(function ($reserva) {
-            return $reserva->estado === 'cancelada';
-        });
+        // Verificar si el horario no tiene reservas asociadas y si no está cancelado
+        if ($horario->reservas->isEmpty() && $horario->estado !== 'cancelado') {
+            $horario->delete();
 
-        if (!$todasCanceladas) {
-            // No permitir borrar el horario y enviar un mensaje de error
             return redirect()
                 ->route('admin.horarios.index')
-                ->with('error', 'No se puede borrar el horario ya que existen reservas activas.');
+                ->with('success', 'Horario eliminado con éxito');
         }
-
-        // Si todas las reservas están canceladas, proceder con el borrado
-        $horario = Horario::findOrFail($horarioId);
-        $horario->delete();
-
         return redirect()
             ->route('admin.horarios.index')
-            ->with('success', 'Horario eliminado con éxito');
+            ->with('error', 'No se puede borrar el horario ya que tiene reservas asociadas.');
     }
 
-    public function borrarHorarioConcreto($fecha, $hora)
-    {
-        // Encuentra y elimina el horario en la fecha y hora especificadas
-        Horario::where('fecha', $fecha)
-            ->where('hora', $hora)
-            ->delete();
+  public function ocultar(Request $request)
+{
+    $horarioId = $request->input('horario_id');
 
-        return redirect()
-            ->route('admin.horarios.index')
-            ->with('success', 'Horario eliminado con éxito');
-    }
+    // Buscar el horario por su ID
+    $horario = Horario::findOrFail($horarioId);
+    $horario->oculto = !$horario->oculto;
+
+    $horario->save();
+    return redirect()->back()->with('success', 'Estado del horario cambiado con éxito.');
+}
+
 }
