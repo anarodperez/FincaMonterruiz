@@ -99,7 +99,7 @@ php artisan key:generate
 php artisan db:seed
 ```
 
-Conectarse a la base de datos `php artisan:db` y ejecutar `CREATE EXTENSION unaccent;`
+Conectarse a la base de datos `php artisan db` y ejecutar `CREATE EXTENSION unaccent;`
 
 ## Configurar el archivo `.env` con los detalles de tu entorno.
 ```plaintext
