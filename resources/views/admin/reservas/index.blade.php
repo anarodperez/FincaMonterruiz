@@ -14,6 +14,10 @@
         border-radius: 5px;
         border: 1px solid #ced4da;
     }
+
+    .pasada {
+        background-color: #e5e3e3 !important;
+    }
 </style>
 
 @section('content')
@@ -128,8 +132,13 @@
                     </thead>
                     <tbody x-ref="tbody">
                         @forelse ($reservas as $reserva)
-                            <tr
-                                x-show="(!search || normalizeStr(`{{ $reserva->usuario->nombre }} {{ $reserva->usuario->apellido1 }} {{ $reserva->usuario->apellido2 }} {{ $reserva->actividad->nombre }}`).toLowerCase().includes(normalizeStr(search).toLowerCase())) && inDateRange('{{ $reserva->horario->fecha }}') && (!estadoSeleccionado || estadoSeleccionado === '{{ $reserva->estado }}')">
+                            @php
+                                $now = \Carbon\Carbon::now();
+                                $reservaFechaHora = \Carbon\Carbon::parse($reserva->horario->fecha . ' ' . $reserva->horario->hora);
+                                $esPasada = $reservaFechaHora < $now;
+                            @endphp
+                            <tr x-show="(!search || normalizeStr(`{{ $reserva->usuario->nombre }} {{ $reserva->usuario->apellido1 }} {{ $reserva->usuario->apellido2 }} {{ $reserva->actividad->nombre }}`).toLowerCase().includes(normalizeStr(search).toLowerCase())) && inDateRange('{{ $reserva->horario->fecha }}') && (!estadoSeleccionado || estadoSeleccionado === '{{ $reserva->estado }}')"
+                                class="{{ $esPasada ? 'pasada' : '' }}">
                                 <td><input type="checkbox" class="reserva-checkbox" value="{{ $reserva->id }}"></td>
                                 <td>{{ $reserva->id }}</td>
                                 <td>{{ $reserva->usuario->nombre }} {{ $reserva->usuario->apellido1 }}
@@ -140,9 +149,11 @@
                                 <td>{{ $reserva->estado }}</td>
                                 <td>
                                     <form id="cancel-form-{{ $reserva->id }}"
-                                        action="{{ route('reservas.cancelar', $reserva->id) }}" method="POST">
+                                        action="{{ route('reservas.cancelar', $reserva->id) }}" method="POST"
+                                        @if ($reservaFechaHora < $now || $reserva->estado === 'cancelada') style="display:none;" @endif>
                                         @csrf
-                                        <button type="button" class="btn btn-danger" ... data-toggle="tooltip"
+                                        <button type="button" class="btn btn-danger"
+                                            @if ($reservaFechaHora < $now || $reserva->estado === 'cancelada') disabled @endif ... data-toggle="tooltip"
                                             title="Cancelar reserva"
                                             onclick="openCancelModal({{ $reserva->id }}, '{{ strtolower($reserva->estado) }}')">
                                             <i class="fa fa-cancel"></i> Cancelar

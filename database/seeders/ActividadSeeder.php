@@ -31,7 +31,7 @@ class ActividadSeeder extends Seeder
                 'activa' => true,
             ],
             [
-                'nombre' => 'Cata y aperitivos',
+                'nombre' => 'Visita al viñedo',
                 'descripcion' => 'Disfruta de un relajante paseo por nuestros viñedos. Aprende sobre el proceso de cultivo y cosecha de la uva mientras disfrutas del paisaje natural.',
                 'duracion' => 60,
                 'precio_adulto' => 15.0,
@@ -41,7 +41,7 @@ class ActividadSeeder extends Seeder
                 'activa' => true,
             ],
             [
-                'nombre' => 'Maridaje de vinos y aperitivos',
+                'nombre' => 'Cata y aperitivos',
                 'descripcion' => 'Explora una experiencia sensorial excepcional con una selección de vinos y aperitivos, aprendiendo a maridarlos de manera experta para resaltar y disfrutar al máximo de sus sabores.',
                 'duracion' => 90,
                 'precio_adulto' => 30.0,

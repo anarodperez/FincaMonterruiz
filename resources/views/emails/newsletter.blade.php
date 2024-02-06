@@ -25,11 +25,11 @@
             background-color: #5c7c64;
             color: white;
             padding: 20px;
-            text-align: center; /* Centra el texto */
-        justify-content: center; /* Centra los elementos flexibles horizontalmente */
-        display: flex; /* Habilita Flexbox */
-        flex-direction: column; /* Alinea los elementos en una columna */
-        align-items: center;
+            text-align: center;
+            justify-content: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
         .card {
@@ -66,8 +66,8 @@
 
         .footer {
             margin-top: 30px;
-            font-size: 14px; /* Tamaño más pequeño para el texto del pie de página */
-            color: #888; /* Color más suave para el pie de página */
+            font-size: 14px;
+            color: #888;
             text-align: center;
         }
 
@@ -75,14 +75,12 @@
             color: #5c7c64;
             text-decoration: underline;
         }
-
     </style>
 </head>
 
 <body>
     <div class="container">
         <div class="header">
-            {{-- Logo y Nombre del Viñedo --}}
             <h1 class="text-center">Boletín Informativo de Finca Monterruiz</h1>
         </div>
 
@@ -98,7 +96,7 @@
                 <h2>{{ $newsletter->titulo }}</h2>
                 <p>{!! html_entity_decode($newsletter->contenido) !!}</p>
                 @if ($newsletter->imagen_url)
-                    <img src="{{ $newsletter->imagen_url }}" alt="Imagen de la Newsletter">
+                <img src="{{ $newsletter->imagen_url }}" alt="Imagen de la Newsletter" width="500" style="max-width: 100%; height: auto; border-radius: 8px;">
                 @endif
             </div>
         </div>
