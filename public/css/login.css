@@ -215,3 +215,8 @@ padding: 0;
     margin-right: 8px; /* Ajusta el margen si es necesario */
 }
 
+.alert {
+    width: 50%;
+    margin: 0 auto;
+    text-align: center;
+}
