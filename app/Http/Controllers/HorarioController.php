@@ -76,6 +76,7 @@ class HorarioController extends Controller
                 'hora' => 'required|date_format:H:i',
                 'idioma' => 'required|in:Español,Inglés,Francés',
                 'frecuencia' => 'required|in:unico,diario,semanal',
+                'repeticiones' => 'nullable|numeric|min:1|required_if:frecuencia,diario,semanal',
             ]);
 
             $actividadId = $request->input('actividad');
@@ -83,6 +84,7 @@ class HorarioController extends Controller
             $hora = $request->input('hora');
             $idioma = $request->input('idioma');
             $frecuencia = $request->input('frecuencia');
+            $repeticiones = $request->input('repeticiones', 1); // Valor por defecto en caso de ser único
 
             $resultado = true; // Asumir éxito inicialmente
             switch ($frecuencia) {
@@ -143,31 +145,35 @@ class HorarioController extends Controller
     }
 
     private function crearHorariosRecurrentes($actividadId, $fechaInicio, $hora, $idioma, $frecuencia, $repeticiones)
-    {
-        $fecha = Carbon::parse($fechaInicio);
-        for ($i = 0; $i < $repeticiones; $i++) {
-            // Verificar si ya existe un horario con las mismas características
-            $existeHorario = Horario::where('actividad_id', $actividadId)
-                ->where('fecha', $fecha->toDateString())
-                ->where('hora', $hora)
-                ->where('idioma', $idioma)
-                ->exists();
+{
+    $fecha = Carbon::parse($fechaInicio);
+    $conflictoEncontrado = false;
 
-            if (!$existeHorario) {
-                $horario = new Horario();
-                $horario->actividad_id = $actividadId;
-                $horario->fecha = $fecha->toDateString();
-                $horario->hora = $hora;
-                $horario->idioma = $idioma;
-                $horario->frecuencia = $frecuencia;
-                $horario->save();
-            } else {
-                // Manejar el caso de horario duplicado
-            }
+    for ($i = 0; $i < $repeticiones; $i++) {
+        $existeHorario = Horario::where('actividad_id', $actividadId)
+            ->where('fecha', $fecha->toDateString())
+            ->where('hora', $hora)
+            ->where('idioma', $idioma)
+            ->exists();
 
-            $frecuencia === 'diario' ? $fecha->addDay() : $fecha->addWeek();
+        if (!$existeHorario) {
+            $horario = new Horario();
+            $horario->actividad_id = $actividadId;
+            $horario->fecha = $fecha->toDateString();
+            $horario->hora = $hora;
+            $horario->idioma = $idioma;
+            $horario->frecuencia = $frecuencia;
+            $horario->save();
+        } else {
+            $conflictoEncontrado = true;
         }
+
+        $frecuencia === 'diario' ? $fecha->addDay() : $fecha->addWeek();
     }
+
+    return !$conflictoEncontrado; // Devuelve true si no se encontró ningún conflicto
+}
+
 
 
     public function edit($id)
