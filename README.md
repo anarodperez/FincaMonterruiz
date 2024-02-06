@@ -90,7 +90,7 @@ Antes de generar la clave copia el ejemplo del contenido del .env que muestro a 
 php artisan key:generate
 ```
 3. Configurar el archivo `.env` con los detalles de tu entorno. (EXPLICADO A CONTINUACIÓN)
-4. Ejecutar migraciones de la base de datos
+4. Una vez configurado el archivo .env, ejecutar migraciones de la base de datos:
 ```bash
  php artisan migrate
 ```
