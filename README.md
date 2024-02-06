@@ -78,9 +78,9 @@ La contraseña que asignaremos será: finca
 ## Configuración del Proyecto
 
 1. Clona el repositorio y navega al directorio del proyecto. Instala las dependencias de PHP con Composer.
-   ```bash
- composer install 
- ```
+```bash
+ composer install
+```
 2. Copia el archivo .env.example a .env y genera la clave de la aplicación:  
 ```bash
 cp .env.example .env
@@ -88,18 +88,18 @@ cp .env.example .env
 Antes de generar la clave copia el ejemplo del contenido del .env que muestro a continuación que ya viene con algunas configuraciones incluidas (excepto las relacionadas con Paypal, Gmail y Amazon S3).
 ```bash
 php artisan key:generate
- ```
+```
 3. Configurar el archivo `.env` con los detalles de tu entorno. (EXPLICADO A CONTINUACIÓN)
 4. Ejecutar migraciones de la base de datos
-   ```bash
+```bash
  php artisan migrate
-  ```
+```
 5. Ejecutar seeders de la base de datos:
-    ```bash
-   php artisan db:seed
-    ```
+```bash
+php artisan db:seed
+```
 
-Conectarse a la base de datos ```php artisan:db``` y ejecutar ```CREATE EXTENSION unaccent;```
+Conectarse a la base de datos `php artisan:db` y ejecutar `CREATE EXTENSION unaccent;`
 
 ## Configurar el archivo `.env` con los detalles de tu entorno.
 ```plaintext
