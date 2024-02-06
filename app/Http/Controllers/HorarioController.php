@@ -36,7 +36,7 @@ class HorarioController extends Controller
                         'horario_id' => $horario->id,
                         'frecuencia' => $horario->frecuencia,
                         'aforoDisponible' => $aforoDisponible,
-                        'estado' => $horario->oculto
+                        'estado' => $horario->oculto,
                     ],
                 ];
             }
@@ -86,21 +86,26 @@ class HorarioController extends Controller
             $frecuencia = $request->input('frecuencia');
             $repeticiones = $request->input('repeticiones', 1); // Valor por defecto en caso de ser único
 
-            // Lógica para crear horarios
+            $resultado = true; // Asumir éxito inicialmente
             switch ($frecuencia) {
                 case 'unico':
-                    $this->crearHorario($actividadId, $fecha, $hora, $idioma);
+                    $resultado = $this->crearHorario($actividadId, $fecha, $hora, $idioma);
                     break;
                 case 'diario':
-                    $this->crearHorariosRecurrentes($actividadId, $fecha, $hora, $idioma, $frecuencia, $repeticiones);
-                    break;
                 case 'semanal':
-                    $this->crearHorariosRecurrentes($actividadId, $fecha, $hora, $idioma, $frecuencia, $repeticiones);
+                    $resultado = $this->crearHorariosRecurrentes($actividadId, $fecha, $hora, $idioma, $frecuencia, $repeticiones);
                     break;
             }
-            return redirect()
+
+            if ($resultado) {
+                return redirect()
+                    ->route('admin.horarios.index')
+                    ->with('success', 'Horario(s) creado(s) exitosamente.');
+            } else {
+                return redirect()
                 ->route('admin.horarios.index')
-                ->with('success', 'Horario(s) creado(s) exitosamente');
+                    ->with('error', 'Uno o más de los horarios que intentas crear ya existen.');
+            }
         } catch (\Illuminate\Validation\ValidationException $e) {
             // Redirigir de vuelta con los errores de validación y los datos de entrada
             return redirect()
@@ -134,13 +139,9 @@ class HorarioController extends Controller
             $horario->frecuencia = 'unico';
             $horario->save();
 
-            return redirect()
-                ->route('admin.horarios.index')
-                ->with('success', 'Horario creado exitosamente.');
+            return true;
         } else {
-            return redirect()
-                ->back()
-                ->with('error', 'El horario que intenta crear ya existe.');
+            return false;
         }
     }
 
@@ -171,6 +172,7 @@ class HorarioController extends Controller
         }
     }
 
+
     public function edit($id)
     {
         $horario = Horario::findOrFail($id);
@@ -198,80 +200,90 @@ class HorarioController extends Controller
                 'idioma' => 'sometimes',
             ]);
 
-            $horario = Horario::findOrFail($id);
 
-            // Verificar si hay reservas asociadas con este horario
-            if (
-                $horario
-                    ->reservas()
-                    // ->where('estado', '!=', 'cancelada')
-                    ->count() > 0
-            ) {
-                return redirect()
-                    ->back()
-                    ->with('error', 'No se puede modificar un horario que tiene reservas asociadas.')
-                    ->withInput();
-            }
-            $tipoEdicion = $request->input('tipo_edicion', 'instancia');
+        $horario = Horario::findOrFail($id);
 
-            if ($tipoEdicion == 'instancia') {
-                // Actualiza solo esta instancia
-                $horario->update($request->only(['fecha', 'hora', 'idioma']));
-            } else {
-                // Actualiza toda la serie
-                $this->updateSerieRecurrente($horario, $request);
-            }
-
-            return redirect()
-                ->route('admin.horarios.index')
-                ->with('success', 'Horario actualizado exitosamente.');
-        } catch (\Illuminate\Validation\ValidationException $e) {
-            // Redirigir de vuelta con los errores de validación y los datos de entrada
-            return redirect()
-                ->back()
-                ->withErrors($e->validator)
-                ->withInput();
-        } catch (\Exception $e) {
-            // Manejar otros tipos de excepciones
-            \Log::error('Error al actualizar el horario: ' . $e->getMessage());
-            return redirect()
-                ->back()
-                ->with('error', 'Hubo un problema al actualizar el horario')
-                ->withInput();
+        // Asegúrate de que no se modifique un horario con reservas asociadas
+        if ($horario->reservas()->count() > 0) {
+            return redirect()->back()->with('error', 'No se puede modificar un horario que tiene reservas asociadas.')->withInput();
         }
+
+        $tipoEdicion = $request->input('tipo_edicion', 'instancia');
+
+        // Verificar si el nuevo horario coincide con otro existente (que no sea el mismo)
+        $existeHorario = Horario::where('id', '!=', $id)
+            ->where('actividad_id', $horario->actividad_id)
+            ->where('fecha', $request->input('fecha'))
+            ->where('hora', $request->input('hora'))
+            ->where('idioma', $request->input('idioma'))
+            ->exists();
+
+        if ($existeHorario) {
+            return redirect()->back()->with('error', 'El horario que intentas actualizar coincide con otro existente.')->withInput();
+        }
+
+        if ($tipoEdicion == 'instancia') {
+            // Actualiza solo esta instancia
+            $horario->update($request->only(['fecha', 'hora', 'idioma']));
+        } else {
+            $resultado = $this->updateSerieRecurrente($horario, $request);
+            if (!$resultado) {
+                return redirect()->back()->with('error', 'No se pudo actualizar la serie debido a un conflicto de horarios.')->withInput();
+            }
+        }
+
+        return redirect()->route('admin.horarios.index')->with('success', 'Horario actualizado exitosamente.');
+    } catch (\Illuminate\Validation\ValidationException $e) {
+        return redirect()->back()->withErrors($e->validator)->withInput();
+    } catch (\Exception $e) {
+        \Log::error('Error al actualizar el horario: ' . $e->getMessage());
+        return redirect()->back()->with('error', 'Hubo un problema al actualizar el horario')->withInput();
     }
+}
 
-    private function updateSerieRecurrente($horarioOriginal, $request)
-    {
-        DB::beginTransaction();
 
-        try {
-            $horaNueva = $request->input('hora');
-            $horariosRecurrentes = Horario::where('actividad_id', $horarioOriginal->actividad_id)
-                ->where('fecha', '>=', $horarioOriginal->fecha)
-                ->get();
+private function updateSerieRecurrente($horarioOriginal, $request)
+{
+    DB::beginTransaction();
 
-            foreach ($horariosRecurrentes as $horarioRecurrente) {
-                $horaActual = Carbon::createFromFormat('H:i:s', now()->format('H:i:s'));
-                $horaHorario = Carbon::createFromFormat('H:i:s', $horarioRecurrente->hora);
+    try {
+        $horariosRecurrentes = Horario::where('actividad_id', $horarioOriginal->actividad_id)
+            ->where('fecha', '>=', $horarioOriginal->fecha)
+            ->get();
 
-                // Asegúrate de no actualizar horarios pasados
-                if ($horarioRecurrente->fecha > today() || ($horarioRecurrente->fecha == today() && $horaHorario > $horaActual)) {
-                    $horarioRecurrente->update([
-                        'hora' => $horaNueva,
-                        'idioma' => $request->input('idioma'),
-                    ]);
-                }
+        foreach ($horariosRecurrentes as $horarioRecurrente) {
+            // Verificar si el horario actualizado coincide con otro existente que no sea parte de la serie recurrente
+            $existeHorario = Horario::where('id', '!=', $horarioRecurrente->id)
+                ->where('actividad_id', $horarioOriginal->actividad_id)
+                ->where('fecha', $request->input('fecha'))
+                ->where('hora', $request->input('hora'))
+                ->where('idioma', $request->input('idioma'))
+                ->exists();
+
+            if ($existeHorario) {
+                DB::rollback();
+                return false; // Indicar que hubo un conflicto y no se completó la actualización
             }
 
-            DB::commit();
-            return true;
-        } catch (\Exception $e) {
-            DB::rollback();
-            \Log::error('Error al actualizar la serie recurrente: ' . $e->getMessage());
-            return back()->with('error', $e->getMessage());
+            // Asegurarte de no actualizar horarios pasados
+            if ($horarioRecurrente->fecha > today() || ($horarioRecurrente->fecha == today() && $horarioRecurrente->hora > now()->format('H:i'))) {
+                $horarioRecurrente->update([
+                    'fecha' => $request->input('fecha'), // Asegúrate de que esta lógica se ajusta a tu modelo de datos
+                    'hora' => $request->input('hora'),
+                    'idioma' => $request->input('idioma'),
+                ]);
+            }
         }
+
+        DB::commit();
+        return true;
+    } catch (\Exception $e) {
+        DB::rollback();
+        \Log::error('Error al actualizar la serie recurrente: ' . $e->getMessage());
+        // Considera devolver un mensaje de error más amigable o manejarlo de otra manera
+        return false;
     }
+}
 
     public function destroy($horarioId)
     {
@@ -291,16 +303,17 @@ class HorarioController extends Controller
             ->with('error', 'No se puede borrar el horario ya que tiene reservas asociadas.');
     }
 
-  public function ocultar(Request $request)
-{
-    $horarioId = $request->input('horario_id');
+    public function ocultar(Request $request)
+    {
+        $horarioId = $request->input('horario_id');
 
-    // Buscar el horario por su ID
-    $horario = Horario::findOrFail($horarioId);
-    $horario->oculto = !$horario->oculto;
+        // Buscar el horario por su ID
+        $horario = Horario::findOrFail($horarioId);
+        $horario->oculto = !$horario->oculto;
 
-    $horario->save();
-    return redirect()->back()->with('success', 'Estado del horario cambiado con éxito.');
-}
-
+        $horario->save();
+        return redirect()
+            ->back()
+            ->with('success', 'Estado del horario cambiado con éxito.');
+    }
 }
