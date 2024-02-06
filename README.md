@@ -54,11 +54,14 @@ Asegúrate de tener instalados PHP, Composer y PostgreSQL en tu sistema. Aquí t
 sudo apt install php8.2 php8.2-amqp php8.2-cgi php8.2-cli php8.2-common php8.2-curl php8.2-fpm php8.2-gd php8.2-igbinary php8.2-intl php8.2-mbstring php8.2-opcache php8.2-pgsql php8.2-readline php8.2-redis php8.2-sqlite3 php8.2-xml php8.2-zip php8.2-bcmath php8.2-gmp php-imagick
 ```
 # Instalar Composer
-```bash sudo apt install composer ```
+```bash
+sudo apt install composer
+```
 
 # Instalar PostgreSQL
-```bash sudo apt install postgresql postgresql-client postgresql-contrib ```
-
+```bash 
+sudo apt install postgresql postgresql-client postgresql-contrib
+```
 
 Antes de ejecutar las migraciones, asegúrate de tener configurada la base de datos PostgreSQL creando un nuevo usuario y una base de datos.
 
@@ -75,9 +78,12 @@ Antes de generar la clave copia el ejemplo del contenido del .env que muestro a 
 ```bash php artisan key:generate ```
 5. Configurar el archivo `.env` con los detalles de tu entorno. (EXPLICADO A CONTINUACIÓN)
 6. Ejecutar migraciones de la base de datos ```bash php artisan migrate ```
-7. Ejecutar seeders de la base de datos ```bash php artisan db:seed ```
+7. Ejecutar seeders de la base de datos:
+    ```bash
+   php artisan db:seed
+    ```
 
-Conectarse a la base de datos ```php artisan:db``` y ejecutar ``CREATE EXTENSION unaccent;```
+Conectarse a la base de datos ```php artisan:db``` y ejecutar ```CREATE EXTENSION unaccent;```
 
 ## Configurar el archivo `.env` con los detalles de tu entorno.
 ```plaintext
