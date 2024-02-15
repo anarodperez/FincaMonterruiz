@@ -108,7 +108,7 @@
             <li> <strong>Total Pagado:</strong> {{ $totalPagado }} €</li>
 
         </ul>
-        <a href="{{ url('/descargar-entrada/' . $reserva->id) }}" class="button">Descargar Entrada</a>
+        <a href="{{ url('/descargar-entrada/' . $reserva->id) }}" class="button" style="color: white !important">Descargar Entrada</a>
 
 
         <p class="footer">Gracias por elegirnos,<br>El equipo de {{ config('app.name') }}</p>

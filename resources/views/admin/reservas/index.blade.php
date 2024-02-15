@@ -34,32 +34,18 @@
                 normalizeStr(str) {
                     return str.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
                 },
-                inDateRange(date) {
+                inDateRange(date) { // Función para determinar si una fecha dada cae dentro del rango de fechas seleccionado
                     const d = new Date(date);
                     const start = new Date(this.startDate);
                     const end = new Date(this.endDate);
                     return (!this.startDate || d >= start) && (!this.endDate || d <= end);
                 },
-                currentReservaEstado: null,
-                openCancelModal(reservaId, estado) {
-                    this.currentCancelFormId = 'cancel-form-' + reservaId;
-                    this.currentReservaEstado = estado;
-                    var modal = new bootstrap.Modal(document.getElementById('cancelModal'));
-                    modal.show();
-                },
-                confirmCancel() {
-                    if (this.currentReservaEstado !== 'cancelada') {
-                        document.getElementById(this.currentCancelFormId).submit();
-                    }
-                },
-                hasResults: true,
-                updateHasResults() {
-                    this.$nextTick(() => {
-                        console.log(this.$refs.tbody); // Para depurar
+                hasResults: true, // Indicador para rastrear si hay filas visibles en la tabla después de aplicar los filtros
+                updateHasResults() { // Función para actualizar el indicador `hasResults` basado en la visibilidad de las filas de la tabla
+                    this.$nextTick(() => { // Asegura que la comprobación se haga después de las actualizaciones del DOM
                         let rows = Array.from(this.$refs.tbody.querySelectorAll('tr:not(.no-results)'));
                         let visibleRows = rows.filter(row => row.style.display !== 'none').length;
                         this.hasResults = visibleRows > 0;
-                        console.log('hasResults:', this.hasResults);
                     });
                 },
                 init() {
@@ -186,6 +172,6 @@
     </div>
 
     @push('scripts')
-    <script src="{{ asset('js/admin-reservas.js') }}"></script>
-@endpush
+        <script src="{{ asset('js/admin-reservas.js') }}"></script>
+    @endpush
 @endsection

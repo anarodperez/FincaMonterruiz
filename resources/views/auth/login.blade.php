@@ -52,17 +52,17 @@
         }
     }
 
-    // Función para validar el correo electrónico
-    function validateEmail(email) {
-        const re =
-            /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-        return re.test(email);
-    }
+    // // Función para validar el correo electrónico
+    // function validateEmail(email) {
+    //     const re =
+    //         /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    //     return re.test(email);
+    // }
 
-    // Función para validar la contraseña
-    function validatePassword(password) {
-        return password.length >= 6; // Ejemplo: una validación simple que requiere 6 caracteres como mínimo
-    }
+    // // Función para validar la contraseña
+    // function validatePassword(password) {
+    //     return password.length >= 6; // Ejemplo: una validación simple que requiere 6 caracteres como mínimo
+    // }
 </script>
 
 @section('content')

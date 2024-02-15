@@ -55,10 +55,7 @@ class UsuarioController extends Controller
         }
 
         // Obtener datos de reservas
-        $datosReservas = Reserva::select(DB::raw("to_char(created_at, 'YYYY-MM-DD') as fecha"), DB::raw('count(*) as total'))
-            ->groupBy('fecha')
-            ->orderBy('fecha', 'asc')
-            ->get();
+        $datosReservas = Reserva::select(DB::raw("to_char(created_at, 'YYYY-MM-DD') as fecha"), DB::raw('count(*) as total'))->groupBy('fecha')->orderBy('fecha', 'asc')->get();
 
         // Retorna la vista con los usuarios
         return view('admin.usuarios.index', [
@@ -72,27 +69,13 @@ class UsuarioController extends Controller
         $usuario->validado = !$usuario->validado;
         $usuario->save();
 
-        return redirect()
-            ->route('admin.usuarios.index')
-            ->with('success', 'Usuario validado/invalidado correctamente');
-    }
-
-    public function autocomplete(Request $request)
-    {
-        $term = $request->input('term');
-
-        $results = User::where('nombre', 'like', '%' . $term . '%')
-            ->orWhere('apellidos', 'like', '%' . $term . '%')
-            ->orWhere('email', 'like', '%' . $term . '%')
-            ->get();
-
-        return response()->json($results);
+        return redirect()->route('admin.usuarios.index')->with('success', 'Usuario validado/invalidado correctamente');
     }
 
     public function showDashboard(Request $request)
     {
-        $user = Auth::user();
-        $now = Carbon::now('UTC')->setTimezone('Europe/Madrid');
+        $user = Auth::user(); //obtener usuario autenticado
+        $now = Carbon::now('UTC')->setTimezone('Europe/Madrid'); //obtiene la fecha y hora actuales
 
         $activePage = $request->query('activePage', 1);
         $pastPage = $request->query('pastPage', 1);
@@ -113,50 +96,58 @@ class UsuarioController extends Controller
 
         // Para reservas pasadas
         $reservasPasadas = $user
-        ->reservas()
-        ->join('horarios', 'reservas.horario_id', '=', 'horarios.id')
-        ->join('actividades', 'horarios.actividad_id', '=', 'actividades.id')
-        ->where(function ($query) use ($now) {
-            $query->where('horarios.fecha', '<', $now->toDateString())->orWhere(function ($query) use ($now) {
-                $query->where('horarios.fecha', '=', $now->toDateString())->where('horarios.hora', '<', $now->toTimeString());
-            });
-        })
-        ->where('reservas.user_id', '=', $user->id)
-        ->select('reservas.id as reserva_id', 'reservas.*', 'actividades.nombre as nombre_actividad', 'horarios.fecha as fecha_actividad', 'horarios.hora as hora_actividad') // Añadir esta línea
-        ->paginate(3, ['*'], 'pastPage', $pastPage)
-        ->appends(['activePage' => $activePage]);
-
+            ->reservas()
+            ->join('horarios', 'reservas.horario_id', '=', 'horarios.id')
+            ->join('actividades', 'horarios.actividad_id', '=', 'actividades.id')
+            ->where(function ($query) use ($now) {
+                $query->where('horarios.fecha', '<', $now->toDateString())->orWhere(function ($query) use ($now) {
+                    $query->where('horarios.fecha', '=', $now->toDateString())->where('horarios.hora', '<', $now->toTimeString());
+                });
+            })
+            ->where('reservas.user_id', '=', $user->id)
+            ->select('reservas.id as reserva_id', 'reservas.*', 'actividades.nombre as nombre_actividad', 'horarios.fecha as fecha_actividad', 'horarios.hora as hora_actividad') // Añadir esta línea
+            ->paginate(3, ['*'], 'pastPage', $pastPage)
+            ->appends(['activePage' => $activePage]);
 
         // Obtener las valoraciones del usuario
-        $valoracionesUsuario = $user
-            ->valoraciones()
-            ->with('actividad')
-            ->paginate(3);
+        $valoracionesUsuario = $user->valoraciones()->with('actividad')->paginate(3);
 
         return view('/dashboard', compact('reservasActivas', 'reservasPasadas', 'valoracionesUsuario'));
     }
 
+    // método para exportar datos de usuarios a un archivo CSV
     public function exportCsv()
     {
+        // Obtener todos los registros de usuarios de la base de datos
         $usuarios = User::all();
+
+        // Preparar los encabezados HTTP para la respuesta, asegurando que el navegador trate la respuesta como un archivo CSV para descargar
         $headers = [
-            'Content-type' => 'text/csv',
-            'Content-Disposition' => 'attachment; filename=usuarios.csv',
-            'Pragma' => 'no-cache',
-            'Cache-Control' => 'must-revalidate, post-check=0, pre-check=0',
-            'Expires' => '0',
+            'Content-type' => 'text/csv', // Indicar que el contenido es un archivo CSV
+            'Content-Disposition' => 'attachment; filename=usuarios.csv', // Forzar la descarga del archivo con el nombre 'usuarios.csv'
+            'Pragma' => 'no-cache', // Indicar que no se debe almacenar en caché la respuesta
+            'Cache-Control' => 'must-revalidate, post-check=0, pre-check=0', // Directivas adicionales de control de caché
+            'Expires' => '0', // Indicar que la respuesta expira inmediatamente
         ];
 
+        // Definir una función anónima para escribir los datos de los usuarios en un archivo CSV
         $callback = function () use ($usuarios) {
+            // Abrir un "archivo" en la salida estándar PHP para escribir los datos del CSV
             $file = fopen('php://output', 'w');
+
+            // Escribir la fila de encabezados en el CSV
             fputcsv($file, ['ID', 'Nombre', 'Apellido', 'Email', 'Teléfono', 'Fecha de Nacimiento']);
 
+            // Iterar sobre cada usuario y escribir sus datos en el archivo CSV
             foreach ($usuarios as $usuario) {
                 fputcsv($file, [$usuario->id, $usuario->nombre, $usuario->apellido1, $usuario->email, $usuario->telefono, $usuario->fecha_nacimiento]);
             }
+
+            // Cerrar el "archivo" después de escribir todos los datos
             fclose($file);
         };
 
+        // Enviar la respuesta al navegador, utilizando la función anónima para generar el contenido del CSV en tiempo real
         return Response::stream($callback, 200, $headers);
     }
 }

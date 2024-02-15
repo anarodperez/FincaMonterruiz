@@ -33,10 +33,11 @@ class PaypalController extends Controller
         } else {
             $environment = new ProductionEnvironment($clientId, $clientSecret);
         }
-
-        $this->client = new PayPalHttpClient($environment);
+        //Este cliente se utilizará para hacer llamadas a la API de PayPal
+        $this->client = new PayPalHttpClient($environment); //Inicializa el PayPalHttpClient con el entorno configurado
     }
 
+    // iniciar el proceso de pago
     public function checkout(Request $request, $horarioId)
     {
         $requestPaypal = new OrdersCreateRequest();

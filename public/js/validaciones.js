@@ -39,26 +39,28 @@ document.addEventListener("DOMContentLoaded", function() {
 
         let errors = false; // Inicialización de la variable de error
 
-        // Validación de cada campo
+        // Itera sobre cada campo definido para su validación
         fieldsToValidate.forEach(field => {
-            const input = document.getElementById(field.inputId);
+            const input = document.getElementById(field.inputId); // Obtiene el elemento del campo a validar
+            // Llama a la función de validación para el campo actual, mostrando un error si es necesario
             if (!validateField(input, field.errorMessage)) {
-                errors = true;
+                errors = true; // Marca que se encontró un error
             }
         });
 
-        // Verificación de la igualdad entre las contraseñas
+        // Validación para verificar que las contraseñas coincidan
         const passwordInput = document.getElementById('password');
         const passwordConfirmationInput = document.getElementById('password_confirmation');
-
+        // Comprueba si las contraseñas no coinciden y muestra un mensaje de error s
         if (passwordInput.value !== passwordConfirmationInput.value) {
             showError(passwordConfirmationInput, 'Las contraseñas no coinciden');
-            errors = true;
+            errors = true; // Marca que se encontró un error
         } else if (passwordConfirmationInput.value.trim().length < 1) {
+            // Verifica también si el campo de confirmación de contraseña está vacío
             showError(passwordConfirmationInput, 'Este campo es requerido');
-            errors = true;
+            errors = true; // Marca que se encontró un error
         } else {
-            hideError(passwordConfirmationInput); // Ocultar el error si las contraseñas coinciden
+            hideError(passwordConfirmationInput); // Si no hay errores, oculta el mensaje de error
         }
 
         // Envío del formulario si no hay errores
@@ -97,33 +99,33 @@ document.addEventListener("DOMContentLoaded", function() {
 
     }
 
-// Función para mostrar un mensaje de error asociado a un campo específico
-function showError(input, message) {
-    let errorSpan = input.nextElementSibling; // Obtiene el siguiente hermano del campo
+    // Función para mostrar un mensaje de error asociado a un campo específico
+    function showError(input, message) {
+        let errorSpan = input.nextElementSibling; // Obtiene el siguiente hermano del campo
 
-    // Si no existe el mensaje de error o no tiene la clase 'error-message'
-    if (!errorSpan || !errorSpan.classList.contains('error-message')) {
-        errorSpan = document.createElement('span'); // Crea un nuevo elemento 'span' para el mensaje de error
-        errorSpan.classList.add('error-message'); // Agrega la clase 'error-message' al nuevo elemento
-        input.parentNode.insertBefore(errorSpan, input.nextElementSibling); // Inserta el nuevo elemento antes del siguiente hermano del campo
+        // Si no existe el mensaje de error o no tiene la clase 'error-message'
+        if (!errorSpan || !errorSpan.classList.contains('error-message')) {
+            errorSpan = document.createElement('span'); // Crea un nuevo elemento 'span' para el mensaje de error
+            errorSpan.classList.add('error-message'); // Agrega la clase 'error-message' al nuevo elemento
+            input.parentNode.insertBefore(errorSpan, input.nextElementSibling); // Inserta el nuevo elemento antes del siguiente hermano del campo
+        }
+
+        errorSpan.innerHTML = `<span class="error-icon">❌</span> ${message}`; // Establece el mensaje de error dentro del elemento
+        input.classList.add('is-invalid'); // Agrega una clase para resaltar visualmente el campo con error
+        errorSpan.classList.add('error-visible'); // Hace visible el mensaje de error
     }
 
-    errorSpan.innerHTML = `<span class="error-icon">❌</span> ${message}`; // Establece el mensaje de error dentro del elemento
-    input.classList.add('is-invalid'); // Agrega una clase para resaltar visualmente el campo con error
-    errorSpan.classList.add('error-visible'); // Hace visible el mensaje de error
-}
 
+    // Función para ocultar el mensaje de error asociado a un campo específico
+    function hideError(input) {
+        const errorSpan = input.nextElementSibling; // Obtiene el siguiente hermano del campo
 
-// Función para ocultar el mensaje de error asociado a un campo específico
-function hideError(input) {
-    const errorSpan = input.nextElementSibling; // Obtiene el siguiente hermano del campo
-
-    // Verifica si hay un mensaje de error y si tiene la clase 'error-message'
-    if (errorSpan && errorSpan.classList.contains('error-message')) {
-        input.classList.remove('is-invalid'); // Elimina la clase de resaltado del campo
-        errorSpan.remove(); // Elimina el mensaje de error
+        // Verifica si hay un mensaje de error y si tiene la clase 'error-message'
+        if (errorSpan && errorSpan.classList.contains('error-message')) {
+            input.classList.remove('is-invalid'); // Elimina la clase de resaltado del campo
+            errorSpan.remove(); // Elimina el mensaje de error
+        }
     }
-}
 
     // Función para validar si el email es válido
     function isValidEmail(email) {
@@ -143,20 +145,24 @@ function hideError(input) {
         return regex.test(password);
     }
 
+    // Función para validar la fecha de nacimiento asegurando que el usuario sea mayor de 18 años
     function validarFechaNacimiento(fecha) {
         const hoy = new Date();
         const fechaNacimiento = new Date(fecha);
-        let edad = hoy.getFullYear() - fechaNacimiento.getFullYear(); // Cambiado a 'let'
+        let edad = hoy.getFullYear() - fechaNacimiento.getFullYear();
         const m = hoy.getMonth() - fechaNacimiento.getMonth();
+
+        // Ajuste de la edad basado en el mes y día actual
         if (m < 0 || (m === 0 && hoy.getDate() < fechaNacimiento.getDate())) {
             edad--;
         }
-        return edad >= 18;
+
+        return edad >= 18; // Retorna true si la edad es 18 o más, false en caso contrario
     }
 
-
+    // Función para validar el formato del teléfono permitiendo un rango de dígitos y, opcionalmente, un prefijo internacional
     function validarTelefono(telefono) {
-        const regexTelefono = /^(?:\+\d{1,3})?\d{6,12}$/;
+        const regexTelefono = /^(?:\+\d{1,3})?\d{9,15}$/;
         return regexTelefono.test(telefono);
     }
 

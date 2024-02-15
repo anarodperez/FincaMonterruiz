@@ -33,7 +33,6 @@ document.addEventListener('DOMContentLoaded', function() {
     document.querySelectorAll('.scheduleButton').forEach(button => {
         button.addEventListener('click', function() {
             const newsletterId = this.getAttribute('data-newsletter-id');
-            console.log("Opening modal for newsletter ID:", newsletterId); // Para depuración
             openScheduleModal(newsletterId);
         });
     });

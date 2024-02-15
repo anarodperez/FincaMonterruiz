@@ -17,7 +17,7 @@
                 </div>
             </header>
             <div class="row">
-                <!-- Campo de búsqueda con ícono de lupa -->
+                <!-- Campo de búsqueda con evento onkeyup para invocar la función de búsqueda -->
                 <div class="d-flex justify-content-center align-items-center busqueda" style="position: relative;">
                     <input type="text" id="search" class="form-control" placeholder="Escribe el nombre de la actividad"
                         onkeyup="buscarActividades()">
@@ -30,8 +30,9 @@
                         <form action="{{ route('catalogo.filter') }}" method="GET" name="form">
                             <!-- Público objetivo -->
                             <div class="form-group mb-3 custom-select">
-                                <label for="publico"  class="mb-1"><strong>Público objetivo:</strong></label>
-                                <select name="publico" id="publico" class="form-control"  onfocus="this.size=3;" onblur="this.size=0;" onchange="this.size=1; this.blur()">
+                                <label for="publico" class="mb-1"><strong>Público objetivo:</strong></label>
+                                <select name="publico" id="publico" class="form-control" onfocus="this.size=3;"
+                                    onblur="this.size=0;" onchange="this.size=1; this.blur()">
                                     <option value="">Selecciona una opción</option>
                                     <option value="todos" @if (isset($filtros['publico']) && $filtros['publico'] == 'todos') selected @endif>Para todos los
                                         públicos</option>
@@ -43,7 +44,8 @@
                             <!-- Duración -->
                             <div class="form-group mb-3 custom-select">
                                 <label for="duracion" class="mb-1"><strong>Duración:</strong></label>
-                                <select name="duracion" id="duracion" class="form-control" onfocus="this.size=4;" onblur="this.size=0;" onchange="this.size=1; this.blur()">
+                                <select name="duracion" id="duracion" class="form-control" onfocus="this.size=4;"
+                                    onblur="this.size=0;" onchange="this.size=1; this.blur()">
                                     <option value="">Cualquier Duración</option>
                                     <option value="corta" @if (isset($filtros['duracion']) && $filtros['duracion'] == 'corta') selected @endif>Corta (menos de
                                         1 hora)</option>
@@ -119,7 +121,6 @@
                                     </div>
                                 </div>
                             @endforelse
-
                         </div>
 
                         <!-- Aquí podrías incluir la paginación si es necesaria -->
@@ -331,7 +332,7 @@
         </script>
 
     </main>
-    <script>
+    {{-- <script>
         function verDetalleActividad(actividadId) {
             // Construir la URL de la página de detalles de actividad
             const url = "{{ route('pages.detalleActividad', ':id') }}".replace(':id', actividadId);
@@ -339,64 +340,61 @@
             // Redirigir a la página de detalles de actividad
             window.location.href = url;
         }
-    </script>
+    </script> --}}
 
     <script>
         function buscarActividades() {
-    var searchQuery = document.getElementById('search').value;
-    var normalizedQuery = normalizeString(searchQuery);
+            // Obtener el valor actual del campo de búsqueda
+            var searchQuery = document.getElementById('search').value;
 
-    fetch('/buscar-actividades?q=' + encodeURIComponent(normalizedQuery))
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Error en la respuesta del servidor');
-            }
-            return response.json();
-        })
-        .then(data => {
-            console.log("Datos recibidos:", data);
+            // Normalizar el término de búsqueda
+            var normalizedQuery = normalizeString(searchQuery);
 
-            var html = '';
-            data.forEach(actividad => {
-                html += `
-                <div class="col-md-4 mb-4">
-                    <div class="card">
-                        <img src="${actividad.imagen}" class="card-img-top" alt="${actividad.nombre}">
-                        <div class="card-body">
-                            <h2 class="card-title">${actividad.nombre}</h2>
-                            <p class="card-text">${actividad.descripcion}</p>
-                            <ul class="list-group">
-                                <li class="list-group-item"><strong>Duración:</strong>
-                                    ${actividad.duracion} min
-                                </li>
-                                <li class="list-group-item"><strong>Precio adulto:</strong>
-                                    ${actividad.precio_adulto} €
-                                </li>
-                                ${actividad.precio_nino !== null ? `
-                                    <li class="list-group-item"><strong>Precio niño:</strong>
-                                        ${actividad.precio_nino} €
-                                    </li>
-                                ` : ''}
-                                <li class="list-group-item"><strong>Aforo:</strong>
-                                    ${actividad.aforo}
-                                </li>
-                            </ul>
+            // Realizar una solicitud AJAX al servidor para buscar actividades
+            fetch('/buscar-actividades?q=' + encodeURIComponent(normalizedQuery))
+                .then(response => {
+                    // Verificar si la respuesta del servidor es exitosa
+                    if (!response.ok) {
+                        throw new Error('Error en la respuesta del servidor');
+                    }
+                    // Convertir la respuesta a JSON
+                    return response.json();
+                })
+                .then(data => {
+                    // Procesar los datos recibidos y construir el HTML de las tarjetas de actividad
+                    var html = '';
+                    data.forEach(actividad => {
+                        html += `
+                    <div class="col-md-4 mb-4">
+                        <div class="card">
+                            <img src="${actividad.imagen}" class="card-img-top" alt="${actividad.nombre}">
+                            <div class="card-body">
+                                <h2 class="card-title">${actividad.nombre}</h2>
+                                <p class="card-text">${actividad.descripcion}</p>
+                                <ul class="list-group">
+                                    <li class="list-group-item"><strong>Duración:</strong> ${actividad.duracion} min</li>
+                                    <li class="list-group-item"><strong>Precio adulto:</strong> ${actividad.precio_adulto} €</li>
+                                    ${actividad.precio_nino !== null ? `<li class="list-group-item"><strong>Precio niño:</strong> ${actividad.precio_nino} €</li>` : ''}
+                                    <li class="list-group-item"><strong>Aforo:</strong> ${actividad.aforo}</li>
+                                </ul>
+                            </div>
                         </div>
                     </div>
-                </div>
                 `;
-            });
-            document.getElementById('search-results').innerHTML = html;
-        })
-        .catch(error => {
-            console.error('Error al realizar la búsqueda:', error);
-        });
-}
-
+                    });
+                    // Actualizar el contenido de la página con los resultados
+                    document.getElementById('search-results').innerHTML = html;
+                })
+                .catch(error => {
+                    // Manejar errores de la solicitud AJAX
+                    console.error('Error al realizar la búsqueda:', error);
+                });
+        }
 
         function normalizeString(string) {
+            // Normalizar el término de búsqueda convirtiéndolo a minúsculas y eliminando tildes
             string = string.toLowerCase();
-            string = string.normalize("NFD").replace(/[\u0300-\u036f]/g, ""); // Quita las tildes
+            string = string.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
             return string;
         }
 

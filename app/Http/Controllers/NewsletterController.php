@@ -156,21 +156,6 @@ class NewsletterController extends Controller
         return back()->with('success', 'Newsletter eliminada con éxito.');
     }
 
-    public function enviarNewsletter()
-    {
-        $suscriptores = Suscriptor::all();
-        $newsletter = Newsletter::where('selected', true)->where('id', '!=', 1)->first();
-
-        if ($newsletter) {
-            foreach ($suscriptores as $suscriptor) {
-                Mail::to($suscriptor->email)->send(new NewsletterMail($newsletter));
-            }
-        } else {
-            // Manejar el caso en que no se encuentra la newsletter seleccionada
-        }
-
-        return back()->with('success', 'Newsletter enviado con éxito a todos los suscriptores.');
-    }
 
     public function preview($id)
     {

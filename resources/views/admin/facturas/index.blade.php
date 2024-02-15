@@ -11,7 +11,7 @@
 
         <form action="{{ route('admin.facturas.index') }}" method="GET">
             <input type="text" name="factura_id" placeholder="ID Factura" value="{{ request('factura_id') }}">
-            <input type="text" name="reserva_id" placeholder="ID Reserva" value="{{ request('reserva_id') }}">
+            {{-- <input type="text" name="reserva_id" placeholder="ID Reserva" value="{{ request('reserva_id') }}"> --}}
             <button type="submit">Buscar</button>
         </form>
         <div class="content">
