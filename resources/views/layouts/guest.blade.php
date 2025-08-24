@@ -114,7 +114,7 @@
     @include('layouts.navbar')
 
     <!-- Contenido Principal -->
-    <main class="py-4">
+    <main>
         @yield('content')
         <div id="cookieConsentContainer"
             style="display: none; position: fixed; bottom: 0; width: 100%; background-color: #f1f1f1; padding: 10px; text-align: center;">
@@ -122,7 +122,6 @@
                     href="#">uso de cookies</a>.</p>
             <button id="acceptCookieConsent">Aceptar</button>
         </div>
-
     </main>
 
     <!-- Footer -->

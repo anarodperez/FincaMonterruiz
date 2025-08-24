@@ -4,7 +4,7 @@ font-family: 'IBM Plex Sans', sans-serif;
 }
 
 .first .carousel-item {
-height: 600px;
+height: 26rem;
 }
 
 .mySwiper-RANDOMID .card {
@@ -204,3 +204,28 @@ width: 50%;
 margin: 0 auto;
 
 }
+
+
+  .mySwiper-RANDOMID .swiper-wrapper{
+    align-items: stretch; 
+  }
+  .mySwiper-RANDOMID .swiper-slide{
+    display: flex;
+    height: auto;        
+  }
+  .mySwiper-RANDOMID .actividad-card{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  }
+  .mySwiper-RANDOMID .actividad-card .card-body{
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+  }
+  .mySwiper-RANDOMID .actividad-card .card-text{
+    flex: 1;           
+  }
+  .mySwiper-RANDOMID .actividad-card .list-group{
+    margin-top: auto;   
+  }
